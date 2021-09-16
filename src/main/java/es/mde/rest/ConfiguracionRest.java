@@ -1,4 +1,4 @@
-package es.sicenad.rest;
+package es.mde.rest;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 

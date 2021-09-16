@@ -8,7 +8,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
-import es.sicenad.rest.ConfiguracionRest;
+import es.mde.rest.ConfiguracionRest;
 
 
 @SpringBootApplication
