@@ -21,8 +21,9 @@ public class SicenadApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(SicenadApplication.class, args);
 		
-		log.debug("Está funcionando la aplicación SICENAD");
 		System.err.println("Está funcionando la aplicación SICENAD");
+		log.debug("Está funcionando la aplicación SICENAD");
+
 	}
 
 }
