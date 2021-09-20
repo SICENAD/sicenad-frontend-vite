@@ -5,7 +5,7 @@ import { faBed, faBone, faDog, faUser, faUsersCog } from '@fortawesome/free-soli
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: []
 })
 export class HeaderComponent implements OnInit {
   faUser =faUser;

@@ -7,14 +7,8 @@ import { faFacebook, faGithub, faGitlab, faTwitter, faWhatsapp } from '@fortawes
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
-  faWhatsapp = faWhatsapp;
-  faFacebook = faFacebook;
-  faGitlab = faGitlab;
-  faTwitter = faTwitter;
-  faGitHub = faGithub;
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }
