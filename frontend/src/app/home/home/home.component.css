@@ -1,16 +1,51 @@
 h1 {
-  color: greenyellow;
+  color: #354f52;
 }
 
-h2 {
-  color: red;
+.bienvenido {
+  color: #52796f;
 }
-.cita {
-  color:blue;
+
+.seleccione {
+  color: #84a98c;
 }
-p+p {
-  color:fuchsia;
+
+.resultado {
+  color: #84a98c;
 }
-fa-icon {
-  color:greenyellow;
+
+.lista, li {
+  color: #354f52;
+}
+
+
+#mapa {
+	background: url("../../../assets/spain.png") no-repeat 0px 0px; width: 781px; height: 713px;
+}
+
+div.interactivo {
+  display: block;
+  width: 600px;
+  align-content: center;
+  margin: auto;
+  padding: 5px;
+}
+
+div.filtro {
+  border: 6px solid #52796f;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-right: 0px;
+}
+
+/* -ms-zoom: 0.7; -o-transform: scale(.7); -moz-transform: scale(.7); */
+
+/* .melilla:hover {
+  display: block;
+  background: red;
+} */
+
+
+#listadoProvincias a.light {
+	color: rgb(108, 213, 0);
 }
