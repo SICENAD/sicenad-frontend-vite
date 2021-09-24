@@ -14,10 +14,6 @@ h1 {
   color: #84a98c;
 }
 
-.lista, li {
-  color: #354f52;
-}
-
 img.madoc {
   max-width: 200;
   max-height: 276;
@@ -38,18 +34,23 @@ div.interactivo {
 }
 
 div.filtro {
-  border: 6px solid #52796f;
+  border: 6px solid #354f52;
   border-top: 0px;
   border-bottom: 0px;
   border-right: 0px;
 }
 
 .no-existe {
-  color: #2f3e46;
+  color: #52796f;
+  font-weight: 700;
 }
 
-a:link {
+div.resultado {
  color: #354f52;
+}
+
+.select-provincia {
+  color: #52796f;
 }
 
 /* -ms-zoom: 0.7; -o-transform: scale(.7); -moz-transform: scale(.7); */

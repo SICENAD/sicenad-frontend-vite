@@ -15,17 +15,17 @@ export class HomeComponent implements OnInit {
   provinciaSeleccionada: string = "";
   cenads: Cenad[] = [];
   cenadsFiltro: Cenad[] = [];
-  idCenad: string;
+ // idCenad: string;
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
   {idProvincia:9, nombre:"BURGOS"}, {idProvincia:10, nombre:"CACERES"}, {idProvincia:11, nombre:"CADIZ"},
   {idProvincia:39, nombre:"CANTABRIA"}, {idProvincia:12, nombre:"CASTELLON"}, {idProvincia:51, nombre:"CEUTA"},
   {idProvincia:13, nombre:"CIUDAD REAL"}, {idProvincia:14, nombre:"CORDOBA"}, {idProvincia:16, nombre:"CUENCA"},
-  {idProvincia:17, nombre:"GIRONA"}, {idProvincia:18, nombre:"GRANADA"}, {idProvincia:19, nombre:"GUADALAJARA"},
+  {idProvincia:17, nombre:"GERONA"}, {idProvincia:18, nombre:"GRANADA"}, {idProvincia:19, nombre:"GUADALAJARA"},
   {idProvincia:20, nombre:"GUIPUZCOA"}, {idProvincia:21, nombre:"HUELVA"}, {idProvincia:22, nombre:"HUESCA"},
-  {idProvincia:7, nombre:"ILLES BALEARS"}, {idProvincia:23, nombre:"JAEN"}, {idProvincia:26, nombre:"LA RIOJA"},
-  {idProvincia:24, nombre:"LEON"}, {idProvincia:25, nombre:"LLEIDA"}, {idProvincia:27, nombre:"LUGO"},
+  {idProvincia:7, nombre:"ISLAS BALEARES"}, {idProvincia:23, nombre:"JAEN"}, {idProvincia:26, nombre:"LA RIOJA"},
+  {idProvincia:24, nombre:"LEON"}, {idProvincia:25, nombre:"LERIDA"}, {idProvincia:27, nombre:"LUGO"},
   {idProvincia:28, nombre:"MADRID"}, {idProvincia:29, nombre:"MALAGA"}, {idProvincia:52, nombre:"MELILLA"},
   {idProvincia:30, nombre:"MURCIA"}, {idProvincia:31, nombre:"NAVARRA"}, {idProvincia:32, nombre:"OURENSE"},
   {idProvincia:34, nombre:"PALENCIA"}, {idProvincia:35, nombre:"LAS PALMAS"}, {idProvincia:36, nombre:"PONTEVEDRA"},
@@ -39,9 +39,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
    this.prueba();
-
    // this.cargarCenads();
-
   }
 
   // función de prueba que crea objetos cenads
@@ -64,7 +62,7 @@ export class HomeComponent implements OnInit {
     this.homeService.getCenads().subscribe((response) => {
       this.cenads = this.homeService.extraerCenads(response);
     });
-    console.log(this.cenads);
+   // console.log(this.cenads);
   }
 
   // Asigna al array cenadsFiltro todos los CENAD,s/CMT,s de una provincia
@@ -79,53 +77,19 @@ export class HomeComponent implements OnInit {
     this.provincias.forEach(p => {
       if (p.idProvincia == idProvincia) {
         this.provinciaSeleccionada = p.nombre;
+        this.idProvinciaSeleccionada = p.idProvincia;
       }
     });
     //console.log(this.cenadsFiltro);
   }
 
-
   // Es invocada desde la capa presentación a través del filtro o al hacer click sobre una provincia
   respuesta(idProvincia: number): void {
-    //console.log(idProvincia);
-    if (!this.inicio) {
-      this.borrarResultado();
-    }
+    this.inicio = false;
     this.buscarCenads(idProvincia);
-    this.mostrarResultado();
   }
 
-  // Borra el resultado de la búsqueda
-  borrarResultado(): void {
-    document.querySelector('.contenedor-resultado').remove();
-  }
-
-  // Muestra el resultado de la búsqueda de CENAD,S/CMT,s de una provincia
-  mostrarResultado(): void {
-    let div = document.createElement('div');
-    div.classList.add('contenedor-resultado');
-    div.classList.add('p-3');
-    let span = document.createElement('span');
-    span.classList.add('resultado');
-    div.appendChild(span);
-    document.querySelector('.titulo-busqueda').insertAdjacentElement('afterend', div);
-    let ul = document.createElement('ul');
-    if (this.cenadsFiltro.length != 0) {
-        this.inicio = false;
-        span.insertAdjacentElement('afterbegin', ul);
-        this.cenadsFiltro.forEach((cenad)=> {
-        ul.insertAdjacentHTML('beforebegin', `<li><a class="nav-link" routerLink="/cenads/${cenad.idCenad}">${cenad.nombre}</a></li>`);
-          });
-    } else {
-      this.inicio = false;
-      let span2 = document.createElement('span');
-      span2.setAttribute('style', 'font-weight: bold; color: #2f3e46;');
-      span2.innerText = "* No existe ningún CENAD/CMT";
-      span.insertAdjacentElement('beforebegin', span2);
-    }
-  }
-  // redireccionar(): void {
-  //   this.router.navigate([`/cenads/${this.idCenad}`]);
-  // }
+  //CODIGO INTERESANTE (de ejemplo)
+  //a.setAttributeNS(null, 'routerLink', 'cenads');  // cuando inserta el atributo en el DOM, mantiene la L mayúscula del routerLink
 
 }
