@@ -26,6 +26,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import es.mde.entidades.Categoria;
+import es.mde.entidades.Cenad;
+
 
 @Configuration
 public class ConfiguracionRest {
@@ -34,9 +37,8 @@ public class ConfiguracionRest {
 	RepresentationModelProcessor<RepositorySearchesResource> addSearchLinks(RepositoryRestConfiguration config) {
 		Map<Class<?>, Class<?>> controllersRegistrados = new HashMap<>();
 
-//		controllersRegistrados.put(MascotaConId.class, MascotaController.class);
-//		controllersRegistrados.put(PrestacionConId.class, PrestacionController.class);
-
+		controllersRegistrados.put(Categoria.class, CategoriaController.class);
+		controllersRegistrados.put(Cenad.class, CenadController.class);
 
 		return new RepresentationModelProcessor<RepositorySearchesResource>() {
 
@@ -76,6 +78,7 @@ public class ConfiguracionRest {
 	CorsFilter corsFilter() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		final CorsConfiguration config = new CorsConfiguration();
+//		config.setAllowCredentials(false);
 		config.setAllowCredentials(true);
 		config.setAllowedOrigins(Collections.singletonList("*"));
 		config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
