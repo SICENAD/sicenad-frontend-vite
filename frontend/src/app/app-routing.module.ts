@@ -8,6 +8,10 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
   },
   {
+    path: 'cenads',
+    loadChildren: () => import('./cenads/cenads.module').then(m => m.CenadsModule),
+  },
+  {
     path: 'not-found',
     component: NotFoundComponent
   },

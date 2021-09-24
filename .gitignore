@@ -35,5 +35,4 @@ out/
 
 ### VS Code ###
 .vscode/
-logs/SICENAD.log
-logs/SICENAD.log.2021-09-22.0.gz
+logs/

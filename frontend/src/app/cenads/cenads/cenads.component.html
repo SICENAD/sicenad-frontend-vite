@@ -1,0 +1,36 @@
+<div class="container">
+  <hr class='w-100'>
+  <div class="row justify-content-end">
+    <button class="btn btn-primary text-white" routerLink="/cenads/formulario">Nuevo CENAD/CMT</button>
+  </div>
+  <hr class='w-100'>
+  <div class="row">
+    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6"><b>CENAD/CMT</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3"><b>PROVINCIA</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3"><b>ADMINISTRADOR</b></div>
+  </div>
+
+  <div *ngFor="let cenad of cenads">
+    <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatos($event)"></app-cenad>
+  </div>
+  <!-- Modal cenad-->
+  <div class="modal fade" id="modalCenad" tabindex="-1" role="dialog" aria-labelledby="datosCenad" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="datosCenad"><b>Datos Completos del CENAD/CMT</b> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-cenad-ficha *ngIf='cenadVerDatos' [cenad]='cenadVerDatos' (cenadEliminar)='onCenadEliminar($event)'
+            (cenadEditar)='onCenadEditar($event)'></app-cenad-ficha>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="ngOnInit()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
