@@ -12,6 +12,10 @@ const routes: Routes = [
     loadChildren: () => import('./cenads/cenads.module').then(m => m.CenadsModule),
   },
   {
+    path: 'categorias',
+    loadChildren: () => import('./categorias/categorias.module').then(m => m.CategoriasModule),
+  },
+  {
     path: 'not-found',
     component: NotFoundComponent
   },

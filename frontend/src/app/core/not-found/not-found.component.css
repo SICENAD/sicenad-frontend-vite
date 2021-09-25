@@ -8,3 +8,8 @@ h1 {
 h2 {
   color:red;
 }
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  }

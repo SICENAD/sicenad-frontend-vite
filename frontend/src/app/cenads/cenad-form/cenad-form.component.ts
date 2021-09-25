@@ -6,7 +6,7 @@ import { CenadService } from '../service/cenad.service';
 @Component({
   selector: 'app-cenad-form',
   templateUrl: './cenad-form.component.html',
-  styles: []
+  styleUrls: ['./cenad-form.component.css']
 })
 export class CenadFormComponent implements OnInit {
 

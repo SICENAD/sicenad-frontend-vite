@@ -7,7 +7,7 @@ import { CenadService } from '../service/cenad.service';
 @Component({
   selector: 'app-cenads',
   templateUrl: './cenads.component.html',
-  styles: []
+  styleUrls: ['./cenads.component.css']
 })
 export class CenadsComponent implements OnInit {
 
