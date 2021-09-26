@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Cenad } from 'src/app/cenads/models/cenad';
+import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { Categoria } from '../models/categoria';
 import { CategoriaImpl } from '../models/categoria-impl';
 import { CategoriaService } from '../service/categoria.service';

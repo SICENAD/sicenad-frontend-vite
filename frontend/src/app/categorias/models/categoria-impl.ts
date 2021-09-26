@@ -1,4 +1,4 @@
-import { Cenad } from "src/app/cenads/models/cenad";
+import { Cenad } from "src/app/superadministrador/models/cenad";
 import { Categoria } from "./categoria";
 
 export class CategoriaImpl implements Categoria {

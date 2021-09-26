@@ -1,4 +1,4 @@
-import { Cenad } from "src/app/cenads/models/cenad";
+import { Cenad } from "src/app/superadministrador/models/cenad";
 
 export interface Categoria {
   idCategoria: string;

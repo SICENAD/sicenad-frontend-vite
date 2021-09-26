@@ -1,0 +1,142 @@
+<div class="container-fluid">
+  <div class="row m-2">
+    <div class="col col-md-2 p-4">
+      <img class="madoc" width="200" height="276" alt="MADOC" src="../../../assets/madoc.png" />
+    </div>
+    <div class="col col-md-7 align-self-center">
+      <h1 class="bienvenido text-center">SUPERADMINISTRADOR</h1>
+    </div>
+    <div class="col col-md-1 mt-5 ml-5">
+      <h1 class="text-center">SICENAD</h1>
+    </div>
+  </div>
+  <div class="row ml-5 p-0">
+    <div class="col col-md-8">
+      <h2 class="text-center"><b>CENAD,s/CMT,s</b> y <b>ADMINISTRADORES</b></h2>
+      <hr class="w-100" />
+      <div class="row justify-content-end">
+        <button class="btn text-white mr-3" routerLink="formulario-cenad">
+          Nuevo <b>CENAD/CMT</b>
+        </button>
+        <button class="btn text-white mr-3" routerLink="formulario-administrador">
+          Nuevo <b>Administrador</b>
+        </button>
+      </div>
+      <hr class="w-100" />
+      <div class="row">
+        <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">
+          <b>CENAD/CMT</b>
+        </div>
+        <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">
+          <b>PROVINCIA</b>
+        </div>
+        <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">
+          <b>ADMINISTRADOR</b>
+        </div>
+      </div>
+      <div *ngFor="let cenad of cenads">
+        <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)"
+          ></app-cenad>
+      </div>
+    </div>
+    <div class="col col-md-4  filtro">
+      <h2 class="text-center">USUARIOS <b>NORMAL</b></h2>
+      <hr class="w-100" />
+      <div class="row justify-content-end">
+        <button class="btn text-white mr-3" routerLink="formulario-unidad">
+          Nuevo Usuario <b>Normal</b>
+        </button>
+      </div>
+      <hr class="w-100" />
+      <div class="row">
+        <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6">
+          <b>USUARIO</b>
+        </div>
+        <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6">
+          <b>UNIDAD</b>
+        </div>
+      </div>
+      <div *ngFor="let usuarioNormal of usuariosNormal">
+        <app-unidad [usuarioNormal]="usuarioNormal" (usuarioNormalSeleccionado)="verDatosUsuarioNormal($event)"></app-unidad>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal cenad-->
+<div class="modal fade" id="modalCenad" tabindex="-1" role="dialog" aria-labelledby="datosCenad" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="datosCenad">
+          <b>Datos Completos del CENAD/CMT</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-cenad-ficha *ngIf="cenadVerDatos" [cenad]="cenadVerDatos" (cenadEliminar)="onCenadEliminar($event)"
+          (cenadEditar)="onCenadEditar($event)"></app-cenad-ficha>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal usuarioAdministrador-->
+<div class="modal fade" id="modalUsuarioAdministrador" tabindex="-1" role="dialog"
+  aria-labelledby="datosUsuarioAdministrador" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="datosUsuarioAdministrador">
+          <b>Datos Completos del Administrador</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-administrador-ficha *ngIf="usuarioAdministradorVerDatos"
+          [usuarioAdministrador]="usuarioAdministradorVerDatos"
+          (usuarioAdministradorEliminar)="onUsuarioAdministradorEliminar($event)"
+          (usuarioAdministradorEditar)="onUsuarioAdministradorEditar($event)"></app-administrador-ficha>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal usuarioNormal-->
+<div class="modal fade" id="modalUsuarioNormal" tabindex="-1" role="dialog"
+  aria-labelledby="datosUsuarioNormal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="datosUsuarioNormal">
+          <b>Datos Completos del Usuario Normal</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-unidad-ficha *ngIf="usuarioNormalVerDatos"
+          [usuarioNormal]="usuarioNormalVerDatos"
+          (usuarioNormalEliminar)="onUsuarioNormalEliminar($event)"
+          (usuarioNormalEditar)="onUsuarioNormalEditar($event)"></app-unidad-ficha>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

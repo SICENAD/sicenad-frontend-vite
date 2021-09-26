@@ -38,8 +38,8 @@ export class HomeComponent implements OnInit {
   constructor(private homeService: HomeService, private router: Router) { }
 
   ngOnInit() {
-   this.prueba();
-   // this.cargarCenads();
+  //  this.prueba();
+   this.cargarCenads();
   }
 
   // función de prueba que crea objetos cenads
