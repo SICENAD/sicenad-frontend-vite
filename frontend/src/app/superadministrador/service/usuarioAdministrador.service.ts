@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Cenad } from '../models/cenad';
 import { UsuarioAdministrador } from '../models/usuarioAdministrador';
 import { UsuarioAdministradorImpl } from '../models/usuarioAdministrador-impl';
 
@@ -90,6 +91,18 @@ export class UsuarioAdministradorService {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
         }
+        return throwError(e);
+      })
+    );
+  }
+  getUsuarioAdministrador(cenad: Cenad): Observable<any> {
+    return this.http.get<any>(`${this.host}cenads/${cenad.idCenad}/usuarioAdministrador/`)
+    .pipe(
+      catchError((e) => {
+        if (e.status === 404) {
+          console.error('Este CENAD/CMT aún no tiene Usuario Administrador');
+        }
+        else cenad.tieneAdmin = true;
         return throwError(e);
       })
     );

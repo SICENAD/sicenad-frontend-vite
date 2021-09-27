@@ -1,11 +1,14 @@
 <div class="container">
+  <div class="mt-4 text-center mb-4">
+    <h3>CREAR USUARIO ADMINISTRADOR</h3>
+  </div>
   <form #administradorForm="ngForm">
     <div class="form-row py-2">
 
 
       <div class="col-lg-4 col-md-12">
-        <label><b>ADMINISTRADOR<sup class="text-danger">*</sup></b></label>
-        <input type="text" class="form-control" [(ngModel)]="usuarioAdministrador.nombre" placeholder="Nombre del Administrador"
+        <label class="titulo"><b>ADMINISTRADOR<sup class="text-danger">*</sup></b></label>
+        <input type="text" class="form-control letra" [(ngModel)]="usuarioAdministrador.nombre" placeholder="Nombre del Administrador"
           name="nombre" required #nombre="ngModel" [ngClass]="{ 'is-invalid': nombre.invalid && (nombre.dirty || nombre.touched),
           'is-valid': !nombre.invalid }" />
         <div class="text-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
@@ -16,8 +19,8 @@
       </div>
 
       <div class="col-lg-4 col-md-12">
-        <label><b>PASSWORD<sup class="text-danger">*</sup></b></label>
-        <input type="text" class="form-control" [(ngModel)]="usuarioAdministrador.password" placeholder="Password del Administrador"
+        <label class="titulo"><b>PASSWORD<sup class="text-danger">*</sup></b></label>
+        <input type="text" class="form-control letra" [(ngModel)]="usuarioAdministrador.password" placeholder="Password del Administrador"
           name="password" required #password="ngModel" [ngClass]="{ 'is-invalid': password.invalid && (password.dirty || password.touched),
           'is-valid': !password.invalid }" />
         <div class="text-danger" *ngIf="password.invalid && (password.dirty || password.touched)">
@@ -28,13 +31,13 @@
       </div>
 
       <div class="col-lg-4 col-md-12">
-        <label><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
-        <input type="tel" class="form-control" [(ngModel)]="usuarioAdministrador.tfno" placeholder="Teléfono de contacto del CENAD/CMT"
+        <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
+        <input type="tel" class="form-control letra" [(ngModel)]="usuarioAdministrador.tfno" placeholder="Teléfono de contacto del Administrador"
           name="telefono" required minlength="9" maxlength="9" #telefono="ngModel" [ngClass]="{ 'is-invalid': telefono.invalid && (telefono.dirty || telefono.touched),
           'is-valid': !telefono.invalid }" />
         <div class="text-danger" *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
           <div *ngIf="telefono.errors.required">
-            El Teléfono del CENAD/CMT es obligatorio
+            El Teléfono del Administrador es obligatorio
           </div>
           <div *ngIf="telefono.errors.minlength || telefono.errors.maxlength">
             El Teléfono debe tener 9 carácteres
@@ -43,8 +46,8 @@
       </div>
 
       <div class="col-lg-6 col-md-12 pt-3">
-        <label><b>EMAIL</b></label>
-        <input type="email" class="form-control" [(ngModel)]="usuarioAdministrador.email" placeholder="Email del Administrador"
+        <label class="titulo"><b>EMAIL</b></label>
+        <input type="email" class="form-control letra" [(ngModel)]="usuarioAdministrador.email" placeholder="Email del Administrador"
           name="email" #email="ngModel" [ngClass]="{ 'is-invalid': email.invalid && (email.dirty || email.touched),
           'is-valid': !email.invalid }" />
         <div class="text-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
@@ -59,9 +62,9 @@
 
 
       <div class="col-lg-6 col-md-12 pt-3">
-        <label><b>CENAD/CMT<sup class="text-danger">*</sup></b></label>
+        <label class="titulo"><b>CENAD/CMT<sup class="text-danger">*</sup></b></label>
         <select name="cenad" id="cenad" [(ngModel)]="usuarioAdministrador.cenad">
-          <option *ngFor="let cenad of cenads" [ngValue]="cenad.url">{{ cenad.nombre }}</option>
+          <option class=" letra" *ngFor="let cenad of cenadsSinAdmin" [ngValue]="cenad.url">{{ cenad.nombre }}</option>
         </select>
       </div>
     </div>

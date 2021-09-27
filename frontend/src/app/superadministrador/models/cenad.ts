@@ -11,4 +11,5 @@ export interface Cenad {
   provincia: number;
   url: string;
   usuarioAdministrador: UsuarioAdministrador;
+  tieneAdmin: boolean;
 }

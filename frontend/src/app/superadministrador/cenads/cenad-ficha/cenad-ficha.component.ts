@@ -6,7 +6,7 @@ import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.
 @Component({
   selector: 'app-cenad-ficha',
   templateUrl: './cenad-ficha.component.html',
-  styles: []
+  styleUrls: ['./cenad-ficha.component.css']
 })
 export class CenadFichaComponent implements OnInit {
 

@@ -35,7 +35,7 @@ export class SuperadministradorComponent implements OnInit {
 
     verDatosCenad(cenad: Cenad): void {
       this.cenadVerDatos = cenad;
-      this.usuarioAdministradorVerDatos = this.cenadVerDatos.usuarioAdministrador;
+      this.usuarioAdministradorVerDatos = cenad.usuarioAdministrador;
     }
 
     onCenadEliminar(cenad: CenadImpl): void {

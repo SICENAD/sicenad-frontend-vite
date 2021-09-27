@@ -13,6 +13,7 @@ import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.
 export class AdministradorFormComponent implements OnInit {
 
   cenads: Cenad[] = [];
+  cenadsSinAdmin: Cenad[] = [];
   usuarioAdministrador: UsuarioAdministradorImpl = new UsuarioAdministradorImpl();
 
   constructor(
@@ -23,6 +24,20 @@ export class AdministradorFormComponent implements OnInit {
 
   ngOnInit() {
     this.cenadService.getCenads().subscribe((response) => this.cenads = this.cenadService.extraerCenads(response));
+    
+    setTimeout(()=> {
+      for (let c of this.cenads) {
+        this.usuarioAdministradorService.getUsuarioAdministrador(c).subscribe((response) => c.usuarioAdministrador = this.usuarioAdministradorService.mapearUsuario(response));
+    
+        setTimeout(() => {
+          if (c.usuarioAdministrador) {
+            c.tieneAdmin = true;
+          }
+          this.cenadsSinAdmin = this.cenads.filter(c => !c.tieneAdmin);
+        }, 1000);
+      }
+    }, 1000);
+    
   }
 
   crearUsuarioAdministrador(): void {

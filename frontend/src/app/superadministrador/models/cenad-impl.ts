@@ -12,6 +12,7 @@ export class CenadImpl implements Cenad {
   provincia: number;
   url: string;
   usuarioAdministrador: UsuarioAdministrador;
+  tieneAdmin: boolean = false;
 
   constructor() {}
   getId(url: string): string {

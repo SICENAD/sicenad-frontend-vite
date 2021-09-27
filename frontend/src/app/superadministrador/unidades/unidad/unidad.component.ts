@@ -4,7 +4,7 @@ import { UsuarioNormal } from '../../models/usuarioNormal';
 @Component({
   selector: 'app-unidad',
   templateUrl: './unidad.component.html',
-  styles: []
+  styleUrls: ['./unidad.component.css']
 })
 export class UnidadComponent implements OnInit {
 
