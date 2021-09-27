@@ -1,13 +1,18 @@
 <div class="container">
+  <div class="row m-2">
+    <div class="col-12 text-center">
+      <h2 class="bienvenido text-center titulo1"><u>GESTIÓN DE CATEGORÍAS</u> </h2>
+    </div>
+  </div>
   <hr class='w-100'>
   <div class="row justify-content-end">
     <button class="btn text-white" routerLink="/categorias/formulario">Nueva Categoría</button>
   </div>
   <hr class='w-100'>
   <div class="row">
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3"><b>CATEGORIA</b></div>
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3"><b>CATEGORIA PADRE</b></div>
-    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6"><b>DESCRIPCIÓN</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>CATEGORIA</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>CATEGORIA PADRE</b></div>
+    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo"><b>DESCRIPCIÓN</b></div>
   </div>
 
   <div *ngFor="let categoria of categorias">

@@ -2,14 +2,15 @@
   background: #A3B18A;
 }
 
-h3 {
-  color: #354f52; font-weight: bold
-}
-
 .titulo {
   color: #3A5A40; 
 }
-
+.guardar:hover {
+  background: green;
+}
+.eliminar:hover {
+  background: red;
+}
 .letra {
   color: #588157;
 }
