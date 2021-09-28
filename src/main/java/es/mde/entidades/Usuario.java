@@ -26,6 +26,7 @@ public abstract class Usuario {
 	private String password;
 	private String email;
 	private String tfno;
+	private String descripcion;
 	
 	public Usuario() {
 		super();
@@ -70,6 +71,14 @@ public abstract class Usuario {
 
 	public void setTfno(String tfno) {
 		this.tfno = tfno;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	

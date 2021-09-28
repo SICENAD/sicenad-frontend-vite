@@ -6,5 +6,6 @@ export interface UsuarioNormal {
   email: string;
   unidad: string;
   tipo:string;
+  descripcion:string;
   url: string;
 }

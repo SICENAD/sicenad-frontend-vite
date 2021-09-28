@@ -8,6 +8,7 @@ export class UsuarioNormalImpl implements UsuarioNormal {
   email: string;
   unidad: string;
   tipo: string;
+  descripcion:string;
   url: string;
   
   constructor() {}

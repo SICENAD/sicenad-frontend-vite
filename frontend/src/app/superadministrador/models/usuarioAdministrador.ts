@@ -8,5 +8,6 @@ export interface UsuarioAdministrador {
   email: string;
   cenad: Cenad;
   tipo:string;
+  descripcion:string;
   url: string;
 }

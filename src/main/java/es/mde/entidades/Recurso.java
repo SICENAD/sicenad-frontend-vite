@@ -1,5 +1,9 @@
 package es.mde.entidades;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -19,13 +24,20 @@ public class Recurso {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true)
 	private Long id;
-	private String zona;
-	private String tipo;
 	private String nombre;
-	
+	private String descripcion;
+	private String otros;
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Fichero.class, mappedBy = "recurso")
+	private Collection<Fichero> ficheros = new ArrayList<>();
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CENAD", nullable = false)
-	private Cenad cenad;
+	@JoinColumn(name = "USUARIO_GESTOR", nullable = false)
+	private UsuarioGestor usuarioGestor;	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CATEGORIA", nullable = false)
+	private Categoria categoria;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "TIPO_RECURSO", nullable = false)
+	private TipoRecurso tipoRecurso;
 	
 	public Recurso() {}
 	
@@ -36,22 +48,6 @@ public class Recurso {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	public String getZona() {
-		return zona;
-	}
-
-	public void setZona(String zona) {
-		this.zona = zona;
-	}
-
-	public String getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -61,11 +57,57 @@ public class Recurso {
 		this.nombre = nombre;
 	}
 
-	public Cenad getCenad() {
-		return cenad;
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public String getOtros() {
+		return otros;
+	}
+
+	public void setOtros(String otros) {
+		this.otros = otros;
+	}
+
+	public Collection<Fichero> getFicheros() {
+		return ficheros;
+	}
+
+	public void setFicheros(Collection<Fichero> ficheros) {
+		this.ficheros = ficheros;
+	}
+
+	public UsuarioGestor getUsuarioGestor() {
+		return usuarioGestor;
+	}
+
+	public void setUsuarioGestor(UsuarioGestor usuario) {
+		this.usuarioGestor = usuario;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 	
-	public void setCenad(Cenad cenad) {
-		this.cenad = cenad;
+	public TipoRecurso getTipoRecurso() {
+		return tipoRecurso;
+	}
+
+	public void setTipoRecurso(TipoRecurso tipoRecurso) {
+		this.tipoRecurso = tipoRecurso;
+	}
+
+	// Establece la relacion en los dos sentidos
+	public void addFichero(Fichero fichero) {
+		getFicheros().add(fichero);
+		fichero.setRecurso(this);
 	}
 }

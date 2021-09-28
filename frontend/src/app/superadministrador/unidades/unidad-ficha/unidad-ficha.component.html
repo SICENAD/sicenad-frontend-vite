@@ -42,6 +42,18 @@
       </div>
     </div>
 
+    <div class="col-lg-8 col-md-12 pt-3">
+      <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
+      <textarea class="form-control letra" [(ngModel)]="usuarioNormal.descripcion" placeholder="Descripción del usuario" name="descripcion"
+        required #descripcion="ngModel" [ngClass]="{ 'is-invalid': descripcion.invalid && (descripcion.dirty || descripcion.touched),
+        'is-valid': !descripcion.invalid }" rows="5" cols="50"></textarea>
+      <div class="text-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+        <div *ngIf="descripcion.errors.required">
+            La descripción del usuario es obligatoria
+        </div>
+      </div>
+    </div>
+
     <div class="col-lg-6 col-md-12 pt-3">
       <label class="titulo"><b>EMAIL</b></label>
       <input type="email" class="form-control letra" [(ngModel)]="usuarioNormal.email" placeholder="Email del usuario"

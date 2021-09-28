@@ -7,7 +7,7 @@
 
 
       <div class="col-lg-4 col-md-12">
-        <label class="titulo"><b>ADMINISTRADOR<sup class="text-danger">*</sup></b></label>
+        <label class="titulo"><b>NOMBRE<sup class="text-danger">*</sup></b></label>
         <input type="text" class="form-control letra" [(ngModel)]="usuarioAdministrador.nombre" placeholder="Nombre del Administrador"
           name="nombre" required #nombre="ngModel" [ngClass]="{ 'is-invalid': nombre.invalid && (nombre.dirty || nombre.touched),
           'is-valid': !nombre.invalid }" />
@@ -41,6 +41,18 @@
           </div>
           <div *ngIf="telefono.errors.minlength || telefono.errors.maxlength">
             El Teléfono debe tener 9 carácteres
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8 col-md-12 pt-3">
+        <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
+        <textarea class="form-control letra" [(ngModel)]="usuarioAdministrador.descripcion" placeholder="Descripción del usuario" name="descripcion"
+          required #descripcion="ngModel" [ngClass]="{ 'is-invalid': descripcion.invalid && (descripcion.dirty || descripcion.touched),
+          'is-valid': !descripcion.invalid }" rows="5" cols="50"></textarea>
+        <div class="text-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+          <div *ngIf="descripcion.errors.required">
+              La descripción del usuario es obligatoria
           </div>
         </div>
       </div>

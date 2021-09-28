@@ -20,6 +20,10 @@ export class CategoriaService {
 
   getCategorias(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
+      //habria que cambiar el endpoint a atacar por `${this.host}cenads/${idCenad}/categorias
+      //para que solo me mostrara las de mi cenad, ya que accedere desde dentro de mi cenad
+      //esto conllevara quitar de los formularios la seleccion de cenad, y poner predefinido q siempre haga post y put a mi cenad
+
   }
 
   extraerCategorias(respuestaApi: any): Categoria[] {

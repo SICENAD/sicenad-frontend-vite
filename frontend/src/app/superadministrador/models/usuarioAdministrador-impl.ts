@@ -9,6 +9,7 @@ export class UsuarioAdministradorImpl implements UsuarioAdministrador {
   email: string;
   cenad: Cenad;
   tipo:string;
+  descripcion:string;
   url: string;
 
   constructor() {}

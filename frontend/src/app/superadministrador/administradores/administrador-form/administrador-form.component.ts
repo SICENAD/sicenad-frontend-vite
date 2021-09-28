@@ -34,9 +34,9 @@ export class AdministradorFormComponent implements OnInit {
             c.tieneAdmin = true;
           }
           this.cenadsSinAdmin = this.cenads.filter(c => !c.tieneAdmin);
-        }, 1000);
+        }, 2000);
       }
-    }, 1000);
+    }, 2000);
     
   }
 
