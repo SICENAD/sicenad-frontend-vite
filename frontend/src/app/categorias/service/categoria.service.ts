@@ -40,7 +40,6 @@ export class CategoriaService {
     categoria.nombre = categoriaApi.nombre;
     categoria.descripcion = categoriaApi.descripcion;
     categoria.subcategorias = categoriaApi.subcategorias;
-    // categoria.categoriaPadre = categoriaApi.categoriaPadre;
     categoria.url = categoriaApi._links.self.href;
     categoria.idCategoria = categoria.getId(categoria.url);
 

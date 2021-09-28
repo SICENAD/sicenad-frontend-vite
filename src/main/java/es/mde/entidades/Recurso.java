@@ -30,7 +30,7 @@ public class Recurso {
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Fichero.class, mappedBy = "recurso")
 	private Collection<Fichero> ficheros = new ArrayList<>();
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USUARIO_GESTOR", nullable = false)
+	@JoinColumn(name = "USUARIO_GESTOR")
 	private UsuarioGestor usuarioGestor;	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CATEGORIA", nullable = false)

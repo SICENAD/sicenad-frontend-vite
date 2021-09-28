@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="mt-4 text-center mb-4">
+    <h3>CREAR TIPO DE RECURSO</h3>
+  </div>
+  <form #tipoRecursoForm="ngForm">
+    <div class="form-row py-2">
+
+
+      <div class="col-lg-4 col-md-12">
+        <label class="titulo"><b>TIPO DE RECURSO<sup class="text-danger">*</sup></b></label>
+        <input type="text" class="form-control letra" [(ngModel)]="tipoRecurso.nombre" placeholder="Nombre del Tipo de Recurso"
+          name="nombre" required #nombre="ngModel" [ngClass]="{ 'is-invalid': nombre.invalid && (nombre.dirty || nombre.touched),
+        'is-valid': !nombre.invalid }" />
+        <div class="text-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+          <div *ngIf="nombre.errors.required">
+            El nombre del Tipo de Recurso es obligatorio
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-12">
+        <label class="titulo"><b>CÓDIGO DEL TIPO DE RECURSO<sup class="text-danger">*</sup></b></label>
+        <input type="text" class="form-control letra" [(ngModel)]="tipoRecurso.codTipo" placeholder="Código del Tipo de Recurso"
+          name="codTipo" required #codTipo="ngModel" [ngClass]="{ 'is-invalid': codTipo.invalid && (codTipo.dirty || codTipo.touched),
+        'is-valid': !codTipo.invalid }" />
+        <div class="text-danger" *ngIf="codTipo.invalid && (codTipo.dirty || codTipo.touched)">
+          <div *ngIf="codTipo.errors.required">
+            El código del Tipo de Recurso es obligatorio
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="col-lg-4 col-md-12">
+        <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
+        <textarea class="form-control letra" [(ngModel)]="tipoRecurso.descripcion" placeholder="Descripción del Tipo de Recurso"
+          name="descripcion" required #descripcion="ngModel" [ngClass]="{ 'is-invalid': descripcion.invalid && (descripcion.dirty || descripcion.touched),
+        'is-valid': !descripcion.invalid }" rows="5" cols="50"></textarea>
+        <div class="text-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+          <div *ngIf="descripcion.errors.required">
+            La descripción del Tipo de Recurso es obligatoria
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="form-row justify-content-between pt-5">
+      <div class="col-lg-5 col-md-12">
+        <button class="btn text-white" role="button" (click)="crearTipoRecurso()" [disabled]="!tipoRecursoForm.form.valid">
+          Crear Tipo de Recurso
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

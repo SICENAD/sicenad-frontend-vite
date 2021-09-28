@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row m-2">
+    <div class="col-12 text-center">
+      <h2 class="bienvenido text-center titulo1"><u>GESTIÓN DE TIPOS DE RECURSOS</u> </h2>
+    </div>
+  </div>
+  <hr class='w-100'>
+  <div class="row justify-content-end">
+    <button class="btn text-white" routerLink="/tiposRecurso/formulario">Nuevo Tipo de Recurso</button>
+  </div>
+  <hr class='w-100'>
+  <div class="row">
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>NOMBRE</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>CÓDIGO</b></div>
+    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo"><b>DESCRIPCIÓN</b></div>
+  </div>
+
+  <div *ngFor="let tipoRecurso of tipoRecursos">
+    <app-tipoRecurso [tipoRecurso]="tipoRecurso" (tipoRecursoSeleccionado)="verDatos($event)"></app-tipoRecurso>
+  </div>
+  <!-- Modal tipoRecurso-->
+  <div class="modal fade" id="modalTipoRecurso" tabindex="-1" role="dialog" aria-labelledby="datosTipoRecurso" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="datosTipoRecurso"><b>Datos Completos del Tipo de Recurso</b> </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-tipoRecurso-ficha *ngIf='tipoRecursoVerDatos' [tipoRecurso]='tipoRecursoVerDatos' (tipoRecursoEliminar)='onTipoRecursoEliminar($event)'
+            (tipoRecursoEditar)='onTipoRecursoEditar($event)'></app-tipoRecurso-ficha>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
