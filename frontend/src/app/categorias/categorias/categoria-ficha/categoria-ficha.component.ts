@@ -6,7 +6,7 @@ import { CategoriaService } from '../../service/categoria.service';
 @Component({
   selector: 'app-categoria-ficha',
   templateUrl: './categoria-ficha.component.html',
-  styles: []
+  styleUrls: ['./categoria-ficha.component.css']
 })
 export class CategoriaFichaComponent implements OnInit {
 
