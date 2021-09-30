@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Cenad } from '../models/cenad';
-import { CenadImpl } from '../models/cenad-impl';
+import { Cenad } from 'src/app/superadministrador/models/cenad';
+import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { HomeService } from '../service/home-service';
 
 @Component({

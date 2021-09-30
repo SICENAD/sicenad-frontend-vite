@@ -8,6 +8,10 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
   },
   {
+    path: 'principalCenad/:idCenad',
+    loadChildren: () => import('./principal-cenad/principal-cenad.module').then(m => m.PrincipalCenadModule)
+  },
+  {
     path: 'superadministrador',
     loadChildren: () => import('./superadministrador/superadministrador.module').then(m => m.SuperadministradorModule),
   },

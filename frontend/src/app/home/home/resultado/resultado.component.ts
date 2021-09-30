@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Cenad } from '../../models/cenad';
+import { Cenad } from 'src/app/superadministrador/models/cenad';
 
 @Component({
   selector: 'app-resultado',

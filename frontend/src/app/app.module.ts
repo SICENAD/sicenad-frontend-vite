@@ -4,14 +4,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
-import { NotFoundComponent } from './core/not-found/not-found.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule } from '@angular/common/http';
+import { PrincipalCenadComponent } from './principalCenad/principal-cenad/principal-cenad.component';
 
 @NgModule({
   declarations: [
-    AppComponent
-    
+    AppComponent,
+    PrincipalCenadComponent
+
   ],
   imports: [
     BrowserModule,

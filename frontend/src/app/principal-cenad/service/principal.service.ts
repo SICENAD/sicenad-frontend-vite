@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { environment } from 'src/environments/environment';
@@ -8,12 +9,11 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class HomeService {
+export class PrincipalService {
   private host: string = environment.hostSicenad;
   private urlEndPoint: string = `${this.host}cenads`;
 
   constructor(private http: HttpClient) { }
-
 
   getCenads(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint);
@@ -26,6 +26,17 @@ export class HomeService {
     });
     //console.log(cenads);
     return cenads;
+  }
+
+  getCenad(id: string): Observable<Cenad> {
+    return this.http.get<Cenad>(`${this.urlEndPoint}/${id}`).pipe(
+      catchError((e) => {
+        if (e.status !== 401 && e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
   }
 
   mapearCenad(cenadApi: any): Cenad {
@@ -49,5 +60,6 @@ export class HomeService {
     //console.log(numId);
     return numId;
   }
+
 
 }
