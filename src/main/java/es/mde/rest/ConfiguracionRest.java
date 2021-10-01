@@ -28,6 +28,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import es.mde.entidades.Categoria;
 import es.mde.entidades.Cenad;
+import es.mde.entidades.Recurso;
 
 
 @Configuration
@@ -39,6 +40,7 @@ public class ConfiguracionRest {
 
 		controllersRegistrados.put(Categoria.class, CategoriaController.class);
 		controllersRegistrados.put(Cenad.class, CenadController.class);
+
 
 		return new RepresentationModelProcessor<RepositorySearchesResource>() {
 

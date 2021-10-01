@@ -5,10 +5,11 @@ import { PrincipalCenadRoutingModule } from './principal-cenad-routing.module';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PrincipalCenadComponent } from './principal-cenad/principal-cenad.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [PrincipalCenadComponent],
   imports: [
     CommonModule,
     PrincipalCenadRoutingModule,

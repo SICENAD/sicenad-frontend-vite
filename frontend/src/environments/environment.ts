@@ -5,8 +5,8 @@
 export const environment = {
   appName: 'Sicenad DEV',
   production: false,
-  hostSicenad: 'http://localhost:8080/api/'
-  // hostSicenad: 'https://sicenad.herokuapp.com/api/'
+  //hostSicenad: 'http://localhost:8080/api/'
+   hostSicenad: 'https://sicenad.herokuapp.com/api/'
 };
 
 /*

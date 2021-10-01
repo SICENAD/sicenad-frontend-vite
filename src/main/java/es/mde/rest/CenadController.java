@@ -7,16 +7,17 @@ import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.mde.entidades.Categoria;
-import es.mde.entidades.Cenad;
+import es.mde.entidades.Recurso;
 import es.mde.repositorios.CenadDAO;
 
 @RepositoryRestController
-@RequestMapping(path = "cenads/{id}/categorias")
+@RequestMapping(path = "cenads/{id}")
 @Configuration
 public class CenadController {
 
@@ -26,14 +27,24 @@ public class CenadController {
 		this.cenadDAO = cenadDAO;
 	}
 	
-//	@GetMapping("/{id}/subcategorias/search")
+	@GetMapping("/categorias")
 	@ResponseBody
-	public CollectionModel<PersistentEntityResource> getCategoriasCenad(@PathVariable Cenad cenad,
+	public CollectionModel<PersistentEntityResource> getCategoriasCenad(@PathVariable Long id,
 			PersistentEntityResourceAssembler assembler) {
 
-		List<Categoria> categorias = cenadDAO.getCategoriasCenad(cenad);
+		List<Categoria> categorias = cenadDAO.getCategoriasCenad(id);
 
 		return assembler.toCollectionModel(categorias);
+	}
+	
+	@GetMapping("/recursos")
+	@ResponseBody
+	public CollectionModel<PersistentEntityResource> getRecursosCenad(@PathVariable Long id,
+			PersistentEntityResourceAssembler assembler) {
+
+		List<Recurso> recursos = cenadDAO.getRecursosCenad(id);
+
+		return assembler.toCollectionModel(recursos);
 	}
 	
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { PrincipalCenadComponent } from '../principalCenad/principal-cenad/principal-cenad.component';
+import { PrincipalCenadComponent } from './principal-cenad/principal-cenad.component';
 
 
 const routes: Routes = [
