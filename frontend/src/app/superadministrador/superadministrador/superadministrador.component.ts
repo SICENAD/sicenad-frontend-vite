@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Cenad } from '../models/cenad';
 import { CenadImpl } from '../models/cenad-impl';
 import { UsuarioAdministrador } from '../models/usuarioAdministrador';
@@ -17,6 +18,7 @@ import { UsuarioNormalService } from '../service/usuarioNormal.service';
 })
 export class SuperadministradorComponent implements OnInit {
 
+  faHome = faHome;
   cenads: Cenad[] = [];
   usuariosNormal: UsuarioNormal[] = [];
   cenadVerDatos: Cenad;

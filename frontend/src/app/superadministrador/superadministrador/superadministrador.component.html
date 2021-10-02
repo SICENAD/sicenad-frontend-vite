@@ -10,8 +10,13 @@
       <h2 class="text-center">SICENAD</h2>
     </div>
   </div>
-  <div class="row justify-content-end">
-    <button class="btn tipoRecurso text-white mr-3 mb-5" routerLink="/tiposRecurso">
+  <div class="row ml-4 pl-3">
+    <a class="nav-link text-center home" routerLink="/" routerLinkActive="router-link-active">
+      <fa-icon class="fa-2x" [icon]="faHome"></fa-icon>&nbsp;<strong>Home</strong></a>
+  </div>
+  <div class="row justify-content-end align-items-start mb-5">
+    <hr class="w-100" />
+    <button class="btn tipoRecurso text-white mr-3" routerLink="/tiposRecurso">
       <b>Tipos de Recursos</b>
     </button>
   </div>
@@ -40,7 +45,7 @@
         </div>
       </div>
       <div *ngFor="let cenad of cenads">
-        <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)" 
+        <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)"
         [usuarioAdministrador]="cenad.usuarioAdministrador" (usuarioAdministradorSeleccionado)="verDatosUsuarioAdministrador($event)"
           ></app-cenad>
       </div>

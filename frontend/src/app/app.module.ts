@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule } from '@angular/common/http';
-import { PrincipalCenadComponent } from './principal-cenad/principal-cenad/principal-cenad.component';
 
 @NgModule({
   declarations: [

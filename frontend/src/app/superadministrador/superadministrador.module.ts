@@ -12,6 +12,7 @@ import { AdministradorFichaComponent } from './administradores/administrador-fic
 import { UnidadComponent } from './unidades/unidad/unidad.component';
 import { UnidadFichaComponent } from './unidades/unidad-ficha/unidad-ficha.component';
 import { UnidadFormComponent } from './unidades/unidad-form/unidad-form.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { UnidadFormComponent } from './unidades/unidad-form/unidad-form.componen
   imports: [
     CommonModule,
     SuperadministradorRoutingModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ]
 })
 export class SuperadministradorModule { }

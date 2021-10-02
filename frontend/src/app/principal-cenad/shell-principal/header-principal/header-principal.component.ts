@@ -8,11 +8,11 @@ import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 
 @Component({
-  selector: 'app-principal-cenad',
-  templateUrl: './principal-cenad.component.html',
-  styleUrls: ['./principal-cenad.component.css']
+  selector: 'app-header-principal',
+  templateUrl: './header-principal.component.html',
+  styleUrls: ['./header-principal.component.css']
 })
-export class PrincipalCenadComponent implements OnInit {
+export class HeaderPrincipalComponent implements OnInit {
 
   // Fortaswesome
   faRecurso = faFolderOpen;
@@ -37,11 +37,6 @@ export class PrincipalCenadComponent implements OnInit {
   faCategorias = faTree;
   faPeticiones = faEdit;
   //
-  src: string = "";
-  pathRelativo: string = "../../../assets/";
-  //pathImg: string = "../../../assets/ESCUDO_CENAD.jpg";
-  escudoCenad: string = "";
-  pathImg: string = "";
   nombreCenad: string = "";
   cenad: Cenad = new CenadImpl();
   idCenad: string = "";
@@ -72,10 +67,6 @@ export class PrincipalCenadComponent implements OnInit {
     this.principalService.getCenad(this.idCenad).subscribe(response => {
         this.cenad = this.principalService.mapearCenad(response);
         this.nombreCenad = this.cenad.nombre;
-       // this.escudoCenad = this.cenad.escudo;
-        this.escudoCenad = "ESCUDO_CENAD.jpg";
-        this.pathImg = `${this.pathRelativo}${this.escudoCenad}`;
-        //console.log(this.pathImg);
       });
   }
 
@@ -114,5 +105,4 @@ export class PrincipalCenadComponent implements OnInit {
       this.isCenadZaragoza = true;
     }
   }
-
 }

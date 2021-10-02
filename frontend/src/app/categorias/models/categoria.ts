@@ -6,6 +6,6 @@ export interface Categoria {
   descripcion: string;
   subcategorias: Categoria[];
   categoriaPadre: Categoria;
-  cenad: Cenad;
+  cenad: Cenad | string;
   url: string;
 }

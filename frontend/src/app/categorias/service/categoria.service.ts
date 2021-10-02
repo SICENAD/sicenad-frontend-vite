@@ -13,17 +13,21 @@ import { CategoriaImpl } from '../models/categoria-impl';
 })
 export class CategoriaService {
   private host: string = environment.hostSicenad;
-  private urlEndPoint: string = `${this.host}categorias/`;
+  private urlEndPoint: string = `${this.host}categorias`;
 
   constructor(
     private http: HttpClient) { }
 
-  getCategorias(): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
+  // getCategorias(): Observable<any> {
+  //   return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
       //habria que cambiar el endpoint a atacar por `${this.host}cenads/${idCenad}/categorias
       //para que solo me mostrara las de mi cenad, ya que accedere desde dentro de mi cenad
       //esto conllevara quitar de los formularios la seleccion de cenad, y poner predefinido q siempre haga post y put a mi cenad
 
+  // }
+
+  getCategoriasDeCenad(idCenad:string): Observable<any> {
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/categorias/?page=0&size=1000`);
   }
 
   extraerCategorias(respuestaApi: any): Categoria[] {
@@ -61,7 +65,7 @@ export class CategoriaService {
   }
 
   delete(categoria): Observable<Categoria> {
-    return this.http.delete<Categoria>(`${this.urlEndPoint}${categoria.idCategoria}`)
+    return this.http.delete<Categoria>(`${this.urlEndPoint}/${categoria.idCategoria}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -74,7 +78,7 @@ export class CategoriaService {
 
   update(categoria: Categoria): Observable<any> {
     return this.http
-      .put<any>(`${this.urlEndPoint}${categoria.idCategoria}`, categoria)
+      .put<any>(`${this.urlEndPoint}/${categoria.idCategoria}`, categoria)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -89,7 +93,7 @@ export class CategoriaService {
   }
 
   getCategoriaPadre(categoria: Categoria): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${categoria.idCategoria}/categoriaPadre/`)
+    return this.http.get<any>(`${this.urlEndPoint}/${categoria.idCategoria}/categoriaPadre`)
     .pipe(
       catchError((e) => {
         if (e.status === 404) {
@@ -102,6 +106,17 @@ export class CategoriaService {
 
   getCenads(): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/?page=0&size=1000`);
+  }
+
+  getCenad(id): Observable<any> {
+    return this.http.get<Cenad>(`${this.host}cenads/${id}`).pipe(
+      catchError((e) => {
+        if (e.status !== 401 && e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
   }
 
   extraerCenads(respuestaApi: any): Cenad[] {
@@ -124,7 +139,6 @@ export class CategoriaService {
     cenad.email = cenadApi.email;
     cenad.url = cenadApi._links.self.href;
     cenad.idCenad = cenad.getId(cenad.url);
-
     return cenad;
   }
 }

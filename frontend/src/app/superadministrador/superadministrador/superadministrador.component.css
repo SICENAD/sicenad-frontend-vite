@@ -17,15 +17,21 @@ div.filtro {
   border-bottom: 0px;
   border-right: 0px;
 }
+
 .btn {
   background: #A3B18A;
 }
+
+.btn:hover {
+background-color: #588157;
+}
+
 .titulo {
   color: #3A5A40; font-weight: bold
 }
 
 .titulo1 {
-  color: #588157; 
+  color: #588157;
 }
 
 h5 {
@@ -34,4 +40,17 @@ h5 {
 
 .tipoRecurso {
   background: #588157;
+}
+
+.tipoRecurso:hover {
+  background: #A3B18A;
+}
+
+a.home {
+  color: #3A5A40;
+  font-size: 18px;
+}
+
+a.home:hover {
+  color: #A3B18A;
 }

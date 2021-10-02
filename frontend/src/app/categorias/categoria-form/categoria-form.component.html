@@ -44,20 +44,20 @@
       </div>
 
       <!--inicialmente le pongo seleccionar cenad pero la idea es que esta dentro del cenad asi que estara fijado ya-->
-      <div class="col-lg-2 col-md-12">
+      <!-- <div class="col-lg-2 col-md-12">
         <label class="titulo"><b>CENAD<sup class="text-danger">*</sup></b></label>
         <select name="cenad" id="cenad" [(ngModel)]="categoria.cenad">
-          <option class="letra" *ngFor="let cenad of cenads" [ngValue]="cenad.url">{{ cenad.nombre }}</option>
-        </select>
-      </div>
+          <option class="letra" [ngValue]="categoria.cenad.url">{{ categoria.cenad.nombre }}</option>
+          </select>
+      </div> -->
 
 
 
     </div>
     <div class="form-row justify-content-between pt-5">
-      <div class="col-lg-5 col-md-12">
+      <div class="col-lg-5 col-md-12 mb-4">
         <button class="btn text-white" role="button" (click)="crearCategoria()" [disabled]="!categoriaForm.form.valid">
-          Crear Categoria
+          Crear Categoría
         </button>
       </div>
     </div>

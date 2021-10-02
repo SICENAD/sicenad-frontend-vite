@@ -30,27 +30,11 @@ div.titulo {
   align-items: center;
 }
 
-img.cenad {
-  display: block;
-  width: 365px;
-  height: 533px;
-  align-content: center;
-  margin: auto;
-  padding-bottom: 2px;
-}
-
-div.enlaces {
-  border: 6px solid #354f52;
-  border-top: 0px;
-  border-bottom: 0px;
-  border-right: 0px;
-}
-
-div a {
+/* div a {
   color: #588157;
   font-weight: bold;
   font-size: 20px;
-}
+} */
 
 div.menu a {
   color: #588157;

@@ -8,9 +8,9 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
   },
   {
-    path: 'principalCenad/:idCenad',
-    loadChildren: () => import('./principal-cenad/principal-cenad.module').then(m => m.PrincipalCenadModule)
-  },
+     path: 'principalCenad/:idCenad',
+     loadChildren: () => import('./principal-cenad/principal-cenad.module').then(m => m.PrincipalCenadModule)
+   },
   {
     path: 'superadministrador',
     loadChildren: () => import('./superadministrador/superadministrador.module').then(m => m.SuperadministradorModule),
@@ -19,10 +19,10 @@ const routes: Routes = [
     path: 'tiposRecurso',
     loadChildren: () => import('./tiposRecurso/tiposRecurso.module').then(m => m.TiposRecursoModule),
   },
-  {
-    path: 'categorias',
-    loadChildren: () => import('./categorias/categorias.module').then(m => m.CategoriasModule),
-  },
+  // {
+  //   path: 'categorias/:idCenad',
+  //   loadChildren: () => import('./categorias/categorias.module').then(m => m.CategoriasModule),
+  // },
   // {
   //   path: 'recursos',
   //   loadChildren: () => import('./recursos/recursos.module').then(m => m.RecursosModule),

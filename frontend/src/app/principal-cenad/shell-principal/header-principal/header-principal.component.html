@@ -1,0 +1,102 @@
+<div class="container-fluid">
+  <div class="row titulo mt-1">
+      <div class="col col-md-1">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
+                   <fa-icon class="fa-2x menu" [icon]="faMenu"></fa-icon>
+            </button>
+      </div>
+      <div class="col col-md-10 ">
+          <h1>{{ this.nombreCenad | uppercase }}</h1>
+      </div>
+  </div>
+
+  <!-- [ngClass]= "{'disabled': !isAutenticado}" -->
+  <div class="row">
+      <div class="col col-md-12 menu">
+        <nav class="navbar navbar-expand-lg collapse navbar-collapse" id="navbarContenido">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link home" routerLink="/" routerLinkActive="router-link-active">
+                  <fa-icon class="fa-2x" [icon]="faHome"></fa-icon></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [routerLink]='["/principalCenad", idCenad]' routerLinkActive="router-link-active">
+                  CENAD/CMT</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [ngClass]= "{'disabled': isAutenticado}">
+                  <fa-icon [icon]="faConsultar"></fa-icon>&nbsp;Consultar
+                </a>
+                <div class="dropdown-menu consultar" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faRecurso"></fa-icon>&nbsp;Recurso</a>
+                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faCalendario"></fa-icon>&nbsp;Calendario</a>
+                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                      <fa-icon [icon]="faCartografia"></fa-icon>&nbsp;Cartografía</a>
+                  <a class="nav-link"  href="https://www.tiempo.com" target="_blank" [hidden]= "isCenadZaragoza">
+                        <fa-icon [icon]="faMeteo"></fa-icon>&nbsp;Meteorología</a>
+                  <a class="nav-link" href="http://srvgregwww02/GESNOEX" target="_blank">
+                          <fa-icon [icon]="faArtefacto"></fa-icon>&nbsp;Artefactos No Explosionados</a>
+                  <a class="nav-link" href="https://10.63.172.26/so/#/login" target="_blank">
+                            <fa-icon [icon]="faVista"></fa-icon>&nbsp;Vistas ACMT</a>
+                  <li class="nav-item dropdown-submenu" [hidden]= "!isCenadZaragoza">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarSubmenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <fa-icon [icon]="faMeteo"></fa-icon>&nbsp; Meteorología
+                          </a>
+                          <div class="dropdown-menu submenu" aria-labelledby="navbarSubmenu">
+                                <a class="nav-link" href="https://www.tiempo.com/san-gregorio.htm" target="_blank">
+                                  <fa-icon [icon]="faPrevision"></fa-icon>&nbsp;Previsión</a>
+                                <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                                    <fa-icon [icon]="faIPI"></fa-icon>&nbsp;IPI</a>
+                                <a class="nav-link" href="http://10.63.172.49/map" target="_blank">
+                                      <fa-icon [icon]="faMetozonas"></fa-icon>&nbsp;Datos por Zonas</a>
+                          </div>
+                  </li>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <fa-icon [icon]="faMas"></fa-icon>&nbsp; Otros
+                </a>
+                <div class="dropdown-menu otros" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faInfo"></fa-icon>&nbsp;Información</a>
+                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                      <fa-icon [icon]="faNormativa"></fa-icon>&nbsp;Normativa</a>
+                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                        <fa-icon [icon]="faEnlace"></fa-icon>&nbsp;Enlaces de Interés</a>
+                </div>
+              </li>
+              <li class="nav-item" [hidden]= "isAutenticado">
+                <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                  <fa-icon [icon]="faSolicitar"></fa-icon>&nbsp;Solicitar Recurso</a>
+              </li>
+
+              <li class="nav-item dropdown" [hidden]= "isAutenticado">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <fa-icon [icon]="faUser"></fa-icon>&nbsp; Gestionar
+                </a>
+                <div class="dropdown-menu gestionar" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faPeticiones"></fa-icon>&nbsp;Peticiones</a>
+                  <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faCartografia"></fa-icon>&nbsp;Cartografía</a>
+                  <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faRecurso"></fa-icon>&nbsp;Recursos</a>
+                  <a class="dropdown-item" [routerLink]="['categorias', idCenad]" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faCategorias"></fa-icon>&nbsp;Categorías</a>
+                  <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faUsuarios"></fa-icon>&nbsp;Usuarios</a>
+                </div>
+              </li>
+            </ul>
+        </nav>
+
+      </div>
+  </div>
+
+</div>
+
+
+

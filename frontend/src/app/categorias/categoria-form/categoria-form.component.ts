@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Cenad } from 'src/app/superadministrador/models/cenad';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { Categoria } from '../models/categoria';
 import { CategoriaImpl } from '../models/categoria-impl';
 import { CategoriaService } from '../service/categoria.service';
@@ -12,25 +12,38 @@ import { CategoriaService } from '../service/categoria.service';
 })
 export class CategoriaFormComponent implements OnInit {
 
-  categoria: CategoriaImpl = new CategoriaImpl();
+  idCenad: string = "";
+  categoria = new CategoriaImpl();
   categorias: Categoria[] = [];
-  cenads: Cenad[] = [];
 
   constructor(
     private categoriaService: CategoriaService,
-    private router: Router) { }
+    private router: Router,
+    private activateRoute: ActivatedRoute) { }
 
 
   ngOnInit() {
-    this.categoriaService.getCategorias().subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));
-    this.categoriaService.getCenads().subscribe((response) => this.cenads = this.categoriaService.extraerCenads(response));
+    this.idCenad = this.activateRoute.snapshot.params['idCenad'];
+    this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));
+    this.categoria.cenad = `${environment.hostSicenad}cenads/${this.idCenad}`;
   }
 
   crearCategoria(): void {
     this.categoriaService.create(this.categoria).subscribe((response) => {
-      console.log(`He creado la Categoria ${this.categoria.nombre}`);
-      this.router.navigate(['/categorias']);
+            console.log(`He creado la Categoria ${this.categoria.nombre}`);
+      this.router.navigate([`/categorias/${this.idCenad}`]);
+      //console.log(response);
+      // this.categoria.cenad = this.categoriaService.mapearCenad(response).url;
     });
+
+    //  setTimeout(()=> {
+    // //   console.log(this.categoria);
+    //   this.categoriaService.create(this.categoria).subscribe((response) => {
+    //   console.log(`He creado la Categoria ${this.categoria.nombre}`);
+    //   this.router.navigate([`/categorias/${this.idCenad}`]);
+    //  });
+    //  }, 500);
+
   }
 
 }

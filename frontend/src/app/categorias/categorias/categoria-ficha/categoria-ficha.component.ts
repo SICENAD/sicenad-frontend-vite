@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Categoria } from '../../models/categoria';
 import { CategoriaImpl } from '../../models/categoria-impl';
 import { CategoriaService } from '../../service/categoria.service';
@@ -10,6 +11,7 @@ import { CategoriaService } from '../../service/categoria.service';
 })
 export class CategoriaFichaComponent implements OnInit {
 
+  idCenad: string = "";
   @Input() categoria: CategoriaImpl;
   @Output() categoriaEliminar = new EventEmitter<CategoriaImpl>();
   @Output() categoriaEditar = new EventEmitter<CategoriaImpl>();
@@ -17,11 +19,12 @@ export class CategoriaFichaComponent implements OnInit {
 
 
   constructor(
-    private categoriaService: CategoriaService) { }
+    private categoriaService: CategoriaService, 
+    private activateRoute: ActivatedRoute) { }
     
   ngOnInit(): void {
-    this.categoriaService.getCategorias().subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));
-  }
+    this.idCenad = this.activateRoute.snapshot.params['idCenad'];
+    this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));  }
 
   eliminar(): void {
     this.categoriaEliminar.emit(this.categoria);

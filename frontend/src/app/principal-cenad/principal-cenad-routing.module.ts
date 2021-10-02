@@ -1,12 +1,24 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { PrincipalCenadComponent } from './principal-cenad/principal-cenad.component';
+import { CategoriasModule } from '../categorias/categorias.module';
+import { HomePrincipalComponent } from './home-principal/home-principal.component';
+import { ShellPrincipalComponent } from './shell-principal/shell-principal.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: PrincipalCenadComponent
+    component: ShellPrincipalComponent,
+    children: [
+      {
+        path: '',
+        component: HomePrincipalComponent
+      },
+      {
+        path: 'categorias/:idCenad',
+        loadChildren: () => import('../categorias/categorias.module').then(m => m.CategoriasModule)
+      }
+    ]
   }
 ];
 

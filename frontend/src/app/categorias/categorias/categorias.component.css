@@ -1,12 +1,17 @@
 .btn {
-  background: #A3B18A;
+  background: #588157;
 }
+
+.btn:hover {
+  background-color: #A3B18A;
+}
+
 .titulo {
   color: #3A5A40; font-weight: bold
 }
 
 .titulo1 {
-  color: #588157; 
+  color: #588157;
 }
 
 h5 {
