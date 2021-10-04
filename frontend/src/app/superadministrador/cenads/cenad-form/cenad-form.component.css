@@ -1,5 +1,9 @@
 .btn {
-  background: #A3B18A;
+  background: #3A5A40;
+}
+
+.btn:hover {
+  background-color: #A3B18A;
 }
 
 h3 {
@@ -12,4 +16,13 @@ h3 {
 
 .letra {
   color: #588157;
+}
+
+a.volver {
+  color: #3A5A40;
+  font-size: 18px;
+}
+
+a.volver:hover {
+  color: #A3B18A;
 }

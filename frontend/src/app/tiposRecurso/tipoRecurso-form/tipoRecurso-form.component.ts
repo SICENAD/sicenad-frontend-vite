@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { faArrowAltCircleLeft } from '@fortawesome/free-regular-svg-icons';
 import { TipoRecurso } from '../models/tipoRecurso';
 import { TipoRecursoImpl } from '../models/tipoRecurso-impl';
 import { TipoRecursoService } from '../service/tipoRecurso.service';
@@ -13,6 +14,7 @@ export class TipoRecursoFormComponent implements OnInit {
 
   tipoRecurso: TipoRecursoImpl = new TipoRecursoImpl();
   tipoRecursos: TipoRecurso[] = [];
+  faVolver = faArrowAltCircleLeft;
 
   constructor(
     private tipoRecursoService: TipoRecursoService,

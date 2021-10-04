@@ -7,7 +7,7 @@ export class UsuarioAdministradorImpl implements UsuarioAdministrador {
   password: string;
   tfno: string;
   email: string;
-  cenad: Cenad;
+  cenad: string;
   tipo:string;
   descripcion:string;
   url: string;

@@ -22,7 +22,7 @@ export class TipoRecursoService {
 
   extraerTiposRecurso(respuestaApi: any): TipoRecurso[] {
     const tiposRecurso: TipoRecurso[] = [];
-    respuestaApi._embedded.tiposRecurso.forEach(t => {
+    respuestaApi._embedded.tipos_recurso.forEach(t => {
       tiposRecurso.push(this.mapearTipoRecurso(t));
 
     });
@@ -35,6 +35,7 @@ export class TipoRecursoService {
     tipoRecurso.descripcion = tipoRecursoApi.descripcion;
     tipoRecurso.codTipo = tipoRecursoApi.codTipo;
     tipoRecurso.url = tipoRecursoApi._links.self.href;
+    tipoRecurso.recursos = tipoRecursoApi._links.recursos.href;
     tipoRecurso.idTipoRecurso = tipoRecurso.getId(tipoRecurso.url);
 
     return tipoRecurso;

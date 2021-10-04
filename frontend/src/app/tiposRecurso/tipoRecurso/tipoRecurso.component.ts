@@ -5,7 +5,7 @@ import { TipoRecursoService } from '../service/tipoRecurso.service';
 @Component({
   selector: 'app-tipoRecurso',
   templateUrl: './tipoRecurso.component.html',
-  styles: []
+  styleUrls: ['./tipoRecurso.component.css']
 })
 export class TipoRecursoComponent implements OnInit {
 

@@ -4,7 +4,7 @@ export class TipoRecursoImpl implements TipoRecurso {
   idTipoRecurso: string;
   nombre: string;
   descripcion: string;
-  // recursos: Recurso[];
+  recursos: string;
   codTipo: number;
   url: string;
 

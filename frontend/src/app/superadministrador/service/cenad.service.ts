@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -14,9 +14,35 @@ export class CenadService {
 
   private host: string = environment.hostSicenad;
   private urlEndPoint: string = `${this.host}cenads/`;
+  private urlFiles = `${this.host}files/`;
 
-  constructor(
-    private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
+
+  upload(file: File): Observable<HttpEvent<any>> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    const req = new HttpRequest('POST', `${this.urlFiles}subirEscudo`, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+
+  deleteArchivo(fileName: string): Observable<any> {
+
+    return this.http.get(`${this.urlFiles}borrarEscudo/${fileName}`).pipe(
+      catchError((e) => {
+        if (e.status === 400) {
+          return throwError(e);
+        }
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
 
   getCenads(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
@@ -41,6 +67,7 @@ export class CenadService {
     cenad.tfno = cenadApi.tfno;
     cenad.email = cenadApi.email;
     cenad.url = cenadApi._links.self.href;
+    cenad.usuarioAdministrador = cenadApi._links.usuarioAdministrador.href;
     cenad.idCenad = cenad.getId(cenad.url);
 
     return cenad;
@@ -101,13 +128,13 @@ export class CenadService {
 
   getUsuarioAdministrador(cenad: Cenad): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${cenad.idCenad}/usuarioAdministrador/`)
-    .pipe(
-      catchError((e) => {
-        if (e.status === 404) {
-          console.error('Este CENAD/CMT aún no tiene Usuario Administrador');
-        }
-        return throwError(e);
-      })
-    );
+      .pipe(
+        catchError((e) => {
+          if (e.status === 404) {
+            console.error('Este CENAD/CMT aún no tiene Usuario Administrador');
+          }
+          return throwError(e);
+        })
+      );
   }
 }

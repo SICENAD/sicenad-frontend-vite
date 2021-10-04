@@ -1,4 +1,11 @@
 <div class="container">
+  <div class="row ml-4 pl-3">
+    <a class="nav-link text-center volver" routerLink="/superadministrador" routerLinkActive="router-link-active">
+      <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
+  </div>
+  <div class="row justify-content-end align-items-start mb-5">
+    <hr class="w-100" />
+  </div>
   <div class="mt-4 text-center mb-4">
     <h3>CREAR CENAD/CMT</h3>
   </div>
@@ -80,7 +87,7 @@
 
 
 
-    <div class="col-lg-8 col-md-12 pt-3">
+    <div class="col-lg-6 col-md-12 pt-3">
       <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
       <textarea class="form-control letra" [(ngModel)]="cenad.descripcion" placeholder="Descripción del CENAD/CMT" name="descripcion"
         required #descripcion="ngModel" [ngClass]="{ 'is-invalid': descripcion.invalid && (descripcion.dirty || descripcion.touched),
@@ -99,14 +106,16 @@
 
 
 
-    <div class="col-lg-4 col-md-12 pt-3">
-      <label class="titulo"><b>ESCUDO<sup class="text-danger">*</sup></b></label>
-      <input type="file" [(ngModel)]="cenad.escudo" name="escudo" class=" letra"/>
-      <input name="tipoFichero" type="hidden" value="1">
+    <div class="col-lg-6 col-md-12 pt-3">
+      <label>Escudo<sup class="text-danger">*</sup></label>
+      <input type="file" (change)="selectFile($event)" class="form-control"/>
     </div>
 
 
 
+ 
+
+    
 
 
 
@@ -115,11 +124,11 @@
 
   </div>
   <div class="form-row justify-content-between pt-5">
-    <div class="col-lg-5 col-md-12">
+    <div class="col-lg-5 col-md-12 mb-4">
       <button class="btn text-white" role="button"
       (click)="crearCenad()"
-        [disabled]="!cenadForm.form.valid">
-        Crear CENAD/CMT
+      [disabled]="!cenadForm.form.valid || !selectedFiles">
+      Crear CENAD/CMT
       </button>
     </div>
   </div>

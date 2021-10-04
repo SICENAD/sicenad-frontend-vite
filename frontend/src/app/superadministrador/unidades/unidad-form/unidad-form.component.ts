@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { UsuarioNormalImpl } from '../../models/usuarioNormal-impl';
 import { UsuarioNormalService } from '../../service/usuarioNormal.service';
 
@@ -11,6 +12,7 @@ import { UsuarioNormalService } from '../../service/usuarioNormal.service';
 export class UnidadFormComponent implements OnInit {
 
   usuarioNormal: UsuarioNormalImpl = new UsuarioNormalImpl();
+  faVolver = faArrowAltCircleLeft;
 
 
   constructor(

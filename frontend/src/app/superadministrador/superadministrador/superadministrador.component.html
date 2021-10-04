@@ -28,7 +28,8 @@
         <button class="btn text-white mr-3" routerLink="formulario-cenad">
           Nuevo <b>CENAD/CMT</b>
         </button>
-        <button class="btn text-white mr-3" routerLink="formulario-administrador">
+        <button class="btn text-white mr-3" href="#">
+        <!--aqui pondriamos un routerLink a "formulario-administrador" cuando lo creemos-->
           Nuevo <b>Administrador</b>
         </button>
       </div>
@@ -46,7 +47,7 @@
       </div>
       <div *ngFor="let cenad of cenads">
         <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)"
-        [usuarioAdministrador]="cenad.usuarioAdministrador" (usuarioAdministradorSeleccionado)="verDatosUsuarioAdministrador($event)"
+       
           ></app-cenad>
       </div>
     </div>
@@ -90,34 +91,9 @@
           (cenadEditar)="onCenadEditar($event)"></app-cenad-ficha>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">
-          Cerrar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal usuarioAdministrador-->
-<div class="modal fade" id="modalUsuarioAdministrador" tabindex="-1" role="dialog"
-  aria-labelledby="datosUsuarioAdministrador" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="datosUsuarioAdministrador">
-          <b>Datos Completos del Administrador</b>
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-administrador-ficha *ngIf="usuarioAdministradorVerDatos"
-          [usuarioAdministrador]="usuarioAdministradorVerDatos"
-          (usuarioAdministradorEliminar)="onUsuarioAdministradorEliminar($event)"
-          (usuarioAdministradorEditar)="onUsuarioAdministradorEditar($event)"></app-administrador-ficha>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">
+        <button type="button" class="btn text-white" data-dismiss="modal" 
+        (click)="ngOnInit()"
+        >
           Cerrar
         </button>
       </div>

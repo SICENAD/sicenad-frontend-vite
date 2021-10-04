@@ -39,6 +39,7 @@ export class UsuarioAdministradorService {
     usuario.email = usuarioApi.email;
     usuario.descripcion = usuarioApi.descripcion;
     usuario.url = usuarioApi._links.self.href;
+    usuario.cenad = usuarioApi._links.cenad.href;
     usuario.idUsuario = usuario.getId(usuario.url);
 
     return usuario;

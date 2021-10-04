@@ -25,7 +25,7 @@
 
     <div class="col-lg-4 col-md-12">
       <label><b>ADMINISTRADOR<sup class="text-danger">*</sup></b></label>
-      <input type="text" class="form-control letra" [(ngModel)]="cenad.usuarioAdministrador.nombre"  name="administrador" readonly/>
+      <input type="text" class="form-control letra" [value]="administrador"  name="administrador" readonly/>
       <!-- <select name="administrador" id="administrador" [(ngModel)]="cenad.usuarioAdministrador">
         <option *ngFor="let administrador of administradores" [ngValue]="administrador.url">{{ administrador.nombre }}</option>
       </select> -->
@@ -90,13 +90,11 @@
       </div>
     </div>
 
-
-
-
-
-    <div class="col-lg-4 col-md-12 pt-3">
-      <label><b>ESCUDO<sup class="text-danger">*</sup></b></label>
-      <input type="file" [(ngModel)]="cenad.escudo" name="escudo" class=" letra"/>
+    <div class="col-lg-4 col-md-12">
+      <label><b>Escudo<sup class="text-danger">*</sup></b></label>
+      <input type="text" class="form-control" [(ngModel)]="cenad.escudo" name="escudo" readonly/>
+      <input type="file" (change)="selectFile($event)" class="form-control"/>
+        
     </div>
 
 

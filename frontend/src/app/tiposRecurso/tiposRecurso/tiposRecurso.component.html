@@ -1,4 +1,11 @@
 <div class="container">
+  <div class="row ml-4 pl-3">
+    <a class="nav-link text-center volver" routerLink="/superadministrador" routerLinkActive="router-link-active">
+      <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
+  </div>
+  <div class="row justify-content-end align-items-start mb-5">
+    <hr class="w-100" />
+  </div>
   <div class="row m-2">
     <div class="col-12 text-center">
       <h2 class="bienvenido text-center titulo1"><u>GESTIÓN DE TIPOS DE RECURSOS</u> </h2>
@@ -15,7 +22,7 @@
     <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo"><b>DESCRIPCIÓN</b></div>
   </div>
 
-  <div *ngFor="let tipoRecurso of tipoRecursos">
+  <div *ngFor="let tipoRecurso of tiposRecurso">
     <app-tipoRecurso [tipoRecurso]="tipoRecurso" (tipoRecursoSeleccionado)="verDatos($event)"></app-tipoRecurso>
   </div>
   <!-- Modal tipoRecurso-->

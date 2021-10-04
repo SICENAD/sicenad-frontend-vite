@@ -6,6 +6,7 @@ import { TiposRecursoComponent } from './tiposRecurso/tiposRecurso.component';
 import { TipoRecursoComponent } from './tipoRecurso/tipoRecurso.component';
 import { TipoRecursoFichaComponent } from './tiposRecurso/tipoRecurso-ficha/tipoRecurso-ficha.component';
 import { TipoRecursoFormComponent } from './tipoRecurso-form/tipoRecurso-form.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 
@@ -14,7 +15,8 @@ import { TipoRecursoFormComponent } from './tipoRecurso-form/tipoRecurso-form.co
   imports: [
     CommonModule,
     TiposRecursoRoutingModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ]
 })
 export class TiposRecursoModule { }

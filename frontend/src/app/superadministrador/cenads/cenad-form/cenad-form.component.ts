@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { CenadImpl } from '../../models/cenad-impl';
 import { UsuarioAdministrador } from '../../models/usuarioAdministrador';
 import { CenadService } from '../../service/cenad.service';
@@ -34,6 +35,11 @@ export class CenadFormComponent implements OnInit {
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
 
+  selectedFiles: FileList;
+  currentFile: File;
+
+  faVolver =faArrowAltCircleLeft;
+
   constructor(
     private cenadService: CenadService,
     private usuarioAdministradorService: UsuarioAdministradorService,
@@ -44,10 +50,23 @@ export class CenadFormComponent implements OnInit {
     }
 
   crearCenad(): void {
+    this.upload();
+    this.cenad.escudo = this.currentFile.name;
     this.cenadService.create(this.cenad).subscribe((response) => {
       console.log(`He creado el CENAD/CMT ${this.cenad.nombre}`);
       this.router.navigate(['/superadministrador']);
     });
+  }
+
+  selectFile(event) {
+    this.selectedFiles = event.target.files;
+  }
+
+  upload() {
+    this.currentFile = this.selectedFiles.item(0);
+    this.cenadService.upload(this.currentFile).subscribe(
+      );
+    this.selectedFiles = undefined;
   }
 
 }

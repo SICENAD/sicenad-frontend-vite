@@ -4,7 +4,7 @@ import { TipoRecursoImpl } from '../../models/tipoRecurso-impl';
 @Component({
   selector: 'app-tipoRecurso-ficha',
   templateUrl: './tipoRecurso-ficha.component.html',
-  styles: []
+  styleUrls: ['./tipoRecurso-ficha.component.css']
 })
 export class TipoRecursoFichaComponent implements OnInit {
 

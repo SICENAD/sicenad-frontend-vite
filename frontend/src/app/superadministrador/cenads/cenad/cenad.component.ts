@@ -36,13 +36,15 @@ export class CenadComponent implements OnInit {
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
   provincia: string;
+  usuario_Administrador: UsuarioAdministrador;
 
   constructor(private cenadService: CenadService,
               private usuarioAdministradorService: UsuarioAdministradorService) { }
 
   ngOnInit() {
     this.getProvincia(this.cenad);
-    this.cenadService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.cenad.usuarioAdministrador = this.usuarioAdministradorService.mapearUsuario(response));
+    this.cenadService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.usuario_Administrador = this.usuarioAdministradorService.mapearUsuario(response));
+
   }
 
   getProvincia(cenad: Cenad) {
