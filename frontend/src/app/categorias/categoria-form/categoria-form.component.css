@@ -17,3 +17,12 @@ h3 {
 .letra {
   color: #588157;
 }
+
+a.volver {
+  color: #3A5A40;
+  font-size: 18px;
+}
+
+a.volver:hover {
+  color: #A3B18A;
+}

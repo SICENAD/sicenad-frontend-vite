@@ -1,7 +1,5 @@
 <form #categoriaForm="ngForm">
   <div class="form-row py-2">
-
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>CATEGORÍA<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="categoria.nombre" placeholder="Nombre de la categoría" name="nombre"
@@ -13,20 +11,12 @@
         </div>
       </div>
     </div>
-
-
-
-
     <div class="col-lg-8 col-md-12">
       <label class="titulo"><b>CATEGORÍA PADRE<sup class="text-danger">*</sup></b></label>
       <select name="categoriaPadre" id="categoriaPadre" [(ngModel)]="categoria.categoriaPadre">
         <option class=" letra" *ngFor="let categoria of categorias" [ngValue]="categoria.url">{{ categoria.nombre }}</option>
       </select>
     </div>
-
-
-
-
     <div class="col-lg-12 col-md-12 pt-3">
       <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
       <textarea class="form-control letra" [(ngModel)]="categoria.descripcion" placeholder="Descripción de la Categoría" name="descripcion"
@@ -38,8 +28,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
   <div class="form-row justify-content-between pt-5">
     <button type="button" class="btn guardar" (click)="editar()" [disabled]="!categoriaForm.form.valid">Guardar</button>

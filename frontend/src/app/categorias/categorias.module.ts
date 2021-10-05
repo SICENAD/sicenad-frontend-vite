@@ -7,6 +7,7 @@ import { CategoriasComponent } from './categorias/categorias.component';
 import { CategoriaFichaComponent } from './categorias/categoria-ficha/categoria-ficha.component';
 import { CategoriaComponent } from './categoria/categoria.component';
 import { CategoriaFormComponent } from './categoria-form/categoria-form.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { CategoriaFormComponent } from './categoria-form/categoria-form.componen
   imports: [
     CommonModule,
     CategoriasRoutingModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ]
 })
 export class CategoriasModule { }

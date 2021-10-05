@@ -18,14 +18,6 @@ export class CategoriaService {
   constructor(
     private http: HttpClient) { }
 
-  // getCategorias(): Observable<any> {
-  //   return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
-      //habria que cambiar el endpoint a atacar por `${this.host}cenads/${idCenad}/categorias
-      //para que solo me mostrara las de mi cenad, ya que accedere desde dentro de mi cenad
-      //esto conllevara quitar de los formularios la seleccion de cenad, y poner predefinido q siempre haga post y put a mi cenad
-
-  // }
-
   getCategoriasDeCenad(idCenad:string): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/${idCenad}/categorias/?page=0&size=1000`);
   }
@@ -43,7 +35,6 @@ export class CategoriaService {
     const categoria = new CategoriaImpl();
     categoria.nombre = categoriaApi.nombre;
     categoria.descripcion = categoriaApi.descripcion;
-    categoria.subcategorias = categoriaApi.subcategorias;
     categoria.url = categoriaApi._links.self.href;
     categoria.idCategoria = categoria.getId(categoria.url);
 
@@ -78,7 +69,7 @@ export class CategoriaService {
 
   update(categoria: Categoria): Observable<any> {
     return this.http
-      .put<any>(`${this.urlEndPoint}/${categoria.idCategoria}`, categoria)
+      .patch<any>(`${this.urlEndPoint}/${categoria.idCategoria}`, categoria)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {

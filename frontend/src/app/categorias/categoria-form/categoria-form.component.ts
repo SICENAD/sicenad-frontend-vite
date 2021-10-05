@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { environment } from 'src/environments/environment';
 import { Categoria } from '../models/categoria';
 import { CategoriaImpl } from '../models/categoria-impl';
@@ -13,8 +14,9 @@ import { CategoriaService } from '../service/categoria.service';
 export class CategoriaFormComponent implements OnInit {
 
   idCenad: string = "";
-  categoria = new CategoriaImpl();
+  categoria: Categoria = new CategoriaImpl();
   categorias: Categoria[] = [];
+  faVolver =faArrowAltCircleLeft;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -31,19 +33,7 @@ export class CategoriaFormComponent implements OnInit {
   crearCategoria(): void {
     this.categoriaService.create(this.categoria).subscribe((response) => {
             console.log(`He creado la Categoria ${this.categoria.nombre}`);
-      this.router.navigate([`/categorias/${this.idCenad}`]);
-      //console.log(response);
-      // this.categoria.cenad = this.categoriaService.mapearCenad(response).url;
+      this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
     });
-
-    //  setTimeout(()=> {
-    // //   console.log(this.categoria);
-    //   this.categoriaService.create(this.categoria).subscribe((response) => {
-    //   console.log(`He creado la Categoria ${this.categoria.nombre}`);
-    //   this.router.navigate([`/categorias/${this.idCenad}`]);
-    //  });
-    //  }, 500);
-
   }
-
 }

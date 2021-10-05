@@ -17,7 +17,6 @@ export class CategoriaFichaComponent implements OnInit {
   @Output() categoriaEditar = new EventEmitter<CategoriaImpl>();
   categorias: Categoria[] = [];
 
-
   constructor(
     private categoriaService: CategoriaService, 
     private activateRoute: ActivatedRoute) { }

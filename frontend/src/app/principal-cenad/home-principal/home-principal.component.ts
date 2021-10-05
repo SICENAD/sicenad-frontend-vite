@@ -4,6 +4,7 @@ import { faEdge } from '@fortawesome/free-brands-svg-icons';
 import { faBusinessTime, faCalendarAlt, faFolderOpen, faLink, faMap } from '@fortawesome/free-solid-svg-icons';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
+import { environment } from 'src/environments/environment';
 import { PrincipalService } from '../service/principal.service';
 
 @Component({
@@ -24,7 +25,8 @@ export class HomePrincipalComponent implements OnInit {
   cenad: Cenad = new CenadImpl();
   idCenad: string = "";
   src: string = "";
-  pathRelativo: string = "../../../assets/";
+  // pathRelativo: string = "../../../assets/";
+  pathRelativo: string = `${environment.hostSicenad}files/escudos/`;
   //pathImg: string = "../../../assets/ESCUDO_CENAD.jpg";
   escudoCenad: string = "";
   pathImg: string = "";
@@ -46,8 +48,8 @@ export class HomePrincipalComponent implements OnInit {
     this.capturarIdBarraNavegacion();
     this.principalService.getCenad(this.idCenad).subscribe(response => {
         this.cenad = this.principalService.mapearCenad(response);
-       // this.escudoCenad = this.cenad.escudo;
-        this.escudoCenad = "ESCUDO_CENAD.jpg";
+       this.escudoCenad = this.cenad.escudo;
+        // this.escudoCenad = "ESCUDO_CENAD.jpg";
         this.pathImg = `${this.pathRelativo}${this.escudoCenad}`;
         //console.log(this.pathImg);
       });

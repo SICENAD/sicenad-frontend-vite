@@ -22,7 +22,6 @@ export class CategoriasComponent implements OnInit {
 
     ngOnInit(): void {
       this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-      //console.log(this.idCenad);
       this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));
     }
 
@@ -33,14 +32,14 @@ export class CategoriasComponent implements OnInit {
     onCategoriaEliminar(categoria: CategoriaImpl): void {
       this.categoriaService.delete(categoria).subscribe(response => {
         console.log(`He borrado la Categoria ${categoria.nombre}`);
-        this.router.navigate([`/categorias/${this.idCenad}`]);
+        this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
       });
     }
 
     onCategoriaEditar(categoria: CategoriaImpl): void {
       this.categoriaService.update(categoria).subscribe(response => {
         console.log(`He actualizado la Categoria ${categoria.nombre}`);
-        this.router.navigate([`/categorias/${this.idCenad}`]);
+        this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
       });
     }
   }

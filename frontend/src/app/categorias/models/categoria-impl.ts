@@ -1,3 +1,4 @@
+import { Recurso } from "src/app/recursos/models/recurso";
 import { Cenad } from "src/app/superadministrador/models/cenad";
 import { Categoria } from "./categoria";
 
@@ -8,6 +9,7 @@ export class CategoriaImpl implements Categoria {
   subcategorias: Categoria[];
   categoriaPadre: Categoria;
   cenad: string | Cenad;
+  recursos: Recurso[];
   url: string;
 
   constructor() {}

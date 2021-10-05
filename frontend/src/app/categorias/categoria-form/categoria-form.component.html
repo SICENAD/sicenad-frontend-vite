@@ -1,11 +1,16 @@
 <div class="container">
+  <div class="row ml-4 pl-3">
+    <a class="nav-link text-center volver" routerLink="../../"  routerLinkActive="router-link-active">
+      <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
+  </div>
+  <div class="row justify-content-end align-items-start mb-5">
+    <hr class="w-100" />
+  </div>
   <div class="mt-4 text-center mb-4">
     <h3>CREAR Categoría</h3>
   </div>
   <form #categoriaForm="ngForm">
     <div class="form-row py-2">
-
-
       <div class="col-lg-4 col-md-12">
         <label class="titulo"><b>CATEGORÍA<sup class="text-danger">*</sup></b></label>
         <input type="text" class="form-control letra" [(ngModel)]="categoria.nombre" placeholder="Nombre de la categoría"
@@ -17,20 +22,12 @@
           </div>
         </div>
       </div>
-
-
-
-
       <div class="col-lg-4 col-md-12">
         <label class="titulo"><b>CATEGORÍA PADRE<sup class="text-danger">*</sup></b></label>
         <select name="categoriaPadre" id="categoriaPadre" [(ngModel)]="categoria.categoriaPadre">
           <option class=" letra" *ngFor="let categoria of categorias" [ngValue]="categoria.url">{{ categoria.nombre }}</option>
         </select>
       </div>
-
-
-
-
       <div class="col-lg-4 col-md-12">
         <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
         <textarea class="form-control letra" [(ngModel)]="categoria.descripcion" placeholder="Descripción de la Categoría"
@@ -42,17 +39,6 @@
           </div>
         </div>
       </div>
-
-      <!--inicialmente le pongo seleccionar cenad pero la idea es que esta dentro del cenad asi que estara fijado ya-->
-      <!-- <div class="col-lg-2 col-md-12">
-        <label class="titulo"><b>CENAD<sup class="text-danger">*</sup></b></label>
-        <select name="cenad" id="cenad" [(ngModel)]="categoria.cenad">
-          <option class="letra" [ngValue]="categoria.cenad.url">{{ categoria.cenad.nombre }}</option>
-          </select>
-      </div> -->
-
-
-
     </div>
     <div class="form-row justify-content-between pt-5">
       <div class="col-lg-5 col-md-12 mb-4">
