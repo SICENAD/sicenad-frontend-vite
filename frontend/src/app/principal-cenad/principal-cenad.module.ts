@@ -11,7 +11,6 @@ import { HeaderPrincipalComponent } from './shell-principal/header-principal/hea
 import { MainPrincipalComponent } from './shell-principal/main-principal/main-principal.component';
 import { HomePrincipalComponent } from './home-principal/home-principal.component';
 
-
 @NgModule({
   declarations: [ShellPrincipalComponent, FooterPrincipalComponent, HeaderPrincipalComponent, MainPrincipalComponent, HomePrincipalComponent],
   imports: [

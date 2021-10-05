@@ -1,7 +1,5 @@
 <form #tipoRecursoForm="ngForm">
   <div class="form-row py-2">
-
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>TIPO DE RECURSO<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="tipoRecurso.nombre" placeholder="Nombre del Tipo de Recurso"
@@ -13,7 +11,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>CÓDIGO DEL TIPO DE RECURSO<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="tipoRecurso.codTipo" placeholder="Código del Tipo de Recurso"
@@ -25,11 +22,6 @@
         </div>
       </div>
     </div>
-
-
-
-
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
       <textarea class="form-control letra" [(ngModel)]="tipoRecurso.descripcion" placeholder="Descripción del Tipo de Recurso"
@@ -41,8 +33,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
   <div class="form-row justify-content-between pt-5">
     <button type="button" class="btn guardar" (click)="editar()" [disabled]="!tipoRecursoForm.form.valid">Guardar</button>

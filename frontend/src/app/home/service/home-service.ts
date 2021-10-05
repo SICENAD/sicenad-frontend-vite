@@ -14,7 +14,6 @@ export class HomeService {
 
   constructor(private http: HttpClient) { }
 
-
   getCenads(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint);
   }
@@ -24,12 +23,10 @@ export class HomeService {
     respuestaApi._embedded.cenads.forEach(c => {
       cenads.push(this.mapearCenad(c));
     });
-    //console.log(cenads);
     return cenads;
   }
 
   mapearCenad(cenadApi: any): Cenad {
-    //console.log(cenadApi);
     let cenad: Cenad = new CenadImpl();
     cenad.idCenad = this.getId(cenadApi._links.cenad.href);
     cenad.nombre = cenadApi.nombre;
@@ -39,15 +36,12 @@ export class HomeService {
     cenad.email = cenadApi.email;
     cenad.escudo = cenadApi.escudo;
     cenad.provincia = cenadApi.provincia;
-    // console.log(cenad);
     return cenad;
   }
 
   getId(url: string): string {
     let posicionFinal: number = url.lastIndexOf('/');
     let numId: string = url.slice(posicionFinal + 1, url.length);
-    //console.log(numId);
     return numId;
   }
-
 }

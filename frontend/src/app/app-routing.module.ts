@@ -19,14 +19,6 @@ const routes: Routes = [
     path: 'tiposRecurso',
     loadChildren: () => import('./tiposRecurso/tiposRecurso.module').then(m => m.TiposRecursoModule),
   },
-  // {
-  //   path: 'categorias/:idCenad',
-  //   loadChildren: () => import('./categorias/categorias.module').then(m => m.CategoriasModule),
-  // },
-  // {
-  //   path: 'recursos',
-  //   loadChildren: () => import('./recursos/recursos.module').then(m => m.RecursosModule),
-  // },
   {
     path: 'not-found',
     component: NotFoundComponent

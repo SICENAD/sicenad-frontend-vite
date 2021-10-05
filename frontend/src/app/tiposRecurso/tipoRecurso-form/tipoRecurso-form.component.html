@@ -6,14 +6,11 @@
   <div class="row justify-content-end align-items-start mb-5">
     <hr class="w-100" />
   </div>
-  
   <div class="mt-4 text-center mb-4">
     <h3>CREAR TIPO DE RECURSO</h3>
   </div>
   <form #tipoRecursoForm="ngForm">
     <div class="form-row py-2">
-
-
       <div class="col-lg-4 col-md-12">
         <label class="titulo"><b>TIPO DE RECURSO<sup class="text-danger">*</sup></b></label>
         <input type="text" class="form-control letra" [(ngModel)]="tipoRecurso.nombre" placeholder="Nombre del Tipo de Recurso"
@@ -25,7 +22,6 @@
           </div>
         </div>
       </div>
-
       <div class="col-lg-4 col-md-12">
         <label class="titulo"><b>CÓDIGO DEL TIPO DE RECURSO<sup class="text-danger">*</sup></b></label>
         <input type="text" class="form-control letra" [(ngModel)]="tipoRecurso.codTipo" placeholder="Código del Tipo de Recurso"
@@ -37,11 +33,6 @@
           </div>
         </div>
       </div>
-
-
-
-
-
       <div class="col-lg-4 col-md-12">
         <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
         <textarea class="form-control letra" [(ngModel)]="tipoRecurso.descripcion" placeholder="Descripción del Tipo de Recurso"
@@ -53,8 +44,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
     <div class="form-row justify-content-between pt-5">
       <div class="col-lg-5 col-md-12 mb-4">

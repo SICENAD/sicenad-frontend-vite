@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
 import { Cenad } from '../models/cenad';
 import { CenadImpl } from '../models/cenad-impl';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -101,7 +100,7 @@ export class CenadService {
 
   update(cenad: Cenad): Observable<any> {
     return this.http
-      .put<any>(`${this.urlEndPoint}${cenad.idCenad}`, cenad)
+      .patch<any>(`${this.urlEndPoint}${cenad.idCenad}`, cenad)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {

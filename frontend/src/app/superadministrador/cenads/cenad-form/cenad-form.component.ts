@@ -15,7 +15,9 @@ export class CenadFormComponent implements OnInit {
 
   cenad: CenadImpl = new CenadImpl();
   administradores: UsuarioAdministrador[] = [];
-
+  faVolver =faArrowAltCircleLeft;
+  selectedFiles: FileList;
+  currentFile: File;
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
@@ -35,19 +37,14 @@ export class CenadFormComponent implements OnInit {
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
 
-  selectedFiles: FileList;
-  currentFile: File;
-
-  faVolver =faArrowAltCircleLeft;
-
   constructor(
     private cenadService: CenadService,
     private usuarioAdministradorService: UsuarioAdministradorService,
     private router: Router) { }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
       this.usuarioAdministradorService.getUsuarios().subscribe((response) => this.administradores = this.usuarioAdministradorService.extraerUsuarios(response));
-    }
+  }
 
   crearCenad(): void {
     this.upload();

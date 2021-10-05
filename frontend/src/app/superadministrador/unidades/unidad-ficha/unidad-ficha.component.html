@@ -1,7 +1,5 @@
 <form #unidadForm="ngForm">
   <div class="form-row py-2">
-
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>NOMBRE DE USUARIO<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="usuarioNormal.nombre" placeholder="Nombre del usuario"
@@ -13,7 +11,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>PASSWORD<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="usuarioNormal.password" placeholder="Password del usuario"
@@ -25,7 +22,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
       <input type="tel" class="form-control letra" [(ngModel)]="usuarioNormal.tfno"
@@ -41,7 +37,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-lg-8 col-md-12 pt-3">
       <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
       <textarea class="form-control letra" [(ngModel)]="usuarioNormal.descripcion" placeholder="Descripción del usuario" name="descripcion"
@@ -53,7 +48,6 @@
         </div>
       </div>
     </div>
-
     <div class="col-lg-6 col-md-12 pt-3">
       <label class="titulo"><b>EMAIL</b></label>
       <input type="email" class="form-control letra" [(ngModel)]="usuarioNormal.email" placeholder="Email del usuario"
@@ -63,13 +57,8 @@
         <div *ngIf="email.errors.required">
           El Email del usuario es obligatorio
         </div>
-        <!-- <div *ngIf="email.errors.email">
-          Introduzca un email valido ("@")
-        </div> -->
       </div>
     </div>
-
-
     <div class="col-lg-6 col-md-12 pt-3">
       <label class="titulo"><b>UNIDAD<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="usuarioNormal.unidad" placeholder="Nombre de la unidad"

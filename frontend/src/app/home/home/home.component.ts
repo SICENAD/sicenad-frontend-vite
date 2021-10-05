@@ -15,7 +15,6 @@ export class HomeComponent implements OnInit {
   provinciaSeleccionada: string = "";
   cenads: Cenad[] = [];
   cenadsFiltro: Cenad[] = [];
- // idCenad: string;
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
@@ -54,7 +53,6 @@ export class HomeComponent implements OnInit {
     cenad3.nombre = "CMT ALVAREZ DE SOTOMAYOR";
     cenad3.provincia = 4;
     this.cenads.push(cenad1, cenad2, cenad3);
-   // console.log(this.cenads);
   }
 
   // función que carga los diferentes CENAD,s/CMT,s de la API
@@ -62,13 +60,11 @@ export class HomeComponent implements OnInit {
     this.homeService.getCenads().subscribe((response) => {
       this.cenads = this.homeService.extraerCenads(response);
     });
-   // console.log(this.cenads);
   }
 
   // Asigna al array cenadsFiltro todos los CENAD,s/CMT,s de una provincia
   // se le pasa como parámetro el código de la provincia
   buscarCenads(idProvincia: number): void {
-   // console.log(idProvincia);
     this.cenadsFiltro = this.cenads.filter(cenad => {
       if (cenad.provincia == idProvincia) {
         return cenad;
@@ -80,7 +76,6 @@ export class HomeComponent implements OnInit {
         this.idProvinciaSeleccionada = p.idProvincia;
       }
     });
-    //console.log(this.cenadsFiltro);
   }
 
   // Es invocada desde la capa presentación a través del filtro o al hacer click sobre una provincia

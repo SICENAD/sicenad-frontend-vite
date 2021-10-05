@@ -11,8 +11,6 @@
   </div>
 <form #cenadForm="ngForm">
   <div class="form-row py-2">
-
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>CENAD/CMT<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="cenad.nombre" placeholder="Nombre del CENAD/CMT" name="nombre"
@@ -24,23 +22,12 @@
         </div>
       </div>
     </div>
-
-
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>PROVINCIA<sup class="text-danger">*</sup></b></label>
       <select name="provincia" id="provincia" [(ngModel)]="cenad.provincia">
         <option class=" letra" *ngFor="let provincia of provincias" [ngValue]="provincia.idProvincia">{{ provincia.nombre }}</option>
       </select>
     </div>
-
-
-    <!-- <div class="col-lg-4 col-md-12">
-      <label><b>ADMINISTRADOR<sup class="text-danger">*</sup></b></label>
-      <select name="administrador" id="administrador" [(ngModel)]="cenad.usuarioAdministrador">
-        <option *ngFor="let administrador of administradores" [ngValue]="administrador.url">{{ administrador.nombre }}</option>
-      </select>
-    </div> -->
-
     <div class="col-lg-4 col-md-12 pt-3">
       <label class="titulo"><b>DIRECCIÓN<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="cenad.direccion" placeholder="Dirección del CENAD/CMT" name="direccion"
@@ -52,8 +39,6 @@
         </div>
       </div>
     </div>
-
-
     <div class="col-lg-4 col-md-12 pt-3">
       <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
       <input type="tel" class="form-control letra" [(ngModel)]="cenad.tfno" placeholder="Teléfono de contacto del CENAD/CMT" name="telefono"
@@ -67,9 +52,7 @@
           El Teléfono debe tener 9 carácteres
         </div>
       </div>
-    </div>
-    
-
+    </div> 
     <div class="col-lg-4 col-md-12 pt-3">
       <label class="titulo"><b>EMAIL</b></label>
       <input type="email" class="form-control letra" [(ngModel)]="cenad.email" placeholder="Email de contacto del CENAD/CMT" name="email"
@@ -84,9 +67,6 @@
         </div>
       </div>
     </div>
-
-
-
     <div class="col-lg-6 col-md-12 pt-3">
       <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
       <textarea class="form-control letra" [(ngModel)]="cenad.descripcion" placeholder="Descripción del CENAD/CMT" name="descripcion"
@@ -98,30 +78,10 @@
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
     <div class="col-lg-6 col-md-12 pt-3">
       <label>Escudo<sup class="text-danger">*</sup></label>
       <input type="file" (change)="selectFile($event)" class="form-control"/>
     </div>
-
-
-
- 
-
-    
-
-
-
-
-
-
   </div>
   <div class="form-row justify-content-between pt-5">
     <div class="col-lg-5 col-md-12 mb-4">

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CenadImpl } from '../../models/cenad-impl';
-import { UsuarioAdministrador } from '../../models/usuarioAdministrador';
 import { CenadService } from '../../service/cenad.service';
 import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.service';
 
@@ -15,6 +14,8 @@ export class CenadFichaComponent implements OnInit {
   @Output() cenadEliminar = new EventEmitter<CenadImpl>();
   @Output() cenadEditar = new EventEmitter<CenadImpl>();
   administrador: string;
+  selectedFiles: FileList;
+  currentFile: File;
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
@@ -34,9 +35,6 @@ export class CenadFichaComponent implements OnInit {
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
 
-  selectedFiles: FileList;
-  currentFile: File;
-
   constructor(private usuarioAdministradorService: UsuarioAdministradorService, private cenadService: CenadService) { }
 
   ngOnInit(): void {
@@ -45,8 +43,7 @@ export class CenadFichaComponent implements OnInit {
 
   eliminar(): void {
     this.delete_Archivo(this.cenad);
-    this.cenadEliminar.emit(this.cenad);
-    
+    this.cenadEliminar.emit(this.cenad);  
   }
 
   editar(): void {
@@ -66,12 +63,10 @@ export class CenadFichaComponent implements OnInit {
     this.currentFile = this.selectedFiles.item(0);
     this.cenadService.upload(this.currentFile).subscribe(
       );
-
     this.selectedFiles = undefined;
   }
 
   delete_Archivo(cenad: CenadImpl) {
     this.cenadService.deleteArchivo(cenad.escudo).subscribe();
-
   }
 }

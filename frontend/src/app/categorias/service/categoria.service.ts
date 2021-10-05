@@ -26,7 +26,6 @@ export class CategoriaService {
     const categorias: Categoria[] = [];
     respuestaApi._embedded.categorias.forEach(c => {
       categorias.push(this.mapearCategoria(c));
-
     });
     return categorias;
   }

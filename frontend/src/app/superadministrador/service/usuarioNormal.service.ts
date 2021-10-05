@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
 import { UsuarioNormal } from '../models/usuarioNormal';
 import { UsuarioNormalImpl } from '../models/usuarioNormal-impl';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +25,6 @@ export class UsuarioNormalService {
     const usuarios: UsuarioNormal[] = [];
     respuestaApi._embedded.usuarios_normal.forEach(u => {
       usuarios.push(this.mapearUsuario(u));
-
     });
     return usuarios;
   }
@@ -73,7 +71,7 @@ export class UsuarioNormalService {
 
   update(usuario: UsuarioNormal): Observable<any> {
     return this.http
-      .put<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
+      .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {

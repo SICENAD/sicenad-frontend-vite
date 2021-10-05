@@ -12,7 +12,6 @@ export class UnidadFichaComponent implements OnInit {
   @Output() usuarioNormalEliminar = new EventEmitter<UsuarioNormalImpl>();
   @Output() usuarioNormalEditar = new EventEmitter<UsuarioNormalImpl>();
 
-
   constructor() { }
 
   ngOnInit(): void {

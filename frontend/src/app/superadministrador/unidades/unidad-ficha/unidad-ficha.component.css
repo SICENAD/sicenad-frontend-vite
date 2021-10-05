@@ -5,12 +5,15 @@
 .titulo {
   color: #3A5A40; 
 }
+
 .guardar:hover {
   background: green;
 }
+
 .eliminar:hover {
   background: red;
 }
+
 .letra {
   color: #588157;
 }

@@ -46,19 +46,16 @@ export class HeaderPrincipalComponent implements OnInit {
   cenads: Cenad[] = [];
   cenadsFiltro: Cenad[] = [];
 
-
   constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.cargarCenad();
     this.procesoComprobacionCenadZaragoza();
-
   }
 
   // Captura el idCenad pasado como parámetro en la barra de navegación
   capturarIdBarraNavegacion(): void {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    //console.log(this.idCenad);
   }
 
   // Hace una llamada a la API y carga el CENAD/CMT cuyo id es pasado como parámetro desde la barra de navegación
@@ -78,16 +75,13 @@ export class HeaderPrincipalComponent implements OnInit {
       this.buscarIdCenadZaragoza();
       this.comprobarCenadZaragoza();
     }, 500);
-
   }
 
   // función que carga los diferentes CENAD,s/CMT,s de la API
   cargarCenads() {
     this.principalService.getCenads().subscribe((response) => {
       this.cenads = this.principalService.extraerCenads(response);
-     // console.log(this.cenads);
     });
-
   }
 
   // si el idProvincia del CENAD/CMT es el de Zaragoza (50), actualiza el valor de la variable idCenadZaragoza

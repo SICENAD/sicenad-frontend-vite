@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { TipoRecursoFormComponent } from './tipoRecurso-form/tipoRecurso-form.component';
 import { TiposRecursoComponent } from './tiposRecurso/tiposRecurso.component';
 
-
-
 const routes: Routes = [
   {
     path: '',

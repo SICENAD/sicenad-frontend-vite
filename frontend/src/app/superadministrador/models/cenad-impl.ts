@@ -1,4 +1,5 @@
 import { Cenad } from "./cenad";
+import { UsuarioAdministrador } from "./usuarioAdministrador";
 
 export class CenadImpl implements Cenad {
   idCenad: string;
@@ -10,7 +11,7 @@ export class CenadImpl implements Cenad {
   escudo: string;
   provincia: number;
   url: string;
-  usuarioAdministrador: string;
+  usuarioAdministrador: UsuarioAdministrador | string;
   tieneAdmin: boolean = false;
 
   constructor() {}

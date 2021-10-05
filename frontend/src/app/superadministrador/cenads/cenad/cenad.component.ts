@@ -4,7 +4,6 @@ import { UsuarioAdministrador } from '../../models/usuarioAdministrador';
 import { CenadService } from '../../service/cenad.service';
 import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.service';
 
-
 @Component({
   selector: 'app-cenad',
   templateUrl: './cenad.component.html',
@@ -16,7 +15,8 @@ export class CenadComponent implements OnInit {
   @Output() cenadSeleccionado = new EventEmitter<Cenad>();
   @Input() usuarioAdministrador: UsuarioAdministrador;
   @Output() usuarioAdministradorSeleccionado = new EventEmitter<UsuarioAdministrador>();
-
+  provincia: string;
+  usuario_Administrador: UsuarioAdministrador;
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
@@ -35,8 +35,6 @@ export class CenadComponent implements OnInit {
   {idProvincia:44, nombre:"TERUEL"}, {idProvincia:45, nombre:"TOLEDO"}, {idProvincia:46, nombre:"VALENCIA"},
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
-  provincia: string;
-  usuario_Administrador: UsuarioAdministrador;
 
   constructor(private cenadService: CenadService,
               private usuarioAdministradorService: UsuarioAdministradorService) { }
@@ -44,7 +42,6 @@ export class CenadComponent implements OnInit {
   ngOnInit() {
     this.getProvincia(this.cenad);
     this.cenadService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.usuario_Administrador = this.usuarioAdministradorService.mapearUsuario(response));
-
   }
 
   getProvincia(cenad: Cenad) {
@@ -54,9 +51,6 @@ export class CenadComponent implements OnInit {
       }
     });
   }
-
-
-
 }
 
 

@@ -11,8 +11,6 @@ export class UnidadComponent implements OnInit {
   @Input() usuarioNormal: UsuarioNormal;
   @Output() usuarioNormalSeleccionado = new EventEmitter<UsuarioNormal>();
 
-
-
   constructor() { }
 
   ngOnInit() {

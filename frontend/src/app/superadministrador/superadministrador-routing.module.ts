@@ -4,7 +4,6 @@ import { CenadFormComponent } from './cenads/cenad-form/cenad-form.component';
 import { SuperadministradorComponent } from './superadministrador/superadministrador.component';
 import { UnidadFormComponent } from './unidades/unidad-form/unidad-form.component';
 
-
 const routes: Routes = [
   {
     path: '',

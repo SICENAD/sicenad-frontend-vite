@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { TipoRecurso } from '../models/tipoRecurso';
-import { TipoRecursoService } from '../service/tipoRecurso.service';
 
 @Component({
   selector: 'app-tipoRecurso',

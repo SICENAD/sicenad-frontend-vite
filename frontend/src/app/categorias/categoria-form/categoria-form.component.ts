@@ -23,7 +23,6 @@ export class CategoriaFormComponent implements OnInit {
     private router: Router,
     private activateRoute: ActivatedRoute) { }
 
-
   ngOnInit() {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));

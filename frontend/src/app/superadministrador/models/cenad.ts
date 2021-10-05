@@ -1,3 +1,4 @@
+import { UsuarioAdministrador } from "./usuarioAdministrador";
 
 export interface Cenad {
   idCenad: string;
@@ -9,6 +10,6 @@ export interface Cenad {
   escudo: string;
   provincia: number;
   url: string;
-  usuarioAdministrador: string;
+  usuarioAdministrador: UsuarioAdministrador | string;
   tieneAdmin: boolean;
 }

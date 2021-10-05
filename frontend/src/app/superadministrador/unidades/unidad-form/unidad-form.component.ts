@@ -14,7 +14,6 @@ export class UnidadFormComponent implements OnInit {
   usuarioNormal: UsuarioNormalImpl = new UsuarioNormalImpl();
   faVolver = faArrowAltCircleLeft;
 
-
   constructor(
     private usuarioNormalService: UsuarioNormalService,
     private router: Router) { }
@@ -28,5 +27,4 @@ export class UnidadFormComponent implements OnInit {
       this.router.navigate(['/superadministrador']);
     });
   }
-
 }

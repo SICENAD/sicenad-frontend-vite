@@ -12,7 +12,6 @@ export class TipoRecursoFichaComponent implements OnInit {
   @Output() tipoRecursoEliminar = new EventEmitter<TipoRecursoImpl>();
   @Output() tipoRecursoEditar = new EventEmitter<TipoRecursoImpl>();
 
-
   constructor() { }
     
   ngOnInit(): void {

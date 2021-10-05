@@ -73,7 +73,7 @@ export class UsuarioAdministradorService {
 
   update(usuario: UsuarioAdministrador): Observable<any> {
     return this.http
-      .put<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
+      .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {

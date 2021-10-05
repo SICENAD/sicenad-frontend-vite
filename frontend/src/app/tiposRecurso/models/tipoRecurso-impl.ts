@@ -1,10 +1,11 @@
+import { Recurso } from "src/app/recursos/models/recurso";
 import { TipoRecurso } from "./tipoRecurso";
 
 export class TipoRecursoImpl implements TipoRecurso {
   idTipoRecurso: string;
   nombre: string;
   descripcion: string;
-  recursos: string;
+  recursos: Recurso[];
   codTipo: number;
   url: string;
 

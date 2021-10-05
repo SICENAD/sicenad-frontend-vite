@@ -6,7 +6,7 @@ export interface UsuarioGestor {
   password: string;
   tfno: string;
   email: string;
-  cenad: string;
+  cenad: Cenad | string;
   tipo:string;
   descripcion:string;
   url: string;

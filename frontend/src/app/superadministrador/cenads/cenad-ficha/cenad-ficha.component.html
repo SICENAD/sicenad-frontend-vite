@@ -1,7 +1,5 @@
 <form #cenadForm="ngForm">
   <div class="form-row py-2">
-
-
     <div class="col-lg-4 col-md-12">
       <label><b>CENAD/CMT<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="cenad.nombre" placeholder="Nombre del CENAD/CMT"
@@ -13,25 +11,16 @@
         </div>
       </div>
     </div>
-
-
     <div class="col-lg-4 col-md-12">
       <label><b>PROVINCIA<sup class="text-danger">*</sup></b></label>
       <select name="provincia" id="provincia" [(ngModel)]="cenad.provincia">
         <option class=" letra" *ngFor="let provincia of provincias" [ngValue]="provincia.idProvincia">{{ provincia.nombre }}</option>
       </select>
     </div>
-
-
     <div class="col-lg-4 col-md-12">
       <label><b>ADMINISTRADOR<sup class="text-danger">*</sup></b></label>
-      <input type="text" class="form-control letra" [value]="administrador"  name="administrador" readonly/>
-      <!-- <select name="administrador" id="administrador" [(ngModel)]="cenad.usuarioAdministrador">
-        <option *ngFor="let administrador of administradores" [ngValue]="administrador.url">{{ administrador.nombre }}</option>
-      </select> -->
+      <input type="text" class="form-control letra" [(ngModel)]="administrador"  name="usuarioAdministrador" readonly/>
     </div>
-
-
     <div class="col-lg-8 col-md-12 pt-3">
       <label><b>DIRECCIÓN<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="cenad.direccion" placeholder="Dirección del CENAD/CMT"
@@ -43,8 +32,6 @@
         </div>
       </div>
     </div>
-
-
     <div class="col-lg-4 col-md-12 pt-3">
       <label><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
       <input type="tel" class="form-control letra" [(ngModel)]="cenad.tfno" placeholder="Teléfono de contacto del CENAD/CMT"
@@ -59,9 +46,6 @@
         </div>
       </div>
     </div>
-
-
-
     <div class="col-lg-12 col-md-12 pt-3">
       <label><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
       <textarea class="form-control letra" [(ngModel)]="cenad.descripcion" placeholder="Descripción del CENAD/CMT"
@@ -73,8 +57,6 @@
         </div>
       </div>
     </div>
-
-
     <div class="col-lg-6 col-md-12 pt-3">
       <label><b>EMAIL</b></label>
       <input type="email" class="form-control letra" [(ngModel)]="cenad.email" placeholder="Email de contacto del CENAD/CMT"
@@ -84,27 +66,13 @@
         <div *ngIf="email.errors.required">
           El Email del CENAD/CMT es obligatorio
         </div>
-        <!-- <div *ngIf="email.errors.email">
-          Introduzca un email valido ("@")
-        </div> -->
       </div>
     </div>
-
     <div class="col-lg-4 col-md-12">
       <label><b>Escudo<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control" [(ngModel)]="cenad.escudo" name="escudo" readonly/>
       <input type="file" (change)="selectFile($event)" class="form-control"/>
-        
     </div>
-
-
-
-
-
-
-
-
-
   </div>
   <div class="form-row justify-content-between pt-5">
     <button type="button" class="btn guardar" (click)="editar()" [disabled]="!cenadForm.form.valid">Guardar</button>

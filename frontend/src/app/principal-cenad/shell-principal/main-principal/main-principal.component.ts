@@ -11,5 +11,4 @@ export class MainPrincipalComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

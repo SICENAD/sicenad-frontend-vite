@@ -30,12 +30,6 @@ div.titulo {
   align-items: center;
 }
 
-/* div a {
-  color: #588157;
-  font-weight: bold;
-  font-size: 20px;
-} */
-
 div.menu a {
   color: #588157;
   font-weight: bold;
@@ -45,7 +39,6 @@ div.menu a {
 }
 
 div a:hover {
-  /* color: #A3B18A; */
   color: yellowgreen;
 }
 
@@ -64,31 +57,23 @@ div.consultar {
 
 div.otros {
   width: 220px !important;
- }
+}
 
- /* .dropdown {
-   position: relative;
-   display: inline-block;
- } */
-
- .dropdown-menu {
+.dropdown-menu {
    display: none;
    position: relative;
- }
+}
 
- .dropdown:hover .dropdown-menu {
+.dropdown:hover .dropdown-menu {
    display: block;
- }
+}
 
- div.submenu {
+div.submenu {
    display: none !important;
    position: relative;
- }
+}
 
- .dropdown-submenu:hover .submenu {
+.dropdown-submenu:hover .submenu {
    display: block !important;
    position: relative;
- }
-
-
-/* -ms-zoom: 0.7; -o-transform: scale(.7); -moz-transform: scale(.7); */
+}
