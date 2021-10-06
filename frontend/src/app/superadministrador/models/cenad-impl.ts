@@ -11,7 +11,7 @@ export class CenadImpl implements Cenad {
   escudo: string;
   provincia: number;
   url: string;
-  usuarioAdministrador: UsuarioAdministrador | string;
+  usuarioAdministrador: UsuarioAdministrador;
   tieneAdmin: boolean = false;
 
   constructor() {}

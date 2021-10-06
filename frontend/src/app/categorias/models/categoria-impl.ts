@@ -7,7 +7,7 @@ export class CategoriaImpl implements Categoria {
   nombre: string;
   descripcion: string;
   subcategorias: Categoria[];
-  categoriaPadre: Categoria;
+  categoriaPadre: Categoria | any;
   cenad: string | Cenad;
   recursos: Recurso[];
   url: string;

@@ -66,7 +66,6 @@ export class CenadService {
     cenad.tfno = cenadApi.tfno;
     cenad.email = cenadApi.email;
     cenad.url = cenadApi._links.self.href;
-    cenad.usuarioAdministrador = cenadApi._links.usuarioAdministrador.href;
     cenad.idCenad = cenad.getId(cenad.url);
 
     return cenad;

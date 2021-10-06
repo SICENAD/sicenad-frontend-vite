@@ -6,7 +6,7 @@ export interface Categoria {
   nombre: string;
   descripcion: string;
   subcategorias: Categoria[];
-  categoriaPadre: Categoria;
+  categoriaPadre: Categoria | any;
   cenad: Cenad | string;
   recursos: Recurso[];
   url: string;

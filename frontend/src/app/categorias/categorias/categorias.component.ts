@@ -22,7 +22,10 @@ export class CategoriasComponent implements OnInit {
 
     ngOnInit(): void {
       this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-      this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));
+      this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => {
+        this.categorias = this.categoriaService.extraerCategorias(response);
+        //console.log(this.categorias);
+      });
     }
 
     verDatos(categoria: Categoria): void {

@@ -17,6 +17,10 @@ const routes: Routes = [
       {
         path: 'categorias/:idCenad',
         loadChildren: () => import('../categorias/categorias.module').then(m => m.CategoriasModule)
+      },
+      {
+        path: 'recursos/:idCenad',
+        loadChildren: () => import('../recursos/recursos.module').then(m => m.RecursosModule)
       }
     ]
   }

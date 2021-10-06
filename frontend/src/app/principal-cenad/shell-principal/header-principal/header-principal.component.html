@@ -82,7 +82,7 @@
                     <fa-icon [icon]="faPeticiones"></fa-icon>&nbsp;Peticiones</a>
                   <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
                     <fa-icon [icon]="faCartografia"></fa-icon>&nbsp;Cartografía</a>
-                  <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
+                  <a class="dropdown-item" [routerLink]="['recursos', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon [icon]="faRecurso"></fa-icon>&nbsp;Recursos</a>
                   <a class="dropdown-item" [routerLink]="['categorias', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon [icon]="faCategorias"></fa-icon>&nbsp;Categorías</a>

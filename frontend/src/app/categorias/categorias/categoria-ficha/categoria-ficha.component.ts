@@ -16,20 +16,32 @@ export class CategoriaFichaComponent implements OnInit {
   @Output() categoriaEliminar = new EventEmitter<CategoriaImpl>();
   @Output() categoriaEditar = new EventEmitter<CategoriaImpl>();
   categorias: Categoria[] = [];
+  categoriaPadreSeleccionada: string = "";
 
   constructor(
-    private categoriaService: CategoriaService, 
+    private categoriaService: CategoriaService,
     private activateRoute: ActivatedRoute) { }
-    
+
   ngOnInit(): void {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));  }
+    this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));
+    this.actualizarNgModels();
+  }
+
+  actualizarNgModels(): void {
+    if (this.categoria.categoriaPadre) {
+      this.categoriaPadreSeleccionada = this.categoria.categoriaPadre.url;
+    }else {
+      this.categoriaPadreSeleccionada = "";
+    }
+  }
 
   eliminar(): void {
     this.categoriaEliminar.emit(this.categoria);
   }
 
   editar(): void {
+    this.categoria.categoriaPadre = this.categoriaPadreSeleccionada;
     this.categoriaEditar.emit(this.categoria);
   }
 }
