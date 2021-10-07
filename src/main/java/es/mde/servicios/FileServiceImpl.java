@@ -6,6 +6,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,20 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileServiceImpl implements FileServiceAPI {
 
-	private final Path escudosFolder = Paths.get("archivos/escudos");
-	private final Path docSolicitudesFolder = Paths.get("archivos/docSolicitudes");
-	private final Path docRecursosFolder = Paths.get("archivos/docRecursos");
+	private static String rutaEscudos = "archivos/escudos";
+	private static String rutaDocRecursos = "archivos/docRecursos";
+	private static String rutaDocSolicitudes = "archivos/docSolicitudes";
+
+	@Autowired
+	public FileServiceImpl(@Qualifier("rutaEscudos") String rutaEscudos, @Qualifier("rutaDocRecursos") String rutaDocRecursos, @Qualifier("rutaDocSolicitudes") String rutaDocSolicitudes) {
+		FileServiceImpl.rutaEscudos = rutaEscudos;
+		FileServiceImpl.rutaDocRecursos = rutaDocRecursos;
+		FileServiceImpl.rutaDocSolicitudes = rutaDocSolicitudes;
+	}
+
+	private final Path escudosFolder = Paths.get(rutaEscudos);
+	private final Path docSolicitudesFolder = Paths.get(rutaDocSolicitudes);
+	private final Path docRecursosFolder = Paths.get(rutaDocRecursos);
 
 	@Override
 	public void saveEscudo(MultipartFile file) throws Exception {

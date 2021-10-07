@@ -21,9 +21,9 @@ public class CategoriaFichero {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
-	private String nombre;
+	private String nombre; //Imagen, normativa, instrucciones, etc
 	private String descripcion;
-	private int tipo; //0=fichero de recurso y 1=fichero de cartografia
+	private int tipo; //0=fichero de recurso, 1=fichero de solicitud, 2=fichero de cartografia y 3=fichero de escudo 
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Fichero.class, mappedBy = "categoriaFichero")
 	private Collection<Fichero> ficheros = new ArrayList<>();
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Cartografia.class, mappedBy = "categoriaFichero")
