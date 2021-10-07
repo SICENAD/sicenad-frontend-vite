@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -20,9 +20,8 @@ export class RecursoService {
   private host: string = environment.hostSicenad;
   private urlEndPoint: string = `${this.host}recursos/`;
 
-  constructor(
-    private http: HttpClient) { }
-
+  constructor(private http: HttpClient) { }
+  
   getRecursos(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
@@ -166,10 +165,8 @@ export class RecursoService {
     return tipoRecurso;
   }
 
-
-
-  getCategorias(): Observable<any> {
-    return this.http.get<any>(`${this.host}categorias/?page=0&size=1000`);
+  getCategoriasDeCenad(idCenad:string): Observable<any> {
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/categorias/?page=0&size=1000`);
   }
 
   extraerCategorias(respuestaApi: any): Categoria[] {
@@ -191,10 +188,8 @@ export class RecursoService {
     return categoria;
   }
 
-  getUsuariosGestor(): Observable<any> {
-    return this.http.get<any>(`${this.host}usuarios_gestor/?page=0&size=1000`);
-      //aqui una vez que estemos dentro de un cenad tendre q hacer en back un metodo
-      //personalizado que me liste todos los gestores de un cenad
+  getUsuariosGestor(idCenad: string): Observable<any> {
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/gestores/?page=0&size=1000`);
   }
 
   extraerUsuarios(respuestaApi: any): UsuarioGestor[] {

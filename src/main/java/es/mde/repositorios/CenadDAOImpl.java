@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import es.mde.entidades.Categoria;
 import es.mde.entidades.Cenad;
 import es.mde.entidades.Recurso;
+import es.mde.entidades.UsuarioGestor;
 
 @Transactional(readOnly = true)
 public class CenadDAOImpl implements CenadDAOCustom {
@@ -33,17 +34,20 @@ public class CenadDAOImpl implements CenadDAOCustom {
 
 	@Override
 	public List<Recurso> getRecursosCenad(Long id) {
-		
+
 		List<Recurso> recursos = new ArrayList<Recurso>();
-		
+
 		getCategoriasCenad(id).forEach(c -> recursos.addAll(c.getRecursos()));
-		
-//		for (Categoria categoria: getCategoriasCenad(cenad)) {
-//		
-//			recursos.addAll(categoria.getRecursos());
-//		}
-				
+
 		return recursos;
 	}
-	
+
+	@Override
+	public List<UsuarioGestor> getUsuariosGestorCenad(Long id) {
+
+		List<UsuarioGestor> gestores = cenadDAO.findById(id).get().getUsuariosGestores().stream().collect(Collectors.toList());
+
+		return gestores;
+	}
+
 }

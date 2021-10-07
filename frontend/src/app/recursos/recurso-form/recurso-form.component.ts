@@ -1,6 +1,8 @@
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { Observable } from 'rxjs';
 import { Categoria } from 'src/app/categorias/models/categoria';
 import { UsuarioGestor } from 'src/app/superadministrador/models/usuarioGestor';
 import { TipoRecurso } from 'src/app/tiposRecurso/models/tipoRecurso';
@@ -30,8 +32,8 @@ export class RecursoFormComponent implements OnInit {
 
   ngOnInit() {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    this.recursoService.getCategorias().subscribe((response) => this.categorias = this.recursoService.extraerCategorias(response));
-    this.recursoService.getUsuariosGestor().subscribe((response) => this.gestores = this.recursoService.extraerUsuarios(response));
+    this.recursoService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.recursoService.extraerCategorias(response));
+    this.recursoService.getUsuariosGestor(this.idCenad).subscribe((response) => this.gestores = this.recursoService.extraerUsuarios(response));
     this.recursoService.getTiposRecurso().subscribe((response) => this.tiposRecurso = this.recursoService.extraerTiposRecurso(response));
   }
 
@@ -41,6 +43,9 @@ export class RecursoFormComponent implements OnInit {
       this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
     });
   }
+
+
+
 
 }
 

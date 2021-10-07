@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Categoria } from 'src/app/categorias/models/categoria';
 import { UsuarioGestor } from 'src/app/superadministrador/models/usuarioGestor';
 import { TipoRecurso } from 'src/app/tiposRecurso/models/tipoRecurso';
-import { Recurso } from '../../models/recurso';
 import { RecursoImpl } from '../../models/recurso-impl';
 import { RecursoService } from '../../service/recurso.service';
 
@@ -18,7 +17,6 @@ export class RecursoFichaComponent implements OnInit {
   @Input() recurso: RecursoImpl;
   @Output() recursoEliminar = new EventEmitter<RecursoImpl>();
   @Output() recursoEditar = new EventEmitter<RecursoImpl>();
-  //recursos: Recurso[] = [];
   categorias: Categoria[] = [];
   gestores: UsuarioGestor[] = [];
   tiposRecurso: TipoRecurso[] = [];
@@ -29,14 +27,12 @@ export class RecursoFichaComponent implements OnInit {
   constructor(
     private recursoService: RecursoService, private activateRoute: ActivatedRoute) { }
 
-
  ngOnInit(): void {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    this.recursoService.getCategorias().subscribe((response) => this.categorias = this.recursoService.extraerCategorias(response));
-    this.recursoService.getUsuariosGestor().subscribe((response) => this.gestores = this.recursoService.extraerUsuarios(response));
+    this.recursoService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.recursoService.extraerCategorias(response));
+    this.recursoService.getUsuariosGestor(this.idCenad).subscribe((response) => this.gestores = this.recursoService.extraerUsuarios(response));
     this.recursoService.getTiposRecurso().subscribe((response) => {
        this.tiposRecurso = this.recursoService.extraerTiposRecurso(response);
-      // console.log(this.tiposRecurso);
       });
     this.actualizarNgModels();
   }
@@ -56,10 +52,7 @@ export class RecursoFichaComponent implements OnInit {
   editar(): void {
     this.recurso.tipoRecurso = this.tipoRecursoSeleccionado;
     this.recurso.categoria = this.categoriaRecursoSeleccionada;
-   // this.recurso.usuarioGestor = this.recursoUsuarioGestorSeleccionado;
+    this.recurso.usuarioGestor = this.recursoUsuarioGestorSeleccionado;
     this.recursoEditar.emit(this.recurso);
-    // console.log(this.recurso.tipoRecurso);
-    // console.log(this.recurso.categoria);
   }
-
 }

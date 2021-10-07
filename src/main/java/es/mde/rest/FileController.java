@@ -71,6 +71,13 @@ public class FileController {
 		return ResponseEntity.status(HttpStatus.OK).body(files);
 	}
 
+	@PostMapping("/subirDocRecursos")
+	public ResponseEntity<Response> uploadFileDocRecursos(@RequestParam("files") List<MultipartFile> files) throws Exception {
+		fileServiceAPI.saveDocRecursos(files);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
+	}
+	
 	@PostMapping("/subirDocRecurso")
 	public ResponseEntity<Response> uploadFileDocRecurso(@RequestParam("file") MultipartFile file) throws Exception {
 		fileServiceAPI.saveDocRecurso(file);
@@ -105,6 +112,13 @@ public class FileController {
 		return ResponseEntity.status(HttpStatus.OK).body(files);
 	}
 
+	@PostMapping("/subirDocSolicitudes")
+	public ResponseEntity<Response> uploadFileDocSolicitudes(@RequestParam("files") List<MultipartFile> files) throws Exception {
+		fileServiceAPI.saveDocSolicitudes(files);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
+	}
+	
 	@PostMapping("/subirDocSolicitud")
 	public ResponseEntity<Response> uploadFileDocSolicitud(@RequestParam("file") MultipartFile file) throws Exception {
 		fileServiceAPI.saveDocSolicitud(file);

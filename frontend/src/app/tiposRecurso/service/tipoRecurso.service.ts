@@ -68,7 +68,7 @@ export class TipoRecursoService {
 
   update(tipoRecurso: TipoRecurso): Observable<any> {
     return this.http
-      .put<any>(`${this.urlEndPoint}${tipoRecurso.idTipoRecurso}`, tipoRecurso)
+      .patch<any>(`${this.urlEndPoint}${tipoRecurso.idTipoRecurso}`, tipoRecurso)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {

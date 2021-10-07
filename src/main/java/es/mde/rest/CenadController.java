@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.mde.entidades.Categoria;
 import es.mde.entidades.Recurso;
+import es.mde.entidades.UsuarioGestor;
 import es.mde.repositorios.CenadDAO;
 
 @RepositoryRestController
@@ -47,4 +48,13 @@ public class CenadController {
 		return assembler.toCollectionModel(recursos);
 	}
 	
+	@GetMapping("/gestores")
+	@ResponseBody
+	public CollectionModel<PersistentEntityResource> getUsuariosGestorCenad(@PathVariable Long id,
+			PersistentEntityResourceAssembler assembler) {
+
+		List<UsuarioGestor> gestores = cenadDAO.getUsuariosGestorCenad(id);
+
+		return assembler.toCollectionModel(gestores);
+	}
 }
