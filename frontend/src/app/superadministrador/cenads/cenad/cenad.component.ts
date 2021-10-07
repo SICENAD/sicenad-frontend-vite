@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Cenad } from '../../models/cenad';
 import { UsuarioAdministrador } from '../../models/usuarioAdministrador';
 import { CenadService } from '../../service/cenad.service';
@@ -15,6 +16,7 @@ export class CenadComponent implements OnInit {
   @Output() cenadSeleccionado = new EventEmitter<Cenad>();
   @Input() usuarioAdministrador: UsuarioAdministrador;
   @Output() usuarioAdministradorSeleccionado = new EventEmitter<UsuarioAdministrador>();
+  faEdit = faEdit;
   provincia: string;
   usuario_Administrador: UsuarioAdministrador;
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},

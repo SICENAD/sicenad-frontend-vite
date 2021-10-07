@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { UsuarioNormal } from '../../models/usuarioNormal';
 
 @Component({
@@ -10,6 +11,7 @@ export class UnidadComponent implements OnInit {
 
   @Input() usuarioNormal: UsuarioNormal;
   @Output() usuarioNormalSeleccionado = new EventEmitter<UsuarioNormal>();
+  faEdit = faEdit;
 
   constructor() { }
 

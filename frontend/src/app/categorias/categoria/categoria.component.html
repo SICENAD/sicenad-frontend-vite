@@ -1,7 +1,7 @@
 <div class="row mb-2">
   <hr class='w-100'>
   <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3"><a class="" data-toggle="modal"
-    data-target="#modalCategoria" (click)='categoriaSeleccionada.emit(categoria)'>{{categoria.nombre | uppercase}}</a></div>
+    data-target="#modalCategoria" (click)='categoriaSeleccionada.emit(categoria)'><fa-icon [icon]="faEdit" class="mr-2"></fa-icon>{{categoria.nombre | uppercase}}</a></div>
   <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3" *ngIf='categoria.categoriaPadre; else elseBlock'>{{categoria.categoriaPadre.nombre | uppercase}}</div>
   <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6"> {{categoria.descripcion | titlecase}}</div>
 </div>

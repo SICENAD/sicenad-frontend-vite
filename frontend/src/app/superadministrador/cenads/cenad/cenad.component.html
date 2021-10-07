@@ -1,7 +1,7 @@
 <div class="row mb-2">
   <hr class='w-100'>
   <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4"><a class="" data-toggle="modal"
-      data-target="#modalCenad" (click)='cenadSeleccionado.emit(cenad)'> {{cenad.nombre | uppercase}}</a></div>
+      data-target="#modalCenad" (click)='cenadSeleccionado.emit(cenad)'><fa-icon [icon]="faEdit" class="mr-2"></fa-icon> {{cenad.nombre | uppercase}}</a></div>
   <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">{{provincia | titlecase}}</div>
-  <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4" *ngIf='usuario_Administrador'>{{usuario_Administrador.nombre | titlecase}}</div>
+  <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4" *ngIf='usuario_Administrador'><fa-icon [icon]="faEdit" class="mr-2"></fa-icon>{{usuario_Administrador.nombre | titlecase}}</div>
 </div>

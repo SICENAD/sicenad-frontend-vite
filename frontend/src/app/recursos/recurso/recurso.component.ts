@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Recurso } from '../models/recurso';
 import { RecursoService } from '../service/recurso.service';
 
@@ -11,6 +12,7 @@ export class RecursoComponent implements OnInit {
 
   @Input() recurso: Recurso;
   @Output() recursoSeleccionado = new EventEmitter<Recurso>();
+  faEdit = faEdit;
 
   constructor(private recursoService: RecursoService) { }
 

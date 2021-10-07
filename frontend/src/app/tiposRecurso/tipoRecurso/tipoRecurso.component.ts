@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { TipoRecurso } from '../models/tipoRecurso';
 
 @Component({
@@ -10,6 +11,7 @@ export class TipoRecursoComponent implements OnInit {
 
   @Input() tipoRecurso: TipoRecurso;
   @Output() tipoRecursoSeleccionado = new EventEmitter<TipoRecurso>();
+  faEdit = faEdit;
 
   constructor() { }
 

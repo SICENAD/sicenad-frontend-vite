@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Categoria } from '../models/categoria';
 import { CategoriaService } from '../service/categoria.service';
 
@@ -11,6 +12,7 @@ export class CategoriaComponent implements OnInit {
 
   @Input() categoria: Categoria;
   @Output() categoriaSeleccionada = new EventEmitter<Categoria>();
+  faEdit = faEdit;
 
   constructor(private categoriaService: CategoriaService) { }
 
