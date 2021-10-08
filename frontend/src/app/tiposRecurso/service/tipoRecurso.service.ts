@@ -2,6 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Recurso } from 'src/app/recursos/models/recurso';
+import { RecursoImpl } from 'src/app/recursos/models/recurso-impl';
+import { RecursoService } from 'src/app/recursos/service/recurso.service';
 import { environment } from 'src/environments/environment';
 import { TipoRecurso } from '../models/tipoRecurso';
 import { TipoRecursoImpl } from '../models/tipoRecurso-impl';
@@ -36,6 +39,8 @@ export class TipoRecursoService {
     tipoRecurso.codTipo = tipoRecursoApi.codTipo;
     tipoRecurso.url = tipoRecursoApi._links.self.href;
     tipoRecurso.idTipoRecurso = tipoRecurso.getId(tipoRecurso.url);
+    this.getRecursosDeTipoRecurso(tipoRecurso).subscribe((response) => {
+      tipoRecurso.recursos = this.extraerRecursos(response)});
 
     return tipoRecurso;
   }
@@ -80,5 +85,29 @@ export class TipoRecursoService {
           return throwError(e);
         })
       );
+  }
+
+  getRecursosDeTipoRecurso(tipoRecurso: TipoRecurso): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}${tipoRecurso.idTipoRecurso}/recursos`);
+  }
+
+  extraerRecursos(respuestaApi: any): Recurso[] {
+    const recursos: Recurso[] = [];
+    respuestaApi._embedded.recursos.forEach(r => {
+      recursos.push(this.mapearRecurso(r));
+
+    });
+    return recursos;
+  }
+
+  mapearRecurso(recursoApi: any): RecursoImpl {
+    const recurso = new RecursoImpl();
+    recurso.nombre = recursoApi.nombre;
+    recurso.descripcion = recursoApi.descripcion;
+    recurso.otros = recursoApi.otros;
+    recurso.url = recursoApi._links.self.href;
+    recurso.idRecurso = recurso.getId(recurso.url);
+
+    return recurso;
   }
 }

@@ -20,6 +20,10 @@ const routes: Routes = [
     loadChildren: () => import('./tiposRecurso/tiposRecurso.module').then(m => m.TiposRecursoModule),
   },
   {
+    path: 'categoriasFichero',
+    loadChildren: () => import('./categoriasFichero/categoriasFichero.module').then(m => m.CategoriasFicheroModule),
+  },
+  {
     path: 'not-found',
     component: NotFoundComponent
   },

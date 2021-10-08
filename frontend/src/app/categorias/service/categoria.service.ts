@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Recurso } from 'src/app/recursos/models/recurso';
+import { RecursoImpl } from 'src/app/recursos/models/recurso-impl';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { environment } from 'src/environments/environment';
@@ -13,7 +15,7 @@ import { CategoriaImpl } from '../models/categoria-impl';
 })
 export class CategoriaService {
   private host: string = environment.hostSicenad;
-  private urlEndPoint: string = `${this.host}categorias`;
+  private urlEndPoint: string = `${this.host}categorias/`;
 
   constructor(
     private http: HttpClient) { }
@@ -55,7 +57,7 @@ export class CategoriaService {
   }
 
   delete(categoria): Observable<Categoria> {
-    return this.http.delete<Categoria>(`${this.urlEndPoint}/${categoria.idCategoria}`)
+    return this.http.delete<Categoria>(`${this.urlEndPoint}${categoria.idCategoria}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -68,7 +70,7 @@ export class CategoriaService {
 
   update(categoria: Categoria): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}/${categoria.idCategoria}`, categoria)
+      .patch<any>(`${this.urlEndPoint}${categoria.idCategoria}`, categoria)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -83,7 +85,7 @@ export class CategoriaService {
   }
 
   getCategoriaPadre(categoria: Categoria): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}/${categoria.idCategoria}/categoriaPadre`)
+    return this.http.get<any>(`${this.urlEndPoint}${categoria.idCategoria}/categoriaPadre`)
     .pipe(
       catchError((e) => {
         if (e.status === 404) {
@@ -94,12 +96,27 @@ export class CategoriaService {
     );
   }
 
+  getSubcategorias(categoria:Categoria): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}${categoria.idCategoria}/subcategorias/`);
+  }
+
   getCenads(): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/?page=0&size=1000`);
   }
 
   getCenad(id): Observable<any> {
     return this.http.get<Cenad>(`${this.host}cenads/${id}`).pipe(
+      catchError((e) => {
+        if (e.status !== 401 && e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
+
+  getCenadDeCategoria(categoria: Categoria): Observable<any> {
+    return this.http.get<Cenad>(`${this.urlEndPoint}${categoria.idCategoria}/cenad`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -130,5 +147,29 @@ export class CategoriaService {
     cenad.url = cenadApi._links.self.href;
     cenad.idCenad = cenad.getId(cenad.url);
     return cenad;
+  }
+
+  getRecursosDeCategoria(categoria: Categoria): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}${categoria.idCategoria}/recursos/?page=0&size=1000`);
+  }
+
+  extraerRecursos(respuestaApi: any): Recurso[] {
+    const recursos: Recurso[] = [];
+    respuestaApi._embedded.recursos.forEach(r => {
+      recursos.push(this.mapearRecurso(r));
+
+    });
+    return recursos;
+  }
+
+  mapearRecurso(recursoApi: any): RecursoImpl {
+    const recurso = new RecursoImpl();
+    recurso.nombre = recursoApi.nombre;
+    recurso.descripcion = recursoApi.descripcion;
+    recurso.otros = recursoApi.otros;
+    recurso.url = recursoApi._links.self.href;
+    recurso.idRecurso = recurso.getId(recurso.url);
+   
+    return recurso;
   }
 }

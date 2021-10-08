@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Cenad } from '../models/cenad';
+import { CenadImpl } from '../models/cenad-impl';
 import { UsuarioAdministrador } from '../models/usuarioAdministrador';
 import { UsuarioAdministradorImpl } from '../models/usuarioAdministrador-impl';
 
@@ -39,8 +40,8 @@ export class UsuarioAdministradorService {
     usuario.email = usuarioApi.email;
     usuario.descripcion = usuarioApi.descripcion;
     usuario.url = usuarioApi._links.self.href;
-    usuario.cenad = usuarioApi._links.cenad.href;
     usuario.idUsuario = usuario.getId(usuario.url);
+    this.getCenad(usuario).subscribe((response) => usuario.cenad = this.mapearCenad(response));
 
     return usuario;
   }
@@ -108,5 +109,33 @@ export class UsuarioAdministradorService {
         return throwError(e);
       })
     );
+  }
+
+  getCenad(usuarioAdministrador: UsuarioAdministrador): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}${usuarioAdministrador.idUsuario}/cenad/`)
+      .pipe(
+        catchError((e) => {
+          if (e.status === 404) {
+            console.error('');
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  mapearCenad(cenadApi: any): CenadImpl {
+    const cenad = new CenadImpl();
+    cenad.nombre = cenadApi.nombre;
+    cenad.descripcion = cenadApi.descripcion;
+    cenad.direccion = cenadApi.direccion;
+    cenad.escudo = cenadApi.escudo;
+    cenad.provincia = cenadApi.provincia;
+    cenad.tfno = cenadApi.tfno;
+    cenad.email = cenadApi.email;
+    cenad.url = cenadApi._links.self.href;
+    cenad.idCenad = cenad.getId(cenad.url);
+    // this.getUsuarioAdministrador(cenad).subscribe((response) => cenad.usuarioAdministrador = this.mapearUsuario(response));
+
+    return cenad;
   }
 }

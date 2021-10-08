@@ -50,6 +50,7 @@ export class RecursoService {
       recurso.tipoRecurso = this.mapearTipoRecurso(response)});
     this.getUsuarioGestor(recurso).subscribe((response) => {
       recurso.usuarioGestor = this.mapearUsuario(response)});
+    this.getCategoria(recurso).subscribe((response) => recurso.categoria = this.mapearCategoria(response));
     return recurso;
   }
 

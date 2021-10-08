@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Cenad } from '../models/cenad';
 import { CenadImpl } from '../models/cenad-impl';
+import { UsuarioAdministradorImpl } from '../models/usuarioAdministrador-impl';
 
 @Injectable({
   providedIn: 'root'
@@ -67,8 +68,23 @@ export class CenadService {
     cenad.email = cenadApi.email;
     cenad.url = cenadApi._links.self.href;
     cenad.idCenad = cenad.getId(cenad.url);
+    this.getUsuarioAdministrador(cenad).subscribe((response) => cenad.usuarioAdministrador = this.mapearUsuario(response));
 
     return cenad;
+  }
+  
+  mapearUsuario(usuarioApi: any): UsuarioAdministradorImpl {
+    const usuario = new UsuarioAdministradorImpl();
+    usuario.nombre = usuarioApi.nombre;
+    usuario.password = usuarioApi.password;
+    usuario.tfno = usuarioApi.tfno;
+    usuario.email = usuarioApi.email;
+    usuario.descripcion = usuarioApi.descripcion;
+    usuario.url = usuarioApi._links.self.href;
+    usuario.idUsuario = usuario.getId(usuario.url);
+    // this.getCenad(usuario).subscribe((response) => usuario.cenad = this.mapearCenad(response));
+
+    return usuario;
   }
 
   create(cenad: Cenad): Observable<any> {
