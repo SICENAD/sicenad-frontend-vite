@@ -3,7 +3,7 @@
 }
 
 .titulo {
-  color: #3A5A40; 
+  color: #3A5A40;
 }
 
 .guardar:hover {
@@ -15,5 +15,9 @@
 }
 
 .letra {
+  color: #588157;
+}
+
+select {
   color: #588157;
 }

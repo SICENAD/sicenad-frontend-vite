@@ -38,12 +38,16 @@ export class CenadFichaComponent implements OnInit {
   constructor(private usuarioAdministradorService: UsuarioAdministradorService, private cenadService: CenadService) { }
 
   ngOnInit(): void {
+    this.actualizarAdministrador();
+  }
+
+  actualizarAdministrador(): void {
     this.usuarioAdministradorService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.administrador = this.usuarioAdministradorService.mapearUsuario(response).nombre);
   }
 
   eliminar(): void {
     this.delete_Archivo(this.cenad);
-    this.cenadEliminar.emit(this.cenad);  
+    this.cenadEliminar.emit(this.cenad);
   }
 
   editar(): void {

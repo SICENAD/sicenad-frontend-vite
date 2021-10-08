@@ -1,40 +1,45 @@
 <div class="container-fluid">
-  <div class="row m-2">
-    <div class="col col-md-2 p-4">
+  <div class="row">
+    <div class="col col-md-2 p-3">
       <img class="madoc" width="80" height="110" alt="MADOC" src="../../../assets/madoc.png" />
     </div>
-    <div class="col col-md-7 align-self-center">
+    <div class="col col-md-7 align-self-center mt-4">
       <h3 class="bienvenido text-center titulo1"><u>SUPERADMINISTRADOR</u> </h3>
     </div>
     <div class="col col-md-1 mt-4 ml-5">
       <h2 class="text-center">SICENAD</h2>
     </div>
   </div>
-  <div class="row ml-4 pl-3">
-    <a class="nav-link text-center home" routerLink="/" routerLinkActive="router-link-active">
-      <fa-icon class="fa-2x" [icon]="faHome"></fa-icon>&nbsp;<strong>Home</strong></a>
-  </div>
-  <div class="row justify-content-end align-items-start mb-5">
-    <hr class="w-100" />
-    <button class="btn tipoRecurso text-white mr-3" routerLink="/tiposRecurso">
-      <b>Tipos de Recursos</b>
-    </button>
+  <div class="row align-items-center">
+    <div class="col-6 pl-0">
+      <a class="nav-link ml-4 home" routerLink="/" routerLinkActive="router-link-active">
+        <fa-icon class="fa-2x" [icon]="faHome"></fa-icon>&nbsp;<strong>Home</strong></a>
+    </div>
+    <div class="col-6 text-right">
+        <button class="btn tipoRecurso text-white mr-2" routerLink="/tiposRecurso">
+          <b>Tipos de Recursos</b>
+        </button>
+        <button class="btn tipoRecurso text-white" href="#">
+          <b>Categorías de Ficheros</b>
+        </button>
+    </div>
+        <hr class="w-100" />
   </div>
   <div class="row ml-5 p-0">
     <div class="col col-md-8">
-      <h4 class="text-center titulo"><b>CENAD,s/CMT,s</b> y <b>ADMINISTRADORES</b></h4>
+      <h5 class="text-center titulo"><b>CENAD,s/CMT,s</b> y <b>ADMINISTRADORES</b></h5>
       <hr class="w-100" />
-      <div class="row justify-content-end">
+      <div class="row justify-content-end mb-1 mt-1">
         <button class="btn text-white mr-3" routerLink="formulario-cenad">
           Nuevo <b>CENAD/CMT</b>
         </button>
-        <button class="btn text-white mr-3" href="#">
+        <button class="btn text-white" href="#">
         <!--aqui pondriamos un routerLink a "formulario-administrador" cuando lo creemos-->
           Nuevo <b>Administrador</b>
         </button>
       </div>
       <hr class="w-100" />
-      <div class="row">
+      <div class="row mt-2">
         <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
           <b>CENAD/CMT</b>
         </div>
@@ -46,15 +51,15 @@
         </div>
       </div>
       <div *ngFor="let cenad of cenads">
-        <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)"      
+        <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)"
           ></app-cenad>
       </div>
     </div>
     <div class="col col-md-4  filtro">
-      <h4 class="text-center titulo">USUARIOS <b>NORMAL</b></h4>
+      <h5 class="text-center titulo">USUARIOS <b>NORMAL</b></h5>
       <hr class="w-100" />
       <div class="row justify-content-end">
-        <button class="btn text-white mr-3" routerLink="formulario-unidad">
+        <button class="btn text-white mt-1 mb-1" routerLink="formulario-unidad">
           Nuevo Usuario <b>Normal</b>
         </button>
       </div>
@@ -90,7 +95,7 @@
           (cenadEditar)="onCenadEditar($event)"></app-cenad-ficha>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn text-white" data-dismiss="modal" 
+        <button type="button" class="btn text-white" data-dismiss="modal"
         (click)="ngOnInit()"
         >
           Cerrar

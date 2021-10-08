@@ -1,6 +1,8 @@
 
 .btn {
   background: #3A5A40;
+  padding: 0.5;
+  font-size: 14px;
 }
 
 .btn:hover {
@@ -26,4 +28,21 @@ a.volver {
 
 a.volver:hover {
   color: #A3B18A;
+}
+
+.row {
+  height: 2em;
+  padding: auto;
+  margin: auto;
+}
+
+hr {
+  margin-bottom: 1;
+  margin-top: 1;
+}
+
+.modal {
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
 }

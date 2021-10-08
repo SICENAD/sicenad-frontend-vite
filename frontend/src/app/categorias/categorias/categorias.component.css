@@ -1,5 +1,7 @@
 .btn {
   background: #588157;
+  padding: 0.5;
+  font-size: 14px;
 }
 
 .btn:hover {
@@ -16,4 +18,21 @@
 
 h5 {
   color: #354f52; font-weight: bold
+}
+
+.row {
+  height: 2em;
+  padding: auto;
+  margin: auto;
+}
+
+hr {
+  margin-bottom: 1;
+  margin-top: 1;
+}
+
+.modal {
+  max-height: 100%;
+  max-width: 100%;
+  margin: auto;
 }

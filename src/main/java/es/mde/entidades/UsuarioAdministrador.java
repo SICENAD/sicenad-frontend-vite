@@ -15,8 +15,8 @@ import es.mde.repositorios.UsuarioAdministradorListener;
 @DiscriminatorValue("UA")
 @Component
 public class UsuarioAdministrador extends Usuario {
-	@OneToOne
-	@JoinColumn(name = "CENAD")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CENAD_ADMINISTRADO")
 	private Cenad cenad;
 	
 	public UsuarioAdministrador() {}

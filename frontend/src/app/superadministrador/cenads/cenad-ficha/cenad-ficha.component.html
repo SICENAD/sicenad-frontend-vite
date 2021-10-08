@@ -1,4 +1,4 @@
-<form #cenadForm="ngForm">
+<form #cenadForm="ngForm" (mouseenter)="actualizarAdministrador()">
   <div class="form-row py-2">
     <div class="col-lg-4 col-md-12">
       <label><b>CENAD/CMT<sup class="text-danger">*</sup></b></label>
@@ -11,13 +11,13 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-4 col-md-12 ml-2">
       <label><b>PROVINCIA<sup class="text-danger">*</sup></b></label>
       <select name="provincia" id="provincia" [(ngModel)]="cenad.provincia">
         <option class=" letra" *ngFor="let provincia of provincias" [ngValue]="provincia.idProvincia">{{ provincia.nombre }}</option>
       </select>
     </div>
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-8 col-md-12 pt-3">
       <label><b>ADMINISTRADOR<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="administrador"  name="usuarioAdministrador" readonly/>
     </div>
@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-4 col-md-12 pt-3 ml-2">
       <label><b>Escudo<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control" [(ngModel)]="cenad.escudo" name="escudo" readonly/>
       <input type="file" (change)="selectFile($event)" class="form-control"/>

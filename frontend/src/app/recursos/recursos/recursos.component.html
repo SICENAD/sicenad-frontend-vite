@@ -1,19 +1,22 @@
 <div class="container">
-  <div class="row m-2">
-    <div class="col-12 text-center">
-      <h2 class="bienvenido text-center titulo1"><u>GESTIÓN DE RECURSOS</u> </h2>
+  <div class="row mt-2">
+    <div class="col-9 text-center">
+      <h3 class="bienvenido text-center titulo1"><u>GESTIÓN DE RECURSOS</u> </h3>
+    </div>
+    <div class="col-3 text-right">
+      <button class="btn text-white" [routerLink]="['formulario', idCenad]">Nuevo Recurso</button>
     </div>
   </div>
-  <hr class='w-100'>
+  <!-- <hr class='w-100'>
   <div class="row justify-content-end">
     <button class="btn text-white" [routerLink]="['formulario', idCenad]">Nuevo Recurso</button>
-  </div>
+  </div> -->
   <hr class='w-100'>
   <div class="row">
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>NOMBRE</b></div>
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>CATEGORIA</b></div>
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>TIPO RECURSO</b></div>
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>GESTOR</b></div>
+    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo"><b>NOMBRE</b></div>
+    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo"><b>CATEGORIA</b></div>
+    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>TIPO RECURSO</b></div>
+    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>GESTOR</b></div>
   </div>
 
   <div *ngFor="let recurso of recursos">

@@ -11,14 +11,14 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-6 col-md-12" *ngIf="gestores.length != 0; else elseGestores">
+    <div class="col-lg-12 col-md-12 pt-3" *ngIf="gestores.length != 0; else elseGestores">
       <label class="titulo"><b>GESTOR<sup class="text-danger">*</sup></b></label>
       <select name="usuarioGestor" id="usuarioGestor" [(ngModel)]="recursoUsuarioGestorSeleccionado">
         <option class=" letra"  *ngFor="let gestor of gestores" [ngValue]="gestor.url">{{ gestor.nombre }}</option>
       </select>
     </div>
     <ng-template #elseGestores>
-      <div class="col-lg-3 col-md-12">
+      <div class="col-lg-12 col-md-12 pt-3">
         <label class="titulo"><b>GESTOR<sup class="text-danger">*</sup></b></label>
         <label class="text-danger">NO EXISTEN</label>
         <!-- <select name="usuarioGestor" id="usuarioGestor" [(ngModel)]="recurso.usuarioGestor">
@@ -27,7 +27,7 @@
       </div>
     </ng-template>
     <!-- (ngModelchange)="cambiarCategoriaRecurso($event)" -->
-    <div class="col-lg-12 col-md-12 pt-5">
+    <div class="col-lg-12 col-md-12 pt-3">
       <label class="titulo"><b>CATEGORÍA<sup class="text-danger">*</sup></b></label>
       <select name="categoria" id="categoria" [(ngModel)]="categoriaRecursoSeleccionada" >
         <option class=" letra" *ngFor="let categoria of categorias" [ngValue]="categoria.url">{{ categoria.nombre }}</option>

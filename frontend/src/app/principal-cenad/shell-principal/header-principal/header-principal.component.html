@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid mb-0 pb-0">
   <div class="row titulo mt-1">
       <div class="col col-md-1">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
                         <fa-icon [icon]="faMeteo"></fa-icon>&nbsp;Meteorología</a>
                   <a class="nav-link" href="http://srvgregwww02/GESNOEX" target="_blank">
                           <fa-icon [icon]="faArtefacto"></fa-icon>&nbsp;Artefactos No Explosionados</a>
-                  <a class="nav-link" href="https://10.63.172.26/so/#/login" target="_blank">
+                  <a class="nav-link" href="https://10.63.172.26/so/#/login" target="_blank" [hidden]= "!isCenadZaragoza">
                             <fa-icon [icon]="faVista"></fa-icon>&nbsp;Vistas ACMT</a>
                   <li class="nav-item dropdown-submenu" [hidden]= "!isCenadZaragoza">
                           <a class="nav-link dropdown-toggle" href="#" id="navbarSubmenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
