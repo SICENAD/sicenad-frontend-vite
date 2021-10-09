@@ -11,6 +11,13 @@
   <div class="row justify-content-end">
     <button class="btn text-white" [routerLink]="['formulario', idCenad]">Nuevo Recurso</button>
   </div> -->
+  <label for="categorias" class="mr-2">Elige una categoría:</label>
+  <select name="categoriasFiltradas" id="categoriasFiltradas1" [(ngModel)]="categoriaSeleccionada" (change)='filtrar()'>
+    <option class=" letra" *ngFor="let categoria of categoriasFiltradas" [ngValue]="categoria" >{{ categoria.nombre | uppercase}}</option>
+  </select>
+
+
+
   <hr class='w-100'>
   <div class="row">
     <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo"><b>NOMBRE</b></div>
@@ -23,7 +30,8 @@
     <app-recurso [recurso]="recurso" (recursoSeleccionado)="verDatos($event)"></app-recurso>
   </div>
   <!-- Modal recurso-->
-  <div class="modal fade" id="modalRecurso" tabindex="-1" role="dialog" aria-labelledby="datosRecurso" aria-hidden="true">
+  <div class="modal fade" id="modalRecurso" tabindex="-1" role="dialog" aria-labelledby="datosRecurso"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -33,8 +41,8 @@
           </button>
         </div>
         <div class="modal-body">
-          <app-recurso-ficha *ngIf='recursoVerDatos' [recurso]='recursoVerDatos' (recursoEliminar)='onRecursoEliminar($event)'
-            (recursoEditar)='onRecursoEditar($event)'></app-recurso-ficha>
+          <app-recurso-ficha *ngIf='recursoVerDatos' [recurso]='recursoVerDatos'
+            (recursoEliminar)='onRecursoEliminar($event)' (recursoEditar)='onRecursoEditar($event)'></app-recurso-ficha>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">Cerrar</button>

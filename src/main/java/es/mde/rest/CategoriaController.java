@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.mde.entidades.Categoria;
+import es.mde.entidades.Recurso;
 import es.mde.repositorios.CategoriaDAO;
 
 @RepositoryRestController
@@ -26,17 +27,27 @@ public class CategoriaController {
 		this.categoriaDAO = categoriaDAO;
 	}
 	
-	@GetMapping("/{id}/subcategorias/search")
+	@GetMapping("/{id}/subcategoriasAnidadas")
 	@ResponseBody
-	public CollectionModel<PersistentEntityResource> getSubcategorias(@PathVariable Categoria categoriaPadre,
+	public CollectionModel<PersistentEntityResource> getSubcategoriasAnidadas(@PathVariable Long id,
 			PersistentEntityResourceAssembler assembler) {
 
-		List<Categoria> categorias = categoriaDAO.getSubcategorias(categoriaPadre);
+		List<Categoria> categorias = categoriaDAO.getSubcategoriasAnidadas(id);
 
 		return assembler.toCollectionModel(categorias);
 	}
 	
-	@GetMapping("/padre/search")
+	@GetMapping("/{id}/recursosDeSubcategorias")
+	@ResponseBody
+	public CollectionModel<PersistentEntityResource> getRecursosDeSubcategorias(@PathVariable Long id,
+			PersistentEntityResourceAssembler assembler) {
+
+		List<Recurso> recursos = categoriaDAO.getRecursosDeSubcategorias(id);
+
+		return assembler.toCollectionModel(recursos);
+	}
+	
+	@GetMapping("/padre")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCategoriasPadre(PersistentEntityResourceAssembler assembler) {
 

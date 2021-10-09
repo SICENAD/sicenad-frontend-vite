@@ -30,6 +30,14 @@ export class RecursoService {
     return this.http.get<any>(`${this.host}cenads/${idCenad}/recursos/?page=0&size=1000`);
   }
 
+  getRecursosDeCategoria(categoria: Categoria) {
+    return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/recursos/?page=0&size=1000`);
+  }
+
+  getRecursosDeSubcategorias(categoria: Categoria) {
+    return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/recursosDeSubcategorias/?page=0&size=1000`);
+  }
+
   extraerRecursos(respuestaApi: any): Recurso[] {
     const recursos: Recurso[] = [];
     respuestaApi._embedded.recursos.forEach(r => {
@@ -168,6 +176,18 @@ export class RecursoService {
 
   getCategoriasDeCenad(idCenad:string): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/${idCenad}/categorias/?page=0&size=1000`);
+  }
+
+  getCategoriasPadreDeCenad(idCenad:string): Observable<any> {
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/categoriasPadre/?page=0&size=1000`);
+  }
+
+  getSubcategorias(categoria:Categoria): Observable<any> {
+    return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/subcategorias/`);
+  }
+
+  getSubcategoriasAnidadas(categoria:Categoria): Observable<any> {
+    return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/subcategoriasAnidadas/`);
   }
 
   extraerCategorias(respuestaApi: any): Categoria[] {

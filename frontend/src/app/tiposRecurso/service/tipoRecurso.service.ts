@@ -39,8 +39,8 @@ export class TipoRecursoService {
     tipoRecurso.codTipo = tipoRecursoApi.codTipo;
     tipoRecurso.url = tipoRecursoApi._links.self.href;
     tipoRecurso.idTipoRecurso = tipoRecurso.getId(tipoRecurso.url);
-    this.getRecursosDeTipoRecurso(tipoRecurso).subscribe((response) => {
-      tipoRecurso.recursos = this.extraerRecursos(response)});
+    // this.getRecursosDeTipoRecurso(tipoRecurso).subscribe((response) => {
+    //   tipoRecurso.recursos = this.extraerRecursos(response)});
 
     return tipoRecurso;
   }

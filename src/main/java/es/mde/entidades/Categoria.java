@@ -107,5 +107,11 @@ public class Categoria {
 		getRecursos().add(recurso);
 		recurso.setCategoria(this);
 	}
+
+	@Override
+	public String toString() {
+		return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
+	}
+	
 }
 

@@ -31,6 +31,14 @@ public class CenadDAOImpl implements CenadDAOCustom {
 
 		return categorias;
 	}
+	
+	@Override
+	public List<Categoria> getCategoriasPadreCenad(Long id) {
+		
+		List<Categoria> categorias = cenadDAO.findById(id).get().getCategorias().stream().filter(c -> c.getCategoriaPadre() == null).collect(Collectors.toList());
+
+		return categorias;
+	}
 
 	@Override
 	public List<Recurso> getRecursosCenad(Long id) {
@@ -49,5 +57,4 @@ public class CenadDAOImpl implements CenadDAOCustom {
 
 		return gestores;
 	}
-
 }

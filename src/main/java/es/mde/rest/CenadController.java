@@ -38,6 +38,16 @@ public class CenadController {
 		return assembler.toCollectionModel(categorias);
 	}
 	
+	@GetMapping("/categoriasPadre")
+	@ResponseBody
+	public CollectionModel<PersistentEntityResource> getCategoriasPadreCenad(@PathVariable Long id,
+			PersistentEntityResourceAssembler assembler) {
+
+		List<Categoria> categorias = cenadDAO.getCategoriasPadreCenad(id);
+
+		return assembler.toCollectionModel(categorias);
+	}
+	
 	@GetMapping("/recursos")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getRecursosCenad(@PathVariable Long id,
