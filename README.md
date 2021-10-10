@@ -1,5 +1,7 @@
 # Aplicación `SICENAD` 
 
+![CENAD_SG](./frontend/src/assets/ESCUDO_CENAD_pequeño.jpg)
+
 ## INSTRUCCIONES
 
 ### PREPRODUCCIÓN
@@ -27,8 +29,5 @@
 - Se necesita una aplicación para poder gestionar los recursos de los CENAD,s/CMT,s del Ejército de Tierra.  
 - La aplicación `SICENAD` permitirá crear y mantener una BD de sus CENAD,s/CMT,s, con sus respectivos recursos, pudiendo administrase cada CENAD/CMT, pero teniendo un control centralizado.
 - Cada CENAD/CMT podrá decidir su estructura de recursos y podrá personalizarlos, sin necesidad de ningún conocimiento de programación.
-
-  
-![CENAD_SG](./frontend/src/assets/ESCUDO_CENAD_pequeño.jpg)
 
 [DIM Sandstorm](https://dim.institutomilitar.com/) |  [DIM Web](https://web.institutomilitar.com/) | [Recursos Online DIM](https://web.institutomilitar.com/recursos-online.html)

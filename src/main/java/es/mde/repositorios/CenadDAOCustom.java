@@ -9,10 +9,8 @@ import es.mde.entidades.UsuarioGestor;
 
 public interface CenadDAOCustom {
 
-	List<Categoria> getCategoriasCenad(Long id);
 	List<Categoria> getCategoriasPadreCenad(Long id);
 	List<Recurso> getRecursosCenad(Long id);
-	List<UsuarioGestor> getUsuariosGestorCenad(Long id);
 
 
 }

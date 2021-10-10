@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.mde.entidades.Categoria;
 import es.mde.entidades.Recurso;
-import es.mde.entidades.UsuarioGestor;
 import es.mde.repositorios.CenadDAO;
 
 @RepositoryRestController
@@ -26,16 +25,6 @@ public class CenadController {
 
 	public CenadController(CenadDAO cenadDAO) {
 		this.cenadDAO = cenadDAO;
-	}
-	
-	@GetMapping("/categorias")
-	@ResponseBody
-	public CollectionModel<PersistentEntityResource> getCategoriasCenad(@PathVariable Long id,
-			PersistentEntityResourceAssembler assembler) {
-
-		List<Categoria> categorias = cenadDAO.getCategoriasCenad(id);
-
-		return assembler.toCollectionModel(categorias);
 	}
 	
 	@GetMapping("/categoriasPadre")
@@ -56,15 +45,5 @@ public class CenadController {
 		List<Recurso> recursos = cenadDAO.getRecursosCenad(id);
 
 		return assembler.toCollectionModel(recursos);
-	}
-	
-	@GetMapping("/gestores")
-	@ResponseBody
-	public CollectionModel<PersistentEntityResource> getUsuariosGestorCenad(@PathVariable Long id,
-			PersistentEntityResourceAssembler assembler) {
-
-		List<UsuarioGestor> gestores = cenadDAO.getUsuariosGestorCenad(id);
-
-		return assembler.toCollectionModel(gestores);
 	}
 }

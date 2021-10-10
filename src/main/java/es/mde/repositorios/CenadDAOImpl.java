@@ -23,14 +23,6 @@ public class CenadDAOImpl implements CenadDAOCustom {
 
 	@PersistenceContext
 	EntityManager entityManager;
-
-	@Override
-	public List<Categoria> getCategoriasCenad(Long id) {
-
-		List<Categoria> categorias = cenadDAO.findById(id).get().getCategorias().stream().collect(Collectors.toList());
-
-		return categorias;
-	}
 	
 	@Override
 	public List<Categoria> getCategoriasPadreCenad(Long id) {
@@ -45,16 +37,10 @@ public class CenadDAOImpl implements CenadDAOCustom {
 
 		List<Recurso> recursos = new ArrayList<Recurso>();
 
-		getCategoriasCenad(id).forEach(c -> recursos.addAll(c.getRecursos()));
+		List<Categoria> categorias = cenadDAO.findById(id).get().getCategorias().stream().collect(Collectors.toList());
+
+		categorias.forEach(c -> recursos.addAll(c.getRecursos()));
 
 		return recursos;
-	}
-
-	@Override
-	public List<UsuarioGestor> getUsuariosGestorCenad(Long id) {
-
-		List<UsuarioGestor> gestores = cenadDAO.findById(id).get().getUsuariosGestores().stream().collect(Collectors.toList());
-
-		return gestores;
 	}
 }
