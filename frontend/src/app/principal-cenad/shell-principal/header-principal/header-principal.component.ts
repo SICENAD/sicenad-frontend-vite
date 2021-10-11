@@ -50,7 +50,9 @@ export class HeaderPrincipalComponent implements OnInit {
 
   ngOnInit() {
     this.cargarCenad();
-    this.procesoComprobacionCenadZaragoza();
+    // realiza el proceso de carga de todos los CENAD,s/CMT,s
+    // y comprueba si el CENAD/CMT seleccionado en el home es el de zaragoza
+    this.cargarCenads();
   }
 
   // Captura el idCenad pasado como parámetro en la barra de navegación
@@ -67,20 +69,22 @@ export class HeaderPrincipalComponent implements OnInit {
       });
   }
 
-  // realiza el proceso de carga de todos los CENAD,s/CMT,s y comprueba si el CENAD/CMT seleccionado en el home es el de zaragoza
-  procesoComprobacionCenadZaragoza(): void {
-    this.cargarCenads();
+
+   //this.cargarCenads();
     // para solucionar el problema de la ejecución asíncrona
-    setTimeout(()=> {
-      this.buscarIdCenadZaragoza();
-      this.comprobarCenadZaragoza();
-    }, 500);
-  }
+    //setTimeout(()=> {
+   // this.buscarIdCenadZaragoza();
+   // this.comprobarCenadZaragoza();
+  //  }, 500);
+
 
   // función que carga los diferentes CENAD,s/CMT,s de la API
-  cargarCenads() {
+  cargarCenads(): void {
     this.principalService.getCenads().subscribe((response) => {
       this.cenads = this.principalService.extraerCenads(response);
+     // console.log('cargarCenads');
+      this.buscarIdCenadZaragoza();
+      this.comprobarCenadZaragoza();
     });
   }
 
@@ -91,12 +95,18 @@ export class HeaderPrincipalComponent implements OnInit {
         this.idCenadZaragoza = c.idCenad;
       }
     });
+    //console.log('buscarIdCenadZaragoza');
   }
 
-  // Para ocultar menú ampliado de meteorología
+  // Para ocultar menú ampliado de meteorología y vistas ACMT
   comprobarCenadZaragoza(): void {
     if (this.idCenadZaragoza == this.idCenad) {
       this.isCenadZaragoza = true;
     }
+    //console.log('comprobarCenadZaragoza');
   }
+
 }
+
+
+

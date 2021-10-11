@@ -7,17 +7,14 @@
       <button class="btn text-white" [routerLink]="['formulario', idCenad]">Nuevo Recurso</button>
     </div>
   </div>
-  <!-- <hr class='w-100'>
-  <div class="row justify-content-end">
-    <button class="btn text-white" [routerLink]="['formulario', idCenad]">Nuevo Recurso</button>
-  </div> -->
-  <label for="categorias" class="mr-2">Elige una categoría:</label>
-  <select name="categoriasFiltradas" id="categoriasFiltradas1" [(ngModel)]="categoriaSeleccionada" (change)='filtrar()'>
-    <option class=" letra" *ngFor="let categoria of categoriasFiltradas" [ngValue]="categoria" >{{ categoria.nombre | uppercase}}</option>
-  </select>
-
-
-
+  <label for="categorias" class="mr-2 mt-2" *ngIf='categoriaSeleccionada'>Categoría Seleccionada: <span> {{categoriaSeleccionada.nombre | uppercase}}</span></label>
+ <div class="mt-2">
+    <label for="categorias" class="mr-2">Elige una categoría:</label>
+    <select name="categoriasFiltradas" id="categoriasFiltradas1" [(ngModel)]="categoriaSeleccionada" (change)='filtrar()'>
+      <option *ngFor="let categoria of categoriasFiltradas" [ngValue]="categoria">{{ categoria.nombre | uppercase}}</option>
+    </select>
+    <button class="mr-2 ml-3" *ngIf='categoriaSeleccionada' (click)='borrarFiltros()'>Borrar filtros</button>
+</div>
   <hr class='w-100'>
   <div class="row">
     <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo"><b>NOMBRE</b></div>
@@ -25,9 +22,8 @@
     <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>TIPO RECURSO</b></div>
     <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>GESTOR</b></div>
   </div>
-
   <div *ngFor="let recurso of recursos">
-    <app-recurso [recurso]="recurso" (recursoSeleccionado)="verDatos($event)"></app-recurso>
+    <app-recurso [recurso]="recurso" *ngIf='recurso' (recursoSeleccionado)="verDatos($event)"></app-recurso>
   </div>
   <!-- Modal recurso-->
   <div class="modal fade" id="modalRecurso" tabindex="-1" role="dialog" aria-labelledby="datosRecurso"

@@ -70,7 +70,7 @@
               </li>
               <li class="nav-item" [hidden]= "isAutenticado">
                 <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
-                  <fa-icon [icon]="faSolicitar"></fa-icon>&nbsp;Solicitar Recurso</a>
+                  <fa-icon [icon]="faSolicitar"></fa-icon>&nbsp;Solicitudes</a>
               </li>
 
               <li class="nav-item dropdown" [hidden]= "isAutenticado">
@@ -78,8 +78,8 @@
                   <fa-icon [icon]="faUser"></fa-icon>&nbsp; Gestionar
                 </a>
                 <div class="dropdown-menu gestionar" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
-                    <fa-icon [icon]="faPeticiones"></fa-icon>&nbsp;Peticiones</a>
+                  <!-- <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
+                    <fa-icon [icon]="faPeticiones"></fa-icon>&nbsp;Peticiones</a> -->
                   <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
                     <fa-icon [icon]="faCartografia"></fa-icon>&nbsp;Cartografía</a>
                   <a class="dropdown-item" [routerLink]="['recursos', idCenad]" routerLinkActive="router-link-active">

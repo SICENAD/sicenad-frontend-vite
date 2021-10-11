@@ -182,6 +182,10 @@ export class RecursoService {
     return this.http.get<any>(`${this.host}cenads/${idCenad}/categoriasPadre/?page=0&size=1000`);
   }
 
+  getCategoriaPadre(categoria:Categoria): Observable<any> {
+    return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/categoriaPadre`);
+  }
+
   getSubcategorias(categoria:Categoria): Observable<any> {
     return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/subcategorias/`);
   }
