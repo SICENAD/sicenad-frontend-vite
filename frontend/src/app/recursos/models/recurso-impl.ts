@@ -1,6 +1,6 @@
 import { Categoria } from "src/app/categorias/models/categoria";
 import { UsuarioGestor } from "src/app/superadministrador/models/usuarioGestor";
-import { TipoRecurso } from "src/app/tiposRecurso/models/tipoRecurso";
+import { TipoFormulario } from "src/app/tiposFormulario/models/tipoFormulario";
 import { Recurso } from "./recurso";
 
 export class RecursoImpl implements Recurso {
@@ -11,7 +11,7 @@ export class RecursoImpl implements Recurso {
   ficheros: any[];
   usuarioGestor: UsuarioGestor | any;
   categoria: Categoria | any;
-  tipoRecurso: TipoRecurso | any;
+  tipoFormulario: TipoFormulario | any;
   url: string;
 
   constructor() {}

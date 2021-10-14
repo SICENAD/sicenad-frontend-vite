@@ -2,45 +2,37 @@
   <div class="row ml-4 mb-0 pl-3">
     <a class="nav-link text-center volver" routerLink="/superadministrador" routerLinkActive="router-link-active">
       <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
-      <!-- <hr class="w-100" /> -->
   </div>
-  <!-- <div class="row justify-content-end align-items-start mb-1">
-    <hr class="w-100" />
-  </div> -->
   <div class="row mt-4">
     <div class="col-9 text-center">
-      <h3 class="bienvenido text-center titulo1"><u>GESTIÓN DE TIPOS DE RECURSOS</u> </h3>
+      <h3 class="bienvenido text-center titulo1"><u>GESTIÓN DE TIPOS DE FORMULARIO</u> </h3>
     </div>
     <div class="col-3 justify-content-end">
-      <button class="btn text-white" routerLink="/tiposRecurso/formulario">Nuevo Tipo de Recurso</button>
+      <button class="btn text-white" routerLink="/tiposFormulario/formulario">Nuevo Tipo de Formulario</button>
     </div>
   </div>
-  <!-- <hr class='w-100'>
-  <div class="row justify-content-end">
-    <button class="btn text-white" routerLink="/tiposRecurso/formulario">Nuevo Tipo de Recurso</button>
-  </div> -->
   <hr class='w-100'>
   <div class="row">
     <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>NOMBRE</b></div>
     <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>CÓDIGO</b></div>
     <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo"><b>DESCRIPCIÓN</b></div>
   </div>
-  <div *ngFor="let tipoRecurso of tiposRecurso">
-    <app-tipoRecurso [tipoRecurso]="tipoRecurso" (tipoRecursoSeleccionado)="verDatos($event)"></app-tipoRecurso>
+  <div *ngFor="let tipoFormulario of tiposFormulario">
+    <app-tipoFormulario [tipoFormulario]="tipoFormulario" (tipoFormularioSeleccionado)="verDatos($event)"></app-tipoFormulario>
   </div>
-  <!-- Modal tipoRecurso-->
-  <div class="modal fade" id="modalTipoRecurso" tabindex="-1" role="dialog" aria-labelledby="datosTipoRecurso" aria-hidden="true">
+  <!-- Modal tipoFormulario-->
+  <div class="modal fade" id="modalTipoFormulario" tabindex="-1" role="dialog" aria-labelledby="datosTipoFormulario" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="datosTipoRecurso"><b>Datos Completos del Tipo de Recurso</b> </h5>
+          <h5 class="modal-title" id="datosTipoFormulario"><b>Datos Completos del Tipo de Formulario</b> </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <app-tipoRecurso-ficha *ngIf='tipoRecursoVerDatos' [tipoRecurso]='tipoRecursoVerDatos' (tipoRecursoEliminar)='onTipoRecursoEliminar($event)'
-            (tipoRecursoEditar)='onTipoRecursoEditar($event)'></app-tipoRecurso-ficha>
+          <app-tipoFormulario-ficha *ngIf='tipoFormularioVerDatos' [tipoFormulario]='tipoFormularioVerDatos' (tipoFormularioEliminar)='onTipoFormularioEliminar($event)'
+            (tipoFormularioEditar)='onTipoFormularioEditar($event)'></app-tipoFormulario-ficha>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">Cerrar</button>

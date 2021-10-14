@@ -3,7 +3,7 @@
   <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4" *ngIf='recurso'><a class="" data-toggle="modal"
     data-target="#modalRecurso" (click)='recursoSeleccionado.emit(recurso)'><fa-icon [icon]="faEdit" class="mr-2"></fa-icon>{{recurso.nombre | uppercase}}</a></div>
   <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4" *ngIf='recurso.categoria'>{{recurso.categoria.nombre | uppercase}}</div>
-  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2" *ngIf='recurso.tipoRecurso'>{{recurso.tipoRecurso.nombre | uppercase}}</div>
+  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2" *ngIf='recurso.tipoFormulario'>{{recurso.tipoFormulario.nombre | uppercase}}</div>
   <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2" *ngIf='recurso.usuarioGestor; else elseBlock'> {{recurso.usuarioGestor.nombre | titlecase}}</div>
 </div>
 <ng-template #elseBlock>

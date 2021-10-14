@@ -36,8 +36,8 @@ public class Recurso {
 	@JoinColumn(name = "CATEGORIA", nullable = false)
 	private Categoria categoria;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "TIPO_RECURSO", nullable = false)
-	private TipoRecurso tipoRecurso;
+	@JoinColumn(name = "TIPO_FORMULARIO", nullable = false)
+	private TipoFormulario tipoFormulario;
 	
 	public Recurso() {}
 	
@@ -97,12 +97,12 @@ public class Recurso {
 		this.categoria = categoria;
 	}
 	
-	public TipoRecurso getTipoRecurso() {
-		return tipoRecurso;
+	public TipoFormulario getTipoFormulario() {
+		return tipoFormulario;
 	}
 
-	public void setTipoRecurso(TipoRecurso tipoRecurso) {
-		this.tipoRecurso = tipoRecurso;
+	public void setTipoFormulario(TipoFormulario tipoFormulario) {
+		this.tipoFormulario = tipoFormulario;
 	}
 
 	// Establece la relacion en los dos sentidos

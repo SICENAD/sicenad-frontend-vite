@@ -30,6 +30,10 @@ public class FileController {
 	@Autowired
 	private FileServiceAPI fileServiceAPI;
 
+	// ******************************
+	// Métodos para subir los escudos
+	// ******************************
+	
 //	@PostMapping("/subirEscudos")
 //	public ResponseEntity<Response> uploadFileEscudos(@RequestParam("files") List<MultipartFile> files) throws Exception {
 //		fileServiceAPI.save(files);
@@ -50,7 +54,7 @@ public class FileController {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("El archivo fue borrado correctamente del servidor"));
 	}
-
+	
 	@GetMapping("/escudos/{filename:.+}")
 	public ResponseEntity<Resource> getFileEscudo(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadEscudo(filename);
@@ -71,28 +75,48 @@ public class FileController {
 		return ResponseEntity.status(HttpStatus.OK).body(files);
 	}
 
-	@PostMapping("/subirDocRecursos")
-	public ResponseEntity<Response> uploadFileDocRecursos(@RequestParam("files") List<MultipartFile> files) throws Exception {
-		fileServiceAPI.saveDocRecursos(files);
+	// *********************************************************
+	// Métodos para tratar los ficheros asociados a los recursos
+	// *********************************************************
+	
+	@PostMapping("/subirDocRecursos/{id}")
+	public ResponseEntity<Response> uploadFileDocRecursos(@RequestParam("files") List<MultipartFile> files, @PathVariable("id") String id) throws Exception {
+		fileServiceAPI.saveDocRecursos(files, id);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
 	}
 	
-	@PostMapping("/subirDocRecurso")
-	public ResponseEntity<Response> uploadFileDocRecurso(@RequestParam("file") MultipartFile file) throws Exception {
-		fileServiceAPI.saveDocRecurso(file);
+	@PostMapping("/subirDocRecurso/{id}")
+	public ResponseEntity<Response> uploadFileDocRecurso(@RequestParam("file") MultipartFile file, @PathVariable("id") String id) throws Exception {
+		fileServiceAPI.saveDocRecurso(file, id);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("El archivo fue cargado correctamente al servidor"));
 	}
 
-	@GetMapping("/borrarDocRecurso/{filename:.+}")
-	public ResponseEntity<Response> borrarFileDocRecurso(@PathVariable String filename) throws Exception {
-		fileServiceAPI.borrarDocRecurso(filename);
+	@GetMapping("/borrarDocRecurso/{id}/{filename:.+}")
+	public ResponseEntity<Response> borrarFileDocRecurso(@PathVariable String filename, @PathVariable("id") String id) throws Exception {
+		fileServiceAPI.borrarDocRecurso(filename, id);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("El archivo fue borrado correctamente del servidor"));
 	}
 	
-	@GetMapping("/docRecursos/{filename:.+}")
+	@GetMapping("/borrarCarpetaDocRecurso/{id}")
+	public ResponseEntity<Response> borrarCarpetaDocRecurso(@PathVariable("id") String id) throws Exception {
+		
+		fileServiceAPI.borrarCarpetaDocRecurso(id);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response("La carpeta del recurso fue borrada correctamente del servidor"));
+	}
+	
+	@GetMapping("/docRecursos/{id}/{filename:.+}")
+	public ResponseEntity<Resource> getFileDocRecurso(@PathVariable String filename, @PathVariable("id") String id) throws Exception {
+		Resource resource = fileServiceAPI.loadDocRecurso(filename, id);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
+	
+	@GetMapping("/docRecursos/all")
 	public ResponseEntity<Resource> getFileDocRecurso(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadDocRecurso(filename);
 		return ResponseEntity.ok()
@@ -100,9 +124,9 @@ public class FileController {
 				.body(resource);
 	}
 	
-	@GetMapping("/docRecursos/all")
-	public ResponseEntity<List<File>> getAllFilesDocRecursos() throws Exception {
-		List<File> files = fileServiceAPI.loadAllDocRecursos().map(path -> {
+	@GetMapping("/docRecursos/{id}/all")
+	public ResponseEntity<List<File>> getAllFilesDocRecursos(@PathVariable("id") String id) throws Exception {
+		List<File> files = fileServiceAPI.loadAllDocRecursos(id).map(path -> {
 			String filename = path.getFileName().toString();
 			String url = MvcUriComponentsBuilder.fromMethodName(FileController.class, "getFileDocRecurso", path.getFileName().toString()).build().toString();
 			
@@ -111,29 +135,49 @@ public class FileController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(files);
 	}
+	
+	// ************************************************************
+	// Métodos para tratar los ficheros asociados a las solicitudes
+	// ************************************************************
 
-	@PostMapping("/subirDocSolicitudes")
-	public ResponseEntity<Response> uploadFileDocSolicitudes(@RequestParam("files") List<MultipartFile> files) throws Exception {
-		fileServiceAPI.saveDocSolicitudes(files);
+	@PostMapping("/subirDocSolicitudes/{id}")
+	public ResponseEntity<Response> uploadFileDocSolicitudes(@RequestParam("files") List<MultipartFile> files, @PathVariable("id") String id) throws Exception {
+		fileServiceAPI.saveDocSolicitudes(files, id);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
 	}
 	
-	@PostMapping("/subirDocSolicitud")
-	public ResponseEntity<Response> uploadFileDocSolicitud(@RequestParam("file") MultipartFile file) throws Exception {
-		fileServiceAPI.saveDocSolicitud(file);
+	@PostMapping("/subirDocSolicitud/{id}")
+	public ResponseEntity<Response> uploadFileDocSolicitud(@RequestParam("file") MultipartFile file, @PathVariable("id") String id) throws Exception {
+		fileServiceAPI.saveDocSolicitud(file, id);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("El archivo fue cargado correctamente al servidor"));
 	}
 
-	@GetMapping("/borrarDocSolicitud/{filename:.+}")
-	public ResponseEntity<Response> borrarFileDocSolicitud(@PathVariable String filename) throws Exception {
-		fileServiceAPI.borrarDocSolicitud(filename);
+	@GetMapping("/borrarDocSolicitud/{id}/{filename:.+}")
+	public ResponseEntity<Response> borrarFileDocSolicitud(@PathVariable String filename, @PathVariable("id") String id) throws Exception {
+		fileServiceAPI.borrarDocSolicitud(filename, id);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("El archivo fue borrado correctamente del servidor"));
 	}
 	
-	@GetMapping("/docSolicitudes/{filename:.+}")
+	@GetMapping("/borrarCarpetaDocSolicitud/{id}")
+	public ResponseEntity<Response> borrarCarpetaDocSolicitud(@PathVariable("id") String id) throws Exception {
+		
+		fileServiceAPI.borrarCarpetaDocSolicitud(id);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response("La carpeta de la solicitud fue borrada correctamente del servidor"));
+	}
+	
+	@GetMapping("/docSolicitudes/{id}/{filename:.+}")
+	public ResponseEntity<Resource> getFileDocSolicitud(@PathVariable String filename, @PathVariable("id") String id) throws Exception {
+		Resource resource = fileServiceAPI.loadDocSolicitud(filename, id);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
+	
+	@GetMapping("/docSolicitudes/all")
 	public ResponseEntity<Resource> getFileDocSolicitud(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadDocSolicitud(filename);
 		return ResponseEntity.ok()
@@ -141,9 +185,9 @@ public class FileController {
 				.body(resource);
 	}
 	
-	@GetMapping("/docSolicitudes/all")
-	public ResponseEntity<List<File>> getAllFilesDocSolicitud() throws Exception {
-		List<File> files = fileServiceAPI.loadAllDocSolicitudes().map(path -> {
+	@GetMapping("/docSolicitudes/{id}/all")
+	public ResponseEntity<List<File>> getAllFilesDocSolicitud(@PathVariable("id") String id) throws Exception {
+		List<File> files = fileServiceAPI.loadAllDocSolicitudes(id).map(path -> {
 			String filename = path.getFileName().toString();
 			String url = MvcUriComponentsBuilder.fromMethodName(FileController.class, "getFileDocSolicitud", path.getFileName().toString()).build().toString();
 			

@@ -1,8 +1,10 @@
 package es.mde.servicios;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -31,8 +33,13 @@ public class FileServiceImpl implements FileServiceAPI {
 	private final Path docSolicitudesFolder = Paths.get(rutaDocSolicitudes);
 	private final Path docRecursosFolder = Paths.get(rutaDocRecursos);
 
+	// *******************************
+	// Métodos para tratar los escudos
+	// *******************************
+	
 	@Override
 	public void saveEscudo(MultipartFile file) throws Exception {
+		Files.createDirectories(escudosFolder);
 		Files.copy(file.getInputStream(), this.escudosFolder.resolve(file.getOriginalFilename()));
 	}
 
@@ -51,6 +58,7 @@ public class FileServiceImpl implements FileServiceAPI {
 
 	@Override
 	public void saveEscudos(List<MultipartFile> files) throws Exception {
+		Files.createDirectories(escudosFolder);
 		for (MultipartFile file : files) {
 			this.saveEscudo(file);
 		}
@@ -61,17 +69,39 @@ public class FileServiceImpl implements FileServiceAPI {
 		return Files.walk(escudosFolder, 1).filter(path -> !path.equals(escudosFolder)).map(escudosFolder::relativize);
 	}
 
+	// *********************************************************
+	// Métodos para tratar los ficheros asociados a los recursos
+	// *********************************************************
+	
 	@Override
-	public void saveDocRecurso(MultipartFile file) throws Exception {
-		Files.copy(file.getInputStream(), this.docRecursosFolder.resolve(file.getOriginalFilename()));
+	public void saveDocRecurso(MultipartFile file, String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+		Files.createDirectories(docRecursosFolder2);
+
+		Files.copy(file.getInputStream(), docRecursosFolder2.resolve(file.getOriginalFilename()));
 	}
 	
 	@Override
-	public void borrarDocRecurso(String name) throws Exception {
-		Path file = docRecursosFolder.resolve(name);
+	public void borrarDocRecurso(String name, String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+		Path file = docRecursosFolder2.resolve(name);
 		Files.deleteIfExists(file);
 	}
+	
+	@Override
+	public void borrarCarpetaDocRecurso(String id) throws Exception {
+		Path carpeta = docRecursosFolder.resolve(id);
+		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+	}
 
+	@Override
+	public Resource loadDocRecurso(String name, String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+		Path file = docRecursosFolder2.resolve(name);
+		Resource resource = new UrlResource(file.toUri());
+		return resource;
+	}
+	
 	@Override
 	public Resource loadDocRecurso(String name) throws Exception {
 		Path file = docRecursosFolder.resolve(name);
@@ -80,28 +110,50 @@ public class FileServiceImpl implements FileServiceAPI {
 	}
 
 	@Override
-	public void saveDocRecursos(List<MultipartFile> files) throws Exception {
+	public void saveDocRecursos(List<MultipartFile> files, String id) throws Exception {
 		for (MultipartFile file : files) {
-			this.saveDocRecurso(file);
+			this.saveDocRecurso(file, id);
 		}
 	}
 
 	@Override
-	public Stream<Path> loadAllDocRecursos() throws Exception {
-		return Files.walk(docRecursosFolder, 1).filter(path -> !path.equals(docRecursosFolder)).map(docRecursosFolder::relativize);
+	public Stream<Path> loadAllDocRecursos(String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+		return Files.walk(docRecursosFolder2, 1).filter(path -> !path.equals(docRecursosFolder2)).map(docRecursosFolder2::relativize);
 	}
 
+	// ************************************************************
+	// Métodos para tratar los ficheros asociados a las solicitudes
+	// ************************************************************
+	
 	@Override
-	public void saveDocSolicitud(MultipartFile file) throws Exception {
-		Files.copy(file.getInputStream(), this.docSolicitudesFolder.resolve(file.getOriginalFilename()));
+	public void saveDocSolicitud(MultipartFile file, String id) throws Exception {
+		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
+		Files.createDirectories(docSolicitudesFolder2);
+		Files.copy(file.getInputStream(), docSolicitudesFolder2.resolve(file.getOriginalFilename()));
 	}
 	
 	@Override
-	public void borrarDocSolicitud(String name) throws Exception {
-		Path file = docSolicitudesFolder.resolve(name);
+	public void borrarDocSolicitud(String name, String id) throws Exception {
+		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
+		Path file = docSolicitudesFolder2.resolve(name);
 		Files.deleteIfExists(file);
 	}
+	
+	@Override
+	public void borrarCarpetaDocSolicitud(String id) throws Exception {
+		Path carpeta = docSolicitudesFolder.resolve(id);
+		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+	}
 
+	@Override
+	public Resource loadDocSolicitud(String name, String id) throws Exception {
+		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
+		Path file = docSolicitudesFolder2.resolve(name);
+		Resource resource = new UrlResource(file.toUri());
+		return resource;
+	}
+	
 	@Override
 	public Resource loadDocSolicitud(String name) throws Exception {
 		Path file = docSolicitudesFolder.resolve(name);
@@ -110,15 +162,16 @@ public class FileServiceImpl implements FileServiceAPI {
 	}
 
 	@Override
-	public void saveDocSolicitudes(List<MultipartFile> files) throws Exception {
+	public void saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception {
 		for (MultipartFile file : files) {
-			this.saveDocSolicitud(file);
+			this.saveDocSolicitud(file, id);
 		}
 	}
 
 	@Override
-	public Stream<Path> loadAllDocSolicitudes() throws Exception {
-		return Files.walk(docSolicitudesFolder, 1).filter(path -> !path.equals(docSolicitudesFolder)).map(docSolicitudesFolder::relativize);
+	public Stream<Path> loadAllDocSolicitudes(String id) throws Exception {
+		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
+		return Files.walk(docSolicitudesFolder2, 1).filter(path -> !path.equals(docSolicitudesFolder2)).map(docSolicitudesFolder2::relativize);
 	}
 
 

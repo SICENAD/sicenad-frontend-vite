@@ -13,9 +13,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-//@EntityListeners(TipoRecursoListener.class)
-@Table(name="TIPOS_RECURSO")
-public class TipoRecurso {
+//@EntityListeners(TipoFormularioListener.class)
+@Table(name="TIPOS_FORMULARIO")
+public class TipoFormulario {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -24,10 +24,10 @@ public class TipoRecurso {
 	private String nombre;
 	private String descripcion;
 	private int codTipo;
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Recurso.class, mappedBy = "tipoRecurso")
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Recurso.class, mappedBy = "tipoFormulario")
 	private Collection<Recurso> recursos = new ArrayList<>();
 	
-	public TipoRecurso() {}
+	public TipoFormulario() {}
 
 	public Long getId() {
 		return id;
@@ -72,7 +72,7 @@ public class TipoRecurso {
 	// Establece la relacion en los dos sentidos
 	public void addRecurso(Recurso recurso) {
 		getRecursos().add(recurso);
-		recurso.setTipoRecurso(this);
+		recurso.setTipoFormulario(this);
 	}
 }
 

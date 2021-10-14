@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChange
 import { ActivatedRoute } from '@angular/router';
 import { Categoria } from 'src/app/categorias/models/categoria';
 import { UsuarioGestor } from 'src/app/superadministrador/models/usuarioGestor';
-import { TipoRecurso } from 'src/app/tiposRecurso/models/tipoRecurso';
+import { TipoFormulario } from 'src/app/tiposFormulario/models/tipoFormulario';
 import { RecursoImpl } from '../../models/recurso-impl';
 import { RecursoService } from '../../service/recurso.service';
 
@@ -19,8 +19,8 @@ export class RecursoFichaComponent implements OnInit {
   @Output() recursoEditar = new EventEmitter<RecursoImpl>();
   categorias: Categoria[] = [];
   gestores: UsuarioGestor[] = [];
-  tiposRecurso: TipoRecurso[] = [];
-  tipoRecursoSeleccionado: string;
+  tiposFormulario: TipoFormulario[] = [];
+  tipoFormularioSeleccionado: string;
   categoriaRecursoSeleccionada: string;
   recursoUsuarioGestorSeleccionado: string;
 
@@ -31,8 +31,8 @@ export class RecursoFichaComponent implements OnInit {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     this.recursoService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.recursoService.extraerCategorias(response));
     this.recursoService.getUsuariosGestor(this.idCenad).subscribe((response) => this.gestores = this.recursoService.extraerUsuarios(response));
-    this.recursoService.getTiposRecurso().subscribe((response) => {
-       this.tiposRecurso = this.recursoService.extraerTiposRecurso(response);
+    this.recursoService.getTiposFormulario().subscribe((response) => {
+       this.tiposFormulario = this.recursoService.extraerTiposFormulario(response);
       });
     this.actualizarNgModels();
   }
@@ -42,15 +42,15 @@ export class RecursoFichaComponent implements OnInit {
   }
 
   actualizarNgModels(): void {
-    this.tipoRecursoSeleccionado = this.recurso.tipoRecurso.url;
-    console.log(this.tipoRecursoSeleccionado);
+    this.tipoFormularioSeleccionado = this.recurso.tipoFormulario.url;
+    console.log(this.tipoFormularioSeleccionado);
     this.categoriaRecursoSeleccionada = this.recurso.categoria.url;
     console.log(this.categoriaRecursoSeleccionada);
     this.recursoUsuarioGestorSeleccionado = this.recurso.usuarioGestor.url;
   }
 
   editar(): void {
-    this.recurso.tipoRecurso = this.tipoRecursoSeleccionado;
+    this.recurso.tipoFormulario = this.tipoFormularioSeleccionado;
     this.recurso.categoria = this.categoriaRecursoSeleccionada;
     this.recurso.usuarioGestor = this.recursoUsuarioGestorSeleccionado;
     this.recursoEditar.emit(this.recurso);

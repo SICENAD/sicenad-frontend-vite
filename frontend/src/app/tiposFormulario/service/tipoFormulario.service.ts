@@ -4,49 +4,48 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Recurso } from 'src/app/recursos/models/recurso';
 import { RecursoImpl } from 'src/app/recursos/models/recurso-impl';
-import { RecursoService } from 'src/app/recursos/service/recurso.service';
 import { environment } from 'src/environments/environment';
-import { TipoRecurso } from '../models/tipoRecurso';
-import { TipoRecursoImpl } from '../models/tipoRecurso-impl';
+import { TipoFormulario } from '../models/tipoFormulario';
+import { TipoFormularioImpl } from '../models/tipoFormulario-impl';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TipoRecursoService {
+export class TipoFormularioService {
   private host: string = environment.hostSicenad;
-  private urlEndPoint: string = `${this.host}tipos_recurso/`;
+  private urlEndPoint: string = `${this.host}tipos_formulario/`;
 
   constructor(
     private http: HttpClient) { }
 
-  getTiposRecurso(): Observable<any> {
+  getTiposFormulario(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
 
-  extraerTiposRecurso(respuestaApi: any): TipoRecurso[] {
-    const tiposRecurso: TipoRecurso[] = [];
-    respuestaApi._embedded.tipos_recurso.forEach(t => {
-      tiposRecurso.push(this.mapearTipoRecurso(t));
+  extraerTiposFormulario(respuestaApi: any): TipoFormulario[] {
+    const tiposFormulario: TipoFormulario[] = [];
+    respuestaApi._embedded.tipos_formulario.forEach(t => {
+      tiposFormulario.push(this.mapearTipoFormulario(t));
 
     });
-    return tiposRecurso;
+    return tiposFormulario;
   }
 
-  mapearTipoRecurso(tipoRecursoApi: any): TipoRecursoImpl {
-    const tipoRecurso = new TipoRecursoImpl();
-    tipoRecurso.nombre = tipoRecursoApi.nombre;
-    tipoRecurso.descripcion = tipoRecursoApi.descripcion;
-    tipoRecurso.codTipo = tipoRecursoApi.codTipo;
-    tipoRecurso.url = tipoRecursoApi._links.self.href;
-    tipoRecurso.idTipoRecurso = tipoRecurso.getId(tipoRecurso.url);
-    // this.getRecursosDeTipoRecurso(tipoRecurso).subscribe((response) => {
-    //   tipoRecurso.recursos = this.extraerRecursos(response)});
+  mapearTipoFormulario(tipoFormularioApi: any): TipoFormularioImpl {
+    const tipoFormulario = new TipoFormularioImpl();
+    tipoFormulario.nombre = tipoFormularioApi.nombre;
+    tipoFormulario.descripcion = tipoFormularioApi.descripcion;
+    tipoFormulario.codTipo = tipoFormularioApi.codTipo;
+    tipoFormulario.url = tipoFormularioApi._links.self.href;
+    tipoFormulario.idTipoFormulario = tipoFormulario.getId(tipoFormulario.url);
+    // this.getRecursosDeTipoFormulario(tipoFormulario).subscribe((response) => {
+    //   tipoFormulario.recursos = this.extraerRecursos(response)});
 
-    return tipoRecurso;
+    return tipoFormulario;
   }
 
-  create(tipoRecurso: TipoRecurso): Observable<any> {
-    return this.http.post(`${this.urlEndPoint}`, tipoRecurso).pipe(
+  create(tipoFormulario: TipoFormulario): Observable<any> {
+    return this.http.post(`${this.urlEndPoint}`, tipoFormulario).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);
@@ -59,8 +58,8 @@ export class TipoRecursoService {
     );
   }
 
-  delete(tipoRecurso): Observable<TipoRecurso> {
-    return this.http.delete<TipoRecurso>(`${this.urlEndPoint}${tipoRecurso.idTipoRecurso}`)
+  delete(tipoFormulario): Observable<TipoFormulario> {
+    return this.http.delete<TipoFormulario>(`${this.urlEndPoint}${tipoFormulario.idTipoFormulario}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -71,9 +70,9 @@ export class TipoRecursoService {
       );
   }
 
-  update(tipoRecurso: TipoRecurso): Observable<any> {
+  update(tipoFormulario: TipoFormulario): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${tipoRecurso.idTipoRecurso}`, tipoRecurso)
+      .patch<any>(`${this.urlEndPoint}${tipoFormulario.idTipoFormulario}`, tipoFormulario)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -87,8 +86,8 @@ export class TipoRecursoService {
       );
   }
 
-  getRecursosDeTipoRecurso(tipoRecurso: TipoRecurso): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${tipoRecurso.idTipoRecurso}/recursos`);
+  getRecursosDeTipoFormulario(tipoFormulario: TipoFormulario): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}${tipoFormulario.idTipoFormulario}/recursos`);
   }
 
   extraerRecursos(respuestaApi: any): Recurso[] {

@@ -9,6 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FileServiceAPI {
 	
+	// *******************************
+	// Métodos para tratar los escudos
+	// *******************************
+	
 	public void saveEscudo(MultipartFile file) throws Exception;
 	
 	public void borrarEscudo(String name) throws Exception;
@@ -19,23 +23,40 @@ public interface FileServiceAPI {
 	
 	public Stream<Path> loadAllEscudos() throws Exception;
 	
-	public void saveDocRecurso(MultipartFile file) throws Exception;
+	// *********************************************************
+	// Métodos para tratar los ficheros asociados a los recursos
+	// *********************************************************
 	
-	public void borrarDocRecurso(String name) throws Exception;
+	public void saveDocRecurso(MultipartFile file, String id) throws Exception;
 	
-	public Resource loadDocRecurso(String name) throws Exception;
+	public void borrarDocRecurso(String name, String id) throws Exception;
 	
-	public void saveDocRecursos(List<MultipartFile> files) throws Exception;
+	public void borrarCarpetaDocRecurso(String id) throws Exception;
 	
-	public Stream<Path> loadAllDocRecursos() throws Exception;
+	public Resource loadDocRecurso(String name, String id) throws Exception;
 	
-	public void saveDocSolicitud(MultipartFile file) throws Exception;
+	public 	Resource loadDocRecurso(String name) throws Exception;
 	
-	public void borrarDocSolicitud(String name) throws Exception;
+	public void saveDocRecursos(List<MultipartFile> files, String id) throws Exception;
 	
-	public Resource loadDocSolicitud(String name) throws Exception;
+	public Stream<Path> loadAllDocRecursos(String id) throws Exception;
 	
-	public void saveDocSolicitudes(List<MultipartFile> files) throws Exception;
+	// ************************************************************
+	// Métodos para tratar los ficheros asociados a las solicitudes
+	// ************************************************************
 	
-	public Stream<Path> loadAllDocSolicitudes() throws Exception;
+	public void saveDocSolicitud(MultipartFile file, String id) throws Exception;
+	
+	public void borrarDocSolicitud(String name, String id) throws Exception;
+	
+	public void borrarCarpetaDocSolicitud(String id) throws Exception;
+
+	public Resource loadDocSolicitud(String name, String id) throws Exception;
+	
+	public 	Resource loadDocSolicitud(String name) throws Exception;
+	
+	public void saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception;
+	
+	public Stream<Path> loadAllDocSolicitudes(String id) throws Exception;
+
 }

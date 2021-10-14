@@ -1,8 +1,8 @@
 import { Recurso } from "src/app/recursos/models/recurso";
-import { TipoRecurso } from "./tipoRecurso";
+import { TipoFormulario } from "./tipoFormulario";
 
-export class TipoRecursoImpl implements TipoRecurso {
-  idTipoRecurso: string;
+export class TipoFormularioImpl implements TipoFormulario {
+  idTipoFormulario: string;
   nombre: string;
   descripcion: string;
   recursos: Recurso[];

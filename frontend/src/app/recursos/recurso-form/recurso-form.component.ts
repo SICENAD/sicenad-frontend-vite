@@ -2,10 +2,9 @@ import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
-import { Observable } from 'rxjs';
 import { Categoria } from 'src/app/categorias/models/categoria';
 import { UsuarioGestor } from 'src/app/superadministrador/models/usuarioGestor';
-import { TipoRecurso } from 'src/app/tiposRecurso/models/tipoRecurso';
+import { TipoFormulario } from 'src/app/tiposFormulario/models/tipoFormulario';
 import { Recurso } from '../models/recurso';
 import { RecursoImpl } from '../models/recurso-impl';
 import { RecursoService } from '../service/recurso.service';
@@ -22,7 +21,7 @@ export class RecursoFormComponent implements OnInit {
   categorias: Categoria[] = [];
   recursos: Recurso[] = [];
   gestores: UsuarioGestor[] = [];
-  tiposRecurso: TipoRecurso[] = [];
+  tiposFormulario: TipoFormulario[] = [];
   faVolver =faArrowAltCircleLeft;
 
   constructor(
@@ -34,7 +33,7 @@ export class RecursoFormComponent implements OnInit {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     this.recursoService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.recursoService.extraerCategorias(response));
     this.recursoService.getUsuariosGestor(this.idCenad).subscribe((response) => this.gestores = this.recursoService.extraerUsuarios(response));
-    this.recursoService.getTiposRecurso().subscribe((response) => this.tiposRecurso = this.recursoService.extraerTiposRecurso(response));
+    this.recursoService.getTiposFormulario().subscribe((response) => this.tiposFormulario = this.recursoService.extraerTiposFormulario(response));
   }
 
   crearRecurso(): void {

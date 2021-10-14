@@ -6,8 +6,8 @@ import { Categoria } from 'src/app/categorias/models/categoria';
 import { CategoriaImpl } from 'src/app/categorias/models/categoria-impl';
 import { UsuarioGestor } from 'src/app/superadministrador/models/usuarioGestor';
 import { UsuarioGestorImpl } from 'src/app/superadministrador/models/usuarioGestor-impl';
-import { TipoRecurso } from 'src/app/tiposRecurso/models/tipoRecurso';
-import { TipoRecursoImpl } from 'src/app/tiposRecurso/models/tipoRecurso-impl';
+import { TipoFormulario } from 'src/app/tiposFormulario/models/tipoFormulario';
+import { TipoFormularioImpl } from 'src/app/tiposFormulario/models/tipoFormulario-impl';
 import { environment } from 'src/environments/environment';
 import { Recurso } from '../models/recurso';
 import { RecursoImpl } from '../models/recurso-impl';
@@ -54,8 +54,8 @@ export class RecursoService {
     recurso.otros = recursoApi.otros;
     recurso.url = recursoApi._links.self.href;
     recurso.idRecurso = recurso.getId(recurso.url);
-    this.getTipoRecurso(recurso).subscribe((response) => {
-      recurso.tipoRecurso = this.mapearTipoRecurso(response)});
+    this.getTipoFormulario(recurso).subscribe((response) => {
+      recurso.tipoFormulario= this.mapearTipoFormulario(response)});
     this.getUsuarioGestor(recurso).subscribe((response) => {
       recurso.usuarioGestor = this.mapearUsuario(response)});
     this.getCategoria(recurso).subscribe((response) => recurso.categoria = this.mapearCategoria(response));
@@ -134,8 +134,8 @@ export class RecursoService {
     );
   }
 
-  getTipoRecurso(recurso: Recurso): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${recurso.idRecurso}/tipoRecurso`)
+  getTipoFormulario(recurso: Recurso): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}${recurso.idRecurso}/tipoFormulario`)
     .pipe(
       catchError((e) => {
         if (e.status === 400) {
@@ -150,28 +150,28 @@ export class RecursoService {
   }
 
 
-  getTiposRecurso(): Observable<any> {
-    return this.http.get<any>(`${this.host}tipos_recurso/?page=0&size=1000`);
+  getTiposFormulario(): Observable<any> {
+    return this.http.get<any>(`${this.host}tipos_formulario/?page=0&size=1000`);
   }
 
-  extraerTiposRecurso(respuestaApi: any): TipoRecurso[] {
-    const tiposRecursos: TipoRecurso[] = [];
-    respuestaApi._embedded.tipos_recurso.forEach(r => {
-      tiposRecursos.push(this.mapearTipoRecurso(r));
+  extraerTiposFormulario(respuestaApi: any): TipoFormulario[] {
+    const tiposFormulario: TipoFormulario[] = [];
+    respuestaApi._embedded.tipos_formulario.forEach(r => {
+      tiposFormulario.push(this.mapearTipoFormulario(r));
 
     });
-    return tiposRecursos;
+    return tiposFormulario;
   }
 
-  mapearTipoRecurso(tipoRecursoApi: any): TipoRecursoImpl {
-    const tipoRecurso = new TipoRecursoImpl();
-    tipoRecurso.nombre = tipoRecursoApi.nombre;
-    tipoRecurso.descripcion = tipoRecursoApi.descripcion;
-    tipoRecurso.codTipo = tipoRecursoApi.codTipo;
-    tipoRecurso.url = tipoRecursoApi._links.self.href;
-    tipoRecurso.idTipoRecurso = tipoRecurso.getId(tipoRecurso.url);
+  mapearTipoFormulario(tipoFormularioApi: any): TipoFormularioImpl {
+    const tipoFormulario = new TipoFormularioImpl();
+    tipoFormulario.nombre = tipoFormularioApi.nombre;
+    tipoFormulario.descripcion = tipoFormularioApi.descripcion;
+    tipoFormulario.codTipo = tipoFormularioApi.codTipo;
+    tipoFormulario.url = tipoFormularioApi._links.self.href;
+    tipoFormulario.idTipoFormulario = tipoFormulario.getId(tipoFormulario.url);
 
-    return tipoRecurso;
+    return tipoFormulario;
   }
 
   getCategoriasDeCenad(idCenad:string): Observable<any> {

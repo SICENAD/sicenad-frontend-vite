@@ -16,8 +16,8 @@ const routes: Routes = [
     loadChildren: () => import('./superadministrador/superadministrador.module').then(m => m.SuperadministradorModule),
   },
   {
-    path: 'tiposRecurso',
-    loadChildren: () => import('./tiposRecurso/tiposRecurso.module').then(m => m.TiposRecursoModule),
+    path: 'tiposFormulario',
+    loadChildren: () => import('./tiposFormulario/tiposFormulario.module').then(m => m.TiposFormularioModule),
   },
   {
     path: 'categoriasFichero',
