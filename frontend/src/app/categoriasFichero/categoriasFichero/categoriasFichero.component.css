@@ -13,7 +13,7 @@
 }
 
 .titulo1 {
-  color: #588157; 
+  color: #588157;
 }
 
 h5 {
@@ -30,13 +30,13 @@ a.volver:hover {
 }
 
 .row {
-  height: 2em;
+  height: 1.5em;
   padding: auto;
   margin: auto;
 }
 
 hr {
-  margin-bottom: 1;
+  margin-bottom: 0;
   margin-top: 1;
 }
 

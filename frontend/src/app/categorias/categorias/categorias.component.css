@@ -21,13 +21,13 @@ h5 {
 }
 
 .row {
-  height: 2em;
+  height: 1.5em;
   padding: auto;
   margin: auto;
 }
 
 hr {
-  margin-bottom: 1;
+  margin-bottom: 0;
   margin-top: 1;
 }
 
@@ -35,4 +35,8 @@ hr {
   max-height: 100%;
   max-width: 100%;
   margin: auto;
+}
+
+div.titulos {
+  background-color: #DAD7CD;
 }

@@ -37,7 +37,8 @@ background-color: #588157;
 }
 
 h5 {
-  color: #354f52; font-weight: bold
+  color: #354f52; font-weight: bold;
+  background-color:lightgreen;
 }
 
 .tipoFormulario, .categoriaFichero {
@@ -72,4 +73,8 @@ hr {
   max-height: 100%;
   max-width: 100%;
   margin: auto;
+}
+
+div.titulos {
+  background-color: #DAD7CD;
 }

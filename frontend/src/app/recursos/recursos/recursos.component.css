@@ -17,7 +17,7 @@
 }
 
 h5 {
-  color: #354f52; 
+  color: #354f52;
   font-weight: bold;
 }
 
@@ -28,14 +28,14 @@ h5 {
 }
 
 .row {
-  height: 2em;
+  height: 1.5em;
   padding: auto;
   margin: auto;
 }
 
 hr {
-  margin-bottom: 1;
-  margin-top: 1;
+  margin-bottom: 0;
+  margin-top: 0;
 }
 
 select {
@@ -45,4 +45,8 @@ select {
 label span {
   color: #3A5A40;
   font-weight: bold;
+}
+
+div.titulos {
+  background-color: #DAD7CD;
 }

@@ -1,13 +1,11 @@
-<div class="container">
-  <div class="row ml-4 pl-3">
-    <a class="nav-link text-center volver" routerLink="../../"  routerLinkActive="router-link-active">
+<div class="container-fluid">
+  <div class="row ml-4 pl-3 mb-0 pb-0">
+    <a class="nav-link text-center volver mb-0 pb-0" routerLink="../../"  routerLinkActive="router-link-active">
       <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
   </div>
-  <div class="row justify-content-end align-items-start mb-5">
-    <hr class="w-100" />
-  </div>
-  <div class="mt-4 text-center mb-4">
-    <h3>CREAR RECURSO</h3>
+  <div class="row justify-content-center align-items-start mb-0">
+    <h3 class="mt-0 pt-0">CREAR RECURSO</h3>
+    <hr class="w-100 mt-0 mb-1" />
   </div>
   <form #recursoForm="ngForm">
     <div class="form-row py-2">
@@ -67,7 +65,7 @@
       </div>
 
     </div>
-    <div class="form-row justify-content-between pt-5">
+    <div class="form-row justify-content-between pt-3">
       <div class="col-lg-5 col-md-12 mb-4">
         <button class="btn text-white" role="button" (click)="crearRecurso()" [disabled]="!recursoForm.form.valid">
           Crear Recurso

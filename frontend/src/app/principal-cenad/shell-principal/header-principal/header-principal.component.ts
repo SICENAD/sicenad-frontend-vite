@@ -6,6 +6,12 @@ import { faBars, faBomb, faBook, faBusinessTime, faCalendarAlt, faCloudSun, faEd
 import { PrincipalService } from 'src/app/principal-cenad/service/principal.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
+import { UsuarioAdministrador } from 'src/app/superadministrador/models/usuarioAdministrador';
+import { UsuarioAdministradorImpl } from 'src/app/superadministrador/models/usuarioAdministrador-impl';
+import { UsuarioGestor } from 'src/app/superadministrador/models/usuarioGestor';
+import { UsuarioGestorImpl } from 'src/app/superadministrador/models/usuarioGestor-impl';
+import { UsuarioNormal } from 'src/app/superadministrador/models/usuarioNormal';
+import { UsuarioNormalImpl } from 'src/app/superadministrador/models/usuarioNormal-impl';
 
 @Component({
   selector: 'app-header-principal',
@@ -41,10 +47,14 @@ export class HeaderPrincipalComponent implements OnInit {
   cenad: Cenad = new CenadImpl();
   idCenad: string = "";
   idCenadZaragoza: string = "";
-  isAutenticado: boolean = false;
   isCenadZaragoza: boolean = false;
   cenads: Cenad[] = [];
   cenadsFiltro: Cenad[] = [];
+  // variables estáticas
+  static isAutenticado: boolean = false;
+  static userAdminLogeado: UsuarioAdministrador = new UsuarioAdministradorImpl();
+  static userGestorLogeado: UsuarioGestor = new UsuarioGestorImpl();
+  static userNormalLogeado: UsuarioNormal = new UsuarioNormalImpl();
 
   constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute) { }
 

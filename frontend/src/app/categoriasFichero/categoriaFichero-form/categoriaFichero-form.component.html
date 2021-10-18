@@ -1,13 +1,11 @@
-<div class="container">
-  <div class="row ml-4 pl-3">
+<div class="container-fluid">
+  <div class="row ml-4 pl-3 mb-0 pb-0">
     <a class="nav-link text-center volver" routerLink="/categoriasFichero" routerLinkActive="router-link-active">
       <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
   </div>
-  <div class="row justify-content-end align-items-start mb-5">
-    <hr class="w-100" />
-  </div>
-  <div class="mt-4 text-center mb-4">
-    <h3>CREAR CATEGORIA DE FICHERO</h3>
+  <div class="row justify-content-center align-items-start mb-1">
+    <h3 class="mb-0 pt-0">CREAR CATEGORIA DE FICHERO</h3>
+    <hr class="w-100 mb-0 pb-0" />
   </div>
   <form #categoriaFicheroForm="ngForm">
     <div class="form-row py-2">
@@ -45,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="form-row justify-content-between pt-5">
+    <div class="form-row justify-content-between pt-3">
       <div class="col-lg-5 col-md-12 mb-4">
         <button class="btn text-white" role="button" (click)="crearCategoriaFichero()" [disabled]="!categoriaFicheroForm.form.valid">
           Crear Categoría de Fichero

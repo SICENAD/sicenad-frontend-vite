@@ -1,5 +1,5 @@
-<div class="container">
-  <div class="row mt-2">
+<div class="container-fluid">
+  <div class="row mt-1">
     <div class="col-9 text-center">
       <h3 class="bienvenido text-center titulo1"><u>GESTIÓN DE RECURSOS</u> </h3>
     </div>
@@ -8,7 +8,7 @@
     </div>
   </div>
   <label for="categorias" class="mr-2 mt-2" *ngIf='categoriaSeleccionada'>Categoría Seleccionada: <span> {{categoriaSeleccionada.nombre | uppercase}}</span></label>
- <div class="mt-2">
+ <div class="mt-0">
     <label for="categorias" class="mr-2">Elige una categoría:</label>
     <select name="categoriasFiltradas" id="categoriasFiltradas1" [(ngModel)]="categoriaSeleccionada" (change)='filtrar()'>
       <option *ngFor="let categoria of categoriasFiltradas" [ngValue]="categoria">{{ categoria.nombre | uppercase}}</option>
@@ -16,11 +16,11 @@
     <button class="mr-2 ml-3" *ngIf='categoriaSeleccionada' (click)='borrarFiltros()'>Borrar filtros</button>
 </div>
   <hr class='w-100'>
-  <div class="row">
-    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo"><b>NOMBRE</b></div>
-    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo"><b>CATEGORIA</b></div>
-    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>TIPO FORMULARIO</b></div>
-    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>GESTOR</b></div>
+  <div class="row titulos">
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>NOMBRE</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>CATEGORIA</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>TIPO FORMULARIO</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>GESTOR</b></div>
   </div>
   <div *ngFor="let recurso of recursos">
     <app-recurso [recurso]="recurso" *ngIf='recurso' (recursoSeleccionado)="verDatos($event)"></app-recurso>

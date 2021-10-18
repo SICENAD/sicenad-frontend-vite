@@ -1,13 +1,11 @@
-<div class="container">
-  <div class="row ml-4 pl-3">
+<div class="container-fluid">
+  <div class="row ml-4 pl-3 mb-0 mt-0">
     <a class="nav-link text-center volver" routerLink="/superadministrador" routerLinkActive="router-link-active">
       <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
   </div>
-  <div class="row justify-content-end align-items-start mb-5">
-    <hr class="w-100" />
-  </div>
-  <div class="mt-4 text-center mb-4">
-    <h3>CREAR CENAD/CMT</h3>
+  <div class="row justify-content-center align-items-start mb-0">
+    <h3 class="mb-0 pb-0">CREAR CENAD/CMT</h3>
+    <hr class="w-100 pb-0 mb-1" />
   </div>
 <form #cenadForm="ngForm">
   <div class="form-row py-2">
@@ -52,7 +50,7 @@
           El Teléfono debe tener 9 carácteres
         </div>
       </div>
-    </div> 
+    </div>
     <div class="col-lg-4 col-md-12 pt-3">
       <label class="titulo"><b>EMAIL</b></label>
       <input type="email" class="form-control letra" [(ngModel)]="cenad.email" placeholder="Email de contacto del CENAD/CMT" name="email"
@@ -83,8 +81,8 @@
       <input type="file" (change)="selectFile($event)" class="form-control"/>
     </div>
   </div>
-  <div class="form-row justify-content-between pt-5">
-    <div class="col-lg-5 col-md-12 mb-4">
+  <div class="form-row justify-content-between pt-3">
+    <div class="col-lg-5 col-md-12 mb-2">
       <button class="btn text-white" role="button"
       (click)="crearCenad()"
       [disabled]="!cenadForm.form.valid || !selectedFiles">

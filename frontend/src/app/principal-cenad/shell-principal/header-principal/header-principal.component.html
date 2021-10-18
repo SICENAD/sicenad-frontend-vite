@@ -13,7 +13,7 @@
   <!-- [ngClass]= "{'disabled': !isAutenticado}" -->
   <div class="row">
       <div class="col col-md-12 menu">
-        <nav class="navbar navbar-expand-lg collapse navbar-collapse" id="navbarContenido">
+        <nav class="navbar navbar-expand-lg collapse navbar-collapse mt-0 pt-0 pt-0 pb-0" id="navbarContenido">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
                 <a class="nav-link home" routerLink="/" routerLinkActive="router-link-active">
@@ -69,7 +69,7 @@
                 </div>
               </li>
               <li class="nav-item" [hidden]= "isAutenticado">
-                <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                <a class="nav-link" [routerLink]="['solicitudesRecursos', idCenad]" routerLinkActive="router-link-active">
                   <fa-icon [icon]="faSolicitar"></fa-icon>&nbsp;Solicitudes</a>
               </li>
 
