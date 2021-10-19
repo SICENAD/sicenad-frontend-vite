@@ -10,7 +10,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import es.mde.entidades.Recurso;
 
 @RepositoryRestResource(path="recursos", collectionResourceRel="recursos", itemResourceRel="recurso")
-public interface RecursoDAO extends JpaRepository<Recurso, Long> {
+public interface RecursoDAO extends JpaRepository<Recurso, Long>, RecursoDAOCustom {
 
 	@RestResource(path="nombre")
 	List<Recurso> findByNombreIgnoreCaseContaining(@Param("nombre") String txt);

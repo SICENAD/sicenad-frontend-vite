@@ -28,7 +28,7 @@
                   <fa-icon [icon]="faConsultar"></fa-icon>&nbsp;Consultar
                 </a>
                 <div class="dropdown-menu consultar" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                  <a class="nav-link" [routerLink]="['consultaRecursos', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon [icon]="faRecurso"></fa-icon>&nbsp;Recurso</a>
                   <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
                     <fa-icon [icon]="faCalendario"></fa-icon>&nbsp;Calendario</a>

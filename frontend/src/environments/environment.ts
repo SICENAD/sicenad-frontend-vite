@@ -7,6 +7,8 @@ export const environment = {
   production: false,
   hostSicenad: 'http://localhost:8080/api/'
   //  hostSicenad: 'https://sicenad.herokuapp.com/api/'
+  //  hostSicenad: 'https://sicenad2.herokuapp.com/api/'
+
 };
 
 /*

@@ -17,8 +17,9 @@ export class RecursoComponent implements OnInit {
   constructor(private recursoService: RecursoService) { }
 
   ngOnInit() {
-    // this.recursoService.getCategoria(this.recurso).subscribe((response) => this.recurso.categoria = this.recursoService.mapearCategoria(response));
-    // this.recursoService.getUsuarioGestor(this.recurso).subscribe((response) => this.recurso.usuarioGestor = this.recursoService.mapearUsuario(response));
+    this.recursoService.getCategoria(this.recurso).subscribe((response) => this.recurso.categoria = this.recursoService.mapearCategoria(response));
+    this.recursoService.getUsuarioGestor(this.recurso).subscribe((response) => this.recurso.usuarioGestor = this.recursoService.mapearUsuario(response));
+    this.recursoService.getTipoFormulario(this.recurso).subscribe((response) => this.recurso.tipoFormulario = this.recursoService.mapearUsuario(response));
 
   }
 }

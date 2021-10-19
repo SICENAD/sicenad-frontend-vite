@@ -10,7 +10,7 @@
           <li><a routerLink="#">
             <fa-icon [icon]="faCalendario"></fa-icon>&nbsp;Calendario</a></li>
           <br>
-          <li><a routerLink="#">
+          <li><a [routerLink]="['consultaRecursos', idCenad]" routerLinkActive="router-link-active">
             <fa-icon [icon]="faRecurso"></fa-icon>&nbsp;Consultar Recursos</a></li>
           <br>
           <li><a routerLink="#">

@@ -3,7 +3,7 @@ export interface CategoriaFichero {
   idCategoriaFichero: string;
   nombre: string;
   descripcion: string;
-  tipo: number;
+  tipo?: number;
   url: string;
   ficheros: any[];
 }

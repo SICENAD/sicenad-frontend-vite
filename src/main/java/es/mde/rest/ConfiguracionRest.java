@@ -40,6 +40,7 @@ public class ConfiguracionRest {
 
 		controllersRegistrados.put(Categoria.class, CategoriaController.class);
 		controllersRegistrados.put(Cenad.class, CenadController.class);
+		controllersRegistrados.put(Recurso.class, RecursoController.class);
 
 
 		return new RepresentationModelProcessor<RepositorySearchesResource>() {

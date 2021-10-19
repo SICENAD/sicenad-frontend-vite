@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CategoriasModule } from '../categorias/categorias.module';
 import { HomePrincipalComponent } from './home-principal/home-principal.component';
 import { ShellPrincipalComponent } from './shell-principal/shell-principal.component';
 
@@ -21,6 +20,10 @@ const routes: Routes = [
       {
         path: 'recursos/:idCenad',
         loadChildren: () => import('../recursos/recursos.module').then(m => m.RecursosModule)
+      },
+      {
+        path: 'consultaRecursos/:idCenad',
+        loadChildren: () => import('../consultaRecursos/consultaRecursos.module').then(m => m.ConsultaRecursosModule)
       }
     ]
   }
