@@ -1,3 +1,4 @@
+import { Unidad } from "src/app/unidades/models/unidad";
 import { UsuarioNormal } from "./usuarioNormal";
 
 export class UsuarioNormalImpl implements UsuarioNormal {
@@ -6,7 +7,7 @@ export class UsuarioNormalImpl implements UsuarioNormal {
   password: string;
   tfno: string;
   email: string;
-  unidad: string;
+  unidad: Unidad | any;
   tipo: string;
   descripcion:string;
   url: string;

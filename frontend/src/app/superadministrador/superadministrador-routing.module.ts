@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CenadFormComponent } from './cenads/cenad-form/cenad-form.component';
 import { SuperadministradorComponent } from './superadministrador/superadministrador.component';
-import { UnidadFormComponent } from './unidades/unidad-form/unidad-form.component';
+import { UsuarioNormalFormComponent } from './usuariosNormal/usuarioNormal-form/usuarioNormal-form.component';
 
 const routes: Routes = [
   {//muestra la pantalla inicial del superadministrador
@@ -14,8 +14,8 @@ const routes: Routes = [
     component: CenadFormComponent
   },
   {//para crear una unidad o usuarioNormal
-    path: 'formulario-unidad',
-    component: UnidadFormComponent
+    path: 'formulario-usuarioNormal',
+    component: UsuarioNormalFormComponent
   },
 ];
 

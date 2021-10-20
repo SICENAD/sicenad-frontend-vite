@@ -62,14 +62,9 @@
     </div>
     <div class="col-lg-6 col-md-12 pt-3">
       <label class="titulo"><b>UNIDAD<sup class="text-danger">*</sup></b></label>
-      <input type="text" class="form-control letra" [(ngModel)]="usuarioNormal.unidad" placeholder="Nombre de la unidad"
-        name="unidad" required #unidad="ngModel" [ngClass]="{ 'is-invalid': unidad.invalid && (unidad.dirty || unidad.touched),
-        'is-valid': !unidad.invalid }" />
-      <div class="text-danger" *ngIf="unidad.invalid && (unidad.dirty || unidad.touched)">
-        <div *ngIf="unidad.errors.required">
-          El nombre de la unidad es obligatorio
-        </div>
-      </div>
+      <select name="unidad" id="unidad" [(ngModel)]="unidadSeleccionada">
+        <option class=" letra" *ngFor="let unidad of unidades" [ngValue]="unidad.url">{{ unidad.nombre }}</option>
+      </select>
     </div>
     <div class="form-row justify-content-between pt-5">
       <button type="button" class="btn mr-3 guardar" (click)="editar()"

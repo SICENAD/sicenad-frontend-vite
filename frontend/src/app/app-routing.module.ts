@@ -13,15 +13,19 @@ const routes: Routes = [
    },
   {//mostrara el modulo de superadministrador, si el rol lo permite
     path: 'superadministrador',
-    loadChildren: () => import('./superadministrador/superadministrador.module').then(m => m.SuperadministradorModule),
+    loadChildren: () => import('./superadministrador/superadministrador.module').then(m => m.SuperadministradorModule)
   },
   {//mostrara el modulo de tipos de formulario, si el rol lo permite
     path: 'tiposFormulario',
-    loadChildren: () => import('./tiposFormulario/tiposFormulario.module').then(m => m.TiposFormularioModule),
+    loadChildren: () => import('./tiposFormulario/tiposFormulario.module').then(m => m.TiposFormularioModule)
   },
   {//mostrara el modulo de categorias de fichero, si el rol lo permite
     path: 'categoriasFichero',
-    loadChildren: () => import('./categoriasFichero/categoriasFichero.module').then(m => m.CategoriasFicheroModule),
+    loadChildren: () => import('./categoriasFichero/categoriasFichero.module').then(m => m.CategoriasFicheroModule)
+  },
+  {//mostrara el modulo de unidades, si el rol lo permite
+    path: 'unidades',
+    loadChildren: () => import('./unidades/unidades.module').then(m => m.UnidadesModule)
   },
   {
     path: 'not-found',

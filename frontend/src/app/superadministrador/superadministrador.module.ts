@@ -6,13 +6,13 @@ import { SuperadministradorComponent } from './superadministrador/superadministr
 import { CenadFormComponent } from './cenads/cenad-form/cenad-form.component';
 import { CenadComponent } from './cenads/cenad/cenad.component';
 import { CenadFichaComponent } from './cenads/cenad-ficha/cenad-ficha.component';
-import { UnidadComponent } from './unidades/unidad/unidad.component';
-import { UnidadFichaComponent } from './unidades/unidad-ficha/unidad-ficha.component';
-import { UnidadFormComponent } from './unidades/unidad-form/unidad-form.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { UsuarioNormalFormComponent } from './usuariosNormal/usuarioNormal-form/usuarioNormal-form.component';
+import { UsuarioNormalFichaComponent } from './usuariosNormal/usuarioNormal-ficha/usuarioNormal-ficha.component';
+import { UsuarioNormalComponent } from './usuariosNormal/usuarioNormal/usuarioNormal.component';
 
 @NgModule({
-  declarations: [SuperadministradorComponent, CenadComponent, CenadFichaComponent, CenadFormComponent, UnidadComponent, UnidadFichaComponent, UnidadFormComponent],
+  declarations: [SuperadministradorComponent, CenadComponent, CenadFichaComponent, CenadFormComponent, UsuarioNormalComponent, UsuarioNormalFichaComponent, UsuarioNormalFormComponent],
   imports: [
     CommonModule,
     SuperadministradorRoutingModule,

@@ -24,7 +24,7 @@ div.filtro {
   font-size: 14px;
 }
 
-.btn:hover, .tipoFormulario, .categoriaFichero {
+.btn:hover, .tipoFormulario, .categoriaFichero, .unidad {
   background-color: #588157;
 }
 

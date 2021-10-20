@@ -17,6 +17,9 @@
         <fa-icon class="fa-2x mr-2" [icon]="faHome"></fa-icon><strong>Home</strong></a>
     </div>
     <div class="col-6 text-right">
+      <button class="btn unidad text-white mr-2" routerLink="/unidades">
+        <b>Unidades</b>
+      </button>
         <button class="btn tipoFormulario text-white mr-2" routerLink="/tiposFormulario">
           <b>Tipos de Formulario</b>
         </button>
@@ -59,7 +62,7 @@
       <h5 class="text-center titulo">USUARIOS <b>NORMAL</b></h5>
       <hr class="w-100" />
       <div class="row justify-content-end">
-        <button class="btn text-white mt-1 mb-1" routerLink="formulario-unidad">
+        <button class="btn text-white mt-1 mb-1" routerLink="formulario-usuarioNormal">
           Nuevo Usuario <b>Normal</b>
         </button>
       </div>
@@ -73,7 +76,7 @@
         </div>
       </div>
       <div *ngFor="let usuarioNormal of usuariosNormal">
-        <app-unidad [usuarioNormal]="usuarioNormal" (usuarioNormalSeleccionado)="verDatosUsuarioNormal($event)"></app-unidad>
+        <app-usuarioNormal [usuarioNormal]="usuarioNormal" (usuarioNormalSeleccionado)="verDatosUsuarioNormal($event)"></app-usuarioNormal>
       </div>
     </div>
   </div>
@@ -117,10 +120,10 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-unidad-ficha *ngIf="usuarioNormalVerDatos"
+        <app-usuarioNormal-ficha *ngIf="usuarioNormalVerDatos"
           [usuarioNormal]="usuarioNormalVerDatos"
           (usuarioNormalEliminar)="onUsuarioNormalEliminar($event)"
-          (usuarioNormalEditar)="onUsuarioNormalEditar($event)"></app-unidad-ficha>
+          (usuarioNormalEditar)="onUsuarioNormalEditar($event)"></app-usuarioNormal-ficha>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">
