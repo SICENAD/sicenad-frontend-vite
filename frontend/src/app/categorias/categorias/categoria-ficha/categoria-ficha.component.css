@@ -14,10 +14,6 @@
   background: red;
 }
 
-.letra {
-  color: #588157;
-}
-
-select {
+.letra, select {
   color: #588157;
 }

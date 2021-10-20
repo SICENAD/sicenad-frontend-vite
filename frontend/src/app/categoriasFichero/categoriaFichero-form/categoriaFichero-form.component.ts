@@ -11,9 +11,9 @@ import { CategoriaFicheroService } from '../service/categoriaFichero.service';
   styleUrls: ['./categoriaFichero-form.component.css']
 })
 export class CategoriaFicheroFormComponent implements OnInit {
-
+  //variable con la que guardar la nueva categoria de fichero
   categoriaFichero: CategoriaFicheroImpl = new CategoriaFicheroImpl();
-  categoriasFichero: CategoriaFichero[] = [];
+  //variable para icono "volver"
   faVolver = faArrowAltCircleLeft;
 
   constructor(
@@ -22,6 +22,7 @@ export class CategoriaFicheroFormComponent implements OnInit {
 
   ngOnInit() {  }
 
+  //metodo para crear una nueva categoria de fichero y volver al listado de categorias de fichero
   crearCategoriaFichero(): void {
     this.categoriaFicheroService.create(this.categoriaFichero).subscribe((response) => {
       console.log(`He creado la Categoría de Fichero ${this.categoriaFichero.nombre}`);

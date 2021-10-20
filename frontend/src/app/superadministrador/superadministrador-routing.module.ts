@@ -5,15 +5,15 @@ import { SuperadministradorComponent } from './superadministrador/superadministr
 import { UnidadFormComponent } from './unidades/unidad-form/unidad-form.component';
 
 const routes: Routes = [
-  {
+  {//muestra la pantalla inicial del superadministrador
     path: '',
     component: SuperadministradorComponent
   },
-  {
+  {//para crear un cenad
     path: 'formulario-cenad',
     component: CenadFormComponent
   },
-  {
+  {//para crear una unidad o usuarioNormal
     path: 'formulario-unidad',
     component: UnidadFormComponent
   },
@@ -23,4 +23,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SuperadministradorRoutingModule { }
+export class SuperadministradorRoutingModule {}

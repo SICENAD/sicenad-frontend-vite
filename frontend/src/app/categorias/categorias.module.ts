@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { CategoriasRoutingModule } from './categorias-routing.module';
 import { FormsModule } from '@angular/forms';
 import { CategoriasComponent } from './categorias/categorias.component';

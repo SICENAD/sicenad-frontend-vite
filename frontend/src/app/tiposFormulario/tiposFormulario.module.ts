@@ -8,8 +8,6 @@ import { TipoFormularioComponent } from './tipoFormulario/tipoFormulario.compone
 import { TipoFormularioFichaComponent } from './tiposFormulario/tipoFormulario-ficha/tipoFormulario-ficha.component';
 import { TiposFormularioComponent } from './tiposFormulario/tiposFormulario.component';
 
-
-
 @NgModule({
   declarations: [TiposFormularioComponent, TipoFormularioComponent, TipoFormularioFichaComponent, TipoFormularioFormComponent],
   imports: [
@@ -19,4 +17,4 @@ import { TiposFormularioComponent } from './tiposFormulario/tiposFormulario.comp
     FontAwesomeModule
   ]
 })
-export class TiposFormularioModule { }
+export class TiposFormularioModule {}

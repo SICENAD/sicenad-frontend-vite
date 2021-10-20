@@ -1,13 +1,14 @@
+<!-- muestra la tabla con los recursos de un cenad -->
 <div class="container-fluid">
   <div class="row mt-1">
     <div class="col-9 text-center">
-      <h3 class="bienvenido text-center titulo1"><u>RECURSOS</u> </h3>
+      <h3 class="text-center titulo1"><u>RECURSOS</u> </h3>
     </div>
   </div>
   <label for="categorias" class="mr-2 mt-2" *ngIf='categoriaSeleccionada'>Categoría Seleccionada: <span> {{categoriaSeleccionada.nombre | uppercase}}</span></label>
  <div class="mt-0">
     <label for="categorias" class="mr-2">Elige una categoría:</label>
-    <select name="categoriasFiltradas" id="categoriasFiltradas1" [(ngModel)]="categoriaSeleccionada" (change)='filtrar()'>
+    <select name="categoriasFiltradas" id="categoriasFiltradas" [(ngModel)]="categoriaSeleccionada" (change)='filtrar()'>
       <option *ngFor="let categoria of categoriasFiltradas" [ngValue]="categoria">{{ categoria.nombre | uppercase}}</option>
     </select>
     <button class="mr-2 ml-3" *ngIf='categoriaSeleccionada' (click)='borrarFiltros()'>Borrar filtros</button>
@@ -19,5 +20,4 @@
   </div>
   <div *ngFor="let recurso of recursos">
     <app-consultaRecurso [recurso]="recurso" *ngIf='recurso'></app-consultaRecurso>
-  </div>
- 
+  </div> 

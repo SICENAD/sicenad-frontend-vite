@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { SuperadministradorRoutingModule } from './superadministrador-routing.module';
 import { FormsModule } from '@angular/forms';
 import { SuperadministradorComponent } from './superadministrador/superadministrador.component';
@@ -12,7 +11,6 @@ import { UnidadFichaComponent } from './unidades/unidad-ficha/unidad-ficha.compo
 import { UnidadFormComponent } from './unidades/unidad-form/unidad-form.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-
 @NgModule({
   declarations: [SuperadministradorComponent, CenadComponent, CenadFichaComponent, CenadFormComponent, UnidadComponent, UnidadFichaComponent, UnidadFormComponent],
   imports: [
@@ -22,4 +20,4 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     FontAwesomeModule
   ]
 })
-export class SuperadministradorModule { }
+export class SuperadministradorModule {}

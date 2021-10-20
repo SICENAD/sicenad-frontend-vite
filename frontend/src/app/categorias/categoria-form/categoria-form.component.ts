@@ -12,10 +12,13 @@ import { CategoriaService } from '../service/categoria.service';
   styleUrls: ['./categoria-form.component.css']
 })
 export class CategoriaFormComponent implements OnInit {
-
+  //variable para recuperar el id del CENAD/CMT
   idCenad: string = "";
+  //variable con la que guardar la nueva categoria
   categoria: Categoria = new CategoriaImpl();
+  //variable en la que meteremos las categorias de este CENAD/CMT para poder seleccionarlas como categoria padre
   categorias: Categoria[] = [];
+  //variable para icono "volver"
   faVolver =faArrowAltCircleLeft;
 
   constructor(
@@ -24,11 +27,15 @@ export class CategoriaFormComponent implements OnInit {
     private activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    //recuperamos el id del CENAD de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
+    //metemos en la variable todas las categorias del cenad, para seleccionar la categoria padre
     this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));
+    //asignamos el CENAD a la categoria que creamos
     this.categoria.cenad = `${environment.hostSicenad}cenads/${this.idCenad}`;
   }
 
+  //metodo para crear una nueva categoria y volver al listado de categorias de ese cenad
   crearCategoria(): void {
     this.categoriaService.create(this.categoria).subscribe((response) => {
             console.log(`He creado la Categoria ${this.categoria.nombre}`);

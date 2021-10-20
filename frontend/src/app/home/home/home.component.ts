@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
-import { HomeService } from '../service/home-service';
+import { HomeService } from '../service/home.service';
 
 @Component({
   selector: 'app-home',
@@ -11,10 +11,14 @@ import { HomeService } from '../service/home-service';
 })
 export class HomeComponent implements OnInit {
   inicio: boolean = true;
+  //variables para la seleccion de la provincia
   idProvinciaSeleccionada: number;
   provinciaSeleccionada: string = "";
+  //variable que recoge todos los cenads
   cenads: Cenad[] = [];
+  //variable que contendra los cenads de la provincia seleccionada
   cenadsFiltro: Cenad[] = [];
+  //[] que contiene todas las provincias
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
@@ -37,11 +41,11 @@ export class HomeComponent implements OnInit {
   constructor(private homeService: HomeService, private router: Router) { }
 
   ngOnInit() {
-  //  this.prueba();
-   this.cargarCenads();
+    //carga los cenads en su variable
+    this.cargarCenads();
   }
 
-  // función de prueba que crea objetos cenads
+  // función de prueba que crea objetos cenads. se uso al principio antes de tener el CRUD de CENADS
   prueba() {
     let cenad1: Cenad = new CenadImpl();
     cenad1.nombre = "CENAD SAN GREGORIO";
@@ -55,15 +59,13 @@ export class HomeComponent implements OnInit {
     this.cenads.push(cenad1, cenad2, cenad3);
   }
 
-  // función que carga los diferentes CENAD,s/CMT,s de la API
+  // función que carga los diferentes CENAD,s/CMT,s de la BD
   cargarCenads() {
-    this.homeService.getCenads().subscribe((response) => {
-      this.cenads = this.homeService.extraerCenads(response);
-    });
+    this.homeService.getCenads().subscribe((response) => 
+      this.cenads = this.homeService.extraerCenads(response));
   }
 
   // Asigna al array cenadsFiltro todos los CENAD,s/CMT,s de una provincia
-  // se le pasa como parámetro el código de la provincia
   buscarCenads(idProvincia: number): void {
     this.cenadsFiltro = this.cenads.filter(cenad => {
       if (cenad.provincia == idProvincia) {
@@ -83,8 +85,4 @@ export class HomeComponent implements OnInit {
     this.inicio = false;
     this.buscarCenads(idProvincia);
   }
-
-  //CODIGO INTERESANTE (de ejemplo)
-  //a.setAttributeNS(null, 'routerLink', 'cenads');  // cuando inserta el atributo en el DOM, mantiene la L mayúscula del routerLink
-
 }

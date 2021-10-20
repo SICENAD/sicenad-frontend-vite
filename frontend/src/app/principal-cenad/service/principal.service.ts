@@ -10,25 +10,29 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class PrincipalService {
+  //endpoint raiz de la API
   private host: string = environment.hostSicenad;
-  private urlEndPoint: string = `${this.host}cenads`;
+  //endpoint especifico de los cenads
+  private urlEndPoint: string = `${this.host}cenads/`;
 
   constructor(private http: HttpClient) { }
 
+  //metodo que rescata de la BD todos los cenads
   getCenads(): Observable<any> {
     return this.http.get<any>(this.urlEndPoint);
   }
 
+  //metodo que extrae el [] de cenads
   extraerCenads(respuestaApi: any): Cenad[] {
     const cenads: Cenad[] = [];
-    respuestaApi._embedded.cenads.forEach(c => {
-      cenads.push(this.mapearCenad(c));
-    });
+    respuestaApi._embedded.cenads.forEach(c => 
+      cenads.push(this.mapearCenad(c)));
     return cenads;
   }
 
+  //metodo que rescata de la BD el Cenad con ese id
   getCenad(id: string): Observable<Cenad> {
-    return this.http.get<Cenad>(`${this.urlEndPoint}/${id}`).pipe(
+    return this.http.get<Cenad>(`${this.urlEndPoint}${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -38,24 +42,18 @@ export class PrincipalService {
     );
   }
 
-  mapearCenad(cenadApi: any): Cenad {
-    let cenad: Cenad = new CenadImpl();
-    cenad.idCenad = this.getId(cenadApi._links.cenad.href);
+  //metodo que mapea un cenad segun la interfaz
+  mapearCenad(cenadApi: any): CenadImpl {
+    const cenad = new CenadImpl();
     cenad.nombre = cenadApi.nombre;
     cenad.descripcion = cenadApi.descripcion;
     cenad.direccion = cenadApi.direccion;
-    cenad.tfno = cenadApi.tfno;
-    cenad.email = cenadApi.email;
     cenad.escudo = cenadApi.escudo;
     cenad.provincia = cenadApi.provincia;
+    cenad.tfno = cenadApi.tfno;
+    cenad.email = cenadApi.email;
+    cenad.url = cenadApi._links.self.href;
+    cenad.idCenad = cenad.getId(cenad.url);
     return cenad;
   }
-
-  getId(url: string): string {
-    let posicionFinal: number = url.lastIndexOf('/');
-    let numId: string = url.slice(posicionFinal + 1, url.length);
-    return numId;
-  }
-
-
 }

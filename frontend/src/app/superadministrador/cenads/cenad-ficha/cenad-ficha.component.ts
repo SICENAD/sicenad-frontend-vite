@@ -9,13 +9,17 @@ import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.
   styleUrls: ['./cenad-ficha.component.css']
 })
 export class CenadFichaComponent implements OnInit {
-
+  //variable que trae del otro componente el cenad
   @Input() cenad: CenadImpl;
+  //variables para emitir los eventos al otro componente para editar/eliminar un cenad
   @Output() cenadEliminar = new EventEmitter<CenadImpl>();
   @Output() cenadEditar = new EventEmitter<CenadImpl>();
+  //variable que guarda el nombre del administrador
   administrador: string;
+  //variables para la subida de archivos de escudos
   selectedFiles: FileList;
   currentFile: File;
+  //variable con todas las provincias
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
@@ -41,15 +45,18 @@ export class CenadFichaComponent implements OnInit {
     this.actualizarAdministrador();
   }
 
+  //metodo que rescata el nombre del administrador del cenad
   actualizarAdministrador(): void {
     this.usuarioAdministradorService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.administrador = this.usuarioAdministradorService.mapearUsuario(response).nombre);
   }
 
+  //metodo que emite el evento para eliminar el cenad y elimina el archivo del escudo
   eliminar(): void {
     this.delete_Archivo(this.cenad);
     this.cenadEliminar.emit(this.cenad);
   }
 
+  //metodo que emite el evento para editar el cenad y elimina el archivo anterior del escudo y carga el nuevo si es necesario
   editar(): void {
     if (this.selectedFiles) {
       this.delete_Archivo(this.cenad);
@@ -59,10 +66,12 @@ export class CenadFichaComponent implements OnInit {
     this.cenadEditar.emit(this.cenad);
   }
 
+  //metodo para seleccionar el archivo a subir
   selectFile(event) {
     this.selectedFiles = event.target.files;
   }
 
+  //metodo para subir el archivo de escudo
   upload() {
     this.currentFile = this.selectedFiles.item(0);
     this.cenadService.upload(this.currentFile).subscribe(
@@ -70,6 +79,7 @@ export class CenadFichaComponent implements OnInit {
     this.selectedFiles = undefined;
   }
 
+  //metodo para borrar el archivo de escudo del cenad
   delete_Archivo(cenad: CenadImpl) {
     this.cenadService.deleteArchivo(cenad.escudo).subscribe();
   }

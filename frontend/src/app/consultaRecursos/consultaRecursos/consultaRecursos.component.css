@@ -8,11 +8,11 @@
   background-color: #A3B18A;
 }
 
-.titulo {
+.titulo, label span {
   color: #3A5A40; font-weight: bold
 }
 
-.titulo1 {
+.titulo1, select {
   color: #588157;
 }
 
@@ -36,15 +36,6 @@ h5 {
 hr {
   margin-bottom: 0;
   margin-top: 0;
-}
-
-select {
-  color: #588157;
-}
-
-label span {
-  color: #3A5A40;
-  font-weight: bold;
 }
 
 div.titulos {

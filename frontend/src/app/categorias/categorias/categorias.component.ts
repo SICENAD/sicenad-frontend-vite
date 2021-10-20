@@ -10,9 +10,11 @@ import { CategoriaService } from '../service/categoria.service';
   styleUrls: ['./categorias.component.css']
 })
 export class CategoriasComponent implements OnInit {
-
+  //variable para recuperar el id del CENAD/CMT
   idCenad: string = "";
+  //variable que recoge todas las categorias del cenad
   categorias: Categoria[] = [];
+  //variable que posibilita la comunicacion de datos con el otro componente para mostrar los datos de una categoria
   categoriaVerDatos: Categoria;
 
   constructor(
@@ -21,17 +23,19 @@ export class CategoriasComponent implements OnInit {
     , private activateRoute: ActivatedRoute) { }
 
     ngOnInit(): void {
-      this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-      this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => {
-        this.categorias = this.categoriaService.extraerCategorias(response);
-        //console.log(this.categorias);
-      });
+    //recuperamos el id del CENAD de la barra de navegacion
+    this.idCenad = this.activateRoute.snapshot.params['idCenad'];
+    //metemos en la variable todas las categorias del cenad
+    this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => 
+      this.categorias = this.categoriaService.extraerCategorias(response));
     }
 
+    //metodo que asigna los datos de la categoria para la comunicacion al otro componente
     verDatos(categoria: Categoria): void {
       this.categoriaVerDatos = categoria;
     }
 
+    //metodo que materializa la eliminacion de una categoria y vuelve al listado de categorias del cenad
     onCategoriaEliminar(categoria: CategoriaImpl): void {
       this.categoriaService.delete(categoria).subscribe(response => {
         console.log(`He borrado la Categoria ${categoria.nombre}`);
@@ -39,6 +43,7 @@ export class CategoriasComponent implements OnInit {
       });
     }
 
+    //metodo que materializa la edicion de una categoria y vuelve al listado de categorias del cenad
     onCategoriaEditar(categoria: CategoriaImpl): void {
       this.categoriaService.update(categoria).subscribe(response => {
         console.log(`He actualizado la Categoria ${categoria.nombre}`);

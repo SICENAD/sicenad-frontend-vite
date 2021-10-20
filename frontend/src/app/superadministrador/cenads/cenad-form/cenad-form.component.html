@@ -1,7 +1,8 @@
+<!-- muestra un formulario para crear un cenad -->
 <div class="container-fluid">
   <div class="row ml-4 pl-3 mb-0 mt-0">
     <a class="nav-link text-center volver" routerLink="/superadministrador" routerLinkActive="router-link-active">
-      <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
+      <fa-icon class="fa-2x mr-2" [icon]="faVolver"></fa-icon><strong>Volver</strong></a>
   </div>
   <div class="row justify-content-center align-items-start mb-0">
     <h3 class="mb-0 pb-0">CREAR CENAD/CMT</h3>
@@ -21,12 +22,12 @@
       </div>
     </div>
     <div class="col-lg-4 col-md-12">
-      <label class="titulo"><b>PROVINCIA<sup class="text-danger">*</sup></b></label>
+      <label class="titulo mr-2"><b>PROVINCIA<sup class="text-danger">*</sup></b></label>
       <select name="provincia" id="provincia" [(ngModel)]="cenad.provincia">
         <option class=" letra" *ngFor="let provincia of provincias" [ngValue]="provincia.idProvincia">{{ provincia.nombre }}</option>
       </select>
     </div>
-    <div class="col-lg-4 col-md-12 pt-3">
+    <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>DIRECCIÓN<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="cenad.direccion" placeholder="Dirección del CENAD/CMT" name="direccion"
         required #direccion="ngModel" [ngClass]="{ 'is-invalid': direccion.invalid && (direccion.dirty || direccion.touched),
@@ -77,7 +78,7 @@
       </div>
     </div>
     <div class="col-lg-6 col-md-12 pt-3">
-      <label>Escudo<sup class="text-danger">*</sup></label>
+      <label class="titulo"><b>ESCUDO<sup class="text-danger">*</sup></b></label>
       <input type="file" (change)="selectFile($event)" class="form-control"/>
     </div>
   </div>

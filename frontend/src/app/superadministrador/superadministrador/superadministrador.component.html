@@ -1,10 +1,11 @@
+<!-- muestra la vista principal del superadministrador -->
 <div class="container-fluid">
   <div class="row">
     <div class="col col-md-2 p-3">
       <img class="madoc" width="80" height="110" alt="MADOC" src="../../../assets/madoc.png" />
     </div>
     <div class="col col-md-7 align-self-center mt-4">
-      <h3 class="bienvenido text-center titulo1"><u>SUPERADMINISTRADOR</u> </h3>
+      <h3 class="bienvenido text-center titulo1"><u>SUPERADMINISTRADOR</u></h3>
     </div>
     <div class="col col-md-1 mt-4 ml-5">
       <h2 class="text-center">SICENAD</h2>
@@ -13,7 +14,7 @@
   <div class="row align-items-center">
     <div class="col-6 pl-0">
       <a class="nav-link ml-4 home" routerLink="/" routerLinkActive="router-link-active">
-        <fa-icon class="fa-2x" [icon]="faHome"></fa-icon>&nbsp;<strong>Home</strong></a>
+        <fa-icon class="fa-2x mr-2" [icon]="faHome"></fa-icon><strong>Home</strong></a>
     </div>
     <div class="col-6 text-right">
         <button class="btn tipoFormulario text-white mr-2" routerLink="/tiposFormulario">
@@ -23,7 +24,7 @@
           <b>Categorías de Ficheros</b>
         </button>
     </div>
-        <hr class="w-100" />
+    <hr class="w-100" />
   </div>
   <div class="row ml-5 p-0">
     <div class="col col-md-8">
@@ -51,8 +52,7 @@
         </div>
       </div>
       <div *ngFor="let cenad of cenads">
-        <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)"
-          ></app-cenad>
+        <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)"></app-cenad>
       </div>
     </div>
     <div class="col col-md-4  filtro">
@@ -96,8 +96,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn text-white" data-dismiss="modal"
-        (click)="ngOnInit()"
-        >
+        (click)="ngOnInit()">
           Cerrar
         </button>
       </div>

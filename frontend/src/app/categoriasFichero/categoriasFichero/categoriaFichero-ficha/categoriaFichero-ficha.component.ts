@@ -7,8 +7,9 @@ import { CategoriaFicheroImpl } from '../../models/categoriaFichero-impl';
   styleUrls: ['./categoriaFichero-ficha.component.css']
 })
 export class CategoriaFicheroFichaComponent implements OnInit {
-
+  //variable que me comunica del otro componente la categoria de fichero a ver/editar
   @Input() categoriaFichero: CategoriaFicheroImpl;
+  //variables que comunican al otro componente el evento para editar/eliminar la categoria de fichero
   @Output() categoriaFicheroEliminar = new EventEmitter<CategoriaFicheroImpl>();
   @Output() categoriaFicheroEditar = new EventEmitter<CategoriaFicheroImpl>();
 
@@ -17,10 +18,12 @@ export class CategoriaFicheroFichaComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //metodo que emite el evento al otro componente para eliminar la categoria de fichero
   eliminar(): void {
     this.categoriaFicheroEliminar.emit(this.categoriaFichero);
   }
 
+  //metodo que emite el evento al otro componente para editar la categoria de fichero
   editar(): void {
     this.categoriaFicheroEditar.emit(this.categoriaFichero);
   }

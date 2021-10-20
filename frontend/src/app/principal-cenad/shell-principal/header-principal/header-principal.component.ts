@@ -20,7 +20,7 @@ import { UsuarioNormalImpl } from 'src/app/superadministrador/models/usuarioNorm
 })
 export class HeaderPrincipalComponent implements OnInit {
 
-  // Fortaswesome
+  //variables de iconos varios
   faRecurso = faFolderOpen;
   faConsultar = faEdge;
   faMas = faFolderPlus;
@@ -42,15 +42,19 @@ export class HeaderPrincipalComponent implements OnInit {
   faUsuarios = faUsers;
   faCategorias = faTree;
   faPeticiones = faEdit;
-  //
+  //variable para mostrar el nombre del cenad
   nombreCenad: string = "";
+  //variable que guarda el cenad seleccionado
   cenad: Cenad = new CenadImpl();
+  //variable para rescatar el id del cenad de la barra de navegacion
   idCenad: string = "";
+  //variable que guarda el id del cenad de la provincia de zaragoza
   idCenadZaragoza: string = "";
+  //variable que indica si el cenad seleccionado es el cenad SG
   isCenadZaragoza: boolean = false;
+  //variable que guarda todos los cenads
   cenads: Cenad[] = [];
-  cenadsFiltro: Cenad[] = [];
-  // variables estáticas
+  // variables estáticas para logging...
   static isAutenticado: boolean = false;
   static userAdminLogeado: UsuarioAdministrador = new UsuarioAdministradorImpl();
   static userGestorLogeado: UsuarioGestor = new UsuarioGestorImpl();
@@ -59,9 +63,9 @@ export class HeaderPrincipalComponent implements OnInit {
   constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    //carga el cenad seleccionado
     this.cargarCenad();
-    // realiza el proceso de carga de todos los CENAD,s/CMT,s
-    // y comprueba si el CENAD/CMT seleccionado en el home es el de zaragoza
+    // realiza el proceso de carga de todos los CENAD,s/CMT,s y comprueba si el CENAD/CMT seleccionado en el home es el de zaragoza
     this.cargarCenads();
   }
 
@@ -70,7 +74,7 @@ export class HeaderPrincipalComponent implements OnInit {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
   }
 
-  // Hace una llamada a la API y carga el CENAD/CMT cuyo id es pasado como parámetro desde la barra de navegación
+  // Rescata de la BD el CENAD/CMT cuyo id es pasado como parámetro desde la barra de navegación
   cargarCenad(): void {
     this.capturarIdBarraNavegacion();
     this.principalService.getCenad(this.idCenad).subscribe(response => {
@@ -79,20 +83,10 @@ export class HeaderPrincipalComponent implements OnInit {
       });
   }
 
-
-   //this.cargarCenads();
-    // para solucionar el problema de la ejecución asíncrona
-    //setTimeout(()=> {
-   // this.buscarIdCenadZaragoza();
-   // this.comprobarCenadZaragoza();
-  //  }, 500);
-
-
-  // función que carga los diferentes CENAD,s/CMT,s de la API
+  // metodo que carga los diferentes CENAD,s/CMT,s y comprueba si es el de zaragoza, ya que tiene algun enlace especial a mostrar
   cargarCenads(): void {
     this.principalService.getCenads().subscribe((response) => {
       this.cenads = this.principalService.extraerCenads(response);
-     // console.log('cargarCenads');
       this.buscarIdCenadZaragoza();
       this.comprobarCenadZaragoza();
     });
@@ -105,18 +99,12 @@ export class HeaderPrincipalComponent implements OnInit {
         this.idCenadZaragoza = c.idCenad;
       }
     });
-    //console.log('buscarIdCenadZaragoza');
   }
 
-  // Para ocultar menú ampliado de meteorología y vistas ACMT
+  // Para ocultar menú ampliado de meteorología y vistas ACMT(es especial del CENAD SG)
   comprobarCenadZaragoza(): void {
     if (this.idCenadZaragoza == this.idCenad) {
       this.isCenadZaragoza = true;
     }
-    //console.log('comprobarCenadZaragoza');
   }
-
 }
-
-
-

@@ -14,11 +14,7 @@ h3 {
   color: #3A5A40;
 }
 
-.titulo1, .href:hover {
-  color: #588157;
-}
-
-.letra {
+.titulo1, .href:hover, .letra {
   color: #588157;
 }
 

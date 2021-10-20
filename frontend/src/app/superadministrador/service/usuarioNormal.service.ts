@@ -10,25 +10,27 @@ import { UsuarioNormalImpl } from '../models/usuarioNormal-impl';
   providedIn: 'root'
 })
 export class UsuarioNormalService {
-
+  //endpoint raiz de la API
   private host: string = environment.hostSicenad;
+  //endpoint especifico de los usuarios normal
   private urlEndPoint: string = `${this.host}usuarios_normal/`;
 
-  constructor(
-    private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
+  //metodo que recupera de la Bd todos los usuarios normal
   getUsuarios(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
 
+  //metodo que extrae el [] de usuarios normal
   extraerUsuarios(respuestaApi: any): UsuarioNormal[] {
     const usuarios: UsuarioNormal[] = [];
-    respuestaApi._embedded.usuarios_normal.forEach(u => {
-      usuarios.push(this.mapearUsuario(u));
-    });
+    respuestaApi._embedded.usuarios_normal.forEach(u => 
+      usuarios.push(this.mapearUsuario(u)));
     return usuarios;
   }
 
+  //metodo para mapear un usuario normal segun la interfaz
   mapearUsuario(usuarioApi: any): UsuarioNormalImpl {
     const usuario = new UsuarioNormalImpl();
     usuario.nombre = usuarioApi.nombre;
@@ -39,10 +41,10 @@ export class UsuarioNormalService {
     usuario.unidad = usuarioApi.unidad;
     usuario.url = usuarioApi._links.self.href;
     usuario.idUsuario = usuario.getId(usuario.url);
-
     return usuario;
   }
 
+  //metodo para crear un usuario normal
   create(usuario: UsuarioNormal): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, usuario).pipe(
       catchError((e) => {
@@ -57,6 +59,7 @@ export class UsuarioNormalService {
     );
   }
 
+  //metodo para borrar un usuario normal
   delete(usuario): Observable<UsuarioNormal> {
     return this.http.delete<UsuarioNormal>(`${this.urlEndPoint}${usuario.idUsuario}`)
       .pipe(
@@ -69,6 +72,7 @@ export class UsuarioNormalService {
       );
   }
 
+  //metodo para editar un usuario normal
   update(usuario: UsuarioNormal): Observable<any> {
     return this.http
       .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
@@ -85,6 +89,7 @@ export class UsuarioNormalService {
       );
   }
 
+  //metodo para recuperar un usuario normal concreto
   getUsuario(id): Observable<any> {
     return this.http.get<UsuarioNormal>(`${this.urlEndPoint}${id}`).pipe(
       catchError((e) => {

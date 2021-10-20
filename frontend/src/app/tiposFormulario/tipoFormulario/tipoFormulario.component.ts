@@ -8,16 +8,14 @@ import { TipoFormulario } from '../models/tipoFormulario';
   styleUrls: ['./tipoFormulario.component.css']
 })
 export class TipoFormularioComponent implements OnInit {
-
+  //variable que trae del otro componente el tipo de formulario
   @Input() tipoFormulario: TipoFormulario;
+  //variable que emite al otro componente un evento con el tipo de formulario seleccionado
   @Output() tipoFormularioSeleccionado = new EventEmitter<TipoFormulario>();
+  //variable para el icono "editar"
   faEdit = faEdit;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }
-
-
-

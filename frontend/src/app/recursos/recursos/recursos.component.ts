@@ -11,34 +11,39 @@ import { RecursoService } from '../service/recurso.service';
   styleUrls: ['./recursos.component.css']
 })
 export class RecursosComponent implements OnInit {
-
+  //variable para capturar el id del cenad de la barra de navegacion
   idCenad: string = "";
+  //variable con todos los recursos del cenad
   recursos: Recurso[] = [];
+  //variable para trasferir los datos del recurso
   recursoVerDatos: Recurso;
-  categorias: Categoria[] = [];
+  //variable con las categorias que se van filtrando
   categoriasFiltradas: Categoria[] = [];
+  //variable con los recursos tras los filtros
   recursosFiltrados: Recurso[] = [];
+  //variable con la categoria seleccionada en el filtro
   categoriaSeleccionada: Categoria;
-  categoriaSeleccionadaAnterior: Categoria;
-  sumaCategoria: number = 1;
 
   constructor(
     private recursoService: RecursoService,
     private router: Router, private activateRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    //captura el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
+    //recupera de la BD los recursos de ese cenad
     this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
+    //recupera de la BD las categorias padre de ese cenad, para comenzar el filtrado
     this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
       this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
-    this.recursoService.getCategoriasDeCenad(this.idCenad).subscribe((response) =>
-      this.categorias = this.recursoService.extraerCategorias(response));
   }
 
+  //metodo para transferir los datos del recurso al otro componente
   verDatos(recurso: Recurso): void {
     this.recursoVerDatos = recurso;
   }
 
+  //metodo para eliminar un recurso y volver al listado de recursos de ese cenad
   onRecursoEliminar(recurso: RecursoImpl): void {
     this.recursoService.delete(recurso).subscribe(response => {
       console.log(`He borrado el recurso ${recurso.nombre}`);
@@ -46,35 +51,38 @@ export class RecursosComponent implements OnInit {
     });
   }
 
+  //metodo para editar un recurso y volver al listado de recursos de ese cenad
   onRecursoEditar(recurso: RecursoImpl): void {
     this.recursoService.update(recurso).subscribe(response => {
       console.log(`He actualizado el recurso ${recurso.nombre}`);
       this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
     });
   }
+
+  //metodo para filtrar recursivamente las categorias
   filtrar() {
-    console.log(this.categoriaSeleccionada.nombre);
-    this.recursoService.getCategoriaPadre(this.categoriaSeleccionada).subscribe((response) =>
-      this.categoriaSeleccionadaAnterior = this.recursoService.mapearCategoria(response));
+    //rescata de la BD las subcategorias de la categoria seleccionada
     this.recursoService.getSubcategorias(this.categoriaSeleccionada).subscribe((response) =>
       this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
     setTimeout(() => {
-
+      //si la categoria seleccionada no tiene subcategorias muestra los recursos de esa categoria
       if (this.categoriasFiltradas.length === 0) {
         this.recursoService.getRecursosDeCategoria(this.categoriaSeleccionada).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
       }
-      else {
+      else {//muestra los recursos de sus subcategorias, esten al nivel que esten
         this.recursoService.getRecursosDeSubcategorias(this.categoriaSeleccionada).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
       }
     }, 500);
   }
 
+  //metodo que restea los filtros y regresa al listado de recursos del cenad
   borrarFiltros() {
+    //rescata de la BD las categorias padre del cenad
     this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
       this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
+    //rescata de la BD los recursos del cenad
     this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
+    //resetea la categoria seleccionada
     this.categoriaSeleccionada = null;
   }
 }
-
-

@@ -2,6 +2,9 @@ package es.mde.entidades;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.springframework.stereotype.Component;
 
@@ -11,15 +14,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class UsuarioNormal extends Usuario {
 
-	private String unidad;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "UNIDAD", nullable = false)
+	private Unidad unidad;
 	
 	public UsuarioNormal() {}
 
-	public String getUnidad() {
+	public Unidad getUnidad() {
 		return unidad;
 	}
 
-	public void setUnidad(String unidad) {
+	public void setUnidad(Unidad unidad) {
 		this.unidad = unidad;
 	}
 }

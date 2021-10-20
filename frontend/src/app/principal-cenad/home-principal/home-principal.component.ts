@@ -13,20 +13,21 @@ import { PrincipalService } from '../service/principal.service';
   styleUrls: ['./home-principal.component.css']
 })
 export class HomePrincipalComponent implements OnInit {
-
-  // Fortaswesome
+  // variables iconos varios
   faRecurso = faFolderOpen;
   faConsultar = faEdge;
   faCalendario = faCalendarAlt;
   faSolicitar = faBusinessTime;
   faEnlace = faLink;
   faCartografia = faMap;
-  //
+  //variable que representa el cenad
   cenad: Cenad = new CenadImpl();
+  //variable para el id del CENAD (barra de navegacion)
   idCenad: string = "";
-  src: string = "";
-  pathRelativo: string = `${environment.hostSicenad}files/escudos/`;
+  //variable para almacenar el nombre del campo escudo del cenad y construir la url
   escudoCenad: string = "";
+  //variables para el path relativo y url del archivo del escudo
+  pathRelativo: string = `${environment.hostSicenad}files/escudos/`;
   pathImg: string = "";
 
   constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute) { }
@@ -35,18 +36,19 @@ export class HomePrincipalComponent implements OnInit {
     this.cargarCenad();
   }
 
-  // Captura el idCenad pasado como parámetro en la barra de navegación
+  // metodo que captura el idCenad de la barra de navegación
   capturarIdBarraNavegacion(): void {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
   }
 
-  // Hace una llamada a la API y carga el CENAD/CMT cuyo id es pasado como parámetro desde la barra de navegación
+  //carga el CENAD/CMT cuyo id esta en la barra de navegación en su variable
   cargarCenad(): void {
     this.capturarIdBarraNavegacion();
     this.principalService.getCenad(this.idCenad).subscribe(response => {
-        this.cenad = this.principalService.mapearCenad(response);
-       this.escudoCenad = this.cenad.escudo;
-        this.pathImg = `${this.pathRelativo}${this.escudoCenad}`;
+      this.cenad = this.principalService.mapearCenad(response);
+      //construye la url del archivo del escudo
+      this.escudoCenad = this.cenad.escudo;
+      this.pathImg = `${this.pathRelativo}${this.escudoCenad}`;
       });
   }
 }

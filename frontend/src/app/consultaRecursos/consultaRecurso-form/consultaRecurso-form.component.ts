@@ -15,41 +15,30 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./consultaRecurso-form.component.css']
 })
 export class ConsultaRecursoFormComponent implements OnInit {
-
+  //variable para el icono "volver"
   faVolver =faArrowAltCircleLeft;
-  
   //variable con la que rescatamos de la barra de navegacion el idCenad
   idCenad: string = "";
-
   //variable con la que rescatamos de la barra de navegacion el idRecurso
   idRecurso: string = '';
-  
   //variable sobre la que se carga el recurso
   recurso: Recurso = new RecursoImpl();
-
   //variable que varia la vista gestor y la vista usuario
   isGestor: boolean = true;
-
   //variable que da visibilidad al formulario de crear fichero
   nuevoFichero: boolean = false;
-
   //variable sobre la que crearemos un fichero nuevo
   fichero: Fichero = new FicheroImpl();
-  
   //variable con todos los ficheros del recurso
   ficheros: Fichero[];
-
   //variable para dar al gestor la opcion de elegir que categoria de fichero asignar a cada fichero
   categoriasFichero: CategoriaFichero[] = [];
-  
   //variable que me filtra las categorias de fichero, y por tanto los apartados, a mostrar en la vista no gestor
   categoriasFicheroDeRecurso: CategoriaFichero[] = [];
-  
   //variables para subida de archivos
   pathRelativo: string = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
   selectedFiles: FileList;
   currentFile: File;
-
   //variables para el modal de imagen
   showModal: boolean;
   imagenModal: Fichero = new FicheroImpl();
@@ -59,36 +48,49 @@ export class ConsultaRecursoFormComponent implements OnInit {
     private router: Router, private activateRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    //recupera de la BD todas las categorias de fichero y las guarda en la variable para poder seleccionarlas si se añade un fichero nuevo
     this.recursoService.getCategoriasFichero().subscribe((response) => this.categoriasFichero = this.recursoService.extraerCategoriasFichero(response));
+    //se recupera el id del recurso de la barra de navegacion
     this.idRecurso = this.activateRoute.snapshot.params['idRecurso'];
+    //se recuperan de la BD las categorias de fichero de los ficheros del recurso y se asignan a la variable. esto posibilita filtrar que apartados tendra la vista de usuario
     this.recursoService.getCategoriasFicheroDeRecurso(this.idRecurso).subscribe((response) => {
       this.categoriasFicheroDeRecurso = this.recursoService.extraerCategoriasFichero(response);});
+    //carga el recurso cuyo id hemos recuperado
     this.cargarRecurso(this.idRecurso);
+    //se recupera el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
+    //se ejecuta con retardo para asegurar que cuando hace la llamada ya tiene el id.
     setTimeout(() => {
-      this.recursoService.getFicheros(this.recurso.idRecurso).subscribe((response) => {
-        this.ficheros = this.recursoService.extraerFicheros(response);
-      });
-      this.recursoService.getCategoria(this.recurso).subscribe((response) => this.recurso.categoria = this.recursoService.mapearCategoria(response));
+      //recupera de la BD lso ficheros del recurso y los asigna a la variable
+      this.recursoService.getFicheros(this.idRecurso).subscribe((response) => 
+        this.ficheros = this.recursoService.extraerFicheros(response));
+      //recupera de la BD la categoria del recurso y se la asigna al campo de la variable del mismo
+      this.recursoService.getCategoria(this.idRecurso).subscribe((response) => this.recurso.categoria = this.recursoService.mapearCategoria(response));
+      //asigna el path relativo, que junto con el nombreArchivo del fichero formara la url en la que se encuentra el archivo
       this.pathRelativo = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;  
     }, 1000);
   }
-//metodo que habilita el formulario para crear fichero
+
+  //metodo que habilita el formulario para crear fichero
   mostrarNuevoFichero() {
     this.nuevoFichero = true;
-
   }
-//metodo para crear un nuevo fichero
+
+  //metodo para crear un nuevo fichero
   crearFichero() {
+    //sube el archivo
     this.upload();
+    //asigna el nombre del mismo al campo del fichero
     this.fichero.nombreArchivo = this.currentFile.name;
+    //crea el fichero propiamente dicho
     this.recursoService.createFichero(this.fichero).subscribe((response) =>
       console.log(`He creado el fichero ${this.fichero.nombre}`));
     setTimeout(() => {
-      this.recursoService.getFicheros(this.recurso.idRecurso).subscribe((response) => {
-        this.ficheros = this.recursoService.extraerFicheros(response);
-      });
+      //actualiza el [] con los ficheros del recurso
+      this.recursoService.getFicheros(this.idRecurso).subscribe((response) => 
+        this.ficheros = this.recursoService.extraerFicheros(response));
     }, 1000); 
+    //cierra el formulario de crear fichero y resetea la variable
     this.nuevoFichero = false;
     this.fichero = new FicheroImpl();
   }
@@ -97,9 +99,9 @@ export class ConsultaRecursoFormComponent implements OnInit {
   onEliminarFichero(fichero: Fichero): void {
     this.recursoService.deleteFichero(fichero).subscribe(response => {
       console.log(`He eliminado el fichero ${fichero.nombre}`);
-      this.recursoService.getFicheros(this.recurso.idRecurso).subscribe((response) => {
-        this.ficheros = this.recursoService.extraerFicheros(response);
-      });
+      //actualiza el [] con los ficheros del recurso
+      this.recursoService.getFicheros(this.idRecurso).subscribe((response) => 
+        this.ficheros = this.recursoService.extraerFicheros(response));
     });
   }
 
@@ -107,6 +109,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
   selectFile(event) {
     this.selectedFiles = event.target.files;
   }
+
 //metodo para subir un archivo
   upload() {
     this.currentFile = this.selectedFiles.item(0);
@@ -114,6 +117,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
       );
     this.selectedFiles = undefined;
   }
+
 //metodo para construir la url del archivo a mostrar o descargar
   pathArchivo(nombreArchivo: string): string {
     const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
@@ -124,12 +128,13 @@ export class ConsultaRecursoFormComponent implements OnInit {
     if (id) {
       this.recursoService.getRecurso(id).subscribe((recurso) => {
         this.recurso = this.recursoService.mapearRecurso(recurso);
+        //asigna al campo recurso del fichero que se vaya a crear el valor de ese recurso
         this.fichero.recurso = this.recursoService.mapearRecurso(recurso).url;    
       });
     }    
   }
 
-  //metodo para modificar el recurso
+  //metodo para modificar el recurso y volver al listado de los recursos de ese cenad
   actualizar(): void {
     this.recursoService.update(this.recurso).subscribe(
       (recurso) => {
@@ -137,33 +142,31 @@ export class ConsultaRecursoFormComponent implements OnInit {
         this.router.navigate([`/principalCenad/${this.idCenad}/consultaRecursos/${this.idCenad}`]);
       });
   }
-//metodos para filtrar en la vista de usuario no gestor
+  //metodos para filtrar en la vista de usuario no gestor
+  //metodo que desprecia las categorias de fichero de las cuales el recurso no tiene ningun fichero
   filtrarPorCategoriaFichero(ficheros: Fichero[], categoriaFichero: CategoriaFichero): Fichero[] {
     return ficheros.filter(f => f.categoriaFichero.idCategoriaFichero === categoriaFichero.idCategoriaFichero);
   }
 
+  //metodo que selecciona solo las categorias de fichero que son imagenes. implicara que sus ficheros se muestren como imagen
   categoriasFicheroImagenes(categoriasFichero: CategoriaFichero[]):CategoriaFichero[] {
     return categoriasFichero.filter(c => c.tipo ===0);
   }
 
+  //metodo que selecciona solo las categorias de fichero que no son imagenes. implicara que sus ficheros se muestren como enlaces de descarga
   categoriasFicheroHref(categoriasFichero: CategoriaFichero[]):CategoriaFichero[] {
     return categoriasFichero.filter(c => c.tipo !==0);
   }
 
-    //metodo para mostrar el modal de una imagen
-    show(imagen: Fichero)
-    {
-      this.showModal = true; // Show-Hide Modal Check
-      this.imagenModal = imagen;
-      
-    }
+  //metodo para mostrar el modal de una imagen
+  show(imagen: Fichero) {
+    // Show-Hide Modal Check
+    this.showModal = true; 
+    this.imagenModal = imagen;
+  }
 
-    //metodo para cerrar el modal de las imagenes
-    hide()
-    {
-      this.showModal = false;
-    }
+  //metodo para cerrar el modal de las imagenes
+  hide() {
+  this.showModal = false;
+  }
 }
-
-
-

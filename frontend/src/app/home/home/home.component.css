@@ -1,22 +1,21 @@
-h2 {
+h2, div.resultado {
   color: #354f52;
 }
 
-.bienvenido {
+.bienvenido, .select-provincia {
   color: #52796f;
 }
 
-.seleccione {
-  color: #84a98c;
-}
-
-.busqueda {
+.seleccione, .busqueda {
   color: #84a98c;
 }
 
 #mapa {
-	background: url("../../../assets/spain.png") no-repeat 0px 0px; width: 781px; height: 713px;
-  zoom: 0.8; transform: scale(.8);
+	background: url("../../../assets/spain.png") no-repeat 0px 0px; 
+  width: 781px; 
+  height: 713px;
+  zoom: 0.8; 
+  transform: scale(.8);
 }
 
 div.interactivo {
@@ -37,12 +36,4 @@ div.filtro {
 .no-existe {
   color: #52796f;
   font-weight: 700;
-}
-
-div.resultado {
- color: #354f52;
-}
-
-.select-provincia {
-  color: #52796f;
 }

@@ -10,25 +10,28 @@ import { CategoriaFicheroImpl } from '../models/categoriaFichero-impl';
   providedIn: 'root'
 })
 export class CategoriaFicheroService {
+  //endpoint raiz de la API
   private host: string = environment.hostSicenad;
+  //endpoint especifico de las categorias de fichero
   private urlEndPoint: string = `${this.host}categorias_fichero/`;
 
   constructor(
     private http: HttpClient) { }
 
+  //metodo que recupera de la BD todas las categorias de fichero
   getCategoriasFichero(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
 
+  //metodo que extrae el [] de categorias de fichero 
   extraerCategoriasFichero(respuestaApi: any): CategoriaFichero[] {
     const categoriasFichero: CategoriaFichero[] = [];
-    respuestaApi._embedded.categorias_fichero.forEach(c => {
-      categoriasFichero.push(this.mapearCategoriaFichero(c));
-
-    });
+    respuestaApi._embedded.categorias_fichero.forEach(c => 
+      categoriasFichero.push(this.mapearCategoriaFichero(c)));
     return categoriasFichero;
   }
 
+  //metodo que mapea la categoria de fichero segun la interfaz
   mapearCategoriaFichero(categoriaFicheroApi: any): CategoriaFicheroImpl {
     const categoriaFichero = new CategoriaFicheroImpl();
     categoriaFichero.nombre = categoriaFicheroApi.nombre;
@@ -36,10 +39,10 @@ export class CategoriaFicheroService {
     categoriaFichero.tipo = categoriaFicheroApi.tipo;
     categoriaFichero.url = categoriaFicheroApi._links.self.href;
     categoriaFichero.idCategoriaFichero = categoriaFichero.getId(categoriaFichero.url);
-
     return categoriaFichero;
   }
 
+  //metodo que crea en nuestra BD una nueva categoria de fichero 
   create(categoriaFichero: CategoriaFichero): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, categoriaFichero).pipe(
       catchError((e) => {
@@ -54,6 +57,7 @@ export class CategoriaFicheroService {
     );
   }
 
+  //metodo que borra de nuestra BD una categoria de fichero
   delete(categoriaFichero): Observable<CategoriaFichero> {
     return this.http.delete<CategoriaFichero>(`${this.urlEndPoint}${categoriaFichero.idCategoriaFichero}`)
       .pipe(
@@ -65,7 +69,7 @@ export class CategoriaFicheroService {
         })
       );
   }
-
+  //metodo que actualiza en nuestra BD una categoria de fichero
   update(categoriaFichero: CategoriaFichero): Observable<any> {
     return this.http
       .patch<any>(`${this.urlEndPoint}${categoriaFichero.idCategoriaFichero}`, categoriaFichero)

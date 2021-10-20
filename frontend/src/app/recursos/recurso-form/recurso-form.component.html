@@ -1,7 +1,8 @@
+<!-- muestra un formulario para crear un recurso nuevo de ese cenad -->
 <div class="container-fluid">
   <div class="row ml-4 pl-3 mb-0 pb-0">
     <a class="nav-link text-center volver mb-0 pb-0" routerLink="../../"  routerLinkActive="router-link-active">
-      <fa-icon class="fa-2x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong></a>
+      <fa-icon class="fa-2x mr-2" [icon]="faVolver"></fa-icon><strong>Volver</strong></a>
   </div>
   <div class="row justify-content-center align-items-start mb-0">
     <h3 class="mt-0 pt-0">CREAR RECURSO</h3>
@@ -9,7 +10,6 @@
   </div>
   <form #recursoForm="ngForm">
     <div class="form-row py-2">
-
       <div class="col-lg-3 col-md-12">
         <label class="titulo"><b>NOMBRE<sup class="text-danger">*</sup></b></label>
         <input type="text" class="form-control letra" [(ngModel)]="recurso.nombre" placeholder="Nombre del recurso" name="nombre"
@@ -21,30 +21,24 @@
           </div>
         </div>
       </div>
-
       <div class="col-lg-3 col-md-12">
         <label class="titulo"><b>CATEGORÍA<sup class="text-danger">*</sup></b></label>
         <select name="categoria" id="categoria" [(ngModel)]="recurso.categoria">
           <option class=" letra" *ngFor="let categoria of categorias" [ngValue]="categoria.url">{{ categoria.nombre }}</option>
         </select>
       </div>
-
       <div class="col-lg-3 col-md-12">
         <label class="titulo"><b>GESTOR<sup class="text-danger">*</sup></b></label>
         <select name="usuarioGestor" id="usuarioGestor" [(ngModel)]="recurso.usuarioGestor">
           <option class=" letra" *ngFor="let gestor of gestores" [ngValue]="gestor.url">{{ gestor.nombre }}</option>
         </select>
       </div>
-
        <div class="col-lg-3 col-md-12">
         <label class="titulo"><b>TIPO DE FORMULARIO<sup class="text-danger">*</sup></b></label>
         <select name="tipoFormulario" id="tipoFormulario" [(ngModel)]="recurso.tipoFormulario">
           <option class=" letra" *ngFor="let tipoFormulario of tiposFormulario" [ngValue]="tipoFormulario.url">{{ tipoFormulario.nombre }}</option>
         </select>
       </div>
-
-
-
       <div class="col-lg-12 col-md-12 pt-3">
         <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
         <textarea class="form-control letra" [(ngModel)]="recurso.descripcion" placeholder="Descripción del recurso" name="descripcion"
@@ -56,14 +50,11 @@
           </div>
         </div>
       </div>
-
       <div class="col-lg-12 col-md-12 pt-3">
         <label class="titulo"><b>OTROS<sup class="text-danger">*</sup></b></label>
         <textarea class="form-control letra" [(ngModel)]="recurso.otros" placeholder="Otros datos de interés" name="otros"
           #otros="ngModel" rows="5" cols="50"></textarea>
-
       </div>
-
     </div>
     <div class="form-row justify-content-between pt-3">
       <div class="col-lg-5 col-md-12 mb-4">

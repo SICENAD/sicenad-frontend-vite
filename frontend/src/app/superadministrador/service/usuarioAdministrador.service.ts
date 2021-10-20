@@ -12,26 +12,27 @@ import { UsuarioAdministradorImpl } from '../models/usuarioAdministrador-impl';
   providedIn: 'root'
 })
 export class UsuarioAdministradorService {
-
+  //endpoint raiz de la API
   private host: string = environment.hostSicenad;
+  //endpoint especifico de los usuarios administrador
   private urlEndPoint: string = `${this.host}usuarios_administrador/`;
 
-  constructor(
-    private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
+  //metodo que recupera de la BD todos los usuarios administrador
   getUsuarios(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
 
+  //metodo que extrae el [] de usuarios administrador
   extraerUsuarios(respuestaApi: any): UsuarioAdministrador[] {
     const usuarios: UsuarioAdministrador[] = [];
-    respuestaApi._embedded.usuarios_administrador.forEach(u => {
-      usuarios.push(this.mapearUsuario(u));
-
-    });
+    respuestaApi._embedded.usuarios_administrador.forEach(u => 
+      usuarios.push(this.mapearUsuario(u)));
     return usuarios;
   }
 
+  //metodo para mapear un usuario administrador segun la interfaz
   mapearUsuario(usuarioApi: any): UsuarioAdministradorImpl {
     const usuario = new UsuarioAdministradorImpl();
     usuario.nombre = usuarioApi.nombre;
@@ -42,10 +43,10 @@ export class UsuarioAdministradorService {
     usuario.url = usuarioApi._links.self.href;
     usuario.idUsuario = usuario.getId(usuario.url);
     this.getCenad(usuario).subscribe((response) => usuario.cenad = this.mapearCenad(response));
-
     return usuario;
   }
 
+  //metodo para crear un usuario administrador
   create(usuario: UsuarioAdministrador): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, usuario).pipe(
       catchError((e) => {
@@ -60,6 +61,7 @@ export class UsuarioAdministradorService {
     );
   }
 
+  //metodo para borrar un usuario administrador
   delete(usuario): Observable<UsuarioAdministrador> {
     return this.http.delete<UsuarioAdministrador>(`${this.urlEndPoint}${usuario.idUsuario}`)
       .pipe(
@@ -72,6 +74,7 @@ export class UsuarioAdministradorService {
       );
   }
 
+  //metodo para editar un usuario administrador
   update(usuario: UsuarioAdministrador): Observable<any> {
     return this.http
       .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
@@ -88,6 +91,7 @@ export class UsuarioAdministradorService {
       );
   }
 
+  //metodo para recuperar un usuario administrador concreto
   getUsuario(id): Observable<any> {
     return this.http.get<UsuarioAdministrador>(`${this.urlEndPoint}${id}`).pipe(
       catchError((e) => {
@@ -98,6 +102,8 @@ export class UsuarioAdministradorService {
       })
     );
   }
+
+  //metodo para recuperar el administrador de un cenad
   getUsuarioAdministrador(cenad: Cenad): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/${cenad.idCenad}/usuarioAdministrador/`)
     .pipe(
@@ -111,6 +117,7 @@ export class UsuarioAdministradorService {
     );
   }
 
+  //metodo para recuperar el cenad de un administrador
   getCenad(usuarioAdministrador: UsuarioAdministrador): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${usuarioAdministrador.idUsuario}/cenad/`)
       .pipe(
@@ -123,6 +130,7 @@ export class UsuarioAdministradorService {
       );
   }
 
+  //metodo para mapear un cenad segun la interfaz
   mapearCenad(cenadApi: any): CenadImpl {
     const cenad = new CenadImpl();
     cenad.nombre = cenadApi.nombre;
@@ -134,8 +142,6 @@ export class UsuarioAdministradorService {
     cenad.email = cenadApi.email;
     cenad.url = cenadApi._links.self.href;
     cenad.idCenad = cenad.getId(cenad.url);
-    // this.getUsuarioAdministrador(cenad).subscribe((response) => cenad.usuarioAdministrador = this.mapearUsuario(response));
-
     return cenad;
   }
 }

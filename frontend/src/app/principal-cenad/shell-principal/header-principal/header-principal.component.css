@@ -3,7 +3,7 @@ h1 {
   font-weight: bold;
 }
 
-h3 {
+h3, fa-icon.fa-2x:hover {
   color: #3A5A40;
 }
 
@@ -17,10 +17,6 @@ h3 {
 
 fa-icon.menu {
   color: #DAD7CD;
-}
-
-fa-icon.fa-2x:hover {
-  color: #3A5A40;
 }
 
 div.titulo {

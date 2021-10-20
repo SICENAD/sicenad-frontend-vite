@@ -23,7 +23,7 @@ public class CategoriaFichero {
 	private Long id;
 	private String nombre; //Imagen, normativa, instrucciones, etc
 	private String descripcion;
-	private int tipo = 0; //de momento se predefine a 0. previsto su uso futuro
+	private int tipo; //0 para imagenes y 1 para otros archivos
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Fichero.class, mappedBy = "categoriaFichero")
 	private Collection<Fichero> ficheros = new ArrayList<>();
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Cartografia.class, mappedBy = "categoriaFichero")

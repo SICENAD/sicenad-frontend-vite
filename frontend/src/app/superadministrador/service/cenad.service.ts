@@ -11,13 +11,16 @@ import { UsuarioAdministradorImpl } from '../models/usuarioAdministrador-impl';
   providedIn: 'root'
 })
 export class CenadService {
-
+  //endpoint raiz de la API
   private host: string = environment.hostSicenad;
+  //endpoint especifico de los cenads
   private urlEndPoint: string = `${this.host}cenads/`;
+  //endpoint para almacenamiento de archivos
   private urlFiles = `${this.host}files/`;
 
   constructor(private http: HttpClient) { }
 
+  //metodo para subir un archivo
   upload(file: File): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
     formData.append('file', file);
@@ -25,12 +28,11 @@ export class CenadService {
       reportProgress: true,
       responseType: 'json'
     });
-
     return this.http.request(req);
   }
 
+  //metodo para borrar un archivo
   deleteArchivo(fileName: string): Observable<any> {
-
     return this.http.get(`${this.urlFiles}borrarEscudo/${fileName}`).pipe(
       catchError((e) => {
         if (e.status === 400) {
@@ -44,19 +46,20 @@ export class CenadService {
     );
   }
 
+  //metodo que recupera de la BD todos los cenads
   getCenads(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
 
+  //metodo que extrae el [] de cenads
   extraerCenads(respuestaApi: any): Cenad[] {
     const cenads: Cenad[] = [];
-    respuestaApi._embedded.cenads.forEach(c => {
-      cenads.push(this.mapearCenad(c));
-
-    });
+    respuestaApi._embedded.cenads.forEach(c =>
+      cenads.push(this.mapearCenad(c)));
     return cenads;
   }
 
+  //metodo para mapear un cenad segun la interfaz
   mapearCenad(cenadApi: any): CenadImpl {
     const cenad = new CenadImpl();
     cenad.nombre = cenadApi.nombre;
@@ -68,11 +71,10 @@ export class CenadService {
     cenad.email = cenadApi.email;
     cenad.url = cenadApi._links.self.href;
     cenad.idCenad = cenad.getId(cenad.url);
-    // this.getUsuarioAdministrador(cenad).subscribe((response) => cenad.usuarioAdministrador = this.mapearUsuario(response));
-
     return cenad;
   }
   
+  //metodo para mapear un usuario administrador segun la interfaz
   mapearUsuario(usuarioApi: any): UsuarioAdministradorImpl {
     const usuario = new UsuarioAdministradorImpl();
     usuario.nombre = usuarioApi.nombre;
@@ -82,11 +84,10 @@ export class CenadService {
     usuario.descripcion = usuarioApi.descripcion;
     usuario.url = usuarioApi._links.self.href;
     usuario.idUsuario = usuario.getId(usuario.url);
-    // this.getCenad(usuario).subscribe((response) => usuario.cenad = this.mapearCenad(response));
-
     return usuario;
   }
 
+  //metodo para crear un cenad
   create(cenad: Cenad): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, cenad).pipe(
       catchError((e) => {
@@ -101,6 +102,7 @@ export class CenadService {
     );
   }
 
+  //metodo para borrar un cenad
   delete(cenad): Observable<Cenad> {
     return this.http.delete<Cenad>(`${this.urlEndPoint}${cenad.idCenad}`)
       .pipe(
@@ -113,6 +115,7 @@ export class CenadService {
       );
   }
 
+  //metodo para editar un cenad
   update(cenad: Cenad): Observable<any> {
     return this.http
       .patch<any>(`${this.urlEndPoint}${cenad.idCenad}`, cenad)
@@ -129,6 +132,7 @@ export class CenadService {
       );
   }
 
+  //metodo para recuperar un cenad concreto
   getCenad(id): Observable<any> {
     return this.http.get<Cenad>(`${this.urlEndPoint}${id}`).pipe(
       catchError((e) => {
@@ -140,6 +144,7 @@ export class CenadService {
     );
   }
 
+  //metodo para recuperar el administardor de un cenad
   getUsuarioAdministrador(cenad: Cenad): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${cenad.idCenad}/usuarioAdministrador/`)
       .pipe(

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { PrincipalCenadRoutingModule } from './principal-cenad-routing.module';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -21,4 +20,4 @@ import { HomePrincipalComponent } from './home-principal/home-principal.componen
     FontAwesomeModule
   ]
 })
-export class PrincipalCenadModule { }
+export class PrincipalCenadModule {}

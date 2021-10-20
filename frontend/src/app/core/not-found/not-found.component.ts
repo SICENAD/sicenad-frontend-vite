@@ -7,12 +7,10 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./not-found.component.css']
 })
 export class NotFoundComponent implements OnInit {
-
+  //variable para el icono "volver"
   faHome =faHome;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

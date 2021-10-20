@@ -12,9 +12,11 @@ import { CategoriaFicheroService } from '../service/categoriaFichero.service';
   styleUrls: ['./categoriasFichero.component.css']
 })
 export class CategoriasFicheroComponent implements OnInit {
-
+  //variable que recoge todas las categorias de fichero 
   categoriasFichero: CategoriaFichero[] = [];
+  //variable que posibilita la comunicacion de datos con el otro componente para mostrar los datos de una categoria
   categoriaFicheroVerDatos: CategoriaFichero;
+  //variable para icono "volver"
   faVolver = faArrowAltCircleLeft;
 
   constructor(
@@ -22,20 +24,24 @@ export class CategoriasFicheroComponent implements OnInit {
     private router: Router) { }
 
     ngOnInit(): void {
+      //metemos en la variable todas las categorias de fichero
       this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => this.categoriasFichero = this.categoriaFicheroService.extraerCategoriasFichero(response));
     }
   
+    //metodo que asigna los datos de la categoria de fichero para la comunicacion al otro componente
     verDatos(categoriaFichero: CategoriaFichero): void {
       this.categoriaFicheroVerDatos = categoriaFichero;
     }
   
+    //metodo que materializa la eliminacion de una categoria de fichero y vuelve al listado de categorias de fichero
     onCategoriaFicheroEliminar(categoriaFichero: CategoriaFichero): void {
       this.categoriaFicheroService.delete(categoriaFichero).subscribe(response => {
         console.log(`He borrado la Categoría de Fichero ${categoriaFichero.nombre}`);
         this.router.navigate(['/categoriasFichero']);
       });
     }
-  
+
+    //metodo que materializa la edicion de una categoria de fichero y vuelve al listado de categorias de fichero
     onCategoriaFicheroEditar(categoriaFichero: CategoriaFicheroImpl): void {
       this.categoriaFicheroService.update(categoriaFichero).subscribe(response => {
         console.log(`He actualizado la Categoría de Fichero ${categoriaFichero.nombre}`);

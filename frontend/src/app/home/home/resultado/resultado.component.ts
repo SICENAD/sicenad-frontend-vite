@@ -4,14 +4,13 @@ import { Cenad } from 'src/app/superadministrador/models/cenad';
 @Component({
   selector: 'app-resultado',
   templateUrl: './resultado.component.html',
-  styles: ['.lista a { color: #52796f; font-weight: bold}']
+  styleUrls: ['./resultado.component.css']
 })
 export class ResultadoComponent implements OnInit {
+  //variable que trae el cenad seleccionado del otro componente
   @Input() cenad: Cenad;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

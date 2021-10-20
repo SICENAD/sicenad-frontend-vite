@@ -9,17 +9,21 @@ import { RecursoService } from '../service/recurso.service';
   styleUrls: ['./recurso.component.css']
 })
 export class RecursoComponent implements OnInit {
-
+  //variable que trae del otro componente el recurso
   @Input() recurso: Recurso;
+  //variable que emite al otro componente un evento con sus datos
   @Output() recursoSeleccionado = new EventEmitter<Recurso>();
+  //variable del icono "editar"
   faEdit = faEdit;
 
   constructor(private recursoService: RecursoService) { }
 
   ngOnInit() {
-    this.recursoService.getCategoria(this.recurso).subscribe((response) => this.recurso.categoria = this.recursoService.mapearCategoria(response));
+    //asigna al campo categoria del recurso su valor
+    this.recursoService.getCategoria(this.recurso.idRecurso).subscribe((response) => this.recurso.categoria = this.recursoService.mapearCategoria(response));
+    //asigna al campo usuario gestor del recurso su valor
     this.recursoService.getUsuarioGestor(this.recurso).subscribe((response) => this.recurso.usuarioGestor = this.recursoService.mapearUsuario(response));
+    //asigna al campo tipo de formulario del recurso su valor    
     this.recursoService.getTipoFormulario(this.recurso).subscribe((response) => this.recurso.tipoFormulario = this.recursoService.mapearUsuario(response));
-
   }
 }
