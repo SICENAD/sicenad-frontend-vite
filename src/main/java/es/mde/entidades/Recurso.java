@@ -17,12 +17,12 @@ import javax.persistence.Table;
 
 @Entity
 //@EntityListeners(RecursoListener.class)
-@Table(name="RECURSOS")
+@Table(name = "RECURSOS")
 public class Recurso {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(unique=true)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(unique = true)
 	private Long id;
 	private String nombre;
 	private String descripcion;
@@ -31,20 +31,26 @@ public class Recurso {
 	private Collection<Fichero> ficheros = new ArrayList<>();
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USUARIO_GESTOR")
-	private UsuarioGestor usuarioGestor;	
+	private UsuarioGestor usuarioGestor;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CATEGORIA", nullable = false)
 	private Categoria categoria;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TIPO_FORMULARIO", nullable = false)
 	private TipoFormulario tipoFormulario;
-	
-	public Recurso() {}
-	
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = SolicitudRecurso.class, mappedBy = "recurso")
+	private Collection<SolicitudRecurso> solicitudes = new ArrayList<>();
+	private Boolean isDatosEspecificosSolicitud;
+	private String datosEspecificosSolicitud = "Ejemplo: \nHorario: 08:00h a 21:00h \nMedios CIS: medios propios de la UCO  \nSIMACET: se solicita el nodo del CENAD "
+			+ "\nPOC CIS: CAP. XXX \nObservaciones Particulares:";
+
+	public Recurso() {
+	}
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -96,7 +102,7 @@ public class Recurso {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	
+
 	public TipoFormulario getTipoFormulario() {
 		return tipoFormulario;
 	}
@@ -105,9 +111,38 @@ public class Recurso {
 		this.tipoFormulario = tipoFormulario;
 	}
 
+	public Collection<SolicitudRecurso> getSolicitudes() {
+		return solicitudes;
+	}
+
+	public void setSolicitudes(Collection<SolicitudRecurso> solicitudes) {
+		this.solicitudes = solicitudes;
+	}
+
+	public Boolean getIsDatosEspecificosSolicitud() {
+		return isDatosEspecificosSolicitud;
+	}
+
+	public void setIsDatosEspecificosSolicitud(Boolean isDatosEspecificosSolicitud) {
+		this.isDatosEspecificosSolicitud = isDatosEspecificosSolicitud;
+	}
+
+	public String getDatosEspecificosSolicitud() {
+		return datosEspecificosSolicitud;
+	}
+
+	public void setDatosEspecificosSolicitud(String datosEspecificosSolicitud) {
+		this.datosEspecificosSolicitud = datosEspecificosSolicitud;
+	}
+
 	// Establece la relacion en los dos sentidos
 	public void addFichero(Fichero fichero) {
 		getFicheros().add(fichero);
 		fichero.setRecurso(this);
+	}
+
+	public void addSolicitudRecurso(SolicitudRecurso solicitud) {
+		getSolicitudes().add(solicitud);
+		solicitud.setRecurso(this);
 	}
 }

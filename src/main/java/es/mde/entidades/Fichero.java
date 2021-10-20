@@ -29,6 +29,12 @@ public class Fichero {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "RECURSO", nullable = false)
 	private Recurso recurso;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SOLICITUDRECURSO_CENAD")
+	private SolicitudRecurso solicitudRecursoCenad;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "SOLICITUDRECURSO_UNIDAD")
+	private SolicitudRecurso solicitudRecursoUnidad;
 
 	public Fichero() {
 	}

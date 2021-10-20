@@ -1,7 +1,6 @@
 package es.mde.repositorios;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,9 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.mde.entidades.Categoria;
-import es.mde.entidades.Cenad;
 import es.mde.entidades.Recurso;
-import es.mde.entidades.UsuarioGestor;
+import es.mde.entidades.SolicitudRecurso;
 
 @Transactional(readOnly = true)
 public class CenadDAOImpl implements CenadDAOCustom {
@@ -43,4 +41,18 @@ public class CenadDAOImpl implements CenadDAOCustom {
 
 		return recursos;
 	}
+
+	@Override
+	public List<SolicitudRecurso> getSolicitudesCenad(Long id) {
+		
+		List<SolicitudRecurso> solicitudes = new ArrayList<SolicitudRecurso>();
+		
+		List<Recurso> recursos = this.getRecursosCenad(id);
+		
+		recursos.forEach(r -> solicitudes.addAll(r.getSolicitudes()));
+		
+		return solicitudes;
+	}
+	
+	
 }

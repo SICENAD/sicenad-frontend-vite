@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.mde.entidades.Categoria;
 import es.mde.entidades.Recurso;
+import es.mde.entidades.SolicitudRecurso;
 import es.mde.repositorios.CenadDAO;
 
 @RepositoryRestController
@@ -46,4 +47,16 @@ public class CenadController {
 
 		return assembler.toCollectionModel(recursos);
 	}
+	
+	@GetMapping("/solicitudes")
+	@ResponseBody
+	public CollectionModel<PersistentEntityResource> getSolicitudesCenad(@PathVariable Long id,
+			PersistentEntityResourceAssembler assembler) {
+
+		List<SolicitudRecurso> solicitudes = cenadDAO.getSolicitudesCenad(id);
+
+		return assembler.toCollectionModel(solicitudes);
+	}
+	
+	
 }
