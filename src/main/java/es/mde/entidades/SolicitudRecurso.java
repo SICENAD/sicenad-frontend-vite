@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -30,21 +31,23 @@ public class SolicitudRecurso {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
+	@Lob
 	private String observaciones;
+	@Lob
 	private String observacionesCenad;
 	private String jefeUnidadUsuaria;
 	private String pocEjercicio;
 	private String tlfnRedactor;
 	private String estado; // Borrador, Solicitada, Rechazada, Validada, Cancelada
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date fechaSolicitud;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date fechaUltModSolicitud;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date fechaHoraInicioRecurso;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date fechaHoraFinRecurso;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date fechaFinDocumentacion;
 	private String unidadUsuaria;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -63,7 +66,7 @@ public class SolicitudRecurso {
 	// *************************************
 	// ZONA DE CAIDA DE PROYECTILES/EXPLOSIVOS
 	private String zonaCaida;
-	private Boolean isMunTrazadoraIluminanteFumigena;
+	private Boolean conMunTrazadoraIluminanteFumigena;
 	private String arma1ZC;
 	private String arma1ZCAsentamiento;
 	private String arma1ZCCoordAsentamiento;
@@ -128,7 +131,7 @@ public class SolicitudRecurso {
 	private String vivac;
 	private String vivacCoord;
 	// ZONA DE VIDA DE BATALLON
-	private Boolean isUsoCocina;
+	private Boolean conUsoCocina;
 	// ZONA DE ESPERA
 	// no contiene atributos específicos
 	// LAVADEROS
@@ -136,9 +139,9 @@ public class SolicitudRecurso {
 	private int numVehRuedas;
 	// SIMULACION REAL LASER
 	private String tipoSimulador;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]")
 	private Date fechaHoraMontaje;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]", timezone = "UTC")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]")
 	private Date fechaHoraDesmontaje;
 	private int numSimuladores;
 	private String usoEstacionSeg;
@@ -345,12 +348,12 @@ public class SolicitudRecurso {
 		this.zonaCaida = zonaCaida;
 	}
 
-	public Boolean getIsMunTrazadoraIluminanteFumigena() {
-		return isMunTrazadoraIluminanteFumigena;
+	public Boolean isConMunTrazadoraIluminanteFumigena() {
+		return conMunTrazadoraIluminanteFumigena;
 	}
 
-	public void setIsMunTrazadoraIluminanteFumigena(Boolean isMunTrazadoraIluminanteFumigena) {
-		this.isMunTrazadoraIluminanteFumigena = isMunTrazadoraIluminanteFumigena;
+	public void setConMunTrazadoraIluminanteFumigena(Boolean conMunTrazadoraIluminanteFumigena) {
+		this.conMunTrazadoraIluminanteFumigena = conMunTrazadoraIluminanteFumigena;
 	}
 
 	public String getArma1ZC() {
@@ -705,12 +708,12 @@ public class SolicitudRecurso {
 		this.vivacCoord = vivacCoord;
 	}
 
-	public Boolean getIsUsoCocina() {
-		return isUsoCocina;
+	public Boolean isConUsoCocina() {
+		return conUsoCocina;
 	}
 
-	public void setIsUsoCocina(Boolean isUsoCocina) {
-		this.isUsoCocina = isUsoCocina;
+	public void setConUsoCocina(Boolean conUsoCocina) {
+		this.conUsoCocina = conUsoCocina;
 	}
 
 	public int getNumVehCadenas() {
