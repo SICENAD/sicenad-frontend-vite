@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { CenadImpl } from '../../models/cenad-impl';
 import { CenadService } from '../../service/cenad.service';
 import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.service';
@@ -19,6 +20,7 @@ export class CenadFichaComponent implements OnInit {
   //variables para la subida de archivos de escudos
   selectedFiles: FileList;
   currentFile: File;
+  sizeMaxEscudo: string = environment.sizeMaxEscudo;
   //variable con todas las provincias
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { environment } from 'src/environments/environment';
 import { CenadImpl } from '../../models/cenad-impl';
 import { UsuarioAdministrador } from '../../models/usuarioAdministrador';
 import { CenadService } from '../../service/cenad.service';
@@ -12,12 +13,17 @@ import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.
   styleUrls: ['./cenad-form.component.css']
 })
 export class CenadFormComponent implements OnInit {
-
+  //variable en la que grabaremos el Cenad creado
   cenad: CenadImpl = new CenadImpl();
+  //variable donde recuperamos todos los administradores
   administradores: UsuarioAdministrador[] = [];
+  //variable del icono "volver"
   faVolver =faArrowAltCircleLeft;
+  //variables para la subida de archivos
   selectedFiles: FileList;
   currentFile: File;
+  sizeMaxEscudo: string = environment.sizeMaxEscudo;
+  //variable con todas las provincias
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},

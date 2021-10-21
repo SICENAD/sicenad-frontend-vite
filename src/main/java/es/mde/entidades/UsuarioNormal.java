@@ -2,7 +2,6 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,19 +9,15 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
 import org.springframework.stereotype.Component;
 
 @Entity
-//@EntityListeners(UsuarioNormalListener.class)
 @DiscriminatorValue("UN")
 @Component
 public class UsuarioNormal extends Usuario {
-
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "UNIDAD", nullable = false)
+	@JoinColumn(name = "UNIDAD")
 	private Unidad unidad;
-	
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = SolicitudRecurso.class, mappedBy = "usuarioNormal")
 	private Collection<SolicitudRecurso> solicitudes = new ArrayList<>();
 	

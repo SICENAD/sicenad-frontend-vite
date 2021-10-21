@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import es.mde.entidades.Categoria;
 import es.mde.entidades.Recurso;
 import es.mde.entidades.SolicitudRecurso;
@@ -21,7 +20,6 @@ import es.mde.repositorios.CenadDAO;
 @RequestMapping(path = "cenads/{id}")
 @Configuration
 public class CenadController {
-
 	private CenadDAO cenadDAO;
 
 	public CenadController(CenadDAO cenadDAO) {
@@ -57,6 +55,4 @@ public class CenadController {
 
 		return assembler.toCollectionModel(solicitudes);
 	}
-	
-	
 }

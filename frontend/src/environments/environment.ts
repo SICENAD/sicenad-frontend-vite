@@ -5,6 +5,9 @@
 export const environment = {
   appName: 'Sicenad DEV',
   production: false,
+  sizeMaxEscudo: "2 MB",
+  sizeMaxDocRecurso: "10 MB",
+  sizeMaxDocSolicitud: "10 MB",
   //endpoint para trabajar en local
   hostSicenad: 'http://localhost:8080/api/'
   //endpoint para atacar la app desplegada en heroku

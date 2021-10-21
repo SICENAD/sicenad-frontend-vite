@@ -2,7 +2,6 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,10 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-//@EntityListeners(TipoFormularioListener.class)
 @Table(name="TIPOS_FORMULARIO")
 public class TipoFormulario {
-
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true)
@@ -75,4 +72,3 @@ public class TipoFormulario {
 		recurso.setTipoFormulario(this);
 	}
 }
-

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
 import es.mde.entidades.Categoria;
 import es.mde.entidades.Cenad;
 import es.mde.entidades.Recurso;
@@ -33,18 +31,14 @@ import es.mde.entidades.Recurso;
 
 @Configuration
 public class ConfiguracionRest {
-
 	@Bean
 	RepresentationModelProcessor<RepositorySearchesResource> addSearchLinks(RepositoryRestConfiguration config) {
 		Map<Class<?>, Class<?>> controllersRegistrados = new HashMap<>();
-
 		controllersRegistrados.put(Categoria.class, CategoriaController.class);
 		controllersRegistrados.put(Cenad.class, CenadController.class);
 		controllersRegistrados.put(Recurso.class, RecursoController.class);
 
-
 		return new RepresentationModelProcessor<RepositorySearchesResource>() {
-
 			@SuppressWarnings("deprecation")
 			@Override
 			public RepositorySearchesResource process(RepositorySearchesResource searchResource) {
@@ -70,10 +64,8 @@ public class ConfiguracionRest {
 						}
 					}
 				}
-
 				return searchResource;
 			}
-
 		};
 	}
 
@@ -89,6 +81,4 @@ public class ConfiguracionRest {
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}
-
 }
-

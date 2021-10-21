@@ -2,28 +2,27 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-//@EntityListeners(CenadListener.class)
 @Table(name="CENADS")
 public class Cenad {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique=true)
 	private Long id;
 	private String nombre;
 	private int provincia;
+	@Lob	
 	private String descripcion;
 	private String direccion;
 	private String tfno;

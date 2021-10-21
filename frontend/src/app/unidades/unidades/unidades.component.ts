@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { UsuarioNormal } from 'src/app/superadministrador/models/usuarioNormal';
 import { Unidad } from '../models/unidad';
 import { UnidadImpl } from '../models/unidad-impl';
 import { UnidadService } from '../service/unidad.service';

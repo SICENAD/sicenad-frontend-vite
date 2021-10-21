@@ -13,10 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-//@EntityListeners(CartografiaListener.class)
 @Table(name = "CARTOGRAFIAS")
 public class Cartografia {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
@@ -106,7 +104,5 @@ public class Cartografia {
 
 	public void setCenad(Cenad cenad) {
 		this.cenad = cenad;
-	}
-	
-	
+	}	
 }

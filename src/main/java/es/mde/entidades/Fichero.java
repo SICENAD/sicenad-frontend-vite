@@ -7,20 +7,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-//@EntityListeners(FicheroListener.class)
 @Table(name = "FICHEROS")
 public class Fichero {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
 	private String nombre;
 	private String nombreArchivo;
+	@Lob	
 	private String descripcion;
 	private String imagen;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -94,5 +94,4 @@ public class Fichero {
 	public void setRecurso(Recurso recurso) {
 		this.recurso = recurso;
 	}
-
 }

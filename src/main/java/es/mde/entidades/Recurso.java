@@ -2,7 +2,6 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,21 +10,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-//@EntityListeners(RecursoListener.class)
 @Table(name = "RECURSOS")
 public class Recurso {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
 	private String nombre;
+	@Lob	
 	private String descripcion;
+	@Lob	
 	private String otros;
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Fichero.class, mappedBy = "recurso")
 	private Collection<Fichero> ficheros = new ArrayList<>();
@@ -40,7 +40,8 @@ public class Recurso {
 	private TipoFormulario tipoFormulario;
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = SolicitudRecurso.class, mappedBy = "recurso")
 	private Collection<SolicitudRecurso> solicitudes = new ArrayList<>();
-	private Boolean isDatosEspecificosSolicitud;
+	private boolean conDatosEspecificosSolicitud;
+	@Lob	
 	private String datosEspecificosSolicitud = "Ejemplo: \nHorario: 08:00h a 21:00h \nMedios CIS: medios propios de la UCO  \nSIMACET: se solicita el nodo del CENAD "
 			+ "\nPOC CIS: CAP. XXX \nObservaciones Particulares:";
 
@@ -119,12 +120,12 @@ public class Recurso {
 		this.solicitudes = solicitudes;
 	}
 
-	public Boolean getIsDatosEspecificosSolicitud() {
-		return isDatosEspecificosSolicitud;
+	public boolean isConDatosEspecificosSolicitud() {
+		return conDatosEspecificosSolicitud;
 	}
 
-	public void setIsDatosEspecificosSolicitud(Boolean isDatosEspecificosSolicitud) {
-		this.isDatosEspecificosSolicitud = isDatosEspecificosSolicitud;
+	public void setConDatosEspecificosSolicitud(boolean conDatosEspecificosSolicitud) {
+		this.conDatosEspecificosSolicitud = conDatosEspecificosSolicitud;
 	}
 
 	public String getDatosEspecificosSolicitud() {

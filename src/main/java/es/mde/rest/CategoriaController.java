@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import es.mde.entidades.Categoria;
 import es.mde.entidades.Recurso;
 import es.mde.repositorios.CategoriaDAO;
@@ -20,7 +19,6 @@ import es.mde.repositorios.CategoriaDAO;
 @RequestMapping(path = "/categorias")
 @Configuration
 public class CategoriaController {
-
 	private CategoriaDAO categoriaDAO;
 
 	public CategoriaController(CategoriaDAO categoriaDAO) {
@@ -55,5 +53,4 @@ public class CategoriaController {
 
 		return assembler.toCollectionModel(categorias);
 	}
-	
 }

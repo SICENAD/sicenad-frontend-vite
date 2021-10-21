@@ -1,7 +1,7 @@
 <!-- muestra el modal con el formulario donde ver/editar la unidad -->
 <form #unidadForm="ngForm">
   <div class="form-row py-2">
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-6 col-md-12">
       <label class="titulo"><b>NOMBRE<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="unidad.nombre" placeholder="Nombre de la unidad"
         name="nombre" required #nombre="ngModel" [ngClass]="{ 'is-invalid': nombre.invalid && (nombre.dirty || nombre.touched),
@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-6 col-md-12">
       <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
       <input type="tel" class="form-control letra" [(ngModel)]="unidad.tfno"
         placeholder="Teléfono de contacto de la unidad" name="telefono" required minlength="9" maxlength="9"
@@ -27,19 +27,8 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-12">
-      <label class="titulo"><b>POC<sup class="text-danger">*</sup></b></label>
-      <input type="text" class="form-control letra" [(ngModel)]="unidad.poc" placeholder="POC de la unidad"
-        name="poc" required #poc="ngModel" [ngClass]="{ 'is-invalid': poc.invalid && (poc.dirty || poc.touched),
-      'is-valid': !poc.invalid }" />
-      <div class="text-danger" *ngIf="poc.invalid && (poc.dirty || poc.touched)">
-        <div *ngIf="poc.errors.required">
-          El POC de la unidad es obligatorio
-        </div>
-      </div>
-    </div>
-    <div class="col-lg-4 col-md-12 pt-3">
-      <label class="titulo"><b>EMAIL</b></label>
+    <div class="col-lg-12 col-md-12 pt-3">
+      <label class="titulo"><b>EMAIL<sup class="text-danger">*</sup></b></label>
       <input type="email" class="form-control letra" [(ngModel)]="unidad.email" placeholder="Email de contacto de la unidad" name="email"
         #email="ngModel" [ngClass]="{ 'is-invalid': email.invalid && (email.dirty || email.touched),
         'is-valid': !email.invalid }"/>
@@ -52,7 +41,18 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-8 col-md-12 pt-3">
+    <div class="col-lg-12 col-md-12 pt-3">
+      <label class="titulo"><b>POC<sup class="text-danger">*</sup></b></label>
+      <input type="text" class="form-control letra" [(ngModel)]="unidad.poc" placeholder="POC de la unidad"
+        name="poc" required #poc="ngModel" [ngClass]="{ 'is-invalid': poc.invalid && (poc.dirty || poc.touched),
+      'is-valid': !poc.invalid }" />
+      <div class="text-danger" *ngIf="poc.invalid && (poc.dirty || poc.touched)">
+        <div *ngIf="poc.errors.required">
+          El POC de la unidad es obligatorio
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12 col-md-12 pt-3">
       <label class="titulo"><b>DIRECCIÓN<sup class="text-danger">*</sup></b></label>
       <input type="text" class="form-control letra" [(ngModel)]="unidad.direccion" placeholder="Dirección de la unidad" name="direccion"
         required #direccion="ngModel" [ngClass]="{ 'is-invalid': direccion.invalid && (direccion.dirty || direccion.touched),

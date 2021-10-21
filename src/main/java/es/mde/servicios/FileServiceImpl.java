@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileServiceImpl implements FileServiceAPI {
-
 	private static String rutaEscudos = "archivos/escudos";
 	private static String rutaDocRecursos = "archivos/docRecursos";
 	private static String rutaDocSolicitudes = "archivos/docSolicitudes";
@@ -173,6 +171,4 @@ public class FileServiceImpl implements FileServiceAPI {
 		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
 		return Files.walk(docSolicitudesFolder2, 1).filter(path -> !path.equals(docSolicitudesFolder2)).map(docSolicitudesFolder2::relativize);
 	}
-
-
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { Fichero } from 'src/app/recursos/models/fichero';
 import { environment } from 'src/environments/environment';
 import { CategoriaFichero } from '../models/categoriaFichero';
 import { CategoriaFicheroImpl } from '../models/categoriaFichero-impl';

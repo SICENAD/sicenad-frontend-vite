@@ -3,16 +3,13 @@ package es.mde.servicios;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Stream;
-
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileServiceAPI {
-	
 	// *******************************
 	// Métodos para tratar los escudos
 	// *******************************
-	
 	public void saveEscudo(MultipartFile file) throws Exception;
 	
 	public void borrarEscudo(String name) throws Exception;
@@ -58,5 +55,4 @@ public interface FileServiceAPI {
 	public void saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception;
 	
 	public Stream<Path> loadAllDocSolicitudes(String id) throws Exception;
-
 }

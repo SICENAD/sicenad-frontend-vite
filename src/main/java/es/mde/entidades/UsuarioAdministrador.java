@@ -6,9 +6,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-
 import org.springframework.stereotype.Component;
-
 import es.mde.repositorios.UsuarioAdministradorListener;
 
 @Entity
@@ -29,6 +27,4 @@ public class UsuarioAdministrador extends Usuario {
 	public void setCenad(Cenad cenad) {
 		this.cenad = cenad;
 	}
-	
-
 }

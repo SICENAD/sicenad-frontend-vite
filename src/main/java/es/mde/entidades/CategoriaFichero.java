@@ -2,26 +2,24 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-//@EntityListeners(CategoriaFicheroListener.class)
 @Table(name = "CATEGORIAS_FICHERO")
 public class CategoriaFichero {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
-	private String nombre; //Imagen, normativa, instrucciones, etc
+	private String nombre; //Imagen, normativa, instrucciones, se definiran muchas en el front.
 	private String descripcion;
 	private int tipo; //0 para imagenes y 1 para otros archivos
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Fichero.class, mappedBy = "categoriaFichero")

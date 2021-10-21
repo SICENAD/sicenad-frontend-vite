@@ -17,7 +17,6 @@ import javax.persistence.Table;
 @DiscriminatorColumn(name = "TIPO")
 @DiscriminatorValue("U")
 public abstract class Usuario {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique=true)
@@ -80,7 +79,4 @@ public abstract class Usuario {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-
-	
 }
-

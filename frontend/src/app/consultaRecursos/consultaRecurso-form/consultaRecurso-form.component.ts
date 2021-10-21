@@ -39,6 +39,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
   pathRelativo: string = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
   selectedFiles: FileList;
   currentFile: File;
+  sizeMaxDocRecurso: string = environment.sizeMaxDocRecurso;
   //variables para el modal de imagen
   showModal: boolean;
   imagenModal: Fichero = new FicheroImpl();

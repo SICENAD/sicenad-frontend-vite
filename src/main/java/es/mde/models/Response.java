@@ -1,7 +1,6 @@
 package es.mde.models;
 
 public class Response {
-	
 	private String message;
 
 	public String getMessage() {
@@ -16,5 +15,4 @@ public class Response {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-
 }

@@ -2,7 +2,6 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,14 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import es.mde.repositorios.CategoriaListener;
 
 @Entity
 @EntityListeners(CategoriaListener.class)
 @Table(name="CATEGORIAS")
 public class Categoria {
-
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true)
@@ -112,6 +109,4 @@ public class Categoria {
 	public String toString() {
 		return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
 	}
-	
 }
-

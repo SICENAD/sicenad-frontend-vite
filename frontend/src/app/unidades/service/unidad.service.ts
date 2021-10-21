@@ -2,8 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Recurso } from 'src/app/recursos/models/recurso';
-import { RecursoImpl } from 'src/app/recursos/models/recurso-impl';
 import { UsuarioNormal } from 'src/app/superadministrador/models/usuarioNormal';
 import { UsuarioNormalImpl } from 'src/app/superadministrador/models/usuarioNormal-impl';
 import { environment } from 'src/environments/environment';

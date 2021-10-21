@@ -7,15 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
-
 import es.mde.rest.ConfiguracionRest;
-
 
 @SpringBootApplication
 @ImportResource({ "classpath:config/jpa-config.xml" })
 @Import({ ConfiguracionPorJava.class, ConfiguracionRest.class })
 public class SicenadApplication {
-
 	private static final Logger log = LoggerFactory.getLogger(SicenadApplication.class);
 	
 	public static void main(String[] args) {
@@ -23,7 +20,5 @@ public class SicenadApplication {
 		
 		System.err.println("Está funcionando la aplicación SICENAD");
 		log.debug("Está funcionando la aplicación SICENAD");
-
 	}
-
 }

@@ -2,13 +2,12 @@ package es.mde.rest;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,16 +16,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-
 import es.mde.models.File;
 import es.mde.models.Response;
 import es.mde.servicios.FileServiceAPI;
 
 @RestController
-//@CrossOrigin("*")
 @RequestMapping("/api/files")
 public class FileController {
+	private static long sizeLimiteEscudo = 5 * 1024 * 1024; //5MB
+	private static long sizeLimiteDocRecurso = 6 * 1024 * 1024; //6MB
+	private static long sizeLimiteDocSolicitud = 7 * 1024 * 1024; //7MB
+	
+	@Autowired
+	public FileController(@Qualifier("sizeLimiteEscudo") long sizeLimiteEscudo, @Qualifier("sizeLimiteDocRecurso") long sizeLimiteDocRecurso, @Qualifier("sizeLimiteDocSolicitud") long sizeLimiteDocSolicitud) {
+		FileController.sizeLimiteEscudo = sizeLimiteEscudo;
+		FileController.sizeLimiteDocRecurso = sizeLimiteDocRecurso;
+		FileController.sizeLimiteDocSolicitud = sizeLimiteDocSolicitud;
+	}
 
+	
 	@Autowired
 	private FileServiceAPI fileServiceAPI;
 
@@ -34,18 +42,17 @@ public class FileController {
 	// Métodos para subir los escudos
 	// ******************************
 	
-//	@PostMapping("/subirEscudos")
-//	public ResponseEntity<Response> uploadFileEscudos(@RequestParam("files") List<MultipartFile> files) throws Exception {
-//		fileServiceAPI.save(files);
-//		return ResponseEntity.status(HttpStatus.OK)
-//				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
-//	}
-	
 	@PostMapping("/subirEscudo")
 	public ResponseEntity<Response> uploadFileEscudo(@RequestParam("file") MultipartFile file) throws Exception {
+		if (file.getSize() > sizeLimiteEscudo) {
+			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+					.body(new Response("El archivo es demasiado pesado"));
+		} else {
+		
 		fileServiceAPI.saveEscudo(file);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("El archivo fue cargado correctamente al servidor"));
+		}
 	}
 	
 	@GetMapping("/borrarEscudo/{filename:.+}")
@@ -81,16 +88,30 @@ public class FileController {
 	
 	@PostMapping("/subirDocRecursos/{id}")
 	public ResponseEntity<Response> uploadFileDocRecursos(@RequestParam("files") List<MultipartFile> files, @PathVariable("id") String id) throws Exception {
-		fileServiceAPI.saveDocRecursos(files, id);
-		return ResponseEntity.status(HttpStatus.OK)
+		long filesSize = 0;
+		for (MultipartFile multipartFile : files) {
+			filesSize += multipartFile.getSize();
+		}
+		if (filesSize > sizeLimiteDocRecurso) {
+			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+					.body(new Response("Los archivos pesan demasiado"));
+		} else {
+			fileServiceAPI.saveDocRecursos(files, id);
+			return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
+		}
 	}
 	
 	@PostMapping("/subirDocRecurso/{id}")
 	public ResponseEntity<Response> uploadFileDocRecurso(@RequestParam("file") MultipartFile file, @PathVariable("id") String id) throws Exception {
-		fileServiceAPI.saveDocRecurso(file, id);
-		return ResponseEntity.status(HttpStatus.OK)
+		if (file.getSize() > sizeLimiteDocRecurso) {
+			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+					.body(new Response("El archivo es demasiado pesado"));
+		} else {
+			fileServiceAPI.saveDocRecurso(file, id);
+			return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("El archivo fue cargado correctamente al servidor"));
+		}
 	}
 
 	@GetMapping("/borrarDocRecurso/{id}/{filename:.+}")
@@ -129,10 +150,8 @@ public class FileController {
 		List<File> files = fileServiceAPI.loadAllDocRecursos(id).map(path -> {
 			String filename = path.getFileName().toString();
 			String url = MvcUriComponentsBuilder.fromMethodName(FileController.class, "getFileDocRecurso", path.getFileName().toString()).build().toString();
-			
 			return new File(filename, url);
 		}).collect(Collectors.toList());
-		
 		return ResponseEntity.status(HttpStatus.OK).body(files);
 	}
 	
@@ -142,16 +161,30 @@ public class FileController {
 
 	@PostMapping("/subirDocSolicitudes/{id}")
 	public ResponseEntity<Response> uploadFileDocSolicitudes(@RequestParam("files") List<MultipartFile> files, @PathVariable("id") String id) throws Exception {
+		long filesSize = 0;
+		for (MultipartFile multipartFile : files) {
+			filesSize += multipartFile.getSize();
+		}
+		if (filesSize > sizeLimiteDocSolicitud) {
+			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+					.body(new Response("Los archivos pesan demasiado"));
+		} else {
 		fileServiceAPI.saveDocSolicitudes(files, id);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
+		}
 	}
 	
 	@PostMapping("/subirDocSolicitud/{id}")
 	public ResponseEntity<Response> uploadFileDocSolicitud(@RequestParam("file") MultipartFile file, @PathVariable("id") String id) throws Exception {
-		fileServiceAPI.saveDocSolicitud(file, id);
-		return ResponseEntity.status(HttpStatus.OK)
+		if (file.getSize() > sizeLimiteDocSolicitud) {
+			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+					.body(new Response("El archivo es demasiado pesado"));
+		} else {
+			fileServiceAPI.saveDocSolicitud(file, id);
+			return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("El archivo fue cargado correctamente al servidor"));
+		}
 	}
 
 	@GetMapping("/borrarDocSolicitud/{id}/{filename:.+}")
@@ -163,7 +196,6 @@ public class FileController {
 	
 	@GetMapping("/borrarCarpetaDocSolicitud/{id}")
 	public ResponseEntity<Response> borrarCarpetaDocSolicitud(@PathVariable("id") String id) throws Exception {
-		
 		fileServiceAPI.borrarCarpetaDocSolicitud(id);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(new Response("La carpeta de la solicitud fue borrada correctamente del servidor"));
@@ -190,11 +222,8 @@ public class FileController {
 		List<File> files = fileServiceAPI.loadAllDocSolicitudes(id).map(path -> {
 			String filename = path.getFileName().toString();
 			String url = MvcUriComponentsBuilder.fromMethodName(FileController.class, "getFileDocSolicitud", path.getFileName().toString()).build().toString();
-			
 			return new File(filename, url);
 		}).collect(Collectors.toList());
-		
 		return ResponseEntity.status(HttpStatus.OK).body(files);
 	}
-
 }

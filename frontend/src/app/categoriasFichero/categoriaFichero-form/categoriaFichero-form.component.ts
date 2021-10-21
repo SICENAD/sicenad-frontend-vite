@@ -24,6 +24,8 @@ export class CategoriaFicheroFormComponent implements OnInit {
 
   //metodo para crear una nueva categoria de fichero y volver al listado de categorias de fichero
   crearCategoriaFichero(): void {
+    console.log(this.categoriaFichero.descripcion);
+
     this.categoriaFicheroService.create(this.categoriaFichero).subscribe((response) => {
       console.log(`He creado la Categoría de Fichero ${this.categoriaFichero.nombre}`);
       this.router.navigate(['/categoriasFichero']);
