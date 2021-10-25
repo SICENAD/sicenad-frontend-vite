@@ -5,7 +5,6 @@
 ## INSTRUCCIONES
 
 ### PREPRODUCCIÓN
-- Haga click [aquí](https://sicenad.netlify.app/) para acceder al primer prototipo de la aplicación. Debido a que en los siguientes prototipos se utilizará información sensible ya no se publicarán en internet. 
 - Puede consultar la documentación accediendo a la [WIKI](https://git.institutomilitar.com/sicenad/sicenad/wikis/home)
 <!-- - Para documentacion más especifica del FRONT, se puede consultar en la siguiente [URL](https://sicenad.github.io/sicenad-documentation/).-->
 
