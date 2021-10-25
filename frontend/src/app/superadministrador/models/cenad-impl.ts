@@ -1,5 +1,5 @@
+import { UsuarioAdministrador } from "src/app/usuarios/models/usuarioAdministrador";
 import { Cenad } from "./cenad";
-import { UsuarioAdministrador } from "./usuarioAdministrador";
 
 export class CenadImpl implements Cenad {
   idCenad: string;

@@ -15,6 +15,10 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./consultaRecurso-form.component.css']
 })
 export class ConsultaRecursoFormComponent implements OnInit {
+  //variable que varia la vista gestor y la vista usuario
+  isGestor: boolean = true;
+  //variable para ver el rol que se esta usando. se borrara cuando haya logging
+  rol: string = this.isGestor ? 'Normal' : 'Gestor';
   //variable para el icono "volver"
   faVolver =faArrowAltCircleLeft;
   //variable con la que rescatamos de la barra de navegacion el idCenad
@@ -23,12 +27,10 @@ export class ConsultaRecursoFormComponent implements OnInit {
   idRecurso: string = '';
   //variable sobre la que se carga el recurso
   recurso: Recurso = new RecursoImpl();
-  //variable que varia la vista gestor y la vista usuario
-  isGestor: boolean = true;
   //variable que da visibilidad al formulario de crear fichero
   nuevoFichero: boolean = false;
   //variable sobre la que crearemos un fichero nuevo
-  fichero: Fichero = new FicheroImpl();
+  fichero: FicheroImpl = new FicheroImpl();
   //variable con todos los ficheros del recurso
   ficheros: Fichero[];
   //variable para dar al gestor la opcion de elegir que categoria de fichero asignar a cada fichero
@@ -48,6 +50,12 @@ export class ConsultaRecursoFormComponent implements OnInit {
     private recursoService: RecursoService,
     private router: Router, private activateRoute: ActivatedRoute) { }
 
+  //metodo para q el boton cambie de rol. se borrara cuando haya logging
+  cambiaRol() {
+    this.isGestor = this.isGestor ? false : true;
+    this.rol = this.isGestor ? 'Normal' : 'Gestor';
+  }
+
   ngOnInit() {
     //recupera de la BD todas las categorias de fichero y las guarda en la variable para poder seleccionarlas si se añade un fichero nuevo
     this.recursoService.getCategoriasFichero().subscribe((response) => this.categoriasFichero = this.recursoService.extraerCategoriasFichero(response));
@@ -55,7 +63,10 @@ export class ConsultaRecursoFormComponent implements OnInit {
     this.idRecurso = this.activateRoute.snapshot.params['idRecurso'];
     //se recuperan de la BD las categorias de fichero de los ficheros del recurso y se asignan a la variable. esto posibilita filtrar que apartados tendra la vista de usuario
     this.recursoService.getCategoriasFicheroDeRecurso(this.idRecurso).subscribe((response) => {
-      this.categoriasFicheroDeRecurso = this.recursoService.extraerCategoriasFichero(response);});
+      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun fichero
+        this.categoriasFicheroDeRecurso = this.recursoService.extraerCategoriasFichero(response);
+      }});
+
     //carga el recurso cuyo id hemos recuperado
     this.cargarRecurso(this.idRecurso);
     //se recupera el id del cenad de la barra de navegacion
@@ -94,6 +105,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
     //cierra el formulario de crear fichero y resetea la variable
     this.nuevoFichero = false;
     this.fichero = new FicheroImpl();
+    this.fichero.recurso = `${environment.hostSicenad}recursos/${this.recurso.idRecurso}`;    
   }
 
   //metodo para eliminar un fichero
@@ -137,6 +149,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
 
   //metodo para modificar el recurso y volver al listado de los recursos de ese cenad
   actualizar(): void {
+    this.recurso.categoria = this.recurso.categoria.url;
     this.recursoService.update(this.recurso).subscribe(
       (recurso) => {
         console.log(`He actualizado el recurso ${this.recurso.nombre}`);
@@ -146,7 +159,9 @@ export class ConsultaRecursoFormComponent implements OnInit {
   //metodos para filtrar en la vista de usuario no gestor
   //metodo que desprecia las categorias de fichero de las cuales el recurso no tiene ningun fichero
   filtrarPorCategoriaFichero(ficheros: Fichero[], categoriaFichero: CategoriaFichero): Fichero[] {
-    return ficheros.filter(f => f.categoriaFichero.idCategoriaFichero === categoriaFichero.idCategoriaFichero);
+    if (ficheros) {
+      return ficheros.filter(f => f.categoriaFichero && f.categoriaFichero.idCategoriaFichero === categoriaFichero.idCategoriaFichero);
+    }
   }
 
   //metodo que selecciona solo las categorias de fichero que son imagenes. implicara que sus ficheros se muestren como imagen

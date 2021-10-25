@@ -2,16 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faEdge } from '@fortawesome/free-brands-svg-icons';
 import { faQuestionCircle, faSnowflake } from '@fortawesome/free-regular-svg-icons';
-import { faBars, faBomb, faBook, faBusinessTime, faCalendarAlt, faCloudSun, faEdit, faFire, faFolderOpen, faFolderPlus, faGlobe, faHome, faLink, faMap, faSearchLocation, faTree, faUserCog, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBomb, faBook, faBusinessTime, faCalendarAlt, faCloudSun, faEdit, faFire, faFolderOpen, faFolderPlus, faGlobe, faHome, faLink, faMap, faSearchLocation, faSitemap, faTree, faUserCog, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { PrincipalService } from 'src/app/principal-cenad/service/principal.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
-import { UsuarioAdministrador } from 'src/app/superadministrador/models/usuarioAdministrador';
-import { UsuarioAdministradorImpl } from 'src/app/superadministrador/models/usuarioAdministrador-impl';
-import { UsuarioGestor } from 'src/app/superadministrador/models/usuarioGestor';
-import { UsuarioGestorImpl } from 'src/app/superadministrador/models/usuarioGestor-impl';
-import { UsuarioNormal } from 'src/app/superadministrador/models/usuarioNormal';
-import { UsuarioNormalImpl } from 'src/app/superadministrador/models/usuarioNormal-impl';
+import { UsuarioAdministrador } from 'src/app/usuarios/models/usuarioAdministrador';
+import { UsuarioAdministradorImpl } from 'src/app/usuarios/models/usuarioAdministrador-impl';
+import { UsuarioGestor } from 'src/app/usuarios/models/usuarioGestor';
+import { UsuarioGestorImpl } from 'src/app/usuarios/models/usuarioGestor-impl';
+import { UsuarioNormal } from 'src/app/usuarios/models/usuarioNormal';
+import { UsuarioNormalImpl } from 'src/app/usuarios/models/usuarioNormal-impl';
 
 @Component({
   selector: 'app-header-principal',
@@ -42,6 +42,7 @@ export class HeaderPrincipalComponent implements OnInit {
   faUsuarios = faUsers;
   faCategorias = faTree;
   faPeticiones = faEdit;
+  faUnidades =faSitemap;
   //variable para mostrar el nombre del cenad
   nombreCenad: string = "";
   //variable que guarda el cenad seleccionado
@@ -55,7 +56,7 @@ export class HeaderPrincipalComponent implements OnInit {
   //variable que guarda todos los cenads
   cenads: Cenad[] = [];
   // variables estáticas para logging...
-  static isAutenticado: boolean = false;
+  isAutenticado: boolean = false;
   static userAdminLogeado: UsuarioAdministrador = new UsuarioAdministradorImpl();
   static userGestorLogeado: UsuarioGestor = new UsuarioGestorImpl();
   static userNormalLogeado: UsuarioNormal = new UsuarioNormalImpl();

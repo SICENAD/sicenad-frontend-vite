@@ -80,8 +80,10 @@
                     <fa-icon class='mr-2' [icon]="faRecurso"></fa-icon>Recursos</a>
                   <a class="dropdown-item" [routerLink]="['categorias', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon class='mr-2' [icon]="faCategorias"></fa-icon>Categorías</a>
-                  <a class="dropdown-item" routerLink="#" routerLinkActive="router-link-active">
+                  <a class="dropdown-item" [routerLink]="['usuarios', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon class='mr-2' [icon]="faUsuarios"></fa-icon>Usuarios</a>
+                  <a class="dropdown-item" [routerLink]="['unidades', idCenad]" routerLinkActive="router-link-active">
+                    <fa-icon class='mr-2' [icon]="faUnidades"></fa-icon>Unidades</a>
                 </div>
               </li>
             </ul>

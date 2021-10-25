@@ -1,6 +1,6 @@
 import { Categoria } from "src/app/categorias/models/categoria";
-import { UsuarioGestor } from "src/app/superadministrador/models/usuarioGestor";
 import { TipoFormulario } from "src/app/tiposFormulario/models/tipoFormulario";
+import { UsuarioGestor } from "src/app/usuarios/models/usuarioGestor";
 import { Fichero } from "./fichero";
 
 export interface Recurso {
@@ -12,5 +12,7 @@ export interface Recurso {
   usuarioGestor: UsuarioGestor | any;
   categoria: Categoria | any;
   tipoFormulario: TipoFormulario | any;
+  conDatosEspecificosSolicitud: boolean;
+  datosEspecificosSolicitud: string;
   url: string;
 }

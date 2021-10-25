@@ -1,7 +1,7 @@
 <!-- muestra la tabla de las unidades -->
 <div class="container-fluid">
   <div class="row ml-4 mb-0 pl-3">
-    <a class="nav-link text-center volver" routerLink="/superadministrador" routerLinkActive="router-link-active">
+    <a class="nav-link text-center volver" [routerLink]="volver" routerLinkActive="router-link-active">
       <fa-icon class="fa-2x mr-2" [icon]="faVolver"></fa-icon><strong>Volver</strong></a>
   </div>
   <div class="row mt-4">
@@ -9,13 +9,13 @@
       <h3 class="text-center titulo1"><u>GESTIÓN DE UNIDADES</u> </h3>
     </div>
     <div class="col-3 justify-content-end">
-      <button class="btn text-white" routerLink="/unidades/formulario">Nueva Unidad</button>
+      <button class="btn text-white" [routerLink]="nuevaUnidad">Nueva Unidad</button>
     </div>
   </div>
   <hr class='w-100'>
   <div class="row">
     <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>NOMBRE</b></div>
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo"><b>TELÉFONO</b></div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo text-center"><b>TELÉFONO</b></div>
     <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo"><b>POC</b></div>
   </div>
   <div *ngFor="let unidad of unidades">

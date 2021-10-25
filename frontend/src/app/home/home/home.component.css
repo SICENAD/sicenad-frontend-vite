@@ -10,13 +10,13 @@ h2, div.resultado {
   color: #84a98c;
 }
 
-#mapa {
-	background: url("../../../assets/spain.png") no-repeat 0px 0px; 
+/* #mapa {
+	background: url("/assets/spain.png") no-repeat 0px 0px; 
   width: 781px; 
   height: 713px;
   zoom: 0.8; 
   transform: scale(.8);
-}
+} */
 
 div.interactivo {
   display: block;

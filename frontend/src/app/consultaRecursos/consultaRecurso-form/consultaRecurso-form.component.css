@@ -41,3 +41,7 @@ hr {
 div.titulos {
   background-color: #DAD7CD;
 }
+
+figure { 
+  display: inline-block;
+}

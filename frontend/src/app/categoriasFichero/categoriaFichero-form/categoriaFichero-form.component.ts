@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
-import { CategoriaFichero } from '../models/categoriaFichero';
 import { CategoriaFicheroImpl } from '../models/categoriaFichero-impl';
 import { CategoriaFicheroService } from '../service/categoriaFichero.service';
 

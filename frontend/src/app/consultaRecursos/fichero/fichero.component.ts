@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Fichero } from 'src/app/recursos/models/fichero';
 import { FicheroImpl } from 'src/app/recursos/models/fichero-impl';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
 import { environment } from 'src/environments/environment';
@@ -12,7 +11,7 @@ import { environment } from 'src/environments/environment';
 })
 export class FicheroComponent implements OnInit {
   //variable que trae el fichero del otro componente
-  @Input() fichero: Fichero;
+  @Input() fichero: FicheroImpl;
   //variable que emite un evento al otro componente para eliminar el fichero
   @Output() ficheroEliminar = new EventEmitter<FicheroImpl>();
   //variable para construir la url de descarga del archivo del fichero

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { UsuarioNormal } from 'src/app/superadministrador/models/usuarioNormal';
-import { UsuarioNormalImpl } from 'src/app/superadministrador/models/usuarioNormal-impl';
+import { UsuarioNormal } from 'src/app/usuarios/models/usuarioNormal';
+import { UsuarioNormalImpl } from 'src/app/usuarios/models/usuarioNormal-impl';
 import { environment } from 'src/environments/environment';
 import { Unidad } from '../models/unidad';
 import { UnidadImpl } from '../models/unidad-impl';
@@ -113,6 +113,7 @@ export class UnidadService {
     usuarioNormal.descripcion = recursoApi.descripcion;
     usuarioNormal.url = recursoApi._links.self.href;
     usuarioNormal.idUsuario = usuarioNormal.getId(usuarioNormal.url);
+    usuarioNormal.tipo ='normal';
     return usuarioNormal;
   }
 }

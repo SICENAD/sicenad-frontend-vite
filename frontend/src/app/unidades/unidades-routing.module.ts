@@ -12,6 +12,10 @@ const routes: Routes = [
     path: 'formulario',
     component: UnidadFormComponent
   },
+  {//para crear una nueva unidad siendo un cenad
+    path: 'formulario/:idCenad',
+    component: UnidadFormComponent
+  },
 ];
 
 @NgModule({

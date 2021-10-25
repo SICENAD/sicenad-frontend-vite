@@ -11,4 +11,7 @@ import es.mde.entidades.Cenad;
 public interface CenadDAO extends JpaRepository<Cenad, Long>, CenadDAOCustom {
 	@RestResource(path="nombre")
 	List<Cenad> findByNombreIgnoreCaseContaining(@Param("nombre") String txt);
+	
+	@RestResource(path="descripcion")
+	List<Cenad> findByDescripcionIgnoreCaseContaining(@Param("descripcion") String txt);
 }

@@ -107,6 +107,8 @@ export class TipoFormularioService {
     recurso.nombre = recursoApi.nombre;
     recurso.descripcion = recursoApi.descripcion;
     recurso.otros = recursoApi.otros;
+    recurso.conDatosEspecificosSolicitud = recursoApi.conDatosEspecificosSolicitud;
+    recurso.datosEspecificosSolicitud = recursoApi.datosEspecificosSolicitud;
     recurso.url = recursoApi._links.self.href;
     recurso.idRecurso = recurso.getId(recurso.url);
     return recurso;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { Recurso } from 'src/app/recursos/models/recurso';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';

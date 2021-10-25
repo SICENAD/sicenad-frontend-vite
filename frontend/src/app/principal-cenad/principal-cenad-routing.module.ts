@@ -23,7 +23,15 @@ const routes: Routes = [
       {//listado de recursos de cada cenad (gestor/usuario)
         path: 'consultaRecursos/:idCenad',
         loadChildren: () => import('../consultaRecursos/consultaRecursos.module').then(m => m.ConsultaRecursosModule)
-      }
+      },
+      {//listado de gestores/usuarios normal de cada cenad (administrador)
+        path: 'usuarios/:idCenad',
+        loadChildren: () => import('../usuarios/usuarios.module').then(m => m.UsuariosModule)
+      },
+      {//listado de unidades
+        path: 'unidades/:idCenad',
+        loadChildren: () => import('../unidades/unidades.module').then(m => m.UnidadesModule)
+      },
     ]
   }
 ];

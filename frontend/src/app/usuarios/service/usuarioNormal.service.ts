@@ -44,6 +44,7 @@ export class UsuarioNormalService {
     usuario.idUsuario = usuario.getId(usuario.url);
     this.getUnidad(usuario.idUsuario).subscribe((response) => 
       usuario.unidad= this.mapearUnidad(response)); 
+    usuario.tipo = 'normal';
     return usuario;
   }
 

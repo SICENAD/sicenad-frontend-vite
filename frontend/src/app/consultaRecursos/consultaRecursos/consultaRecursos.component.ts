@@ -29,10 +29,15 @@ export class ConsultaRecursosComponent implements OnInit {
     //rescatamos el id del Cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     //rescatamos de la BD los recursos de ese cenad
-    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
+    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => { 
+      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
+        this.recursos = this.recursoService.extraerRecursos(response);
+      }});
     //asignamos a la variable categorias filtradas las categorias padre del cenad, para comenzar a filtrar
-    this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
-      this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
+    this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => { 
+      if (response._embedded) {//con este condicional elimino el error de consola si no hay ninguna categoria padre
+        this.categoriasFiltradas = this.recursoService.extraerCategorias(response);
+      }});
   }
 
   //metodo que filtra por la categoria seleccionada y muestra los recursos de la misma o sus hijas...

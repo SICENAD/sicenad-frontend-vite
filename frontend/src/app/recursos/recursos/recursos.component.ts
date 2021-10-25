@@ -31,8 +31,11 @@ export class RecursosComponent implements OnInit {
   ngOnInit(): void {
     //captura el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    //recupera de la BD los recursos de ese cenad
-    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
+    //rescatamos de la BD los recursos de ese cenad
+    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => { 
+      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
+        this.recursos = this.recursoService.extraerRecursos(response);
+      }});
     //recupera de la BD las categorias padre de ese cenad, para comenzar el filtrado
     this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
       this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
@@ -67,11 +70,15 @@ export class RecursosComponent implements OnInit {
     setTimeout(() => {
       //si la categoria seleccionada no tiene subcategorias muestra los recursos de esa categoria
       if (this.categoriasFiltradas.length === 0) {
-        this.recursoService.getRecursosDeCategoria(this.categoriaSeleccionada).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
-      }
-      else {//muestra los recursos de sus subcategorias, esten al nivel que esten
-        this.recursoService.getRecursosDeSubcategorias(this.categoriaSeleccionada).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
-      }
+    //rescatamos de la BD los recursos de ese cenad de esa categoria seleccionada
+        this.recursoService.getRecursosDeCategoria(this.categoriaSeleccionada).subscribe((response) => { 
+          if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
+            this.recursos = this.recursoService.extraerRecursos(response);
+          }
+        });
+      } else {//muestra los recursos de sus subcategorias, esten al nivel que esten
+              this.recursoService.getRecursosDeSubcategorias(this.categoriaSeleccionada).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
+          }
     }, 500);
   }
 
@@ -80,9 +87,11 @@ export class RecursosComponent implements OnInit {
     //rescata de la BD las categorias padre del cenad
     this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
       this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
-    //rescata de la BD los recursos del cenad
-    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
-    //resetea la categoria seleccionada
+    //rescatamos de la BD los recursos de ese cenad
+    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => { 
+      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
+        this.recursos = this.recursoService.extraerRecursos(response);
+      }});    //resetea la categoria seleccionada
     this.categoriaSeleccionada = null;
   }
 }

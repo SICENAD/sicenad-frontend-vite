@@ -5,8 +5,12 @@
       <fa-icon class="fa-2x mr-2" [icon]="faVolver"></fa-icon><strong>Volver</strong>
     </a> 
   </div>
-  <div class="row justify-content-center align-items-start mt-0 pt-0 ">
-    <h3 class="titulo1">{{recurso.nombre | uppercase}}</h3>
+  <div class="row  align-items-start mt-0 pt-0 ">
+        <!-- este boton se borrara cuando haya logging -->
+    <div class="col-3">
+      <button class="btn text-white" (click)='cambiaRol()'>Cambiar a Vista {{rol}}</button>
+    </div>    
+    <h3 class="titulo1 col-9">{{recurso.nombre | uppercase}}</h3>
     <hr class="w-100 mt-0 mb-3" />
   </div>
   <!--esta sera la vista del gestor-->
@@ -26,6 +30,21 @@
       <div class="col-lg-3 col-md-12" *ngIf='recurso.categoria'>
         <label class="titulo pr-2"><b>CATEGORÍA:</b></label><br>
         <input type="text" class="form-control letra" name="categoria" [placeholder]='recurso.categoria.nombre' readonly />
+      </div>
+      <div class="col-lg-3 col-md-12">
+        <label class="titulo pr-2"><b>DATOS ESPECIFICOS (SOLICITUD):</b></label><br>
+        <input type="checkbox" class="form-control" name="conDatosEspecificosSolicitud" [(ngModel)]='recurso.conDatosEspecificosSolicitud'/>
+      </div>
+      <div class="col-lg-12 col-md-12 pt-3" *ngIf='recurso.conDatosEspecificosSolicitud'>
+        <label class="titulo"><b>DATOS ESPECÍFICOS DE LA SOLICITUD<sup class="text-danger">*</sup></b></label>
+        <textarea class="form-control letra" [(ngModel)]="recurso.datosEspecificosSolicitud" placeholder="Datos específicos de la solicitud del recurso"
+          name="datosEspecificosSolicitud" required #datosEspecificosSolicitud="ngModel" [ngClass]="{ 'is-invalid': datosEspecificosSolicitud.invalid && (datosEspecificosSolicitud.dirty || datosEspecificosSolicitud.touched),
+          'is-valid': !datosEspecificosSolicitud.invalid }" rows="5" cols="50"></textarea>
+        <div class="text-danger" *ngIf="datosEspecificosSolicitud.invalid && (datosEspecificosSolicitud.dirty || datosEspecificosSolicitud.touched)">
+          <div *ngIf="datosEspecificosSolicitud.errors.required">
+            La descripción del Recurso es obligatoria
+          </div>
+        </div>
       </div>
       <div class="col-lg-12 col-md-12 pt-3">
         <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
@@ -128,9 +147,11 @@
   <!-- este div recorrera cada categoria de fichero de las q si tiene el recurso, que son imagenes, y solo esas -->
   <div class="titulo" *ngFor='let categoriaFichero of categoriasFicheroImagenes(categoriasFicheroDeRecurso)'> <h4><u>{{categoriaFichero.nombre | uppercase}}</u></h4>
     <!-- este div recorrera cada fichero de esa categoria de fichero, -->
-    <a  (click)='show(imagen)' *ngFor='let imagen of filtrarPorCategoriaFichero(ficheros, categoriaFichero)' ><img 
-      class="pr-2 pt-2 inline img-fluid" [src]='pathArchivo(imagen.nombreArchivo)' width="150" 
-      [alt]='imagen.nombreArchivo' />
+    <a  (click)='show(imagen)' *ngFor='let imagen of filtrarPorCategoriaFichero(ficheros, categoriaFichero)'>
+      <figure class="pr-4 pt-2 pb-3">
+        <img class="" [src]='pathArchivo(imagen.nombreArchivo)' width="350" [alt]='imagen.nombre' />
+        <figcaption class="text-center pt-2">{{imagen.nombre}}</figcaption>
+      </figure> 
     </a>
   </div>
   <!-- este div recorrera cada categoria de fichero de las q si tiene el recurso, que no son imagenes, y solo esas -->
@@ -141,27 +162,39 @@
     </a>
   </div>
   <div class="titulo">
+    <h4><u>CALENDARIO</u></h4>
+    <a href="/assets/calendario.pdf">
+      <p class="texto href">Calendario del recurso {{recurso.nombre}}</p>
+  </a>  </div>
+  <div class="titulo">
     <h4><u>OTROS</u></h4>
     <p class="texto">{{recurso.otros}}</p>
+  </div>
+  <div class="titulo" *ngIf='recurso.conDatosEspecificosSolicitud'>
+    <h4><u>DATOS ESPECÍFICOS DE LA SOLICITUD</u></h4>
+    <textarea class="texto"  rows="6" cols="60"  readonly>{{recurso.datosEspecificosSolicitud}}</textarea>
   </div>
 </ng-template>
 <!-- modal de las imagenes -->
 <div *ngIf='showModal' [style.display]="showModal ? 'block' : 'none'"   class="modal" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog"  role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="myModalLabel">{{imagenModal.nombre}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         <figure>
-        <img 
-        class="pr-2 pt-2 inline img-fluid" [src]='pathArchivo(imagenModal.nombreArchivo)' width="400" 
-        [alt]='imagenModal.nombre' />
-        <figcaption class="text-center pt-2">{{imagenModal.descripcion}}</figcaption>
-      </figure>   
+          <img 
+            class="pr-2 pt-2 inline img-fluid" [src]='pathArchivo(imagenModal.nombreArchivo)' 
+            [alt]='imagenModal.nombre' />
+          <figcaption class="text-center pt-2">{{imagenModal.descripcion}}</figcaption>
+        </figure>   
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" (click) = "hide()">Close</button>
+        <button type="button" class="btn text-white" data-dismiss="modal" (click)="hide()">Cerrar</button>
       </div>
     </div>
   </div>

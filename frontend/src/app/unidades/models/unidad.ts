@@ -1,4 +1,4 @@
-import { UsuarioNormal } from "src/app/superadministrador/models/usuarioNormal";
+import { UsuarioNormal } from "src/app/usuarios/models/usuarioNormal";
 
 export interface Unidad {
   idUnidad: string;

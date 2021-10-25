@@ -1,4 +1,4 @@
-import { UsuarioAdministrador } from "./usuarioAdministrador";
+import { UsuarioAdministrador } from "src/app/usuarios/models/usuarioAdministrador";
 
 export interface Cenad {
   idCenad: string;

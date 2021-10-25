@@ -27,6 +27,10 @@ const routes: Routes = [
     path: 'unidades',
     loadChildren: () => import('./unidades/unidades.module').then(m => m.UnidadesModule)
   },
+  {//mostrara el modulo de usuarios, si el rol lo permite
+    path: 'usuarios',
+    loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosModule)
+  },
   {
     path: 'not-found',
     component: NotFoundComponent

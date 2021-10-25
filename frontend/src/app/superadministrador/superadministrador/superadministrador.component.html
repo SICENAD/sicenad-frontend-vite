@@ -2,7 +2,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col col-md-2 p-3">
-      <img class="madoc" width="80" height="110" alt="MADOC" src="../../../assets/madoc.png" />
+      <img class="madoc" width="80" height="110" alt="MADOC" src="assets/madoc.png" />
     </div>
     <div class="col col-md-7 align-self-center mt-4">
       <h3 class="bienvenido text-center titulo1"><u>SUPERADMINISTRADOR</u></h3>
@@ -14,32 +14,32 @@
   <div class="row align-items-center">
     <div class="col-6 pl-0">
       <a class="nav-link ml-4 home" routerLink="/" routerLinkActive="router-link-active">
-        <fa-icon class="fa-2x mr-2" [icon]="faHome"></fa-icon><strong>Home</strong></a>
+        <fa-icon class="fa-2x mr-2" [icon]="faHome"></fa-icon><strong>Home</strong>
+      </a>
     </div>
     <div class="col-6 text-right">
+      <button class="btn usuario text-white mr-2" routerLink="/usuarios">
+        <b>Usuarios</b>
+      </button>
       <button class="btn unidad text-white mr-2" routerLink="/unidades">
         <b>Unidades</b>
       </button>
-        <button class="btn tipoFormulario text-white mr-2" routerLink="/tiposFormulario">
-          <b>Tipos de Formulario</b>
-        </button>
-        <button class="btn categoriaFichero text-white" routerLink="/categoriasFichero">
-          <b>Categorías de Ficheros</b>
-        </button>
+      <button class="btn tipoFormulario text-white mr-2" routerLink="/tiposFormulario">
+        <b>Tipos de Formulario</b>
+      </button>
+      <button class="btn categoriaFichero text-white" routerLink="/categoriasFichero">
+        <b>Categorías de Ficheros</b>
+      </button>
     </div>
     <hr class="w-100" />
   </div>
   <div class="row ml-5 p-0">
-    <div class="col col-md-8">
-      <h5 class="text-center titulo"><b>CENAD,s/CMT,s</b> y <b>ADMINISTRADORES</b></h5>
+    <div class="col col-md-12">
+      <h5 class="text-center titulo"><b>CENAD,s/CMT,s</b></h5>
       <hr class="w-100" />
       <div class="row justify-content-end mb-1 mt-1">
         <button class="btn text-white mr-3" routerLink="formulario-cenad">
           Nuevo <b>CENAD/CMT</b>
-        </button>
-        <button class="btn text-white" href="#">
-        <!--aqui pondriamos un routerLink a "formulario-administrador" cuando lo creemos-->
-          Nuevo <b>Administrador</b>
         </button>
       </div>
       <hr class="w-100" />
@@ -56,27 +56,6 @@
       </div>
       <div *ngFor="let cenad of cenads">
         <app-cenad [cenad]="cenad" (cenadSeleccionado)="verDatosCenad($event)"></app-cenad>
-      </div>
-    </div>
-    <div class="col col-md-4  filtro">
-      <h5 class="text-center titulo">USUARIOS <b>NORMAL</b></h5>
-      <hr class="w-100" />
-      <div class="row justify-content-end">
-        <button class="btn text-white mt-1 mb-1" routerLink="formulario-usuarioNormal">
-          Nuevo Usuario <b>Normal</b>
-        </button>
-      </div>
-      <hr class="w-100" />
-      <div class="row titulos">
-        <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
-          <b>USUARIO</b>
-        </div>
-        <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
-          <b>UNIDAD</b>
-        </div>
-      </div>
-      <div *ngFor="let usuarioNormal of usuariosNormal">
-        <app-usuarioNormal [usuarioNormal]="usuarioNormal" (usuarioNormalSeleccionado)="verDatosUsuarioNormal($event)"></app-usuarioNormal>
       </div>
     </div>
   </div>
@@ -96,34 +75,6 @@
       <div class="modal-body">
         <app-cenad-ficha *ngIf="cenadVerDatos" [cenad]="cenadVerDatos" (cenadEliminar)="onCenadEliminar($event)"
           (cenadEditar)="onCenadEditar($event)"></app-cenad-ficha>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn text-white" data-dismiss="modal"
-        (click)="ngOnInit()">
-          Cerrar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal usuarioNormal-->
-<div class="modal fade" id="modalUsuarioNormal" tabindex="-1" role="dialog"
-  aria-labelledby="datosUsuarioNormal" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="datosUsuarioNormal">
-          <b>Datos Completos del Usuario Normal</b>
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-usuarioNormal-ficha *ngIf="usuarioNormalVerDatos"
-          [usuarioNormal]="usuarioNormalVerDatos"
-          (usuarioNormalEliminar)="onUsuarioNormalEliminar($event)"
-          (usuarioNormalEditar)="onUsuarioNormalEditar($event)"></app-usuarioNormal-ficha>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { UsuarioAdministrador } from 'src/app/usuarios/models/usuarioAdministrador';
+import { UsuarioAdministradorService } from 'src/app/usuarios/service/usuarioAdministrador.service';
 import { environment } from 'src/environments/environment';
 import { CenadImpl } from '../../models/cenad-impl';
-import { UsuarioAdministrador } from '../../models/usuarioAdministrador';
 import { CenadService } from '../../service/cenad.service';
-import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.service';
 
 @Component({
   selector: 'app-cenad-form',
@@ -48,11 +48,11 @@ export class CenadFormComponent implements OnInit {
     private usuarioAdministradorService: UsuarioAdministradorService,
     private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {//rescata de la BD todos los administradores
       this.usuarioAdministradorService.getUsuarios().subscribe((response) => this.administradores = this.usuarioAdministradorService.extraerUsuarios(response));
   }
 
-  crearCenad(): void {
+  crearCenad(): void {//sube el archivo, le asigna el nombre al campo escudo y crea el cenad
     this.upload();
     this.cenad.escudo = this.currentFile.name;
     this.cenadService.create(this.cenad).subscribe((response) => {
@@ -60,7 +60,7 @@ export class CenadFormComponent implements OnInit {
       this.router.navigate(['/superadministrador']);
     });
   }
-
+  //metodo para seleccionar el archivo a subir
   selectFile(event) {
     this.selectedFiles = event.target.files;
   }
@@ -71,5 +71,4 @@ export class CenadFormComponent implements OnInit {
       );
     this.selectedFiles = undefined;
   }
-
 }

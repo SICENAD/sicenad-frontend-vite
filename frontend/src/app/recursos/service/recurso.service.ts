@@ -6,10 +6,10 @@ import { Categoria } from 'src/app/categorias/models/categoria';
 import { CategoriaImpl } from 'src/app/categorias/models/categoria-impl';
 import { CategoriaFichero } from 'src/app/categoriasFichero/models/categoriaFichero';
 import { CategoriaFicheroImpl } from 'src/app/categoriasFichero/models/categoriaFichero-impl';
-import { UsuarioGestor } from 'src/app/superadministrador/models/usuarioGestor';
-import { UsuarioGestorImpl } from 'src/app/superadministrador/models/usuarioGestor-impl';
 import { TipoFormulario } from 'src/app/tiposFormulario/models/tipoFormulario';
 import { TipoFormularioImpl } from 'src/app/tiposFormulario/models/tipoFormulario-impl';
+import { UsuarioGestor } from 'src/app/usuarios/models/usuarioGestor';
+import { UsuarioGestorImpl } from 'src/app/usuarios/models/usuarioGestor-impl';
 import { environment } from 'src/environments/environment';
 import { Fichero } from '../models/fichero';
 import { FicheroImpl } from '../models/fichero-impl';
@@ -37,8 +37,18 @@ export class RecursoService {
       reportProgress: true,
       responseType: 'json'
     });
-    return this.http.request(req);
-  }
+    return this.http.request(req).pipe(
+      catchError((e) => {
+        if (e.status === 413) {
+          alert("El archivo tiene un tamaño superior al permitido");
+          return throwError(e);
+        }
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );  }
 
   //metodo para borrar un archivo de la subcarpeta de un recurso
   deleteArchivo(fileName: string, idRecurso: string): Observable<any> {
@@ -89,6 +99,8 @@ export class RecursoService {
     recurso.nombre = recursoApi.nombre;
     recurso.descripcion = recursoApi.descripcion;
     recurso.otros = recursoApi.otros;
+    recurso.conDatosEspecificosSolicitud = recursoApi.conDatosEspecificosSolicitud;
+    recurso.datosEspecificosSolicitud = recursoApi.datosEspecificosSolicitud;
     recurso.url = recursoApi._links.self.href;
     recurso.idRecurso = recurso.getId(recurso.url);
     return recurso;
@@ -292,6 +304,7 @@ export class RecursoService {
     usuario.descripcion = usuarioApi.descripcion;
     usuario.url = usuarioApi._links.self.href;
     usuario.idUsuario = usuario.getId(usuario.url);
+    usuario.tipo = 'gestor';
     return usuario;
   }
 

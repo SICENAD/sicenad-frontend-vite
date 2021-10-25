@@ -1,4 +1,4 @@
-import { UsuarioNormal } from "src/app/superadministrador/models/usuarioNormal";
+import { UsuarioNormal } from "src/app/usuarios/models/usuarioNormal";
 import { Unidad } from "./unidad";
 
 export class UnidadImpl implements Unidad {

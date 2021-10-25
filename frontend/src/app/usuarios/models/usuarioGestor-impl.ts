@@ -1,4 +1,4 @@
-import { Cenad } from "./cenad";
+import { Cenad } from "src/app/superadministrador/models/cenad";
 import { UsuarioGestor } from "./usuarioGestor";
 
 export class UsuarioGestorImpl implements UsuarioGestor {
@@ -7,7 +7,7 @@ export class UsuarioGestorImpl implements UsuarioGestor {
   password: string;
   tfno: string;
   email: string;
-  cenad: Cenad | string;
+  cenad: Cenad | any;
   tipo:string;
   descripcion:string;
   url: string;

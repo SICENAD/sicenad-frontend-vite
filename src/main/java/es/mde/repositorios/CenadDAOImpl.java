@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import es.mde.entidades.Categoria;
+import es.mde.entidades.Cenad;
 import es.mde.entidades.Recurso;
 import es.mde.entidades.SolicitudRecurso;
 
@@ -49,5 +50,14 @@ public class CenadDAOImpl implements CenadDAOCustom {
 		recursos.forEach(r -> solicitudes.addAll(r.getSolicitudes()));
 		
 		return solicitudes;
+	}	
+	
+	@Override//obtiene todas los cenads sin administrador
+	public List<Cenad> getCenadsSinAdmin() {
+		
+		List<Cenad> cenads = cenadDAO.findAll().stream()
+				.filter(j -> j.getUsuarioAdministrador() == null).collect(Collectors.toList());
+		
+		return cenads;
 	}	
 }

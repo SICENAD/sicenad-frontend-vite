@@ -24,7 +24,7 @@ div.filtro {
   font-size: 14px;
 }
 
-.btn:hover, .tipoFormulario, .categoriaFichero, .unidad {
+.btn:hover, .tipoFormulario, .categoriaFichero, .unidad, .usuario {
   background-color: #588157;
 }
 
@@ -43,7 +43,7 @@ h5 {
   background-color:lightgreen;
 }
 
-.tipoFormulario:hover, .categoriaFichero:hover {
+.tipoFormulario:hover, .categoriaFichero:hover, .unidad:hover, .usuario:hover {
   background-color: #A3B18A;
 }
 

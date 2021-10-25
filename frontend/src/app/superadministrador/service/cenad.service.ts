@@ -2,10 +2,10 @@ import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { UsuarioAdministradorImpl } from 'src/app/usuarios/models/usuarioAdministrador-impl';
 import { environment } from 'src/environments/environment';
 import { Cenad } from '../models/cenad';
 import { CenadImpl } from '../models/cenad-impl';
-import { UsuarioAdministradorImpl } from '../models/usuarioAdministrador-impl';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,18 @@ export class CenadService {
       reportProgress: true,
       responseType: 'json'
     });
-    return this.http.request(req);
+    return this.http.request(req).pipe(
+      catchError((e) => {
+        if (e.status === 413) {
+          alert("El archivo tiene un tamaño superior al permitido");
+          return throwError(e);
+        }
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
   }
 
   //metodo para borrar un archivo
@@ -84,6 +95,7 @@ export class CenadService {
     usuario.descripcion = usuarioApi.descripcion;
     usuario.url = usuarioApi._links.self.href;
     usuario.idUsuario = usuario.getId(usuario.url);
+    usuario.tipo = 'administrador';
     return usuario;
   }
 

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { UsuarioAdministrador } from 'src/app/usuarios/models/usuarioAdministrador';
+import { UsuarioAdministradorService } from 'src/app/usuarios/service/usuarioAdministrador.service';
 import { Cenad } from '../../models/cenad';
-import { UsuarioAdministrador } from '../../models/usuarioAdministrador';
 import { CenadService } from '../../service/cenad.service';
-import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.service';
 
 @Component({
   selector: 'app-cenad',

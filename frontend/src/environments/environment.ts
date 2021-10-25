@@ -8,8 +8,10 @@ export const environment = {
   sizeMaxEscudo: "2 MB",
   sizeMaxDocRecurso: "10 MB",
   sizeMaxDocSolicitud: "10 MB",
-  //endpoint para trabajar en local
-  hostSicenad: 'http://localhost:8080/api/'
+  //endpoint para trabajar en local a H2
+  // hostSicenad: 'http://localhost:8080/api/'
+  //endpoint para trabajar en local a la BD MINERVA
+  hostSicenad: 'http://192.168.100.199:8080/api/'
   //endpoint para atacar la app desplegada en heroku
   //  hostSicenad: 'https://sicenad.herokuapp.com/api/'
   //  hostSicenad: 'https://sicenad2.herokuapp.com/api/'

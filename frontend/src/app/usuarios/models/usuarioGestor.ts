@@ -1,4 +1,4 @@
-import { Cenad } from "./cenad";
+import { Cenad } from "src/app/superadministrador/models/cenad";
 
 export interface UsuarioGestor {
   idUsuario: string;
@@ -6,7 +6,7 @@ export interface UsuarioGestor {
   password: string;
   tfno: string;
   email: string;
-  cenad: Cenad | string;
+  cenad: Cenad | any;
   tipo:string;
   descripcion:string;
   url: string;

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { UsuarioAdministradorService } from 'src/app/usuarios/service/usuarioAdministrador.service';
 import { environment } from 'src/environments/environment';
 import { CenadImpl } from '../../models/cenad-impl';
 import { CenadService } from '../../service/cenad.service';
-import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.service';
 
 @Component({
   selector: 'app-cenad-ficha',
