@@ -10,11 +10,11 @@ h3 {
   color: #354f52; font-weight: bold
 }
 
-.titulo {
+.titulo, .texto {
   color: #3A5A40;
 }
 
-.titulo1, .href:hover, .letra {
+.titulo1, .letra {
   color: #588157;
 }
 
@@ -23,7 +23,7 @@ a.volver {
   font-size: 18px;
 }
 
-a.volver:hover, .texto {
+a.volver:hover, .href:hover {
   color: #A3B18A;
 }
 

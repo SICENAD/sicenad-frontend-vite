@@ -3,6 +3,7 @@ import { CategoriaFichero } from 'src/app/categoriasFichero/models/categoriaFich
 import { FicheroImpl } from 'src/app/recursos/models/fichero-impl';
 import { Recurso } from 'src/app/recursos/models/recurso';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { environment } from 'src/environments/environment';
 
 
@@ -28,7 +29,7 @@ export class FicheroFichaComponent implements OnInit {
   //variable para recoger los recursos
   recursos: Recurso[] = [];
 
-  constructor(private recursoService: RecursoService) { }
+  constructor(private recursoService: RecursoService, private appConfigService: AppConfigService) { }
 
   ngOnInit(): void {
     //recupera de la BD todos los recursos
@@ -38,7 +39,10 @@ export class FicheroFichaComponent implements OnInit {
     this.recursoService.getCategoriasFichero().subscribe((response) => 
        this.categoriasFichero = this.recursoService.extraerCategoriasFichero(response));
     //asigna los valores seleccionados a los select de los campos del recurso
-    this.actualizarNgModels();  }
+    this.actualizarNgModels();
+    //para que use la variable del properties.json
+    this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso;
+  }
 
   //metodo para poder mostrar en los select los valores seleccionados
   actualizarNgModels(): void {

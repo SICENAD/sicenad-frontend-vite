@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { UsuarioAdministrador } from 'src/app/usuarios/models/usuarioAdministrador';
 import { UsuarioAdministradorService } from 'src/app/usuarios/service/usuarioAdministrador.service';
 import { environment } from 'src/environments/environment';
@@ -46,10 +47,12 @@ export class CenadFormComponent implements OnInit {
   constructor(
     private cenadService: CenadService,
     private usuarioAdministradorService: UsuarioAdministradorService,
-    private router: Router) { }
+    private router: Router, private appConfigService: AppConfigService) { }
 
   ngOnInit(): void {//rescata de la BD todos los administradores
       this.usuarioAdministradorService.getUsuarios().subscribe((response) => this.administradores = this.usuarioAdministradorService.extraerUsuarios(response));
+      //para que coja la variable del properties.json
+      this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
   }
 
   crearCenad(): void {//sube el archivo, le asigna el nombre al campo escudo y crea el cenad

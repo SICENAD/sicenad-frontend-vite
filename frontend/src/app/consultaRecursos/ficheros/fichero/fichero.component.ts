@@ -22,6 +22,9 @@ export class FicheroComponent implements OnInit {
   //variable del icono "editar"
   faEdit = faEdit;
   faDownload = faDownload;  
+  //variables del texto a mostrar para recortarlo (nombre y descripcion)
+  nombreMostrado: string = '';
+  descripcionMostrada: string = '';
 
   constructor(private recursoService: RecursoService) {}
 
@@ -32,10 +35,12 @@ export class FicheroComponent implements OnInit {
     this.recursoService.getCategoriaFichero(this.fichero.idFichero).subscribe((response) => this.fichero.categoriaFichero = this.recursoService.mapearCategoriaFichero(response));
     setTimeout(() => {
       //construye el path relativo para la url de descarga del archivo
-      if (this.fichero.recurso.idRecurso) {
+      if (this.fichero.recurso) {
         this.pathRelativo = `${environment.hostSicenad}files/docRecursos/${this.fichero.recurso.idRecurso}/`;
       }
     }, 3000);
+    this.nombreMostrado = this.recortarTexto(this.fichero.nombre, 45);
+    this.descripcionMostrada = this.recortarTexto(this.fichero.descripcion, 50);
   }
 
   //metodo que emite el evento para eliminar el fichero (y elimina el archivo)
@@ -50,4 +55,11 @@ export class FicheroComponent implements OnInit {
     const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
     return pathImg;    
   }  
+
+  //metodo para recortar el texto a mostrar
+  recortarTexto(texto: string, numeroCaracteres: number): string {
+    let textoFinal: string = '';
+    textoFinal = (texto.length > numeroCaracteres) ? texto.slice(0, numeroCaracteres) : texto; 
+    return textoFinal;
+  }
 }
