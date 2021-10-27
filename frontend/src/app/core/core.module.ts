@@ -7,13 +7,15 @@ import { FooterComponent } from './shell/footer/footer.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ShellComponent, HeaderComponent, MainComponent, FooterComponent, NotFoundComponent],
   imports: [
     CommonModule,
     AppRoutingModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FormsModule
   ],
   exports: [ShellComponent]
 })

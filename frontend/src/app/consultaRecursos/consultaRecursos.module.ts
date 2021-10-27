@@ -6,10 +6,11 @@ import { ConsultaRecursosComponent } from './consultaRecursos/consultaRecursos.c
 import { ConsultaRecursosRoutingModule } from './consultaRecursos-routing.module';
 import { ConsultaRecursoComponent } from './consultaRecurso/consultaRecurso.component';
 import { ConsultaRecursoFormComponent } from './consultaRecurso-form/consultaRecurso-form.component';
-import { FicheroComponent } from './fichero/fichero.component';
+import { FicheroComponent } from './ficheros/fichero/fichero.component';
+import { FicheroFichaComponent } from './ficheros/fichero-ficha/fichero-ficha.component';
 
 @NgModule({
-  declarations: [ConsultaRecursosComponent, ConsultaRecursoComponent, ConsultaRecursoFormComponent, FicheroComponent],
+  declarations: [ConsultaRecursosComponent, ConsultaRecursoComponent, ConsultaRecursoFormComponent, FicheroComponent, FicheroFichaComponent],
   imports: [
     CommonModule,
     ConsultaRecursosRoutingModule,

@@ -103,6 +103,8 @@ export class RecursoService {
     recurso.datosEspecificosSolicitud = recursoApi.datosEspecificosSolicitud;
     recurso.url = recursoApi._links.self.href;
     recurso.idRecurso = recurso.getId(recurso.url);
+    this.getCategoria(recurso.idRecurso).subscribe((response) => 
+    recurso.categoria= this.mapearCategoria(response));
     return recurso;
   }
 
@@ -169,6 +171,22 @@ export class RecursoService {
   //metodo para obtener el gestor de un recurso
   getUsuarioGestor(recurso: Recurso): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${recurso.idRecurso}/usuarioGestor`)
+    .pipe(
+      catchError((e) => {
+        if (e.status === 400) {
+          return throwError(e);
+        }
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
+
+  //metodo para obtener el gestor de un recurso
+  getUsuarioGestorDeIdRecurso(idRecurso: string): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}${idRecurso}/usuarioGestor`)
     .pipe(
       catchError((e) => {
         if (e.status === 400) {
@@ -360,6 +378,23 @@ export class RecursoService {
       );
   }
 
+  //metodo para editar un fichero
+  updateFichero(fichero: Fichero): Observable<any> {
+    return this.http
+      .patch<any>(`${this.host}ficheros/${fichero.idFichero}`, fichero)
+      .pipe(
+        catchError((e) => {
+          if (e.status === 400) {
+            return throwError(e);
+          }
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
   //metodo para obtener todas las categorias de fichero
   getCategoriasFichero(): Observable<any> {
     return this.http.get<any>(`${this.host}categorias_fichero/?page=0&size=1000`);
@@ -398,4 +433,9 @@ export class RecursoService {
   getCategoriasFicheroDeRecurso(idRecurso: String) {
     return this.http.get<any>(`${this.urlEndPoint}${idRecurso}/categoriasFichero/?page=0&size=1000`);
   }
+
+    //metodo para recuperar de la BD los recursos de un gestor
+    getRecursosDeGestor(idGestor: string): Observable<any> {
+      return this.http.get<any>(`${this.host}usuarios_gestor/${idGestor}/recursos/?page=0&size=1000`);
+    }
 }

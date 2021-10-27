@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Categoria } from 'src/app/categorias/models/categoria';
+import { HeaderComponent } from 'src/app/core/shell/header/header.component';
 import { Recurso } from 'src/app/recursos/models/recurso';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
 
@@ -10,6 +11,12 @@ import { RecursoService } from 'src/app/recursos/service/recurso.service';
   styleUrls: ['./consultaRecursos.component.css']
 })
 export class ConsultaRecursosComponent implements OnInit {
+  //variable que define el usuario gestor que accede para modificar recursos
+  idUsuarioGestor: string = '';
+  //variable que dice si el usuario esta loggeado como gestor de ese cenad
+  isGestorCenad: boolean = false;
+  //variable con la que se muestra o no el boton de ver todas o solo las tuyas
+  cambioBoton: boolean = false;
   //variable con la que rescatamos de la barra de navegacion el idCenad
   idCenad: string = "";
   //variable en la que se guardan todos los recursos del cenad
@@ -38,6 +45,11 @@ export class ConsultaRecursosComponent implements OnInit {
       if (response._embedded) {//con este condicional elimino el error de consola si no hay ninguna categoria padre
         this.categoriasFiltradas = this.recursoService.extraerCategorias(response);
       }});
+    //comprobamos si el usuario es un gestor de este cenad
+    if(HeaderComponent.isGestor && (HeaderComponent.idCenad === this.idCenad)) {
+      this.idUsuarioGestor = HeaderComponent.idUsuario;
+      this.isGestorCenad = this.cambioBoton = true;
+    }
   }
 
   //metodo que filtra por la categoria seleccionada y muestra los recursos de la misma o sus hijas...
@@ -62,5 +74,14 @@ export class ConsultaRecursosComponent implements OnInit {
       this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
     this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
     this.categoriaSeleccionada = null;
+  }
+
+  //metodo para conseguir los recursos de un gestor
+  verSoloMisRecursos(): void {
+    this.recursoService.getRecursosDeGestor(this.idUsuarioGestor).subscribe((response) => { 
+      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
+        this.recursos = this.recursoService.extraerRecursos(response);
+      }});
+    this.cambioBoton = false;
   }
 }

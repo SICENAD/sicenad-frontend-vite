@@ -5,6 +5,10 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClientModule } from '@angular/common/http';
+import { CanActivateViaLoggingAdministrador } from './logging/canActivateViaLoggingAdministrador';
+import { CanActivateViaLoggingGestor } from './logging/canActivateViaLoggingGestor';
+import { CanActivateViaLoggingNormal } from './logging/canActivateViaLoggingNormal';
+import { CanActivateViaLoggingSuperadministrador } from './logging/canActivateViaLoggingSuperadministrador';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     FontAwesomeModule
   ],
-  providers: [],
+  //hay que declarar los "guards"
+  providers: [CanActivateViaLoggingAdministrador, CanActivateViaLoggingGestor, CanActivateViaLoggingNormal, CanActivateViaLoggingSuperadministrador],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

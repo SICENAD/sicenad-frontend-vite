@@ -7,6 +7,9 @@ administradores y normales y si se entra como administrador de un cenad mostrara
     </a>
   </div>
   <hr class='w-100'>
+  <div class="row ml-5 p-0" [hidden]='!(isAdministrador && !isMiCenad)'>
+    <p class="titulo">NO ESTÁS AUTORIZADO</p>
+  </div>
   <div class="row ml-5 p-0">
     <!-- vista de superadministrador->ve administradores -->
     <div class="col col-md-6" *ngIf='!isAdministrador; else elseBlock'>
@@ -33,7 +36,7 @@ administradores y normales y si se entra como administrador de un cenad mostrara
     </div>
     <!-- vista de administrador->ve gestores de su cenad -->
     <ng-template #elseBlock>
-      <div class="col col-md-6">
+      <div class="col col-md-6" [hidden]='!isMiCenad'>
         <h5 class="text-center titulo">USUARIOS <b>GESTORES</b></h5>
         <hr class="w-100" />
         <div class="row justify-content-end">
@@ -43,11 +46,8 @@ administradores y normales y si se entra como administrador de un cenad mostrara
         </div>
         <hr class="w-100" />
         <div class="row titulos">
-          <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 titulo">
             <b>GESTOR</b>
-          </div>
-          <div class="col-10 col-sm-10 col-md-8 col-lg-8 col-xl-8 titulo">
-            <b>DESCRIPCIÓN</b>
           </div>
         </div>
         <div *ngFor="let usuarioGestor of usuariosGestor">
@@ -56,7 +56,7 @@ administradores y normales y si se entra como administrador de un cenad mostrara
         </div>
       </div>
     </ng-template>
-    <div class="col col-md-6  filtro">
+    <div class="col col-md-6  filtro" [hidden]='!(isMiCenad || !isAdministrador)'>
       <h5 class="text-center titulo">USUARIOS <b>NORMALES</b></h5>
       <hr class="w-100" />
       <div class="row justify-content-end">

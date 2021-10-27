@@ -73,3 +73,7 @@ div.submenu {
    display: block !important;
    position: relative;
 }
+
+.homePrincipal {
+  cursor:pointer;
+}

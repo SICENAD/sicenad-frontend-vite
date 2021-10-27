@@ -20,7 +20,7 @@
                   <fa-icon class="fa-2x" [icon]="faHome"></fa-icon></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" [routerLink]='["/principalCenad", idCenad]' routerLinkActive="router-link-active">
+                <a class="nav-link homePrincipal" (click)='inicioCenad()'>
                   CENAD/CMT</a>
               </li>
               <li class="nav-item dropdown">
@@ -70,7 +70,7 @@
                 <a class="nav-link" [routerLink]="['solicitudesRecursos', idCenad]" routerLinkActive="router-link-active">
                   <fa-icon class='mr-2' [icon]="faSolicitar"></fa-icon>Solicitudes</a>
               </li>
-              <li class="nav-item dropdown" [hidden]= "isAutenticado">
+              <li class="nav-item dropdown" [hidden]= "!isAdminEsteCenad">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <fa-icon class='mr-2' [icon]="faUser"></fa-icon>Gestionar</a>
                 <div class="dropdown-menu gestionar" aria-labelledby="navbarDropdownMenuLink">

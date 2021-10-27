@@ -45,3 +45,7 @@ div.titulos {
 figure { 
   display: inline-block;
 }
+
+.texto {
+  white-space: pre-wrap;
+}

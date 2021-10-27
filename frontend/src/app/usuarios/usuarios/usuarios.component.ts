@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { HeaderComponent } from 'src/app/core/shell/header/header.component';
 import { UsuarioAdministrador } from '../models/usuarioAdministrador';
 import { UsuarioAdministradorImpl } from '../models/usuarioAdministrador-impl';
 import { UsuarioGestor } from '../models/usuarioGestor';
@@ -19,6 +20,8 @@ import { UsuarioNormalService } from '../service/usuarioNormal.service';
 export class UsuariosComponent implements OnInit {
   //variable del icono "volver"
   faVolver = faArrowAltCircleLeft;
+  //variable que dice si es tu cenad o no
+  isMiCenad: boolean = false;
   //variable boolean que dice si es administrador (ve gestores de su cenad) o no (ve administradores)
   isAdministrador: boolean = false;
   //variable para capturar el idCenad en el caso de que el que acceda sea el administrador de un cenad
@@ -49,15 +52,32 @@ export class UsuariosComponent implements OnInit {
     ngOnInit(): void {
       //captura el id del cenad de la barra de navegacion
       this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-      if (this.idCenad !==undefined) {
-        //recupera de la BD todos los gestores del cenad del administrador
+      this.isMiCenad = (this.idCenad === HeaderComponent.idCenad);
+
+      this.isAdministrador = HeaderComponent.isAdmin;
+      //comprueba que sea administrador de ese cenad
+      if(this.isAdministrador && this.isMiCenad) {
+        //recupera los usuarios gestores del cenad
         this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => this.usuariosGestor = this.usuarioGestorService.extraerUsuarios(response));
-        this.isAdministrador = true;
+        //recupera todos los usuarios normal de la BD
+        this.usuarioNormalService.getUsuarios().subscribe((response) => this.usuariosNormal = this.usuarioNormalService.extraerUsuarios(response));
       }
+
+      if(!this.isAdministrador) {
+        //recupera todos los usuarios normal de la BD
+        this.usuarioNormalService.getUsuarios().subscribe((response) => this.usuariosNormal = this.usuarioNormalService.extraerUsuarios(response));
+      }
+
+      // if (this.idCenad !==undefined) {
+      //   //recupera de la BD todos los gestores del cenad del administrador
+      //   this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => this.usuariosGestor = this.usuarioGestorService.extraerUsuarios(response));
+      //   this.isAdministrador = true;
+      // }
+
+
+
       //recupera todos los administradores de la BD
       this.usuarioAdministradorService.getUsuarios().subscribe((response) => this.usuariosAdministrador = this.usuarioAdministradorService.extraerUsuarios(response));
-      //recupera todos los usuarios normal de la BD
-      this.usuarioNormalService.getUsuarios().subscribe((response) => this.usuariosNormal = this.usuarioNormalService.extraerUsuarios(response));
       if (this.isAdministrador) {//la variable volver nos llevara a "superadministrador"o a "ppalCenad"
         //aqui debo sacar el idCenad del administrador que esta logueado
         this.volver = `/principalCenad/${this.idCenad}`;

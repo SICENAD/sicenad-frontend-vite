@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
 import { CategoriaFichero } from 'src/app/categoriasFichero/models/categoriaFichero';
+import { HeaderComponent } from 'src/app/core/shell/header/header.component';
 import { Fichero } from 'src/app/recursos/models/fichero';
 import { FicheroImpl } from 'src/app/recursos/models/fichero-impl';
 import { Recurso } from 'src/app/recursos/models/recurso';
@@ -15,10 +16,14 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./consultaRecurso-form.component.css']
 })
 export class ConsultaRecursoFormComponent implements OnInit {
-  //variable que varia la vista gestor y la vista usuario
-  isGestor: boolean = true;
+  //variable que define el usuario gestor que accede para modificar recursos
+  idUsuarioGestor: string = '';
+  //variable que dice si el usuario esta loggeado como gestor de ese recurso
+  isGestorRecurso: boolean = false;
+  //variable para cambiar el boton de la vista gestor/previa
+  cambioBoton: boolean = false;
   //variable para ver el rol que se esta usando. se borrara cuando haya logging
-  rol: string = this.isGestor ? 'Normal' : 'Gestor';
+  rol: string = 'Previa';
   //variable para el icono "volver"
   faVolver =faArrowAltCircleLeft;
   //variable con la que rescatamos de la barra de navegacion el idCenad
@@ -29,6 +34,8 @@ export class ConsultaRecursoFormComponent implements OnInit {
   recurso: Recurso = new RecursoImpl();
   //variable que da visibilidad al formulario de crear fichero
   nuevoFichero: boolean = false;
+  //variable que comunicara los datos del fichero
+  ficheroVerDatos: Fichero;
   //variable sobre la que crearemos un fichero nuevo
   fichero: FicheroImpl = new FicheroImpl();
   //variable con todos los ficheros del recurso
@@ -52,8 +59,8 @@ export class ConsultaRecursoFormComponent implements OnInit {
 
   //metodo para q el boton cambie de rol. se borrara cuando haya logging
   cambiaRol() {
-    this.isGestor = this.isGestor ? false : true;
-    this.rol = this.isGestor ? 'Normal' : 'Gestor';
+    this.cambioBoton = this.cambioBoton ? false : true;
+    this.rol = this.cambioBoton ? 'Previa' : 'Gestor';
   }
 
   ngOnInit() {
@@ -66,13 +73,21 @@ export class ConsultaRecursoFormComponent implements OnInit {
       if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun fichero
         this.categoriasFicheroDeRecurso = this.recursoService.extraerCategoriasFichero(response);
       }});
-
     //carga el recurso cuyo id hemos recuperado
     this.cargarRecurso(this.idRecurso);
     //se recupera el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     //se ejecuta con retardo para asegurar que cuando hace la llamada ya tiene el id.
     setTimeout(() => {
+      //recupero el idUsuario del gestor del recurso  
+      this.recursoService.getUsuarioGestorDeIdRecurso(this.idRecurso).subscribe((response) => {
+        // if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun fichero
+          this.idUsuarioGestor = this.recursoService.mapearUsuario(response).idUsuario;
+      //comprobamos si el usuario es un gestor de este recurso
+      if(HeaderComponent.isGestor && (HeaderComponent.idUsuario === this.idUsuarioGestor)) {
+        this.isGestorRecurso = this.cambioBoton = true;
+      }
+    });
       //recupera de la BD lso ficheros del recurso y los asigna a la variable
       this.recursoService.getFicheros(this.idRecurso).subscribe((response) => 
         this.ficheros = this.recursoService.extraerFicheros(response));
@@ -184,5 +199,20 @@ export class ConsultaRecursoFormComponent implements OnInit {
   //metodo para cerrar el modal de las imagenes
   hide() {
   this.showModal = false;
+  }
+
+  //metodo para traspasar los datos del fichero
+  verDatosFichero(fichero: Fichero): void {
+    this.ficheroVerDatos = fichero;
+  }
+
+  //metodo para editar un fichero
+  onFicheroEditar(fichero: FicheroImpl): void {
+    this.recursoService.updateFichero(fichero).subscribe(response => {
+      console.log(`He actualizado el fichero ${fichero.nombre}`);
+    //actualiza el [] con los ficheros del recurso
+    this.recursoService.getFicheros(this.idRecurso).subscribe((response) => 
+    this.ficheros = this.recursoService.extraerFicheros(response));
+    });
   }
 }

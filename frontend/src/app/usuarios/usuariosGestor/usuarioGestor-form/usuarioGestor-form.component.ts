@@ -16,6 +16,8 @@ export class UsuarioGestorFormComponent implements OnInit {
   usuarioGestor: UsuarioGestorImpl = new UsuarioGestorImpl();
   //variable del icono "volver"
   faVolver = faArrowAltCircleLeft;
+  //variable para poner la ruta de vuelta
+  volver: string = '';
 
   constructor(
     private usuarioGestorService: UsuarioGestorService,
@@ -24,6 +26,7 @@ export class UsuarioGestorFormComponent implements OnInit {
   ngOnInit(): void {
     //resacata el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
+    this.volver = `/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`;
   }
 
   //metodo para crear un usuarioGestor

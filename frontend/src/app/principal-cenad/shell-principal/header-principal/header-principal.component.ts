@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faEdge } from '@fortawesome/free-brands-svg-icons';
 import { faQuestionCircle, faSnowflake } from '@fortawesome/free-regular-svg-icons';
 import { faBars, faBomb, faBook, faBusinessTime, faCalendarAlt, faCloudSun, faEdit, faFire, faFolderOpen, faFolderPlus, faGlobe, faHome, faLink, faMap, faSearchLocation, faSitemap, faTree, faUserCog, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { HeaderComponent } from 'src/app/core/shell/header/header.component';
 import { PrincipalService } from 'src/app/principal-cenad/service/principal.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
@@ -57,17 +58,21 @@ export class HeaderPrincipalComponent implements OnInit {
   cenads: Cenad[] = [];
   // variables estáticas para logging...
   isAutenticado: boolean = false;
+  isAdminEsteCenad: boolean = false;
   static userAdminLogeado: UsuarioAdministrador = new UsuarioAdministradorImpl();
   static userGestorLogeado: UsuarioGestor = new UsuarioGestorImpl();
   static userNormalLogeado: UsuarioNormal = new UsuarioNormalImpl();
 
-  constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute) { }
+  constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
     //carga el cenad seleccionado
     this.cargarCenad();
     // realiza el proceso de carga de todos los CENAD,s/CMT,s y comprueba si el CENAD/CMT seleccionado en el home es el de zaragoza
     this.cargarCenads();
+    //comprueba si estas loggeado como administrador de este cenad
+    this.isAdminEsteCenad = (this.idCenad === HeaderComponent.idCenad && HeaderComponent.isAdmin);
   }
 
   // Captura el idCenad pasado como parámetro en la barra de navegación
@@ -107,5 +112,11 @@ export class HeaderPrincipalComponent implements OnInit {
     if (this.idCenadZaragoza == this.idCenad) {
       this.isCenadZaragoza = true;
     }
+  }
+
+  //va a la home de ese cenad y ejecuta ngOnInit para refresacr si se ha loggeado
+  inicioCenad(): void {
+    this.router.navigate([`/principalCenad/${this.idCenad}`]);
+    this.ngOnInit();
   }
 }
