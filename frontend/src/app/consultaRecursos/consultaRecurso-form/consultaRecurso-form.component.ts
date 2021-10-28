@@ -8,6 +8,7 @@ import { FicheroImpl } from 'src/app/recursos/models/fichero-impl';
 import { Recurso } from 'src/app/recursos/models/recurso';
 import { RecursoImpl } from 'src/app/recursos/models/recurso-impl';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -55,7 +56,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
   
   constructor(
     private recursoService: RecursoService,
-    private router: Router, private activateRoute: ActivatedRoute) { }
+    private router: Router, private activateRoute: ActivatedRoute, private appConfigService: AppConfigService) { }
 
   //metodo para q el boton cambie de rol. se borrara cuando haya logging
   cambiaRol() {
@@ -96,6 +97,8 @@ export class ConsultaRecursoFormComponent implements OnInit {
       //asigna el path relativo, que junto con el nombreArchivo del fichero formara la url en la que se encuentra el archivo
       this.pathRelativo = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;  
     }, 1000);
+    //para que use el valor del properties.json
+    this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso;
   }
 
   //metodo que habilita el formulario para crear fichero

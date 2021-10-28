@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { UsuarioAdministradorService } from 'src/app/usuarios/service/usuarioAdministrador.service';
 import { environment } from 'src/environments/environment';
 import { CenadImpl } from '../../models/cenad-impl';
@@ -41,10 +42,12 @@ export class CenadFichaComponent implements OnInit {
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
 
-  constructor(private usuarioAdministradorService: UsuarioAdministradorService, private cenadService: CenadService) { }
+  constructor(private usuarioAdministradorService: UsuarioAdministradorService, private cenadService: CenadService, private appConfigService: AppConfigService) { }
 
   ngOnInit(): void {
     this.actualizarAdministrador();
+    //para que coja la variable del properties.json
+    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
   }
 
   //metodo que rescata el nombre del administrador del cenad

@@ -9,6 +9,8 @@ import { CanActivateViaLoggingAdministrador } from './logging/canActivateViaLogg
 import { CanActivateViaLoggingGestor } from './logging/canActivateViaLoggingGestor';
 import { CanActivateViaLoggingNormal } from './logging/canActivateViaLoggingNormal';
 import { CanActivateViaLoggingSuperadministrador } from './logging/canActivateViaLoggingSuperadministrador';
+import { APP_INITIALIZER } from '@angular/core';
+import { AppConfigService } from './services/app-config.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,17 @@ import { CanActivateViaLoggingSuperadministrador } from './logging/canActivateVi
     FontAwesomeModule
   ],
   //hay que declarar los "guards"
-  providers: [CanActivateViaLoggingAdministrador, CanActivateViaLoggingGestor, CanActivateViaLoggingNormal, CanActivateViaLoggingSuperadministrador],
+  providers: [CanActivateViaLoggingAdministrador, CanActivateViaLoggingGestor, CanActivateViaLoggingNormal, CanActivateViaLoggingSuperadministrador,
+    {//declaro el servicio con el que uso las variables de mi properties.json en tiempo de ejecucion
+    provide: APP_INITIALIZER,
+    multi: true,
+    deps: [AppConfigService],
+    useFactory: (appConfigService: AppConfigService) => {
+      return () => {
+        return appConfigService.loadAppConfig();
+      };
+    }
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
