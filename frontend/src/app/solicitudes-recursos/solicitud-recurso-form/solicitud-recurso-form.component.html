@@ -1,0 +1,260 @@
+<!-- Componente FORMULARIO para edición y consulta de Solicitudes -->
+<div class="container-fluid">
+  <div class="row ml-4 pl-3 mb-3 mt-2 pb-0">
+    <div class="col-lg-3 col-md-12">
+      <a class="nav-link text-center volver" routerLink="../../../" routerLinkActive="router-link-active">
+        <fa-icon class="fa-1x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong>
+      </a>
+    </div>
+    <div class="col-lg-6 col-md-12">
+      <h5 class="text-center" [hidden]="isUsuarioNormal || !isAdministrador">{{ usuarioAdministrador.nombre |
+        uppercase}}</h5>
+      <h5 class="text-center" [hidden]="!isUsuarioNormal || isAdministrador">{{ usuarioNormal.nombre | uppercase}}</h5>
+    </div>
+    <div class="col-lg-3 col-md-12">
+      <h6 class="text-center" *ngIf="isBorrador">
+        <fa-icon class="fa-1x" [icon]="faEdit"></fa-icon>&nbsp;--Edición--
+      </h6>
+      <h6 class="text-center" *ngIf="!isBorrador">
+        <fa-icon class="fa-1x" [icon]="faLectura"></fa-icon>&nbsp;--Consulta--
+      </h6>
+    </div>
+    <hr class='w-100'>
+  </div>
+  <form class="formulario" #solicitudForm="ngForm">
+    <div class="form-row py-2 justify-content-center">
+      <div class="col-lg-3 col-md-12 text-right mr-5" *ngIf="isAdministrador">
+        <label for="solicitudes" class="mr-2 solicitudes">Estado de la Solicitud:</label>
+        <select name="solicitudesFiltradas" id="solicitudesFiltradas" [(ngModel)]="estadoSeleccionado"
+          (click)="guardarEstadoAnterior()" (change)="preguntar()">
+          <option value="Solicitada">Solicitada</option>
+          <option value="Rechazada">Rechazada</option>
+          <option value="Validada">Validada</option>
+          <option value="Cancelada">Cancelada</option>
+          <option value="Borrador">Borrador</option>
+        </select>
+      </div>
+      <div class="col-lg-2 col-md-12" *ngIf="!isAdministrador">
+        <label for="solicitudes" class="mr-2 estados">Estado de la Solicitud: <sup class="text-danger">*</sup></label>
+        <input type="text" class="form-control" [(ngModel)]="solicitud.estado" name="estado" required readonly />
+      </div>
+    </div>
+    <div class="form-row py-2 justify-content-between">
+      <div class="col-lg-3 col-md-12 ml-2 mt-2">
+        <label class="mr-2">Unidad Solicitante: <sup class="text-danger">*</sup></label>
+        <select name="unidades" id="unidades" [(ngModel)]="unidadSeleccionada" [hidden]="!isAdministrador">
+          <option *ngFor="let unidad of unidades" [ngValue]="unidad">{{ unidad.nombre | uppercase}}</option>
+        </select>
+        <input type="text" class="form-control" *ngIf="unidad" [(ngModel)]="unidad" placeholder="Unidad Solicitante"
+          name="UcoSol" [readonly]="!isAdministrador" [hidden]="isAdministrador" />
+      </div>
+      <div class="col-lg-2 col-md-12 ml-2">
+        <label for="validationServer02">Fecha Solicitud: <sup class="text-danger"></sup></label>
+        <input type="date" class="form-control" [(ngModel)]="fechaSolicitudParse" placeholder="dd-MM-yyyy" required
+          [readonly]="isAdministrador || !isBorrador" minlength="10" maxlength="10" name="fechaSol" #fechaSol="ngModel"
+          [ngClass]="{
+              'is-invalid': fechaSol.invalid && (fechaSol.dirty || fechaSol.touched),
+              'is-valid': !fechaSol.invalid }" />
+        <div class="text-danger" *ngIf="fechaSol.invalid && (fechaSol.dirty || fechaSol.touched)">
+          <div *ngIf="fechaSol.errors.required">
+            La Fecha de la Solicitud es obligatoria
+          </div>
+          <div *ngIf="fechaSol.errors.minlength && fechaSol.errors.maxlength">
+            La fecha de la Solicitud debe tener 10 caracteres
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-12 ml-2 mr-2">
+        <label>Unidad Usuaria: <sup class="text-danger">*</sup></label>
+        <input type="text" class="form-control" [(ngModel)]="solicitud.unidadUsuaria" placeholder="Unidad Usuaria"
+          name="UcoUsuaria" required [readonly]="isAdministrador || !isBorrador" minlength="4" maxlength="10"
+          #UcoUsuaria="ngModel" [ngClass]="{
+              'is-invalid': UcoUsuaria.invalid && (UcoUsuaria.dirty || UcoUsuaria.touched),
+              'is-valid': !UcoUsuaria.invalid
+            }" />
+        <div class="text-danger" *ngIf="UcoUsuaria.invalid && (UcoUsuaria.dirty || UcoUsuaria.touched)">
+          <div *ngIf="UcoUsuaria.errors.required">
+            La Unidad Usuaria es obligatoria
+          </div>
+          <div *ngIf="UcoUsuaria.errors.minlength">
+            La Unidad Usuaria debe tener al menos 4 caracteres
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-1 col-md-12 ml-2 mr-2" [hidden]="!isAdministrador">
+        <label>Etiqueta: <sup class="text-danger">*</sup></label>
+        <input type="color" class="form-control" [(ngModel)]="solicitud.etiqueta" placeholder="Etiqueta calendario"
+          name="etiqueta" minlength="4" maxlength="10" #etiqueta="ngModel" [ngClass]="{
+              'is-invalid': etiqueta.invalid && (etiqueta.dirty || etiqueta.touched),
+              'is-valid': !etiqueta.invalid
+            }" />
+        <div class="text-danger" *ngIf="etiqueta.invalid && (etiqueta.dirty || etiqueta.touched)">
+          <div *ngIf="etiqueta.errors.required">
+            La Etiqueta de la Unidad es obligatoria
+          </div>
+          <div *ngIf="etiqueta.errors.minlength">
+            La Etiqueta de la Unidad debe tener al menos 4 caracteres
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row py-2 mt-2 justify-content-between">
+      <div class="col-lg-3 col-md-12 ml-2">
+        <label>POC para el EJERCICIO: <sup class="text-danger">*</sup></label>
+        <input type="text" class="form-control" [(ngModel)]="solicitud.pocEjercicio" placeholder="POC para el Ejercicio"
+          name="pocEjercicio" required [readonly]="isAdministrador || !isBorrador" minlength="8" maxlength="30"
+          #pocEjercicio="ngModel" [ngClass]="{
+              'is-invalid': pocEjercicio.invalid && (pocEjercicio.dirty || pocEjercicio.touched),
+              'is-valid': !pocEjercicio.invalid
+            }" />
+        <div class="text-danger" *ngIf="pocEjercicio.invalid && (pocEjercicio.dirty || pocEjercicio.touched)">
+          <div *ngIf="pocEjercicio.errors.required">
+            El POC para el Ejercicio es obligatorio
+          </div>
+          <div *ngIf="pocEjercicio.errors.minlength">
+            El POC para el Ejercicio debe tener al menos 8 caracteres
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-12 ml-2">
+        <label>Jefe Unidad Usuaria: <sup class="text-danger">*</sup></label>
+        <input type="text" class="form-control" [(ngModel)]="solicitud.jefeUnidadUsuaria" placeholder="Jefe UCO Usuaria"
+          name="jefeUcoUsuaria" required [readonly]="isAdministrador || !isBorrador" minlength="8" maxlength="20"
+          #jefeUcoUsuaria="ngModel" [ngClass]="{
+            'is-invalid': jefeUcoUsuaria.invalid && (jefeUcoUsuaria.dirty || jefeUcoUsuaria.touched),
+            'is-valid': !jefeUcoUsuaria.invalid
+          }" />
+        <div class="text-danger" *ngIf="jefeUcoUsuaria.invalid && (jefeUcoUsuaria.dirty || jefeUcoUsuaria.touched)">
+          <div *ngIf="jefeUcoUsuaria.errors.required">
+            Jefe de la UCO Usuaria es obligatorio
+          </div>
+          <div *ngIf="jefeUcoUsuaria.errors.minlength">
+            El Jefe de UCO Usuaria debe tener al menos 8 caracteres
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-12 ml-2 mr-2">
+        <label>Redactor (Teléfono): <sup class="text-danger">*</sup></label>
+        <input type="text" class="form-control" [(ngModel)]="solicitud.tlfnRedactor"
+          placeholder="RCT UCO/ RCT durante EX" name="tfno" required [readonly]="isAdministrador || !isBorrador"
+          minlength="15" maxlength="30" #tfno="ngModel" [ngClass]="{
+          'is-invalid': tfno.invalid && (tfno.dirty || tfno.touched),
+          'is-valid': !tfno.invalid
+        }" />
+        <div class="text-danger" *ngIf="tfno.invalid && (tfno.dirty || tfno.touched)">
+          <div *ngIf="tfno.errors.required">
+            El teléfono del redactor es obligatorio
+          </div>
+          <div *ngIf="tfno.errors.minlength">
+            El teléfono del redactor debe tener al menos 15 caracteres
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row py-2 mt-2 justify-content-between">
+      <div class="col-lg-3 col-md-12 ml-2" *ngIf="!isBorrador">
+        <label class="">Categoría: <sup class="text-danger mr-2">*</sup></label>
+        <input type="text" class="form-control ml-2" *ngIf="solicitud.recurso && solicitud.recurso.categoria"
+          [(ngModel)]="solicitud.recurso.categoria.nombre" name="categoria1" [readonly]="!isAdministrador" />
+      </div>
+      <div class="col-lg-3 col-md-12 ml-2" *ngIf="isBorrador">
+        <label class="mr-5">Categoría: <sup class="text-danger mr-3">*</sup>{{ categoriaSeleccionada.nombre | uppercase }}</label>
+        <select  name="categoriasFiltradas" id="categoriasFiltradas" *ngIf="categoriasCenad"
+          [(ngModel)]="categoriaSeleccionada" (change)="filtrar()">
+          <option *ngFor="let categoria of categoriasCenad" [ngValue]="categoria">{{ categoria.nombre | uppercase}}
+          </option>
+        </select>
+        <button class="btn-filtros mt-2 ml-1" *ngIf='categoriaSeleccionada' (click)="borrarFiltros()">Borrar Filtros
+          Categoria</button>
+      </div>
+      <div class="col-lg-3 col-md-12 ml-2" *ngIf="!isBorrador">
+        <label>Recurso: <sup class="text-danger mr-2">*</sup></label>
+        <input type="text" class="form-control ml-2" *ngIf="solicitud.recurso" [(ngModel)]="solicitud.recurso.nombre"
+          name="recurso1" [readonly]="!isAdministrador" />
+      </div>
+      <div class="col-lg-3 col-md-12 ml-2" *ngIf="isBorrador">
+        <label>Recurso: <sup class="text-danger mr-2">*</sup></label>
+        <select name="recursosFiltrados" id="recursosFiltrados" [(ngModel)]="uRlRecursoSeleccionado">
+          <option *ngFor="let recurso of recursosDeCategoria" [value]="recurso.url">{{ recurso.nombre | uppercase}}
+          </option>
+        </select>
+      </div>
+      <div class="col-lg-2 col-md-12 ml-2">
+        <label for="validationServer02">Fecha-Hora Inicio: <sup class="text-danger"></sup></label>
+        <input type="datetime" class="form-control" [(ngModel)]="fechaInicioParse" placeholder="dd-MM-yyyy HH:mm"
+          required [readonly]="!isBorrador" name="fechaIni" #fechaIni="ngModel" [ngClass]="{
+              'is-invalid': fechaIni.invalid && (fechaIni.dirty || fechaIni.touched),
+              'is-valid': !fechaIni.invalid
+            }" />
+        <div class="text-danger" *ngIf="fechaIni.invalid && (fechaIni.dirty || fechaIni.touched)">
+          <div *ngIf="fechaIni.errors.required">
+            La Fecha-Hora de Inicio es obligatoria
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-12 mr-2">
+        <label for="validationServer02">Fecha-Hora Fin: <sup class="text-danger"></sup></label>
+        <input type="datetime" class="form-control" [(ngModel)]="fechaFinParse" (change)="verificarFechas()"
+          placeholder="dd-MM-yyyy HH:mm" required [readonly]="!isBorrador" name="fechaFin" #fechaFin="ngModel"
+          [ngClass]="{
+              'is-invalid': fechaFin.invalid && (fechaFin.dirty || fechaFin.touched),
+              'is-valid': !fechaFin.invalid }" />
+        <div class="text-danger" *ngIf="fechaFin.invalid && (fechaFin.dirty || fechaFin.touched)">
+          <div *ngIf="fechaFin.errors.required">
+            La Fecha-Hora de Fin es obligatoria
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--  -->
+    <!-- DATOS ESPECIFICOS -->
+    <!--  -->
+
+    <div class="form-row py-2 mt-2 justify-content-center mr-3">
+      <div class="col-lg-12 col-md-12 ml-2">
+        <label class="ml-2">Observaciones: <sup class="text-danger">*</sup></label>
+        <input type="text" class="form-control ml-2" name="observacionesUco" [readonly]="!isBorrador"
+          [(ngModel)]="solicitud.observaciones" placeholder="Observaciones de la UCO" />
+      </div>
+    </div>
+
+    <div class="form-row py-2 mt-2 justify-content-center mr-3">
+      <div class="col-lg-12 col-md-12 ml-2">
+        <label class="ml-2">Observaciones CENAD/CMT: <sup class="text-danger">*</sup></label>
+        <input type="text" class="form-control ml-2" name="observacionesCenad" [readonly]="isUsuarioNormal"
+          [(ngModel)]="solicitud.observacionesCenad" placeholder="Observaciones del CENAD/CMT" />
+      </div>
+    </div>
+
+    <div class="form-row py-2 mt-2 justify-content-center">
+      <div class="col-lg-12 col-md-12">
+      </div>
+    </div>
+
+    <div class="form-row justify-content-center pt-3 ml-2">
+      <div class="col-lg-5 col-md-12 mb-3">
+        <button class="btn btn-primary" *ngIf="boton; else modificar" role="button" (click)="create()"
+          [disabled]="!solicitudForm.form.valid">
+          Crear Solicitud
+        </button>
+        <ng-template #modificar>
+          <button class="btn btn-primary" role="button" (click)="actualizar()" [hidden]="!isBorrador"
+            [disabled]="!solicitudForm.form.valid">
+            Actualizar
+          </button>
+          <button class="btn btn-primary ml-5" role="button" (click)="tramitarSolicitud()" [hidden]="!isBorrador"
+            [disabled]="!solicitudForm.form.valid">
+            Tramitar Solicitud
+          </button>
+          <button class="btn btn-primary ml-5" role="button" (click)="borrarSolicitud()" [hidden]="!isBorrador"
+            [disabled]="!solicitudForm.form.valid">
+            Borrar Solicitud
+          </button>
+        </ng-template>
+      </div>
+    </div>
+  </form>
+</div>

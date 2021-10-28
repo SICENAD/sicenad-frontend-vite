@@ -24,6 +24,8 @@ export class HomePrincipalComponent implements OnInit {
   cenad: Cenad = new CenadImpl();
   //variable para el id del CENAD (barra de navegacion)
   idCenad: string = "";
+  //variable para el id de la Solicitud (barra de navegación). Con este valor entrará en el formulario en modo Creación
+  idSolicitud: string = "";
   //variable para almacenar el nombre del campo escudo del cenad y construir la url
   escudoCenad: string = "";
   //variables para el path relativo y url del archivo del escudo

@@ -37,6 +37,10 @@ const routes: Routes = [
         loadChildren: () => import('../unidades/unidades.module').then(m => m.UnidadesModule),
         canActivateChild: [CanActivateViaLoggingAdministrador]
       },
+      {//listado de solicitudes de los recursos de un cenad (administrador/gestor/usuario_normal)
+        path: 'solicitudesRecursos/:idCenad',
+        loadChildren: () => import('../solicitudes-recursos/solicitudes-recursos.module').then(m => m.SolicitudesRecursosModule)
+      }
     ]
   }
 ];
