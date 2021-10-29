@@ -1,5 +1,5 @@
 {
-  "sizeMaxEscudo": "2 MB",
-  "sizeMaxDocRecurso": "30 MB",
-  "sizeMaxDocSolicitud": "30 MB"
+  "sizeMaxEscudo": 2,
+  "sizeMaxDocRecurso": 30,
+  "sizeMaxDocSolicitud": 30 
 }

@@ -49,7 +49,9 @@ export class ConsultaRecursoFormComponent implements OnInit {
   pathRelativo: string = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
   selectedFiles: FileList;
   currentFile: File;
-  sizeMaxDocRecurso: string = environment.sizeMaxDocRecurso;
+  sizeMaxDocRecurso: number = environment.sizeMaxDocRecurso;
+  sizeMaxEscudo: number = environment.sizeMaxEscudo;
+  archivoSubido: boolean = false;
   //variables para el modal de imagen
   showModal: boolean;
   imagenModal: Fichero = new FicheroImpl();
@@ -99,6 +101,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
     }, 1000);
     //para que use el valor del properties.json
     this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso;
+    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
   }
 
   //metodo que habilita el formulario para crear fichero
@@ -112,14 +115,17 @@ export class ConsultaRecursoFormComponent implements OnInit {
     this.upload();
     //asigna el nombre del mismo al campo del fichero
     this.fichero.nombreArchivo = this.currentFile.name;
-    //crea el fichero propiamente dicho
-    this.recursoService.createFichero(this.fichero).subscribe((response) =>
-      console.log(`He creado el fichero ${this.fichero.nombre}`));
-    setTimeout(() => {
-      //actualiza el [] con los ficheros del recurso
-      this.recursoService.getFicheros(this.idRecurso).subscribe((response) => 
-        this.ficheros = this.recursoService.extraerFicheros(response));
-    }, 1000); 
+    //compruebo que el archivo se sube antes de crear el fichero
+    if(this.archivoSubido) {
+      //crea el fichero propiamente dicho
+      this.recursoService.createFichero(this.fichero).subscribe((response) =>
+        console.log(`He creado el fichero ${this.fichero.nombre}`));
+      setTimeout(() => {
+        //actualiza el [] con los ficheros del recurso
+        this.recursoService.getFicheros(this.idRecurso).subscribe((response) => 
+          this.ficheros = this.recursoService.extraerFicheros(response));
+      }, 1000);
+    } 
     //cierra el formulario de crear fichero y resetea la variable
     this.nuevoFichero = false;
     this.fichero = new FicheroImpl();
@@ -144,8 +150,13 @@ export class ConsultaRecursoFormComponent implements OnInit {
 //metodo para subir un archivo
   upload() {
     this.currentFile = this.selectedFiles.item(0);
-    this.recursoService.upload(this.currentFile, this.recurso.idRecurso).subscribe(
-      );
+    //compruebo si es imagen para aplicarle el tamaño maximo de imagen o el de docRecurso
+    if(this.currentFile.type.includes("image")) {//si supera el tamaño archivoSubido sera false, y no se creara el fichero
+      this.archivoSubido = (this.currentFile.size > this.sizeMaxEscudo * 1024 * 1024) ? false : true;//debo pasarlo a bytes
+    } else {
+      this.archivoSubido = (this.currentFile.size > this.sizeMaxDocRecurso * 1024 * 1024) ? false : true;
+    }
+    this.recursoService.upload(this.currentFile, this.recurso.idRecurso).subscribe();
     this.selectedFiles = undefined;
   }
 

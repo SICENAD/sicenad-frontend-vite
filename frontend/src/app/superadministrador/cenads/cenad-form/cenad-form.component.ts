@@ -23,7 +23,8 @@ export class CenadFormComponent implements OnInit {
   //variables para la subida de archivos
   selectedFiles: FileList;
   currentFile: File;
-  sizeMaxEscudo: string = environment.sizeMaxEscudo;
+  sizeMaxEscudo: number = environment.sizeMaxEscudo;
+  archivoSubido: boolean = false;
   //variable con todas las provincias
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
@@ -58,10 +59,13 @@ export class CenadFormComponent implements OnInit {
   crearCenad(): void {//sube el archivo, le asigna el nombre al campo escudo y crea el cenad
     this.upload();
     this.cenad.escudo = this.currentFile.name;
-    this.cenadService.create(this.cenad).subscribe((response) => {
-      console.log(`He creado el CENAD/CMT ${this.cenad.nombre}`);
-      this.router.navigate(['/superadministrador']);
-    });
+    //compruebo que el archivo se sube antes de crear el cenad
+    if(this.archivoSubido) {
+      this.cenadService.create(this.cenad).subscribe((response) => {
+        console.log(`He creado el CENAD/CMT ${this.cenad.nombre}`);
+        this.router.navigate(['/superadministrador']);
+      });
+    }
   }
   //metodo para seleccionar el archivo a subir
   selectFile(event) {
@@ -70,8 +74,13 @@ export class CenadFormComponent implements OnInit {
 
   upload() {
     this.currentFile = this.selectedFiles.item(0);
-    this.cenadService.upload(this.currentFile).subscribe(
-      );
+    //si supera el tamaño archivoSubido sera false, y no se creara el cenad
+    if(this.currentFile.type.includes("image")) {
+      this.archivoSubido = (this.currentFile.size > this.sizeMaxEscudo * 1024 * 1024) ? false : true;//debo pasarlo a bytes
+      this.cenadService.upload(this.currentFile).subscribe();
+    } else {
+      alert('El archivo seleccionado debe ser una imagen');
+    }
     this.selectedFiles = undefined;
   }
 }

@@ -5,9 +5,9 @@
 export const environment = {
   appName: 'Sicenad DEV',
   production: false,
-  sizeMaxEscudo: "2 MB",
-  sizeMaxDocRecurso: "10 MB",
-  sizeMaxDocSolicitud: "10 MB",
+  sizeMaxEscudo: 2,
+  sizeMaxDocRecurso: 10,
+  sizeMaxDocSolicitud: 10,
   //endpoint para trabajar en local a H2
   // hostSicenad: 'http://localhost:8080/api/'
   //endpoint para trabajar en local a la BD MINERVA

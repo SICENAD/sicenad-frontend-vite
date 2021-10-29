@@ -1,5 +1,5 @@
 <!-- muestra un formulario con los datos del usuario para ver/editar -->
-<form #usuarioNormalForm="ngForm">
+<form #usuarioNormalForm="ngForm" (mouseenter)="actualizarNgModels()">
   <div class="form-row py-2">
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>NOMBRE<sup class="text-danger">*</sup></b></label>

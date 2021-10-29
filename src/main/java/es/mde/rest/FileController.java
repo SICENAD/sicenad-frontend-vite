@@ -104,7 +104,16 @@ public class FileController {
 	
 	@PostMapping("/subirDocRecurso/{id}")
 	public ResponseEntity<Response> uploadFileDocRecurso(@RequestParam("file") MultipartFile file, @PathVariable("id") String id) throws Exception {
-		if (file.getSize() > sizeLimiteDocRecurso) {
+		if(file.getContentType().contains("image")) {
+			if(file.getSize() > sizeLimiteEscudo) {
+				return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+						.body(new Response("La imagen es demasiado pesada"));				
+			} else {
+				fileServiceAPI.saveDocRecurso(file, id);
+				return ResponseEntity.status(HttpStatus.OK)
+					.body(new Response("La imagen fue cargada correctamente al servidor"));
+			}
+		} else if (file.getSize() > sizeLimiteDocRecurso) {
 			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
 					.body(new Response("El archivo es demasiado pesado"));
 		} else {
@@ -177,7 +186,16 @@ public class FileController {
 	
 	@PostMapping("/subirDocSolicitud/{id}")
 	public ResponseEntity<Response> uploadFileDocSolicitud(@RequestParam("file") MultipartFile file, @PathVariable("id") String id) throws Exception {
-		if (file.getSize() > sizeLimiteDocSolicitud) {
+		if(file.getContentType().contains("image")) {
+			if(file.getSize() > sizeLimiteEscudo) {
+				return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+						.body(new Response("La imagen es demasiado pesada"));				
+			} else {
+				fileServiceAPI.saveDocSolicitud(file, id);
+				return ResponseEntity.status(HttpStatus.OK)
+					.body(new Response("La imagen fue cargada correctamente al servidor"));
+			}
+		} else if (file.getSize() > sizeLimiteDocSolicitud) {
 			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
 					.body(new Response("El archivo es demasiado pesado"));
 		} else {

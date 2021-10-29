@@ -21,7 +21,8 @@ export class CenadFichaComponent implements OnInit {
   //variables para la subida de archivos de escudos
   selectedFiles: FileList;
   currentFile: File;
-  sizeMaxEscudo: string = environment.sizeMaxEscudo;
+  sizeMaxEscudo: number = environment.sizeMaxEscudo;
+  archivoSubido: boolean = false;
   //variable con todas las provincias
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
@@ -64,11 +65,15 @@ export class CenadFichaComponent implements OnInit {
   //metodo que emite el evento para editar el cenad y elimina el archivo anterior del escudo y carga el nuevo si es necesario
   editar(): void {
     if (this.selectedFiles) {
-      this.delete_Archivo(this.cenad);
       this.upload();
-      this.cenad.escudo = this.currentFile.name;
+      if(this.archivoSubido) {
+        this.delete_Archivo(this.cenad);
+        this.cenad.escudo = this.currentFile.name;
+        this.cenadEditar.emit(this.cenad);
+      }
+    } else {
+      this.cenadEditar.emit(this.cenad);
     }
-    this.cenadEditar.emit(this.cenad);
   }
 
   //metodo para seleccionar el archivo a subir
@@ -79,8 +84,12 @@ export class CenadFichaComponent implements OnInit {
   //metodo para subir el archivo de escudo
   upload() {
     this.currentFile = this.selectedFiles.item(0);
-    this.cenadService.upload(this.currentFile).subscribe(
-      );
+    if(this.currentFile.type.includes("image")) {
+      this.archivoSubido = (this.currentFile.size > this.sizeMaxEscudo * 1024 * 1024) ? false : true;//debo pasarlo a bytes
+      this.cenadService.upload(this.currentFile).subscribe();
+    } else {
+      alert('El archivo seleccionado debe ser una imagen');
+    }
     this.selectedFiles = undefined;
   }
 

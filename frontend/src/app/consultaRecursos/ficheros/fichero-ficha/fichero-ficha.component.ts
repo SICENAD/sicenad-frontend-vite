@@ -20,7 +20,8 @@ export class FicheroFichaComponent implements OnInit {
   //variables para la subida de archivos de escudos
   selectedFiles: FileList;
   currentFile: File;
-  sizeMaxDocRecurso: string = environment.sizeMaxDocRecurso;
+  sizeMaxDocRecurso: number = environment.sizeMaxDocRecurso;
+  sizeMaxEscudo: number = environment.sizeMaxEscudo;
   //variables para poder mostrar el valor inicial de los campos select
   recursoSeleccionado: string;
   categoriaFicheroSeleccionada: string;
@@ -28,6 +29,7 @@ export class FicheroFichaComponent implements OnInit {
   categoriasFichero: CategoriaFichero[] = [];
   //variable para recoger los recursos
   recursos: Recurso[] = [];
+  archivoSubido: boolean = false;
 
   constructor(private recursoService: RecursoService, private appConfigService: AppConfigService) { }
 
@@ -42,6 +44,7 @@ export class FicheroFichaComponent implements OnInit {
     this.actualizarNgModels();
     //para que use la variable del properties.json
     this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso;
+    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
   }
 
   //metodo para poder mostrar en los select los valores seleccionados
@@ -52,14 +55,18 @@ export class FicheroFichaComponent implements OnInit {
 
   //metodo que emite el evento para editar el fichero y elimina el archivo anterior del fichero y carga el nuevo si es necesario
   editar(): void {
-    if (this.selectedFiles) {
-      this.delete_Archivo(this.fichero);
-      this.upload();
-      this.fichero.nombreArchivo = this.currentFile.name;
-    }
     this.fichero.categoriaFichero = this.categoriaFicheroSeleccionada;
     this.fichero.recurso = this.recursoSeleccionado;
-    this.ficheroEditar.emit(this.fichero);
+    if (this.selectedFiles) { 
+      this.upload();
+      if(this.archivoSubido) {
+        this.delete_Archivo(this.fichero);
+        this.fichero.nombreArchivo = this.currentFile.name;
+        this.ficheroEditar.emit(this.fichero);
+      } 
+    } else {
+      this.ficheroEditar.emit(this.fichero);
+    }
   }
 
   //metodo para seleccionar el archivo a subir
@@ -70,6 +77,12 @@ export class FicheroFichaComponent implements OnInit {
   //metodo para subir el archivo 
   upload() {
     this.currentFile = this.selectedFiles.item(0);
+    //compruebo si es imagen para aplicarle el tamaño maximo de imagen o el de docRecurso
+    if(this.currentFile.type.includes("image")) {//si supera el tamaño archivoSubido sera false, y no se creara el fichero
+      this.archivoSubido = (this.currentFile.size > this.sizeMaxEscudo * 1024 * 1024) ? false : true;//debo pasarlo a bytes
+    } else {
+      this.archivoSubido = (this.currentFile.size > this.sizeMaxDocRecurso * 1024 * 1024) ? false : true;
+    }
     this.recursoService.upload(this.currentFile, this.fichero.recurso.idRecurso).subscribe(
       );
     this.selectedFiles = undefined;
