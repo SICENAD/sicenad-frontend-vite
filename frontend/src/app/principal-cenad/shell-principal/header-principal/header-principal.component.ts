@@ -3,8 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faEdge } from '@fortawesome/free-brands-svg-icons';
 import { faQuestionCircle, faSnowflake } from '@fortawesome/free-regular-svg-icons';
 import { faBars, faBomb, faBook, faBusinessTime, faCalendarAlt, faCloudSun, faEdit, faFire, faFolderOpen, faFolderPlus, faGlobe, faHome, faLink, faMap, faSearchLocation, faSitemap, faTree, faUserCog, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { CategoriaService } from 'src/app/categorias/service/categoria.service';
 import { HeaderComponent } from 'src/app/core/shell/header/header.component';
 import { PrincipalService } from 'src/app/principal-cenad/service/principal.service';
+import { RecursoService } from 'src/app/recursos/service/recurso.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { UsuarioAdministrador } from 'src/app/usuarios/models/usuarioAdministrador';
@@ -13,6 +15,7 @@ import { UsuarioGestor } from 'src/app/usuarios/models/usuarioGestor';
 import { UsuarioGestorImpl } from 'src/app/usuarios/models/usuarioGestor-impl';
 import { UsuarioNormal } from 'src/app/usuarios/models/usuarioNormal';
 import { UsuarioNormalImpl } from 'src/app/usuarios/models/usuarioNormal-impl';
+import { UsuarioGestorService } from 'src/app/usuarios/service/usuarioGestor.service';
 
 @Component({
   selector: 'app-header-principal',
@@ -64,7 +67,8 @@ export class HeaderPrincipalComponent implements OnInit {
   static userNormalLogeado: UsuarioNormal = new UsuarioNormalImpl();
 
   constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute,
-              private router: Router) { }
+              private router: Router, private categoriaService: CategoriaService, private recursoService: RecursoService,
+              private usuarioGestorService: UsuarioGestorService) { }
 
   ngOnInit() {
     //carga el cenad seleccionado
@@ -72,7 +76,20 @@ export class HeaderPrincipalComponent implements OnInit {
     // realiza el proceso de carga de todos los CENAD,s/CMT,s y comprueba si el CENAD/CMT seleccionado en el home es el de zaragoza
     this.cargarCenads();
     //comprueba si estas loggeado como administrador de este cenad
-    this.isAdminEsteCenad = (this.idCenad === HeaderComponent.idCenad && HeaderComponent.isAdmin);
+    this.isAdminEsteCenad = (this.idCenad === sessionStorage.idCenad && (sessionStorage.isAdmin === 'true'));
+    //recupera al local storage las categorias padre, categorias, recursos y gestores de ese cenad
+    if(!localStorage.getItem(`categorias_${this.idCenad}`)) {
+      this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
+    }
+    if(!localStorage.getItem(`categoriasPadre_${this.idCenad}`)) {
+      this.categoriaService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categoriasPadre_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
+    }
+    if(!localStorage.getItem(`recursos_${this.idCenad}`)) {
+      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response))));
+    }
+    if(!localStorage.getItem(`usuariosGestor_${this.idCenad}`)) {
+      this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
+    }
   }
 
   // Captura el idCenad pasado como parámetro en la barra de navegación
@@ -91,11 +108,9 @@ export class HeaderPrincipalComponent implements OnInit {
 
   // metodo que carga los diferentes CENAD,s/CMT,s y comprueba si es el de zaragoza, ya que tiene algun enlace especial a mostrar
   cargarCenads(): void {
-    this.principalService.getCenads().subscribe((response) => {
-      this.cenads = this.principalService.extraerCenads(response);
-      this.buscarIdCenadZaragoza();
-      this.comprobarCenadZaragoza();
-    });
+    this.cenads = JSON.parse(localStorage.cenads);
+    this.buscarIdCenadZaragoza();
+    this.comprobarCenadZaragoza();
   }
 
   // si el idProvincia del CENAD/CMT es el de Zaragoza (50), actualiza el valor de la variable idCenadZaragoza

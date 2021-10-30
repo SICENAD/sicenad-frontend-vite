@@ -27,6 +27,11 @@ export class CategoriaService {
     return this.http.get<any>(`${this.host}cenads/${idCenad}/categorias/?page=0&size=1000`);
   }
 
+  //metodo para obtener las categorias padre de un cenad
+  getCategoriasPadreDeCenad(idCenad:string): Observable<any> {
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/categoriasPadre/?page=0&size=1000`);
+  }
+
   //metodo que extrae el [] de categorias
   extraerCategorias(respuestaApi: any): Categoria[] {
     const categorias: Categoria[] = [];

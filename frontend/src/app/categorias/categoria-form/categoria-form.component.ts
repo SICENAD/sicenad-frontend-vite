@@ -30,7 +30,7 @@ export class CategoriaFormComponent implements OnInit {
     //recuperamos el id del CENAD de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     //metemos en la variable todas las categorias del cenad, para seleccionar la categoria padre
-    this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.categoriaService.extraerCategorias(response));
+    this.categorias = JSON.parse(localStorage.getItem(`categorias_${this.idCenad}`));
     //asignamos el CENAD a la categoria que creamos
     this.categoria.cenad = `${environment.hostSicenad}cenads/${this.idCenad}`;
   }
@@ -38,7 +38,10 @@ export class CategoriaFormComponent implements OnInit {
   //metodo para crear una nueva categoria y volver al listado de categorias de ese cenad
   crearCategoria(): void {
     this.categoriaService.create(this.categoria).subscribe((response) => {
-            console.log(`He creado la Categoria ${this.categoria.nombre}`);
+      //actualizamos el localStorage
+      this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
+      this.categoriaService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categoriasPadre_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
+      console.log(`He creado la Categoria ${this.categoria.nombre}`);
       this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
     });
   }

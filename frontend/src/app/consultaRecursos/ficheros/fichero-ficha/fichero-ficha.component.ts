@@ -34,12 +34,11 @@ export class FicheroFichaComponent implements OnInit {
   constructor(private recursoService: RecursoService, private appConfigService: AppConfigService) { }
 
   ngOnInit(): void {
-    //recupera de la BD todos los recursos
+    //recupera de la BD todos los recursos. es para un select hidden, no es importante la velocidad.
     this.recursoService.getRecursos().subscribe((response) => 
        this.recursos = this.recursoService.extraerRecursos(response));
-    //recupera de la BD todas las categorias de fichero
-    this.recursoService.getCategoriasFichero().subscribe((response) => 
-       this.categoriasFichero = this.recursoService.extraerCategoriasFichero(response));
+    //recupera del Local Storage todas las categorias de fichero y las guarda en la variable para poder seleccionarlas si se añade un fichero nuevo
+    this.categoriasFichero = JSON.parse(localStorage.categoriasFichero);
     //asigna los valores seleccionados a los select de los campos del recurso
     this.actualizarNgModels();
     //para que use la variable del properties.json

@@ -43,7 +43,6 @@ export class SolicitudesRecursosComponent implements OnInit {
   //estado de una solicitud, utilizada para realizar los filtros
   static estadoSolicitud: string = "";
 
-
   constructor(private solicitudService: SolicitudRecursoService,
     private router: Router, private activateRoute: ActivatedRoute) { }
 
@@ -84,10 +83,10 @@ export class SolicitudesRecursosComponent implements OnInit {
       if (HeaderPrincipalComponent.userAdminLogeado) {
         this.isAdministrador = true;
       } else if (HeaderPrincipalComponent.userGestorLogeado) {
-            this.isGestor = true;
-          } else if (HeaderPrincipalComponent.userNormalLogeado) {
-                  this.isUserNormal = true;
-                }
+        this.isGestor = true;
+      } else if (HeaderPrincipalComponent.userNormalLogeado) {
+        this.isUserNormal = true;
+      }
     }
   }
 
@@ -98,7 +97,4 @@ export class SolicitudesRecursosComponent implements OnInit {
     SolicitudesRecursosComponent.estadoSolicitud = tipo;
     this.router.navigate([`principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}/solicitudesTodas/${this.idCenad}`]);
   }
-
-
-
 }

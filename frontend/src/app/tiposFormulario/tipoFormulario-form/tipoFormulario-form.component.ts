@@ -25,6 +25,8 @@ export class TipoFormularioFormComponent implements OnInit {
   //metodo que crea un tipo de formulario y vuelve al listado de tipos de formulario
   crearTipoFormulario(): void {
     this.tipoFormularioService.create(this.tipoFormulario).subscribe((response) => {
+      //actualiza el local storage
+      this.tipoFormularioService.getTiposFormulario().subscribe((response) => localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response)));
       console.log(`He creado el Tipo de Formulario ${this.tipoFormulario.nombre}`);
       this.router.navigate(['/tiposFormulario']);
     });

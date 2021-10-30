@@ -23,7 +23,7 @@ export class UsuarioAdministradorFormComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    //rescata de la BD los cenads
+    //rescata de la BD los cenads sin administrador
     this.usuarioAdministradorService.getCenadsSinAdmin().subscribe((response) => this.cenads = this.usuarioAdministradorService.extraerCenads(response));
   }
 
@@ -31,6 +31,8 @@ export class UsuarioAdministradorFormComponent implements OnInit {
   crearUsuarioAdministrador(): void {
     this.usuarioAdministradorService.create(this.usuarioAdministrador).subscribe((response) => {
       console.log(`He creado el Usuario Administrador ${this.usuarioAdministrador.nombre}`);
+      //actualizo el local storage
+      this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
       this.router.navigate(['/usuarios']);
     });
   }

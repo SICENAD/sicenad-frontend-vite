@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { UsuarioAdministrador } from '../../models/usuarioAdministrador';
+import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.service';
 
 @Component({
   selector: 'app-usuarioAdministrador',
@@ -15,7 +16,10 @@ export class UsuarioAdministradorComponent implements OnInit {
   //variable del icono "editar"
   faEdit = faEdit;
 
-  constructor() {}
+  constructor(private usuarioAdministradorService: UsuarioAdministradorService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.usuarioAdministradorService.getCenad(this.usuarioAdministrador).subscribe((response) =>
+      this.usuarioAdministrador.cenad = this.usuarioAdministradorService.mapearCenad(response));
+  }
 }

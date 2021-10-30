@@ -99,7 +99,7 @@ export class SolicitudRecursoFormComponent implements OnInit {
         this.fechaSolicitudParse = this.actualizarFechaInv(this.solicitud.fechaSolicitud);
         this.fechaInicioParse = this.solicitud.fechaHoraInicioRecurso;
         this.fechaFinParse = this.solicitud.fechaHoraFinRecurso;
-        this.solicitud.estado == "Borrador" ? this.isBorrador = true : this.isBorrador = false;
+        this.solicitud.estado === "Borrador" ? this.isBorrador = true : this.isBorrador = false;
         this.estadoSeleccionado = this.solicitud.estado;
       });
       setTimeout(()=> {
@@ -126,18 +126,14 @@ export class SolicitudRecursoFormComponent implements OnInit {
     }
   }
 
-  // método que obtiene de la API todas las categorías del Cenad
+  // método que obtiene del local storage todas las categorías del Cenad
   getCategorias(): void {
-    this.solicitudService.getCategoriasDeCenad(this.idCenad).subscribe((response) => {
-      this.categoriasCenad = this.solicitudService.extraerCategorias(response);
-    });
+    this.categoriasCenad = JSON.parse(localStorage.getItem(`categorias_${this.idCenad}`));
   }
 
-  // método que obtiene de la API todas las Unidades
+  // método que obtiene del local storage todas las Unidades
   getUcos(): void {
-    this.unidadService.getUnidades().subscribe((response) => {
-      this.unidades = this.unidadService.extraerUnidades(response);
-    });
+    this.unidades = JSON.parse(localStorage.unidades);
   }
 
   //método que captura los parámetros (idSolicitud y idCenad) de la barra de navegación
@@ -325,16 +321,11 @@ export class SolicitudRecursoFormComponent implements OnInit {
 
   //metodo que resetea los filtros y regresa al listado de recursos del cenad
   borrarFiltros() {
-    //rescata de la BD las categorias padre del cenad
-    this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
-      this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
-    //rescatamos de la BD los recursos de ese cenad
-    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => {
-      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
-        this.recursosDeCategoria = this.recursoService.extraerRecursos(response);
-      }});    //resetea la categoria seleccionada
+    //rescata del local storage las categorias padre del cenad
+    this.categoriasFiltradas = JSON.parse(localStorage.getItem(`categoriasPadre_${this.idCenad}`));
+    //rescatamos del local storage los recursos de ese cenad
+    this.recursosDeCategoria = JSON.parse(localStorage.getItem(`recursos_${this.idCenad}`));
+    //resetea la categoria seleccionada
     this.categoriaSeleccionada = null;
   }
-
-
 }

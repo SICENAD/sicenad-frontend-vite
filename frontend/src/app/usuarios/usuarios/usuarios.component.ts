@@ -52,37 +52,24 @@ export class UsuariosComponent implements OnInit {
     ngOnInit(): void {
       //captura el id del cenad de la barra de navegacion
       this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-      this.isMiCenad = (this.idCenad === HeaderComponent.idCenad);
-
-      this.isAdministrador = HeaderComponent.isAdmin;
+      //compruebo si el usuario loggeado pertenece a este cenad
+      this.isMiCenad = (this.idCenad === sessionStorage.idCenad);
+      //compruebo si el usuario loggeado es administrador
+      this.isAdministrador = (sessionStorage.isAdmin === 'true');
       //comprueba que sea administrador de ese cenad
+      //recupera todos los usuarios normal del loccal storage
+      this.usuariosNormal = JSON.parse(localStorage.usuariosNormal);
       if(this.isAdministrador && this.isMiCenad) {
-        //recupera los usuarios gestores del cenad
-        this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => this.usuariosGestor = this.usuarioGestorService.extraerUsuarios(response));
-        //recupera todos los usuarios normal de la BD
-        this.usuarioNormalService.getUsuarios().subscribe((response) => this.usuariosNormal = this.usuarioNormalService.extraerUsuarios(response));
+        //recupera del local storage los usuarios gestores del cenad
+        this.usuariosGestor = JSON.parse(localStorage.getItem(`usuariosGestor_${this.idCenad}`));
       }
-
-      if(!this.isAdministrador) {
-        //recupera todos los usuarios normal de la BD
-        this.usuarioNormalService.getUsuarios().subscribe((response) => this.usuariosNormal = this.usuarioNormalService.extraerUsuarios(response));
-      }
-
-      // if (this.idCenad !==undefined) {
-      //   //recupera de la BD todos los gestores del cenad del administrador
-      //   this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => this.usuariosGestor = this.usuarioGestorService.extraerUsuarios(response));
-      //   this.isAdministrador = true;
-      // }
-
-
-
-      //recupera todos los administradores de la BD
-      this.usuarioAdministradorService.getUsuarios().subscribe((response) => this.usuariosAdministrador = this.usuarioAdministradorService.extraerUsuarios(response));
       if (this.isAdministrador) {//la variable volver nos llevara a "superadministrador"o a "ppalCenad"
         //aqui debo sacar el idCenad del administrador que esta logueado
         this.volver = `/principalCenad/${this.idCenad}`;
         this.nuevoUsuarioNormal = `/principalCenad/${this.idCenad}/usuarios/${this.idCenad}/formulario-usuarioNormal/${this.idCenad}`;
       } else {
+        //recupera todos los administradores de la BD
+        this.usuariosAdministrador = JSON.parse(localStorage.usuariosAdministrador);
         this.volver = `/superadministrador`;
         this.nuevoUsuarioNormal = `/usuarios/formulario-usuarioNormal`;
       }
@@ -96,6 +83,8 @@ export class UsuariosComponent implements OnInit {
     //metodo para eliminar un usuario administrador
     onUsuarioAdministradorEliminar(usuarioAdministrador: UsuarioAdministradorImpl): void {
       this.usuarioAdministradorService.delete(usuarioAdministrador).subscribe(response => {
+        //actualizo el local storage
+        this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
         console.log(`He borrado el Administrador ${usuarioAdministrador.nombre}`);
         this.router.navigate(['/usuarios']);
       });
@@ -104,6 +93,8 @@ export class UsuariosComponent implements OnInit {
     //metodo para editar un usuario administrador
     onUsuarioAdministradorEditar(usuarioAdministrador: UsuarioAdministradorImpl): void {
       this.usuarioAdministradorService.update(usuarioAdministrador).subscribe(response => {
+        //actualizo el local storage
+        this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
         console.log(`He actualizado el Administrador ${usuarioAdministrador.nombre}`);
         this.router.navigate(['/usuarios']);
       });
@@ -117,6 +108,9 @@ export class UsuariosComponent implements OnInit {
     //metodo para eliminar un usuario gestor
     onUsuarioGestorEliminar(usuarioGestor: UsuarioGestorImpl): void {
       this.usuarioGestorService.delete(usuarioGestor).subscribe(response => {
+        //actualizo el local storage
+        this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
+        this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
         console.log(`He borrado el gestor ${usuarioGestor.nombre}`);
         this.router.navigate([`/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`]);
       });
@@ -125,6 +119,9 @@ export class UsuariosComponent implements OnInit {
     //metodo para editar un usuario gestor
     onUsuarioGestorEditar(usuarioGestor: UsuarioGestorImpl): void {
       this.usuarioGestorService.update(usuarioGestor).subscribe(response => {
+        //actualizo el local storage
+        this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
+        this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
         console.log(`He actualizado el gestor ${usuarioGestor.nombre}`);
         this.router.navigate([`/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`]);
       });
@@ -139,6 +136,8 @@ export class UsuariosComponent implements OnInit {
     onUsuarioNormalEliminar(usuarioNormal: UsuarioNormalImpl): void {
       let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/usuarios/${this.idCenad}` : 'usuarios'  
       this.usuarioNormalService.delete(usuarioNormal).subscribe(response => {
+        //actualizo el local storage
+        this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
         console.log(`He borrado el usuario ${usuarioNormal.nombre}`);
         this.router.navigate([ruta]);
       });
@@ -148,6 +147,8 @@ export class UsuariosComponent implements OnInit {
     onUsuarioNormalEditar(usuarioNormal: UsuarioNormalImpl): void {
       let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/usuarios/${this.idCenad}` : 'usuarios'    
       this.usuarioNormalService.update(usuarioNormal).subscribe(response => {
+        //actualizo el local storage
+        this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
         console.log(`He actualizado el usuario ${usuarioNormal.nombre}`);
         this.router.navigate([ruta]);
       });

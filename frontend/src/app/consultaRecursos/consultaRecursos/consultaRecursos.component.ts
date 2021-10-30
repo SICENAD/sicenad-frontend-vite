@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Categoria } from 'src/app/categorias/models/categoria';
-import { HeaderComponent } from 'src/app/core/shell/header/header.component';
 import { Recurso } from 'src/app/recursos/models/recurso';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
 
@@ -35,19 +34,13 @@ export class ConsultaRecursosComponent implements OnInit {
   ngOnInit(): void {
     //rescatamos el id del Cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    //rescatamos de la BD los recursos de ese cenad
-    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => { 
-      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
-        this.recursos = this.recursoService.extraerRecursos(response);
-      }});
+    //rescatamos del local storage los recursos de ese cenad
+    this.recursos = JSON.parse(localStorage.getItem(`recursos_${this.idCenad}`));
     //asignamos a la variable categorias filtradas las categorias padre del cenad, para comenzar a filtrar
-    this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => { 
-      if (response._embedded) {//con este condicional elimino el error de consola si no hay ninguna categoria padre
-        this.categoriasFiltradas = this.recursoService.extraerCategorias(response);
-      }});
+    this.categoriasFiltradas = JSON.parse(localStorage.getItem(`categoriasPadre_${this.idCenad}`));
     //comprobamos si el usuario es un gestor de este cenad
-    if(HeaderComponent.isGestor && (HeaderComponent.idCenad === this.idCenad)) {
-      this.idUsuarioGestor = HeaderComponent.idUsuario;
+    if((sessionStorage.isGestor ==='true') && (sessionStorage.idCenad === this.idCenad)) {
+      this.idUsuarioGestor = sessionStorage.idUsuario;
       this.isGestorCenad = this.cambioBoton = true;
     }
   }
@@ -70,9 +63,8 @@ export class ConsultaRecursosComponent implements OnInit {
 
   //metodo para resetear los filtros y volver a mostrar todos los recursos del cenad
   borrarFiltros() {
-    this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
-      this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
-    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
+    this.categoriasFiltradas = JSON.parse(localStorage.getItem(`categoriasPadre_${this.idCenad}`));
+    this.recursos = JSON.parse(localStorage.getItem(`recursos_${this.idCenad}`));
     this.categoriaSeleccionada = null;
   }
 

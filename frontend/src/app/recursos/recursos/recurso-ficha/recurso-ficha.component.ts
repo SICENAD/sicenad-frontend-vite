@@ -36,13 +36,12 @@ export class RecursoFichaComponent implements OnInit {
   ngOnInit(): void {
     //captura el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    //recupera de la BD las categorias de ese cenad
-    this.recursoService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.recursoService.extraerCategorias(response));
-    //recupera de la BD los gestores de ese cenad    
-    this.recursoService.getUsuariosGestor(this.idCenad).subscribe((response) => this.gestores = this.recursoService.extraerUsuarios(response));
-    //recupera de la BD todos los tipos de formulario
-    this.recursoService.getTiposFormulario().subscribe((response) => 
-       this.tiposFormulario = this.recursoService.extraerTiposFormulario(response));
+    //rescata del local storage las categorias del cenad
+    this.categorias = JSON.parse(localStorage.getItem(`categorias_${this.idCenad}`));
+    //rescata del local storage los usuarios gestores de ese cenad
+    this.gestores = JSON.parse(localStorage.getItem(`usuariosGestor_${this.idCenad}`));
+    //rescata del LocalStorage los tipos de formulario
+    this.tiposFormulario = JSON.parse(localStorage.tiposFormulario);
     //asigna los valores seleccionados a los select de los campos del recurso
     this.actualizarNgModels();
   }

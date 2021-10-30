@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { UsuarioNormal } from '../../models/usuarioNormal';
+import { UsuarioNormalService } from '../../service/usuarioNormal.service';
 
 @Component({
   selector: 'app-usuarioNormal',
@@ -15,7 +16,10 @@ export class UsuarioNormalComponent implements OnInit {
   //variable del icono "editar"
   faEdit = faEdit;
 
-  constructor() {}
+  constructor(private usuarioNormalService: UsuarioNormalService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.usuarioNormalService.getUnidad(this.usuarioNormal.idUsuario).subscribe((response) => 
+      this.usuarioNormal.unidad = this.usuarioNormalService.mapearUnidad(response));
+  }
 }

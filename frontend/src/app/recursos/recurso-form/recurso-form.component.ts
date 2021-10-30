@@ -33,17 +33,19 @@ export class RecursoFormComponent implements OnInit {
   ngOnInit() {
     //resacata el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    //rescata de la BD las categorias del cenad
-    this.recursoService.getCategoriasDeCenad(this.idCenad).subscribe((response) => this.categorias = this.recursoService.extraerCategorias(response));
-    //rescata de la BD los usuarios gestores de ese cenad
-    this.recursoService.getUsuariosGestor(this.idCenad).subscribe((response) => this.gestores = this.recursoService.extraerUsuarios(response));
-    //rescata de la BD los tipos de formulario
-    this.recursoService.getTiposFormulario().subscribe((response) => this.tiposFormulario = this.recursoService.extraerTiposFormulario(response));
+    //rescata del local storage las categorias del cenad
+    this.categorias = JSON.parse(localStorage.getItem(`categorias_${this.idCenad}`));
+    //rescata del local storage los usuarios gestores de ese cenad
+    this.gestores = JSON.parse(localStorage.getItem(`usuariosGestor_${this.idCenad}`));
+    //rescata del LocalStorage los tipos de formulario
+    this.tiposFormulario = JSON.parse(localStorage.tiposFormulario);
   }
 
   //metodo para crear un recurso en ese cenad y volver al listado de recursos de ese cenad
   crearRecurso(): void {
     this.recursoService.create(this.recurso).subscribe((response) => {
+      //actualizo local storage
+      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response))));
       console.log(`He creado el recurso ${this.recurso.nombre}`);
       this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
     });

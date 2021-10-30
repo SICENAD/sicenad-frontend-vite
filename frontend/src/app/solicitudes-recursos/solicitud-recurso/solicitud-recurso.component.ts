@@ -18,7 +18,6 @@ export class SolicitudRecursoComponent implements OnInit {
   //variable para parsear la fecha de la solicitud
   fechaSolicitudParse: Date;
 
-
   constructor(private router: Router, private solicitudService: SolicitudRecursoService) { }
 
   ngOnInit() {
@@ -45,5 +44,4 @@ export class SolicitudRecursoComponent implements OnInit {
      let fechaDate: Date = new Date(arrayDate[2], arrayDate[1]-1, arrayDate[0]);
      return fechaDate;
    }
-
 }

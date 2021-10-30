@@ -20,6 +20,3 @@ export class CategoriaFicheroComponent implements OnInit {
   ngOnInit() {
   }
 }
-
-
-

@@ -23,8 +23,8 @@ export class TiposFormularioComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    //recoge en la variable todos los tipos de formulario
-    this.tipoFormularioService.getTiposFormulario().subscribe((response) => this.tiposFormulario = this.tipoFormularioService.extraerTiposFormulario(response));
+    //recoge del local storage en la variable todos los tipos de formulario
+    this.tiposFormulario = JSON.parse(localStorage.tiposFormulario);
   }
   
   //metodo para poder mostrar los datos del tipo de formulario
@@ -35,6 +35,8 @@ export class TiposFormularioComponent implements OnInit {
   //metodo para eliminar un tipo de formulario y volver al listado
   onTipoFormularioEliminar(tipoFormulario: TipoFormulario): void {
     this.tipoFormularioService.delete(tipoFormulario).subscribe(response => {
+      //actualizo el local storage
+      this.tipoFormularioService.getTiposFormulario().subscribe((response) => localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response)));
       console.log(`He borrado el Tipo de Formulario ${tipoFormulario.nombre}`);
       this.router.navigate(['/tiposFormulario']);
     });
@@ -43,6 +45,8 @@ export class TiposFormularioComponent implements OnInit {
   //metodo para editar un tipo de formulario y volver al listado
   onTipoFormularioEditar(tipoFormulario: TipoFormularioImpl): void {
     this.tipoFormularioService.update(tipoFormulario).subscribe(response => {
+      //actualizo el local storage
+      this.tipoFormularioService.getTiposFormulario().subscribe((response) => localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response)));
       console.log(`He actualizado el Tipo de Formulario ${tipoFormulario.nombre}`);
       this.router.navigate(['/tiposFormulario']);
     });

@@ -31,14 +31,10 @@ export class RecursosComponent implements OnInit {
   ngOnInit(): void {
     //captura el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    //rescatamos de la BD los recursos de ese cenad
-    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => { 
-      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
-        this.recursos = this.recursoService.extraerRecursos(response);
-      }});
-    //recupera de la BD las categorias padre de ese cenad, para comenzar el filtrado
-    this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
-      this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
+    //rescatamos del local storage los recursos de ese cenad
+    this.recursos = JSON.parse(localStorage.getItem(`recursos_${this.idCenad}`));
+    //recupera del local storage las categorias padre de ese cenad, para comenzar el filtrado
+    this.categoriasFiltradas = JSON.parse(localStorage.getItem(`categoriasPadre_${this.idCenad}`));
   }
 
   //metodo para transferir los datos del recurso al otro componente
@@ -49,6 +45,8 @@ export class RecursosComponent implements OnInit {
   //metodo para eliminar un recurso y volver al listado de recursos de ese cenad
   onRecursoEliminar(recurso: RecursoImpl): void {
     this.recursoService.delete(recurso).subscribe(response => {
+      //actualizo local storage
+      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response))));
       console.log(`He borrado el recurso ${recurso.nombre}`);
       this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
     });
@@ -57,6 +55,8 @@ export class RecursosComponent implements OnInit {
   //metodo para editar un recurso y volver al listado de recursos de ese cenad
   onRecursoEditar(recurso: RecursoImpl): void {
     this.recursoService.update(recurso).subscribe(response => {
+      //actualizo local storage
+      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response))));
       console.log(`He actualizado el recurso ${recurso.nombre}`);
       this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
     });
@@ -84,14 +84,11 @@ export class RecursosComponent implements OnInit {
 
   //metodo que restea los filtros y regresa al listado de recursos del cenad
   borrarFiltros() {
-    //rescata de la BD las categorias padre del cenad
-    this.recursoService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) =>
-      this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
-    //rescatamos de la BD los recursos de ese cenad
-    this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => { 
-      if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
-        this.recursos = this.recursoService.extraerRecursos(response);
-      }});    //resetea la categoria seleccionada
+    //rescata del local storage las categorias padre del cenad
+    this.categoriasFiltradas = JSON.parse(localStorage.getItem(`categoriasPadre_${this.idCenad}`));
+    //rescatamos del local storage los recursos de ese cenad
+    this.recursos = JSON.parse(localStorage.getItem(`recursos_${this.idCenad}`));
+    //resetea la categoria seleccionada
     this.categoriaSeleccionada = null;
   }
 }

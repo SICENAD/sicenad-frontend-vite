@@ -72,27 +72,23 @@ export class SolicitudesTodasComponent implements OnInit {
     this.solicitudesCenad = SolicitudesRecursosComponent.solicitudesCenad;
     this.estadoSeleccionado = SolicitudesRecursosComponent.estadoSolicitud;
     this.filtrar();
-    //obtiene las categorias del Cenad
-    this.solicitudService.getCategoriasDeCenad(this.idCenad).subscribe((response) => {
-      this.categoriasCenad = this.solicitudService.extraerCategorias((response));
-    });
-    //obtiene las unidades
-    this.solicitudService.getUnidades().subscribe((response) => {
-      this.unidades = this.solicitudService.extraerUnidades((response));
-    });
+    //obtiene del local storage las categorias del Cenad
+    this.categoriasCenad = JSON.parse(localStorage.getItem(`categorias_${this.idCenad}`));
+    //obtiene del local storage las unidades
+    this.unidades = JSON.parse(localStorage.unidades);
   }
 
   //método que se ejecuta al hacer click sobre el botón Borrar Filtro
   //inicializa las variables en función del filtro donde se haya hecho click
   borrarFiltro(filtro: string): void {
-    if (filtro == 'categoria') {
+    if (filtro === 'categoria') {
       this.categoriaSeleccionada = null;
     }
-    if (filtro == 'fecha') {
+    if (filtro === 'fecha') {
       this.fechaInicioSeleccionada = null;
       this.fechaFinSeleccionada = null;
     }
-    if (filtro == 'unidad') {
+    if (filtro === 'unidad') {
       this.unidadSeleccionada = null;
     }
     this.filtrar();
@@ -283,7 +279,6 @@ export class SolicitudesTodasComponent implements OnInit {
     }
   }
 
-
   //método que realiza los filtros en el array de solicitudes del cenad
   filtrarTodas(): void {
     console.log(this.isFechaActual);
@@ -433,5 +428,4 @@ export class SolicitudesTodasComponent implements OnInit {
       });
     }
   }
-
 }

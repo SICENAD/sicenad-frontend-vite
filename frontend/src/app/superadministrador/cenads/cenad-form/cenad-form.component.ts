@@ -50,8 +50,8 @@ export class CenadFormComponent implements OnInit {
     private usuarioAdministradorService: UsuarioAdministradorService,
     private router: Router, private appConfigService: AppConfigService) { }
 
-  ngOnInit(): void {//rescata de la BD todos los administradores
-      this.usuarioAdministradorService.getUsuarios().subscribe((response) => this.administradores = this.usuarioAdministradorService.extraerUsuarios(response));
+  ngOnInit(): void {//rescata del local storage todos los administradores
+      this.administradores = JSON.parse(localStorage.usuariosAdministrador);
       //para que coja la variable del properties.json
       this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
   }
@@ -62,6 +62,8 @@ export class CenadFormComponent implements OnInit {
     //compruebo que el archivo se sube antes de crear el cenad
     if(this.archivoSubido) {
       this.cenadService.create(this.cenad).subscribe((response) => {
+        //actualiza el local storage
+        this.cenadService.getCenads().subscribe((response) => localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response)));
         console.log(`He creado el CENAD/CMT ${this.cenad.nombre}`);
         this.router.navigate(['/superadministrador']);
       });
@@ -72,6 +74,7 @@ export class CenadFormComponent implements OnInit {
     this.selectedFiles = event.target.files;
   }
 
+  //metodo para subir los archivos
   upload() {
     this.currentFile = this.selectedFiles.item(0);
     //si supera el tamaño archivoSubido sera false, y no se creara el cenad

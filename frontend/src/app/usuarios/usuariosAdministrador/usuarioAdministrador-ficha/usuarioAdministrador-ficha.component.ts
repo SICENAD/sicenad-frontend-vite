@@ -23,8 +23,8 @@ export class UsuarioAdministradorFichaComponent implements OnInit {
     private usuarioAdministradorService: UsuarioAdministradorService) { }
 
   ngOnInit(): void {
-     //rescata de la BD los cenads
-     this.usuarioAdministradorService.getCenads().subscribe((response) => this.cenads = this.usuarioAdministradorService.extraerCenads(response));
+    //rescata del local storage los cenads
+    this.cenads = JSON.parse(localStorage.cenads);
     //asigna los valores seleccionados a los select de los campos del usuario
     this.actualizarNgModels();
   }
@@ -40,8 +40,8 @@ export class UsuarioAdministradorFichaComponent implements OnInit {
     this.usuarioAdministradorEditar.emit(this.usuarioAdministrador);
   }
 
-    //metodo para poder mostrar en los select los valores seleccionados
-    actualizarNgModels(): void {
-      this.cenadSeleccionado = this.usuarioAdministrador.cenad.url;
-    }
+  //metodo para poder mostrar en los select los valores seleccionados
+  actualizarNgModels(): void {
+    this.cenadSeleccionado = this.usuarioAdministrador.cenad.url;
+  }
 }

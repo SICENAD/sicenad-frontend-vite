@@ -41,28 +41,8 @@ export class HomeComponent implements OnInit {
   constructor(private homeService: HomeService, private router: Router) { }
 
   ngOnInit() {
-    //carga los cenads en su variable
-    this.cargarCenads();
-  }
+    this.cenads = JSON.parse(localStorage.cenads);
 
-  // función de prueba que crea objetos cenads. se uso al principio antes de tener el CRUD de CENADS
-  prueba() {
-    let cenad1: Cenad = new CenadImpl();
-    cenad1.nombre = "CENAD SAN GREGORIO";
-    cenad1.provincia = 50;
-    let cenad2: Cenad = new CenadImpl();
-    cenad2.nombre = "CENAD PRUEBA";
-    cenad2.provincia = 50;
-    let cenad3: Cenad = new CenadImpl();
-    cenad3.nombre = "CMT ALVAREZ DE SOTOMAYOR";
-    cenad3.provincia = 4;
-    this.cenads.push(cenad1, cenad2, cenad3);
-  }
-
-  // función que carga los diferentes CENAD,s/CMT,s de la BD
-  cargarCenads() {
-    this.homeService.getCenads().subscribe((response) => 
-      this.cenads = this.homeService.extraerCenads(response));
   }
 
   // Asigna al array cenadsFiltro todos los CENAD,s/CMT,s de una provincia

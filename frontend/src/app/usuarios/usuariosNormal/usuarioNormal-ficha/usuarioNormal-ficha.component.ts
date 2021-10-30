@@ -23,8 +23,8 @@ export class UsuarioNormalFichaComponent implements OnInit {
     private usuarioNormalService: UsuarioNormalService) { }
 
   ngOnInit(): void {
-     //rescata de la BD las unidades
-     this.usuarioNormalService.getUnidades().subscribe((response) => this.unidades = this.usuarioNormalService.extraerUnidades(response));
+    //rescata del local storage las unidades
+    this.unidades = JSON.parse(localStorage.unidades);
     //asigna los valores seleccionados a los select de los campos del recurso
     this.actualizarNgModels();
   }
@@ -40,8 +40,8 @@ export class UsuarioNormalFichaComponent implements OnInit {
     this.usuarioNormalEditar.emit(this.usuarioNormal);
   }
 
-    //metodo para poder mostrar en los select los valores seleccionados
-    actualizarNgModels(): void {
-      this.unidadSeleccionada = this.usuarioNormal.unidad.url;
-    }
+  //metodo para poder mostrar en los select los valores seleccionados
+  actualizarNgModels(): void {
+    this.unidadSeleccionada = this.usuarioNormal.unidad.url;
+  }
 }

@@ -19,33 +19,35 @@ export class CategoriasFicheroComponent implements OnInit {
   //variable para icono "volver"
   faVolver = faArrowAltCircleLeft;
 
-  constructor(
-    private categoriaFicheroService: CategoriaFicheroService,
-    private router: Router) { }
+  constructor(private categoriaFicheroService: CategoriaFicheroService, private router: Router) { }
 
-    ngOnInit(): void {
-      //metemos en la variable todas las categorias de fichero
-      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => this.categoriasFichero = this.categoriaFicheroService.extraerCategoriasFichero(response));
-    }
-  
-    //metodo que asigna los datos de la categoria de fichero para la comunicacion al otro componente
-    verDatos(categoriaFichero: CategoriaFichero): void {
-      this.categoriaFicheroVerDatos = categoriaFichero;
-    }
-  
-    //metodo que materializa la eliminacion de una categoria de fichero y vuelve al listado de categorias de fichero
-    onCategoriaFicheroEliminar(categoriaFichero: CategoriaFichero): void {
-      this.categoriaFicheroService.delete(categoriaFichero).subscribe(response => {
-        console.log(`He borrado la Categoría de Fichero ${categoriaFichero.nombre}`);
-        this.router.navigate(['/categoriasFichero']);
-      });
-    }
-
-    //metodo que materializa la edicion de una categoria de fichero y vuelve al listado de categorias de fichero
-    onCategoriaFicheroEditar(categoriaFichero: CategoriaFicheroImpl): void {
-      this.categoriaFicheroService.update(categoriaFichero).subscribe(response => {
-        console.log(`He actualizado la Categoría de Fichero ${categoriaFichero.nombre}`);
-        this.router.navigate(['/categoriasFichero']);
-      });
-    }
+  ngOnInit(): void {
+    //metemos en la variable todas las categorias de fichero
+    this.categoriasFichero = JSON.parse(localStorage.categoriasFichero);
   }
+  
+  //metodo que asigna los datos de la categoria de fichero para la comunicacion al otro componente
+  verDatos(categoriaFichero: CategoriaFichero): void {
+    this.categoriaFicheroVerDatos = categoriaFichero;
+  }
+  
+  //metodo que materializa la eliminacion de una categoria de fichero y vuelve al listado de categorias de fichero
+  onCategoriaFicheroEliminar(categoriaFichero: CategoriaFichero): void {
+    this.categoriaFicheroService.delete(categoriaFichero).subscribe(response => {
+      //actualizamos el localStorage
+      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response)));
+      console.log(`He borrado la Categoría de Fichero ${categoriaFichero.nombre}`);
+      this.router.navigate(['/categoriasFichero']);
+    });
+  }
+
+  //metodo que materializa la edicion de una categoria de fichero y vuelve al listado de categorias de fichero
+  onCategoriaFicheroEditar(categoriaFichero: CategoriaFicheroImpl): void {
+    this.categoriaFicheroService.update(categoriaFichero).subscribe(response => {
+      //actualizamos el localStorage
+      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response)));
+      console.log(`He actualizado la Categoría de Fichero ${categoriaFichero.nombre}`);
+      this.router.navigate(['/categoriasFichero']);
+    });
+  }
+}

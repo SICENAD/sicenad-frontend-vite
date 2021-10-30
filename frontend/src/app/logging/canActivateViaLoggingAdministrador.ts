@@ -12,7 +12,7 @@ export class CanActivateViaLoggingAdministrador implements CanActivateChild {
 
     canActivateChild() {
         // si el usuario no está loggeado como administrador le dará un alert y le llevará a la pagina principal del cenad de donde venia
-        if (!HeaderComponent.isAdmin) {
+        if ((sessionStorage.isAdmin !== 'true')) {
             let url = location.toString();
             this.idCenad = this.getId(url);
             this.router.navigate([`/principalCenad/${this.idCenad}`]);

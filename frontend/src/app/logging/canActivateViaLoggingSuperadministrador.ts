@@ -9,7 +9,7 @@ export class CanActivateViaLoggingSuperadministrador implements CanActivateChild
 
     canActivateChild() {
         // si el usuario no está loggeado como superadministrador le dará un alert y le llevará a "/"
-        if (!HeaderComponent.isSuperAdmin) {
+        if ((sessionStorage.isSuperAdmin !== 'true')) {
             this.router.navigate([`/`]); 
             alert('Debes identificarte como superadministrador para continuar');
             return false;

@@ -41,6 +41,8 @@ export class UnidadFormComponent implements OnInit {
   crearUnidad(): void {
     let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/unidades/${this.idCenad}` : 'unidades'
     this.unidadService.create(this.unidad).subscribe((response) => {
+      //actualizo el local storage
+      this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
       console.log(`He creado la unidad ${this.unidad.nombre}`);
       this.router.navigate([ruta]);
     });

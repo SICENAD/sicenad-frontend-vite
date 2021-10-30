@@ -26,8 +26,7 @@ export class CategoriasComponent implements OnInit {
     //recuperamos el id del CENAD de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     //metemos en la variable todas las categorias del cenad
-    this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => 
-      this.categorias = this.categoriaService.extraerCategorias(response));
+    this.categorias = JSON.parse(localStorage.getItem(`categorias_${this.idCenad}`));
     }
 
     //metodo que asigna los datos de la categoria para la comunicacion al otro componente
@@ -38,6 +37,9 @@ export class CategoriasComponent implements OnInit {
     //metodo que materializa la eliminacion de una categoria y vuelve al listado de categorias del cenad
     onCategoriaEliminar(categoria: CategoriaImpl): void {
       this.categoriaService.delete(categoria).subscribe(response => {
+        //actualizamos el localStorage
+        this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
+        this.categoriaService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categoriasPadre_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
         console.log(`He borrado la Categoria ${categoria.nombre}`);
         this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
       });
@@ -46,6 +48,9 @@ export class CategoriasComponent implements OnInit {
     //metodo que materializa la edicion de una categoria y vuelve al listado de categorias del cenad
     onCategoriaEditar(categoria: CategoriaImpl): void {
       this.categoriaService.update(categoria).subscribe(response => {
+        //actualizamos el localStorage
+        this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
+        this.categoriaService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categoriasPadre_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
         console.log(`He actualizado la Categoria ${categoria.nombre}`);
         this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
       });

@@ -57,8 +57,8 @@ export class ConsultaRecursoFormComponent implements OnInit {
   imagenModal: Fichero = new FicheroImpl();
   
   constructor(
-    private recursoService: RecursoService,
-    private router: Router, private activateRoute: ActivatedRoute, private appConfigService: AppConfigService) { }
+    private recursoService: RecursoService, private router: Router, 
+    private activateRoute: ActivatedRoute, private appConfigService: AppConfigService) { }
 
   //metodo para q el boton cambie de rol. se borrara cuando haya logging
   cambiaRol() {
@@ -67,8 +67,8 @@ export class ConsultaRecursoFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    //recupera de la BD todas las categorias de fichero y las guarda en la variable para poder seleccionarlas si se añade un fichero nuevo
-    this.recursoService.getCategoriasFichero().subscribe((response) => this.categoriasFichero = this.recursoService.extraerCategoriasFichero(response));
+    //recupera del Local Storage todas las categorias de fichero y las guarda en la variable para poder seleccionarlas si se añade un fichero nuevo
+    this.categoriasFichero = JSON.parse(localStorage.categoriasFichero);
     //se recupera el id del recurso de la barra de navegacion
     this.idRecurso = this.activateRoute.snapshot.params['idRecurso'];
     //se recuperan de la BD las categorias de fichero de los ficheros del recurso y se asignan a la variable. esto posibilita filtrar que apartados tendra la vista de usuario
@@ -84,14 +84,13 @@ export class ConsultaRecursoFormComponent implements OnInit {
     setTimeout(() => {
       //recupero el idUsuario del gestor del recurso  
       this.recursoService.getUsuarioGestorDeIdRecurso(this.idRecurso).subscribe((response) => {
-        // if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun fichero
-          this.idUsuarioGestor = this.recursoService.mapearUsuario(response).idUsuario;
+        this.idUsuarioGestor = this.recursoService.mapearUsuario(response).idUsuario;
       //comprobamos si el usuario es un gestor de este recurso
-      if(HeaderComponent.isGestor && (HeaderComponent.idUsuario === this.idUsuarioGestor)) {
+      if((sessionStorage.isGestor === 'true') && (sessionStorage.idUsuario === this.idUsuarioGestor)) {
         this.isGestorRecurso = this.cambioBoton = true;
       }
     });
-      //recupera de la BD lso ficheros del recurso y los asigna a la variable
+      //recupera de la BD los ficheros del recurso y los asigna a la variable
       this.recursoService.getFicheros(this.idRecurso).subscribe((response) => 
         this.ficheros = this.recursoService.extraerFicheros(response));
       //recupera de la BD la categoria del recurso y se la asigna al campo de la variable del mismo
@@ -142,12 +141,12 @@ export class ConsultaRecursoFormComponent implements OnInit {
     });
   }
 
-//metodo para seleccionar el archivo a subir
+  //metodo para seleccionar el archivo a subir
   selectFile(event) {
     this.selectedFiles = event.target.files;
   }
 
-//metodo para subir un archivo
+  //metodo para subir un archivo
   upload() {
     this.currentFile = this.selectedFiles.item(0);
     //compruebo si es imagen para aplicarle el tamaño maximo de imagen o el de docRecurso
@@ -160,12 +159,12 @@ export class ConsultaRecursoFormComponent implements OnInit {
     this.selectedFiles = undefined;
   }
 
-//metodo para construir la url del archivo a mostrar o descargar
+  //metodo para construir la url del archivo a mostrar o descargar
   pathArchivo(nombreArchivo: string): string {
     const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
     return pathImg;    
   }
-//metodo para cargar el recurso
+  //metodo para cargar el recurso
   cargarRecurso(id): void {
     if (id) {
       this.recursoService.getRecurso(id).subscribe((recurso) => {

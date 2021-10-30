@@ -33,9 +33,9 @@ export class UnidadesComponent implements OnInit {
   ngOnInit(): void {
     //captura el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    //recoge en la variable todas las unidades
     this.isAdministrador = (this.idCenad !==undefined);
-    this.unidadService.getUnidades().subscribe((response) => this.unidades = this.unidadService.extraerUnidades(response));
+    //recoge del local storage en la variable todas las unidades
+    this.unidades = JSON.parse(localStorage.unidades);
     if (this.isAdministrador) {//la variable volver nos llevara a "superadministrador"o a "ppalCenad"
       //aqui debo sacar el idCenad del administrador que esta logueado
       this.volver = `/principalCenad/${this.idCenad}`;
@@ -55,6 +55,8 @@ export class UnidadesComponent implements OnInit {
   onUnidadEliminar(unidad: UnidadImpl): void {
     let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/unidades/${this.idCenad}` : 'unidades'
     this.unidadService.delete(unidad).subscribe(response => {
+      //actualizo el local storage
+      this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
       console.log(`He borrado la unidad ${unidad.nombre}`);
       this.router.navigate([ruta]);
     });
@@ -64,6 +66,8 @@ export class UnidadesComponent implements OnInit {
   onUnidadEditar(unidad: UnidadImpl): void {
     let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/unidades/${this.idCenad}` : 'unidades'
     this.unidadService.update(unidad).subscribe(response => {
+      //actualizo el local storage
+      this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
       console.log(`He actualizado la unidad ${unidad.nombre}`);
       this.router.navigate([ruta]);
     });

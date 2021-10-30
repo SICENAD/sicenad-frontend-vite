@@ -13,7 +13,7 @@ export class CanActivateViaLoggingNormal implements CanActivateChild {
 
     canActivateChild() {
         // si el usuario no está loggeado como normal le dará un alert y le llevará a la pag principal del cenad donde estaba
-        if (!HeaderComponent.isNormal) {
+        if ((sessionStorage.isNormal !== 'true')) {
             let url = location.toString();
             this.idCenad = this.getId(url);
             this.router.navigate([`/principalCenad/${this.idCenad}`]);             

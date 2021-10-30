@@ -38,14 +38,16 @@ export class UsuarioNormalFormComponent implements OnInit {
     } else {
       this.volver = `/usuarios`;
     }
-    //rescata de la BD las unidades
-    this.usuarioNormalService.getUnidades().subscribe((response) => this.unidades = this.usuarioNormalService.extraerUnidades(response));
+    //rescata del local storage las unidades
+    this.unidades = JSON.parse(localStorage.unidades);
   }
 
   //metodo para crear un usuario normal
   crearUsuarioNormal(): void {
     let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/usuarios/${this.idCenad}` : 'usuarios'
     this.usuarioNormalService.create(this.usuarioNormal).subscribe((response) => {
+      //actualizo el local storage
+      this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
       console.log(`He creado el Usuario Normal ${this.usuarioNormal.nombre}`);
       this.router.navigate([ruta]);
     });
