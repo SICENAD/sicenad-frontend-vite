@@ -35,9 +35,11 @@ export class CategoriasFicheroComponent implements OnInit {
   onCategoriaFicheroEliminar(categoriaFichero: CategoriaFichero): void {
     this.categoriaFicheroService.delete(categoriaFichero).subscribe(response => {
       //actualizamos el localStorage
-      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response)));
-      console.log(`He borrado la Categoría de Fichero ${categoriaFichero.nombre}`);
-      this.router.navigate(['/categoriasFichero']);
+      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => {
+        localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response));
+        console.log(`He borrado la Categoría de Fichero ${categoriaFichero.nombre}`);
+        this.router.navigate(['/categoriasFichero']);
+      });
     });
   }
 
@@ -45,9 +47,11 @@ export class CategoriasFicheroComponent implements OnInit {
   onCategoriaFicheroEditar(categoriaFichero: CategoriaFicheroImpl): void {
     this.categoriaFicheroService.update(categoriaFichero).subscribe(response => {
       //actualizamos el localStorage
-      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response)));
-      console.log(`He actualizado la Categoría de Fichero ${categoriaFichero.nombre}`);
-      this.router.navigate(['/categoriasFichero']);
+      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => {
+        localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response));
+        console.log(`He actualizado la Categoría de Fichero ${categoriaFichero.nombre}`);
+        this.router.navigate(['/categoriasFichero']);
+      });
     });
   }
 }

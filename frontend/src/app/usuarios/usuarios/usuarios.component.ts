@@ -84,19 +84,23 @@ export class UsuariosComponent implements OnInit {
     onUsuarioAdministradorEliminar(usuarioAdministrador: UsuarioAdministradorImpl): void {
       this.usuarioAdministradorService.delete(usuarioAdministrador).subscribe(response => {
         //actualizo el local storage
-        this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
-        console.log(`He borrado el Administrador ${usuarioAdministrador.nombre}`);
-        this.router.navigate(['/usuarios']);
+        this.usuarioAdministradorService.getUsuarios().subscribe((response) =>{ 
+          localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response));
+          console.log(`He borrado el Administrador ${usuarioAdministrador.nombre}`);
+          this.router.navigate(['/usuarios']);
+        });
       });
     }
 
     //metodo para editar un usuario administrador
     onUsuarioAdministradorEditar(usuarioAdministrador: UsuarioAdministradorImpl): void {
       this.usuarioAdministradorService.update(usuarioAdministrador).subscribe(response => {
-        //actualizo el local storage
-        this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
-        console.log(`He actualizado el Administrador ${usuarioAdministrador.nombre}`);
-        this.router.navigate(['/usuarios']);
+      //actualizo el local storage
+        this.usuarioAdministradorService.getUsuarios().subscribe((response) =>{ 
+          localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response));
+          console.log(`He actualizado el Administrador ${usuarioAdministrador.nombre}`);
+          this.router.navigate(['/usuarios']);
+        });
       });
     }
 
@@ -109,10 +113,12 @@ export class UsuariosComponent implements OnInit {
     onUsuarioGestorEliminar(usuarioGestor: UsuarioGestorImpl): void {
       this.usuarioGestorService.delete(usuarioGestor).subscribe(response => {
         //actualizo el local storage
-        this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
         this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
-        console.log(`He borrado el gestor ${usuarioGestor.nombre}`);
-        this.router.navigate([`/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`]);
+        this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => {
+          localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
+          console.log(`He borrado el gestor ${usuarioGestor.nombre}`);
+          this.router.navigate([`/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`]);
+        });
       });
     }
 
@@ -120,10 +126,12 @@ export class UsuariosComponent implements OnInit {
     onUsuarioGestorEditar(usuarioGestor: UsuarioGestorImpl): void {
       this.usuarioGestorService.update(usuarioGestor).subscribe(response => {
         //actualizo el local storage
-        this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
         this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
-        console.log(`He actualizado el gestor ${usuarioGestor.nombre}`);
-        this.router.navigate([`/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`]);
+        this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => {
+          localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
+          console.log(`He actualizado el gestor ${usuarioGestor.nombre}`);
+          this.router.navigate([`/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`]);
+        });
       });
     }
 
@@ -137,9 +145,11 @@ export class UsuariosComponent implements OnInit {
       let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/usuarios/${this.idCenad}` : 'usuarios'  
       this.usuarioNormalService.delete(usuarioNormal).subscribe(response => {
         //actualizo el local storage
-        this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
-        console.log(`He borrado el usuario ${usuarioNormal.nombre}`);
-        this.router.navigate([ruta]);
+        this.usuarioNormalService.getUsuarios().subscribe((response) => {
+          localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response));
+          console.log(`He borrado el usuario ${usuarioNormal.nombre}`);
+          this.router.navigate([ruta]);
+        });
       });
     }
 
@@ -148,9 +158,11 @@ export class UsuariosComponent implements OnInit {
       let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/usuarios/${this.idCenad}` : 'usuarios'    
       this.usuarioNormalService.update(usuarioNormal).subscribe(response => {
         //actualizo el local storage
-        this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
-        console.log(`He actualizado el usuario ${usuarioNormal.nombre}`);
-        this.router.navigate([ruta]);
+        this.usuarioNormalService.getUsuarios().subscribe((response) => {
+          localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response));
+          console.log(`He actualizado el usuario ${usuarioNormal.nombre}`);
+          this.router.navigate([ruta]);
+        });
       });
     }
   }

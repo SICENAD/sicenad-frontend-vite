@@ -35,18 +35,22 @@ export class SuperadministradorComponent implements OnInit {
     onCenadEliminar(cenad: CenadImpl): void {
       this.cenadService.delete(cenad).subscribe(response => {
         //actualizo el local storage
-        this.cenadService.getCenads().subscribe((response) => localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response)));
-        console.log(`He borrado el CENAD/CMT ${cenad.nombre}`);
-        this.router.navigate(['/superadministrador']);
+        this.cenadService.getCenads().subscribe((response) => {
+          localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response));
+          console.log(`He borrado el CENAD/CMT ${cenad.nombre}`);
+          this.router.navigate(['/superadministrador']);
+        });
       });
     }
     //metodo para editar un cenad
     onCenadEditar(cenad: CenadImpl): void {
       this.cenadService.update(cenad).subscribe(response => {
         //actualizo el local storage
-        this.cenadService.getCenads().subscribe((response) => localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response)));
-        console.log(`He actualizado el CENAD/CMT ${cenad.nombre} en la provincia ${cenad.provincia}`);
-        this.router.navigate(['/superadministrador']);
+        this.cenadService.getCenads().subscribe((response) => {
+          localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response));
+          console.log(`He actualizado el CENAD/CMT ${cenad.nombre}`);
+          this.router.navigate(['/superadministrador']);
+        });
       });
     }
   }

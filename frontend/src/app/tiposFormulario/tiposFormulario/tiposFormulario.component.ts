@@ -36,9 +36,11 @@ export class TiposFormularioComponent implements OnInit {
   onTipoFormularioEliminar(tipoFormulario: TipoFormulario): void {
     this.tipoFormularioService.delete(tipoFormulario).subscribe(response => {
       //actualizo el local storage
-      this.tipoFormularioService.getTiposFormulario().subscribe((response) => localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response)));
-      console.log(`He borrado el Tipo de Formulario ${tipoFormulario.nombre}`);
-      this.router.navigate(['/tiposFormulario']);
+      this.tipoFormularioService.getTiposFormulario().subscribe((response) => {
+        localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response));
+        console.log(`He borrado el Tipo de Formulario ${tipoFormulario.nombre}`);
+        this.router.navigate(['/tiposFormulario']);
+      });
     });
   }
 
@@ -46,9 +48,11 @@ export class TiposFormularioComponent implements OnInit {
   onTipoFormularioEditar(tipoFormulario: TipoFormularioImpl): void {
     this.tipoFormularioService.update(tipoFormulario).subscribe(response => {
       //actualizo el local storage
-      this.tipoFormularioService.getTiposFormulario().subscribe((response) => localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response)));
-      console.log(`He actualizado el Tipo de Formulario ${tipoFormulario.nombre}`);
-      this.router.navigate(['/tiposFormulario']);
+      this.tipoFormularioService.getTiposFormulario().subscribe((response) => {
+        localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response));
+        console.log(`He actualizado el Tipo de Formulario ${tipoFormulario.nombre}`);
+        this.router.navigate(['/tiposFormulario']);
+      });
     });
   }
 }

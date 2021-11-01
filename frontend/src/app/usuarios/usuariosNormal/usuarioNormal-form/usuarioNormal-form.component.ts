@@ -47,9 +47,11 @@ export class UsuarioNormalFormComponent implements OnInit {
     let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/usuarios/${this.idCenad}` : 'usuarios'
     this.usuarioNormalService.create(this.usuarioNormal).subscribe((response) => {
       //actualizo el local storage
-      this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
-      console.log(`He creado el Usuario Normal ${this.usuarioNormal.nombre}`);
-      this.router.navigate([ruta]);
+      this.usuarioNormalService.getUsuarios().subscribe((response) => {
+        localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response));
+        console.log(`He creado el Usuario Normal ${this.usuarioNormal.nombre}`);
+        this.router.navigate([ruta]);
+      });
     });
   }
 }

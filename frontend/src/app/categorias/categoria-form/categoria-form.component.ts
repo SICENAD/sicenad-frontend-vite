@@ -38,11 +38,13 @@ export class CategoriaFormComponent implements OnInit {
   //metodo para crear una nueva categoria y volver al listado de categorias de ese cenad
   crearCategoria(): void {
     this.categoriaService.create(this.categoria).subscribe((response) => {
-      //actualizamos el localStorage
-      this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
-      this.categoriaService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categoriasPadre_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
-      console.log(`He creado la Categoria ${this.categoria.nombre}`);
-      this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
-    });
+        //actualizamos el localStorage
+        this.categoriaService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categoriasPadre_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
+        this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => {
+          localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response)));
+          console.log(`He creado la Categoria ${this.categoria.nombre}`);
+          this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
+        });
+      });
   }
 }

@@ -63,9 +63,11 @@ export class CenadFormComponent implements OnInit {
     if(this.archivoSubido) {
       this.cenadService.create(this.cenad).subscribe((response) => {
         //actualiza el local storage
-        this.cenadService.getCenads().subscribe((response) => localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response)));
-        console.log(`He creado el CENAD/CMT ${this.cenad.nombre}`);
-        this.router.navigate(['/superadministrador']);
+        this.cenadService.getCenads().subscribe((response) => {
+          localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response));
+          console.log(`He creado el CENAD/CMT ${this.cenad.nombre}`);
+          this.router.navigate(['/superadministrador']);
+        });
       });
     }
   }

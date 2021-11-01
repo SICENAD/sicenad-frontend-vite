@@ -32,8 +32,10 @@ export class UsuarioAdministradorFormComponent implements OnInit {
     this.usuarioAdministradorService.create(this.usuarioAdministrador).subscribe((response) => {
       console.log(`He creado el Usuario Administrador ${this.usuarioAdministrador.nombre}`);
       //actualizo el local storage
-      this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
-      this.router.navigate(['/usuarios']);
+      this.usuarioAdministradorService.getUsuarios().subscribe((response) => {
+        localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response));
+        this.router.navigate(['/usuarios']);
+      });
     });
   }
 }

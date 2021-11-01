@@ -56,9 +56,11 @@ export class UnidadesComponent implements OnInit {
     let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/unidades/${this.idCenad}` : 'unidades'
     this.unidadService.delete(unidad).subscribe(response => {
       //actualizo el local storage
-      this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
-      console.log(`He borrado la unidad ${unidad.nombre}`);
-      this.router.navigate([ruta]);
+      this.unidadService.getUnidades().subscribe((response) => {
+        localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response));
+        console.log(`He borrado la unidad ${unidad.nombre}`);
+        this.router.navigate([ruta]);
+      });
     });
   }
 
@@ -67,9 +69,11 @@ export class UnidadesComponent implements OnInit {
     let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/unidades/${this.idCenad}` : 'unidades'
     this.unidadService.update(unidad).subscribe(response => {
       //actualizo el local storage
-      this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
-      console.log(`He actualizado la unidad ${unidad.nombre}`);
-      this.router.navigate([ruta]);
+      this.unidadService.getUnidades().subscribe((response) => {
+        localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response));
+        console.log(`He actualizado la unidad ${unidad.nombre}`);
+        this.router.navigate([ruta]);
+      });
     });
   }
 }

@@ -46,9 +46,11 @@ export class RecursosComponent implements OnInit {
   onRecursoEliminar(recurso: RecursoImpl): void {
     this.recursoService.delete(recurso).subscribe(response => {
       //actualizo local storage
-      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response))));
-      console.log(`He borrado el recurso ${recurso.nombre}`);
-      this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
+      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => {
+        localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response)));
+        console.log(`He borrado el recurso ${recurso.nombre}`);
+        this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
+      });
     });
   }
 
@@ -56,9 +58,11 @@ export class RecursosComponent implements OnInit {
   onRecursoEditar(recurso: RecursoImpl): void {
     this.recursoService.update(recurso).subscribe(response => {
       //actualizo local storage
-      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response))));
-      console.log(`He actualizado el recurso ${recurso.nombre}`);
-      this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
+      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => {
+        localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response)));
+        console.log(`He actualizado el recurso ${recurso.nombre}`);
+        this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
+      });
     });
   }
 

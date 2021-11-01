@@ -25,10 +25,11 @@ export class CategoriaFicheroFormComponent implements OnInit {
   crearCategoriaFichero(): void {
     this.categoriaFicheroService.create(this.categoriaFichero).subscribe((response) => {
       //actualizamos el localStorage
-      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => 
-        localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response)));
-      console.log(`He creado la Categoría de Fichero ${this.categoriaFichero.nombre}`);
-      this.router.navigate(['/categoriasFichero']);
+      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => {
+        localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response));
+        console.log(`He creado la Categoría de Fichero ${this.categoriaFichero.nombre}`);
+        this.router.navigate(['/categoriasFichero']);
+      });
     });
   }
 }

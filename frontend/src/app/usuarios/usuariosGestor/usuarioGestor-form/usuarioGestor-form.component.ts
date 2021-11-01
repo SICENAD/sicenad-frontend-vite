@@ -34,10 +34,12 @@ export class UsuarioGestorFormComponent implements OnInit {
     this.usuarioGestor.cenad = `environment.hostSicenad/cenads/${this.idCenad}`;
     this.usuarioGestorService.create(this.usuarioGestor).subscribe((response) => {
       //actualizo el local storage
-      this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
       this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
-      console.log(`He creado el Usuario Gestor ${this.usuarioGestor.nombre}`);
-      this.router.navigate([`/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`]);
+      this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => {
+        localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
+        console.log(`He creado el Usuario Gestor ${this.usuarioGestor.nombre}`);
+        this.router.navigate([`/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`]);
+      });
     });
   }
 }

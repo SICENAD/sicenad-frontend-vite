@@ -45,9 +45,11 @@ export class RecursoFormComponent implements OnInit {
   crearRecurso(): void {
     this.recursoService.create(this.recurso).subscribe((response) => {
       //actualizo local storage
-      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response))));
-      console.log(`He creado el recurso ${this.recurso.nombre}`);
-      this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
+      this.recursoService.getRecursosDeCenad(this.idCenad).subscribe((response) => {
+        localStorage.setItem(`recursos_${this.idCenad}`, JSON.stringify(this.recursoService.extraerRecursos(response)));
+        console.log(`He creado el recurso ${this.recurso.nombre}`);
+        this.router.navigate([`/principalCenad/${this.idCenad}/recursos/${this.idCenad}`]);
+      });
     });
   }
 }

@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CategoriaFicheroService } from 'src/app/categoriasFichero/service/categoriaFichero.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
-import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
+import { CenadService } from 'src/app/superadministrador/service/cenad.service';
+import { TipoFormularioService } from 'src/app/tiposFormulario/service/tipoFormulario.service';
+import { UnidadService } from 'src/app/unidades/service/unidad.service';
+import { UsuarioAdministradorService } from 'src/app/usuarios/service/usuarioAdministrador.service';
+import { UsuarioGestorService } from 'src/app/usuarios/service/usuarioGestor.service';
+import { UsuarioNormalService } from 'src/app/usuarios/service/usuarioNormal.service';
+import { UsuarioSuperadministradorService } from 'src/app/usuarios/service/usuarioSuperadministrador.service';
 import { HomeService } from '../service/home.service';
 
 @Component({
@@ -38,11 +45,17 @@ export class HomeComponent implements OnInit {
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
 
-  constructor(private homeService: HomeService, private router: Router) { }
+  constructor(private homeService: HomeService, private router: Router,private usuarioSuperadministradorService: UsuarioSuperadministradorService,
+    private usuarioAdministradorService: UsuarioAdministradorService,
+    private usuarioGestorService: UsuarioGestorService,
+    private usuarioNormalService: UsuarioNormalService,
+    private cenadService: CenadService,
+    private categoriaFicheroService: CategoriaFicheroService,
+    private tipoFormularioService: TipoFormularioService,
+    private unidadService: UnidadService) { }
 
   ngOnInit() {
     this.cenads = JSON.parse(localStorage.cenads);
-
   }
 
   // Asigna al array cenadsFiltro todos los CENAD,s/CMT,s de una provincia
@@ -64,5 +77,32 @@ export class HomeComponent implements OnInit {
   respuesta(idProvincia: number): void {
     this.inicio = false;
     this.buscarCenads(idProvincia);
+  }
+
+  actualizarLocalStorage(): void {
+    if(!localStorage.usuariosSuperadministrador) {
+      this.usuarioSuperadministradorService.getUsuarios().subscribe((response) => localStorage.usuariosSuperadministrador = JSON.stringify(this.usuarioSuperadministradorService.extraerUsuarios(response)));
+    }
+    if(!localStorage.usuariosAdministrador) {
+      this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
+    }
+    if(!localStorage.usuariosGestor) {
+      this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
+    }
+    if(!localStorage.usuariosNormal) {
+      this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
+    }
+    if(!localStorage.cenads) {
+      this.cenadService.getCenads().subscribe((response) => localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response)));
+    }
+    if(!localStorage.categoriasFichero) {
+      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response)));
+    }
+    if(!localStorage.tiposFormulario) {
+      this.tipoFormularioService.getTiposFormulario().subscribe((response) => localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response)));
+    }
+    if(!localStorage.unidades) {
+      this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
+    }
   }
 }

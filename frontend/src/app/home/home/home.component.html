@@ -2,7 +2,9 @@
 <div class="container-fluid">
     <div class="row m-2">
         <div class="col col-md-2 p-4">
-          <img class="madoc" width="80" height="110" alt="MADOC" src="assets/madoc.png">
+          <a (click)='actualizarLocalStorage()'>
+            <img class="madoc" width="80" height="110" alt="MADOC" src="assets/madoc.png">
+          </a>
         </div>
         <div class="col col-md-7 align-self-center pt-5">
           <h6 class="bienvenido text-center">Bienvenido al Sistema de CENAD,s y CMT,s del ET</h6>
@@ -16,10 +18,10 @@
           <!-- ********************** -->
           <!-- * MAPA DE PROVINCIAS * -->
           <!-- ********************** -->
-                <div class="" id="mapa" style="background: url('assets/spain.png') no-repeat 0px 0px; 
-                width: 781px; 
+                <div class="" id="mapa" style="background: url('assets/spain.png') no-repeat 0px 0px;
+                width: 781px;
                 height: 713px;
-                zoom: 0.8; 
+                zoom: 0.8;
                 transform: scale(.8);">
                     <img src="assets/transparente.png" alt="Seleccione una provincia" usemap="#Map" class="spain"/>
                     <map name="Map" id="Map" alt="Mapa de España por provincias">

@@ -38,10 +38,12 @@ export class CategoriasComponent implements OnInit {
     onCategoriaEliminar(categoria: CategoriaImpl): void {
       this.categoriaService.delete(categoria).subscribe(response => {
         //actualizamos el localStorage
-        this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
         this.categoriaService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categoriasPadre_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
-        console.log(`He borrado la Categoria ${categoria.nombre}`);
-        this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
+        this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => {
+          localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response)));
+          console.log(`He borrado la Categoria ${categoria.nombre}`);
+          this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
+        });
       });
     }
 
@@ -49,10 +51,12 @@ export class CategoriasComponent implements OnInit {
     onCategoriaEditar(categoria: CategoriaImpl): void {
       this.categoriaService.update(categoria).subscribe(response => {
         //actualizamos el localStorage
-        this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
         this.categoriaService.getCategoriasPadreDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categoriasPadre_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));
-        console.log(`He actualizado la Categoria ${categoria.nombre}`);
-        this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
+        this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => {
+          localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response)));
+          console.log(`He actualizado la Categoria ${categoria.nombre}`);
+          this.router.navigate([`/principalCenad/${this.idCenad}/categorias/${this.idCenad}`]);
+        });
       });
     }
   }
