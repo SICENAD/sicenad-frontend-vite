@@ -12,7 +12,7 @@ import es.mde.entidades.SolicitudRecurso;
 
 /**
  * Representa la interfaz que expone para la API las solicitudes 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="solicitudes", collectionResourceRel="solicitudes", itemResourceRel="solicitud") 

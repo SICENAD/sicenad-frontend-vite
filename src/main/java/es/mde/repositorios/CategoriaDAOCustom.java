@@ -6,7 +6,7 @@ import es.mde.entidades.Recurso;
 
 /**
  * Representa la interfaz con los metodos personalizados de categorias
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 public interface CategoriaDAOCustom {

@@ -6,7 +6,7 @@ import es.mde.entidades.UsuarioNormal;
 
 /**
  * Representa la interfaz que expone para la API los usuarios normales 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="usuarios_normal", collectionResourceRel="usuarios_normal", itemResourceRel="usuario_normal") 

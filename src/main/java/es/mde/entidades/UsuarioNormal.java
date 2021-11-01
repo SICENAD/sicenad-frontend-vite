@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Representa a los usuarios de "unidades" que soliciten recursos...
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

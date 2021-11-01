@@ -6,7 +6,7 @@ import es.mde.entidades.UsuarioSuperadministrador;
 
 /**
  * Representa la interfaz que expone para la API los superadministradores 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="usuarios_superadministrador", collectionResourceRel="usuarios_superadministrador", itemResourceRel="usuario_superadministrador") 

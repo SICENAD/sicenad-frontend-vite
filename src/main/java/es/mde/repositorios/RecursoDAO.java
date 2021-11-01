@@ -9,7 +9,7 @@ import es.mde.entidades.Recurso;
 
 /**
  * Representa la interfaz que expone para la API los recursos 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="recursos", collectionResourceRel="recursos", itemResourceRel="recurso")

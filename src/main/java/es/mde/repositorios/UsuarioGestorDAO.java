@@ -6,7 +6,7 @@ import es.mde.entidades.UsuarioGestor;
 
 /**
  * Representa la interfaz que expone para la API los gestores 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="usuarios_gestor", collectionResourceRel="usuarios_gestor", itemResourceRel="usuario_gestor") 

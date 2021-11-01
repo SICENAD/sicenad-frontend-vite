@@ -9,7 +9,7 @@ import es.mde.entidades.Categoria;
 
 /**
  * Representa la interfaz que expone para la API las categorias 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="categorias", collectionResourceRel="categorias", itemResourceRel="categoria") 

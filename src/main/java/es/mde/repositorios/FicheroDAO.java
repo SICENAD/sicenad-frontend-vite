@@ -6,7 +6,7 @@ import es.mde.entidades.Fichero;
 
 /**
  * Representa la interfaz que expone para la API los ficheros 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="ficheros", collectionResourceRel="ficheros", itemResourceRel="fichero") 

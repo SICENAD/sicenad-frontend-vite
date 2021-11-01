@@ -6,7 +6,7 @@ import es.mde.entidades.CategoriaFichero;
 
 /**
  * Representa la interfaz que expone para la API las categorias de fichero 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="categorias_fichero", collectionResourceRel="categorias_fichero", itemResourceRel="categoria_fichero") 

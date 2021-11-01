@@ -21,8 +21,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Representa las solicitudes de recursos
- * 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

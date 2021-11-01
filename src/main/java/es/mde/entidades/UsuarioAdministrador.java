@@ -11,7 +11,7 @@ import es.mde.repositorios.UsuarioAdministradorListener;
 
 /**
  * Representa a los administradores de cada CENAD
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

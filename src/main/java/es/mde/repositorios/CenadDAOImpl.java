@@ -14,7 +14,7 @@ import es.mde.entidades.SolicitudRecurso;
 
 /**
  * Representa la clase implementada con los metodos personalizados de los CENAD,s 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Transactional(readOnly = true)

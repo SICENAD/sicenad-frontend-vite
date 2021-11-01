@@ -13,8 +13,7 @@ import javax.persistence.Table;
 
 /**
  * Representa los usuarios de la aplicacion
- * 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

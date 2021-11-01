@@ -6,7 +6,7 @@ import es.mde.entidades.TipoFormulario;
 
 /**
  * Representa la interfaz que expone para la API los tipos de formulario 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="tipos_formulario", collectionResourceRel="tipos_formulario", itemResourceRel="tipo_formulario") 

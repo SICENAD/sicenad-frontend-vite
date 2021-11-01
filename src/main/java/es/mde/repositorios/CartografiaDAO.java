@@ -9,7 +9,7 @@ import es.mde.entidades.Cartografia;
 
 /**
  * Representa la interfaz que expone para la API los conjuntos cartograficos 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="cartografias", collectionResourceRel="cartografias", itemResourceRel="cartografia") 

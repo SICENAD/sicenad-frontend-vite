@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 /**
  * Representa la entidad que controla los archivos adjuntos
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

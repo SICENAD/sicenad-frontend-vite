@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Representa a los usuarios superadministradores de la aplicacion
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

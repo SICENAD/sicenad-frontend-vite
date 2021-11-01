@@ -9,7 +9,7 @@ import es.mde.entidades.Cenad;
 
 /**
  * Representa la interfaz que expone para la API los CENADS 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="cenads", collectionResourceRel="cenads", itemResourceRel="cenad") 

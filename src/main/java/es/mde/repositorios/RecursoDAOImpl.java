@@ -12,7 +12,7 @@ import es.mde.entidades.Fichero;
 
 /**
  * Representa la clase implementada con los metodos personalizados de los recursos 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Transactional(readOnly = true)

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 /**
  * Representa las unidades que utilizarán los recursos de los CENADS
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

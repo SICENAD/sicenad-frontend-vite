@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Representa a los gestores de los recursos de un CENAD
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

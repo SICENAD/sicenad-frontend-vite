@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 /**
  * Representa los recursos que ofrece cada CENAD/CMT
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity

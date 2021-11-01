@@ -6,7 +6,7 @@ import es.mde.entidades.Unidad;
 
 /**
  * Representa la interfaz que expone para la API las unidades 
- * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @RepositoryRestResource(path="unidades", collectionResourceRel="unidades", itemResourceRel="unidad") 
