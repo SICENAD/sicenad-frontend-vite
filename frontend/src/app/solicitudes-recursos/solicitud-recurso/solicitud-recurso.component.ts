@@ -13,6 +13,7 @@ export class SolicitudRecursoComponent implements OnInit {
 
   @Input() solicitud: SolicitudRecurso;
   @Input() idCenad: string;
+  @Input() isModal: boolean = false;
   //variable icono FontAwesome
   faEdit = faEdit;
   //variable para parsear la fecha de la solicitud
@@ -35,7 +36,9 @@ export class SolicitudRecursoComponent implements OnInit {
 
   //método que al recibir como parámetro una solicitud, redirecciona el navegador al componente formulario para su edición
   editar(solicitudEdicion: SolicitudRecurso): void {
-    this.router.navigate([`principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}/formulario/${this.idCenad}/${solicitudEdicion.idSolicitud}`]);
+    if (!this.isModal) {
+      this.router.navigate([`principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}/formulario/${this.idCenad}/${solicitudEdicion.idSolicitud}`]);
+    }
   }
 
   //método que recibe una variable string en formato fecha y devuelte una variable Date

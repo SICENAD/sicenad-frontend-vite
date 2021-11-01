@@ -4,7 +4,6 @@ import { faEdge } from '@fortawesome/free-brands-svg-icons';
 import { faQuestionCircle, faSnowflake } from '@fortawesome/free-regular-svg-icons';
 import { faBars, faBomb, faBook, faBusinessTime, faCalendarAlt, faCloudSun, faEdit, faFire, faFolderOpen, faFolderPlus, faGlobe, faHome, faLink, faMap, faSearchLocation, faSitemap, faTree, faUserCog, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { CategoriaService } from 'src/app/categorias/service/categoria.service';
-import { HeaderComponent } from 'src/app/core/shell/header/header.component';
 import { PrincipalService } from 'src/app/principal-cenad/service/principal.service';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
@@ -60,7 +59,7 @@ export class HeaderPrincipalComponent implements OnInit {
   //variable que guarda todos los cenads
   cenads: Cenad[] = [];
   // variables estáticas para logging...
-  isAutenticado: boolean = false;
+  isAdminGestorNormal: boolean = false;
   isAdminEsteCenad: boolean = false;
   static userAdminLogeado: UsuarioAdministrador = new UsuarioAdministradorImpl();
   static userGestorLogeado: UsuarioGestor = new UsuarioGestorImpl();
@@ -77,6 +76,8 @@ export class HeaderPrincipalComponent implements OnInit {
     this.cargarCenads();
     //comprueba si estas loggeado como administrador de este cenad
     this.isAdminEsteCenad = (this.idCenad === sessionStorage.idCenad && (sessionStorage.isAdmin === 'true'));
+    //comprueba si estas loggeado como administrador, gestor o usuario normal
+    this.isAdminGestorNormal = (sessionStorage.isAdmin === "true" || sessionStorage.isGestor === "true" || sessionStorage.isNormal === "true");
     //recupera al local storage las categorias padre, categorias, recursos y gestores de ese cenad
     if(!localStorage.getItem(`categorias_${this.idCenad}`)) {
       this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));

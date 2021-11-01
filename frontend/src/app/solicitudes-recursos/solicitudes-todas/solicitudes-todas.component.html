@@ -18,7 +18,7 @@
         <option value="Borrador">Borrador</option>
       </select>
     </div>
-    <div class="col-6 col-md-2 por-unidad">
+    <div class="col-6 col-md-2 por-unidad" *ngIf="!isUserNormal">
       <label for="unidades" class="mr-2 unidades">Elige una Unidad:</label>
       <select name="categoriasFiltradas" id="categoriasFiltradas" [(ngModel)]="unidadSeleccionada" (change)="filtrar()">
         <option *ngFor="let unidad of unidades" [ngValue]="unidad">{{ unidad.nombre | uppercase}}</option>
@@ -26,7 +26,7 @@
       <button class="mr-1 mt-2" *ngIf='unidadSeleccionada' (click)="borrarFiltro('unidad')">Borrar Filtro
         Unidad</button>
     </div>
-    <div class="col-6 col-md-3  por-categorias">
+    <div class="col-6 col-md-3  por-categorias" *ngIf="!isGestor">
       <label for="categorias" class="mr-1 categorias">Elige una Categoría:</label>
       <select name="categoriasFiltradas" id="categoriasFiltradas" [(ngModel)]="categoriaSeleccionada"
         (change)="filtrar()">
@@ -59,12 +59,11 @@
         <h5 class="text-center titulo-todas">TODAS LAS SOLICITUDES</h5>
         <div class="row">
           <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>UCO</u></b></div>
-          <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>SOLICITUD</u></b></div>
-          <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>ESTADO</u></b></div>
-          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>TIPO RECURSO</u></b></div>
-          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
-          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
-          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>ESTADO</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>
         </div>
       </div>
       <div *ngIf='solicitudesFiltradas.length != 0; else elseFiltradas'>
@@ -73,8 +72,11 @@
         </div>
       </div>
       <ng-template #elseFiltradas>
-        <div class="row justify-content-center pt-2 mb-4 pb-4">
+        <div class="row justify-content-center pt-2 mb-4 pb-4" *ngIf="(isGestor && !isBorrador) || !isGestor">
           <h6 class="no-existen">NO EXISTEN</h6>
+        </div>
+        <div class="row justify-content-center pt-2 mb-4 pb-4" *ngIf="isGestor && isBorrador">
+          <h6 class="no-existen">NO TIENE PRIVILEGIOS SUFICIENTES PARA CONSULTAR ESTAS SOLICITUDES</h6>
         </div>
       </ng-template>
     </div>

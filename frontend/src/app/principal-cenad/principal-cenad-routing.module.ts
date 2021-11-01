@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CanActivateViaLoggingAdministrador } from '../logging/canActivateViaLoggingAdministrador';
+import { CanActivateViaLoggingGestor } from '../logging/canActivateViaLoggingGestor';
+import { CanActivateViaLoggingLogeado } from '../logging/canActivateViaLoggingLogeado';
+import { CanActivateViaLoggingNormal } from '../logging/canActivateViaLoggingNormal';
 import { HomePrincipalComponent } from './home-principal/home-principal.component';
 import { ShellPrincipalComponent } from './shell-principal/shell-principal.component';
 
@@ -39,7 +42,8 @@ const routes: Routes = [
       },
       {//listado de solicitudes de los recursos de un cenad (administrador/gestor/usuario_normal)
         path: 'solicitudesRecursos/:idCenad',
-        loadChildren: () => import('../solicitudes-recursos/solicitudes-recursos.module').then(m => m.SolicitudesRecursosModule)
+        loadChildren: () => import('../solicitudes-recursos/solicitudes-recursos.module').then(m => m.SolicitudesRecursosModule),
+        canActivateChild: [CanActivateViaLoggingLogeado]
       }
     ]
   }

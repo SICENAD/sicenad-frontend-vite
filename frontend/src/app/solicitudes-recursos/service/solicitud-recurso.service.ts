@@ -110,11 +110,10 @@ export class SolicitudRecursoService {
     solicitud.fechaHoraFinRecurso = solicitudApi.fechaHoraFinRecurso;
     solicitud.fechaFinDocumentacion = solicitudApi.fechaFinDocumentacion;
     solicitud.unidadUsuaria = solicitudApi.unidadUsuaria;
-    this.getUsuarioNormalDeSolicitud(solicitud.idSolicitud).subscribe(
-      (response) => {
-        solicitud.usuarioNormal = this.mapearUsuarioNormal(response);
-      }
-    );
+    this.getUsuarioNormalDeSolicitud(solicitud.idSolicitud).subscribe((response) => {
+      solicitud.usuarioNormal = this.mapearUsuarioNormal(response);
+      });
+
     solicitud.documentacionCenad = [];
     solicitud.documentacionUnidad = [];
     this.getRecursoDeSolicitud(solicitud.idSolicitud).subscribe((response) => {
@@ -363,3 +362,7 @@ export class SolicitudRecursoService {
     return categoria;
   }
 }
+function deferred(arg0: () => void, deferred: any) {
+  throw new Error("Function not implemented.");
+}
+

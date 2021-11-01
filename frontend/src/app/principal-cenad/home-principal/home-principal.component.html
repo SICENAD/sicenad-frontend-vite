@@ -13,8 +13,10 @@
             <fa-icon class="mr-2" [icon]="faRecurso"></fa-icon>Consultar Recursos</a></li>
           <li class="pt-4"><a routerLink="#">
             <fa-icon class="mr-2" [icon]="faCartografia"></fa-icon>Cartografía</a></li>
-          <li class="pt-4"><a [routerLink]="['solicitudesRecursos', idCenad, 'formulario', idCenad, idSolicitud]">
+          <li class="pt-4" [hidden]="!isUserNormal"><a [routerLink]="['solicitudesRecursos', idCenad, 'formulario', idCenad, idSolicitud]">
             <fa-icon class="mr-2" [icon]="faSolicitar"></fa-icon>Solicitar Recurso</a></li>
+          <li class="pt-4" [hidden]="isUserNormal"><a (click)="mensaje()">
+              <fa-icon class="mr-2" [icon]="faSolicitar"></fa-icon>Solicitar Recurso</a></li>
         </ul>
     </div>
   </div>

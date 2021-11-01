@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CategoriaService } from 'src/app/categorias/service/categoria.service';
 import { CategoriaFicheroService } from 'src/app/categoriasFichero/service/categoriaFichero.service';
+import { HeaderPrincipalComponent } from 'src/app/principal-cenad/shell-principal/header-principal/header-principal.component';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
 import { CenadService } from 'src/app/superadministrador/service/cenad.service';
 import { TipoFormularioService } from 'src/app/tiposFormulario/service/tipoFormulario.service';
@@ -53,13 +55,14 @@ export class HeaderComponent implements OnInit {
               private cenadService: CenadService,
               private categoriaFicheroService: CategoriaFicheroService,
               private tipoFormularioService: TipoFormularioService,
-              private unidadService: UnidadService) { }
+              private unidadService: UnidadService,
+              private router: Router) { }
 
   ngOnInit(): void {//recupero de la BD todos los usuarios, cenads, categorias de fichero, tipos de formulario y unidades y los guardo en el local storage
     if(!localStorage.usuariosSuperadministrador) {
       this.usuarioSuperadministradorService.getUsuarios().subscribe((response) => localStorage.usuariosSuperadministrador = JSON.stringify(this.usuarioSuperadministradorService.extraerUsuarios(response)));
     }
-    if(!localStorage.usuariosAdministrador) { 
+    if(!localStorage.usuariosAdministrador) {
       this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
     }
     if(!localStorage.usuariosGestor) {
@@ -68,7 +71,7 @@ export class HeaderComponent implements OnInit {
     if(!localStorage.usuariosNormal) {
       this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
     }
-    if(!localStorage.cenads) { 
+    if(!localStorage.cenads) {
       this.cenadService.getCenads().subscribe((response) => localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response)));
     }
     if(!localStorage.categoriasFichero) {
@@ -116,7 +119,7 @@ export class HeaderComponent implements OnInit {
           sessionStorage.idUsuario = u.idUsuario;
           sessionStorage.isSuperAdmin = true;
         } else {
-          alert('La contraseña no es correcta');     
+          alert('La contraseña no es correcta');
         }
       }
     });
@@ -132,7 +135,7 @@ export class HeaderComponent implements OnInit {
             this.usuarioAdministradorService.getCenad(u).subscribe((response) => {
               sessionStorage.idCenad = this.usuarioAdministradorService.mapearCenad(response).idCenad;
               sessionStorage.nombreCenad = this.nombreCenad = this.usuarioAdministradorService.mapearCenad(response).nombre;
-              sessionStorage.loggedAs = this.loggedAs = `${sessionStorage.tipoUsuario} del ${sessionStorage.nombreCenad.toUpperCase()}`;  
+              sessionStorage.loggedAs = this.loggedAs = `${sessionStorage.tipoUsuario} del ${sessionStorage.nombreCenad.toUpperCase()}`;
             });
             sessionStorage.idUsuario = u.idUsuario;
             sessionStorage.isAdmin = true;
@@ -185,7 +188,10 @@ export class HeaderComponent implements OnInit {
         }
       });
     }
-    //es el unico caso que queda  
+    //CUIDADO !!!  location.reload() resetea los valores (idCenad e idUnidad) del sessionStorage
+    // sessionStorage.isLogged == "true" ? location.reload() : "";
+    //this.router.navigate([`${location.href.substr(location.host.length + 8)}`]);
+    //es el unico caso que queda
     if(!this.usuarioExiste) {
       alert('El usuario no existe');
     }
@@ -195,10 +201,11 @@ export class HeaderComponent implements OnInit {
   cerrarSesion(): void {
     this.ngOnInit();
     this.nombreUsuario = this.password = this.tipoUsuario = sessionStorage.idCenad = sessionStorage.idUnidad =
-      this.nombreCenad = this.nombreUnidad = sessionStorage.idUsuario = this.loggedAs = sessionStorage.nombreUsuario = 
+      this.nombreCenad = this.nombreUnidad = sessionStorage.idUsuario = this.loggedAs = sessionStorage.nombreUsuario =
       sessionStorage.loggedAs = sessionStorage.nombreCenad = sessionStorage.tipoUsuario = '';
-    sessionStorage.isAdmin = sessionStorage.isGestor = sessionStorage.isNormal 
+    sessionStorage.isAdmin = sessionStorage.isGestor = sessionStorage.isNormal
       = sessionStorage.isSuperAdmin = sessionStorage.isLogged = false;
+    this.router.navigate([`/`]);
   }
 
   //metodo para acceder desde el html a la variable estatica

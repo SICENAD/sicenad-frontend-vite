@@ -66,7 +66,7 @@
                     <fa-icon class='mr-2' [icon]="faEnlace"></fa-icon>Enlaces de Interés</a>
                 </div>
               </li>
-              <li class="nav-item" [hidden]= "isAutenticado">
+              <li class="nav-item" *ngIf= "isAdminGestorNormal">
                 <a class="nav-link" [routerLink]="['solicitudesRecursos', idCenad]" routerLinkActive="router-link-active">
                   <fa-icon class='mr-2' [icon]="faSolicitar"></fa-icon>Solicitudes</a>
               </li>

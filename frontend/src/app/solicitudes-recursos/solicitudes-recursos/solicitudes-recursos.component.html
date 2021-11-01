@@ -5,13 +5,13 @@
       <h3 class="titulo1 ml-5 pl-5"><u>SOLICITUDES</u></h3>
     </div>
     <div class="col-2">
-      <div class="text-right mt-0 pt-0" [hidden]="!isUserNormal && isAdministrador && isGestor">
+      <div class="text-right mt-0 pt-0" *ngIf="isUserNormal">
         <button class="btn text-white" [routerLink]="['formulario', idCenad, idSolicitud]">Nueva Solicitud</button>
       </div>
     </div>
   </div>
   <br>
-  <div class="administrador mt-0" [hidden]="!isAutenticado">
+  <div class="mt-0" [hidden]="!isAutenticado">
     <div class="row solicitadas-validadas mb-3">
       <div class="col-6 solicitadas">
         <div class="titulos">
@@ -22,9 +22,8 @@
           <hr class='w-100 titulo-solicitadas'>
           <div class="row">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>UCO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>SOLICITUD</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>ESTADO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>CATEGORIA</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>ESTADO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>
@@ -51,9 +50,8 @@
           <hr class='w-100 titulo-validadas'>
           <div class="row">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>UCO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>SOLICITUD</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>ESTADO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>CATEGORIA</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>ESTADO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>
@@ -82,9 +80,8 @@
           <hr class='w-100 titulo-rechazadas'>
           <div class="row">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>UCO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>SOLICITUD</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>ESTADO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>CATEGORIA</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>ESTADO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>
@@ -102,7 +99,7 @@
         </ng-template>
         <hr class='w-100 titulo-rechazadas'>
       </div>
-      <div class="col-6 canceladas" [hidden]="isUserNormal">
+      <div class="col-6 canceladas" *ngIf="!isUserNormal">
         <div class="titulos">
           <h5 class="text-center titulo-canceladas">CANCELADAS<label class="ml-5 pl-5 ver-todas"
               (click)="verTodas('Cancelada')">
@@ -111,9 +108,8 @@
           <hr class='w-100 titulo-canceladas'>
           <div class="row">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>UCO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>SOLICITUD</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>ESTADO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>CATEGORIA</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>ESTADO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>
@@ -131,8 +127,8 @@
         </ng-template>
         <hr class='w-100 titulo-canceladas'>
       </div>
-      <!-- VISIBLE para el usuario normal -->
-      <div class="col-6 borrador" [hidden]="!isUserNormal">
+      <!-- VISIBLE solo para el usuario normal -->
+      <div class="col-6 borrador" *ngIf="isUserNormal">
         <div class="titulos">
           <h5 class="text-center titulo-borrador">BORRADOR<label class="ml-5 pl-5 ver-todas"
               (click)="verTodas('Borrador')">
@@ -141,9 +137,8 @@
           <hr class='w-100 titulo-borrador'>
           <div class="row">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>UCO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>SOLICITUD</u></b></div>
-            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b><u>ESTADO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>CATEGORIA</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>ESTADO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>

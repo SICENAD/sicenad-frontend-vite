@@ -11,6 +11,7 @@ import { CanActivateViaLoggingNormal } from './logging/canActivateViaLoggingNorm
 import { CanActivateViaLoggingSuperadministrador } from './logging/canActivateViaLoggingSuperadministrador';
 import { APP_INITIALIZER } from '@angular/core';
 import { AppConfigService } from './services/app-config.service';
+import { CanActivateViaLoggingLogeado } from './logging/canActivateViaLoggingLogeado';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,7 @@ import { AppConfigService } from './services/app-config.service';
     FontAwesomeModule
   ],
   //hay que declarar los "guards"
-  providers: [CanActivateViaLoggingAdministrador, CanActivateViaLoggingGestor, CanActivateViaLoggingNormal, CanActivateViaLoggingSuperadministrador,
+  providers: [CanActivateViaLoggingAdministrador, CanActivateViaLoggingGestor, CanActivateViaLoggingNormal, CanActivateViaLoggingSuperadministrador, CanActivateViaLoggingLogeado,
     {//declaro el servicio con el que uso las variables de mi properties.json en tiempo de ejecucion
     provide: APP_INITIALIZER,
     multi: true,

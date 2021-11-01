@@ -45,6 +45,16 @@ export class SolicitudesTodasComponent implements OnInit {
   isFechaActual: boolean = false;
   //fecha actual del sistema
   fechaActual: Date;
+  //si un usuario esta autenticado
+  isAutenticado: boolean = false;
+  //si un usuario es administrador del CENAD/CMT
+  isAdministrador: boolean = false;
+  //si un usuario es gestor
+  isGestor: boolean = false;
+  //si un usuario es normal
+  isUserNormal: boolean = false;
+  //si el estado es borrador
+  isBorrador: boolean = false;
 
   constructor(private solicitudService: SolicitudRecursoService,
     private router: Router, private activateRoute: ActivatedRoute, private miDatePipe: DatePipe) { }
@@ -52,6 +62,7 @@ export class SolicitudesTodasComponent implements OnInit {
   ngOnInit() {
     this.getParams();
     this.getFechaActual();
+    this.comprobarUser();
     this.getDatosInicio();
   }
 
@@ -66,16 +77,52 @@ export class SolicitudesTodasComponent implements OnInit {
     this.fechaActual = this.cambiarFormatoDate(new Date(tiempoTranscurrido));
   }
 
+  //método que comprueba el rol del usuario logeado en el sistema
+  comprobarUser(): void {
+    this.isAutenticado = sessionStorage.isLogged;
+    if (this.isAutenticado) {
+      if (sessionStorage.isAdmin == "true" && this.idCenad == sessionStorage.idCenad) {
+        this.isAdministrador = true;
+      } else if (sessionStorage.isGestor == "true" && this.idCenad == sessionStorage.idCenad) {
+        this.isGestor = true;
+      } else if (sessionStorage.isNormal == "true") {
+        this.isUserNormal = true;
+      }
+    }
+  }
+
   //método que obtiene los datos iniciales
   getDatosInicio(): void {
     //asigna los valores de las variables estáticas
-    this.solicitudesCenad = SolicitudesRecursosComponent.solicitudesCenad;
+    this.filtrarSolicitudes();
+    //asigna los valores de las variables estáticas
+    //this.solicitudesCenad = SolicitudesRecursosComponent.solicitudesCenad;
     this.estadoSeleccionado = SolicitudesRecursosComponent.estadoSolicitud;
+    this.estadoSeleccionado == "Borrador" ? this.isBorrador = true : "";
     this.filtrar();
     //obtiene del local storage las categorias del Cenad
     this.categoriasCenad = JSON.parse(localStorage.getItem(`categorias_${this.idCenad}`));
     //obtiene del local storage las unidades
     this.unidades = JSON.parse(localStorage.unidades);
+  }
+
+  //obtiene un array de las solicitudes de un Cenad y posteriormente filtra este array:
+  //por el usuario logeado (Administrador: todas las solicitudes de su Cenad, Gestor: todas las de su recurso, Usuario Normal: las de su Unidad)
+  filtrarSolicitudes(): void {
+    if (this.isAdministrador) {
+      this.solicitudesCenad = SolicitudesRecursosComponent.solicitudesCenad;
+    } else if (this.isUserNormal) {
+          this.solicitudesCenad = SolicitudesRecursosComponent.solicitudesCenad.filter(s => s.usuarioNormal.unidad.idUnidad == sessionStorage.idUnidad);
+          this.unidades.forEach(u => {
+            if (u.idUnidad == sessionStorage.idUnidad) {
+              this.unidadSeleccionada = u;
+            }
+          });
+        } else if (this.isGestor) {
+            this.solicitudesCenad = SolicitudesRecursosComponent.solicitudesCenad.filter(s => s.recurso.usuarioGestor.idUsuario == sessionStorage.idUsuario
+              && s.estado != "Borrador");
+            this.categoriaSeleccionada = null;
+          }
   }
 
   //método que se ejecuta al hacer click sobre el botón Borrar Filtro
@@ -129,6 +176,7 @@ export class SolicitudesTodasComponent implements OnInit {
 
   //método principal que realiza los filtros en los diferentes arrays de solicitudes
   filtrar(): void {
+    this.estadoSeleccionado == "Borrador" ? this.isBorrador = true : this.isBorrador = false;
     if (this.estadoSeleccionado == "Todas") {
       this.filtrarTodas();
     } else if (!this.isFechaActual) {

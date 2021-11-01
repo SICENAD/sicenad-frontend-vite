@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faEdge } from '@fortawesome/free-brands-svg-icons';
 import { faBusinessTime, faCalendarAlt, faFolderOpen, faLink, faMap } from '@fortawesome/free-solid-svg-icons';
+import { HeaderComponent } from 'src/app/core/shell/header/header.component';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { environment } from 'src/environments/environment';
@@ -20,6 +21,10 @@ export class HomePrincipalComponent implements OnInit {
   faSolicitar = faBusinessTime;
   faEnlace = faLink;
   faCartografia = faMap;
+  //variable que almacena si un usuario está logeado
+  isLogeado: boolean = false;
+  //variable que almacena si un usuario normal está logeado
+  isUserNormal: boolean = false;
   //variable que representa el cenad
   cenad: Cenad = new CenadImpl();
   //variable para el id del CENAD (barra de navegacion)
@@ -36,7 +41,16 @@ export class HomePrincipalComponent implements OnInit {
 
   ngOnInit() {
     this.cargarCenad();
+    this.comprobarLogin();
   }
+
+  //metodo que comprueba si el usuario está logeado
+  comprobarLogin(): void {
+    if (sessionStorage.isNormal == "true") {
+      this.isUserNormal = true;
+    }
+  }
+
 
   // metodo que captura el idCenad de la barra de navegación
   capturarIdBarraNavegacion(): void {
@@ -52,5 +66,10 @@ export class HomePrincipalComponent implements OnInit {
       this.escudoCenad = this.cenad.escudo;
       this.pathImg = `${this.pathRelativo}${this.escudoCenad}`;
       });
+  }
+
+  //metodo que muestra un mensaje
+  mensaje(): void {
+    alert('Debe Identificarse como Usuario Normal para acceder a esta opción....');
   }
 }

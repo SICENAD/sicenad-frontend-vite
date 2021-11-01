@@ -34,6 +34,12 @@ a.volver:hover {
   font-size: small;
 }
 
+.titulos-disponibilidad {
+  color: #3a5a40;
+  font-weight: bold;
+  font-size: medium;
+}
+
 .titulo1 {
   color: #588157;
 }
@@ -83,7 +89,7 @@ div.denegadas {
   border: 3px solid #354f52;
 }
 
-.titulo-pendientes {
+.titulo-pendientes, .titulo-disponibilidad {
   margin-top: 5px;
   color: #3a5a40;
   font-weight: bold;
@@ -91,7 +97,7 @@ div.denegadas {
   background-color: #dad7cd;
 }
 
-hr.titulo-pendientes {
+hr.titulo-pendientes, .titulo-disponibles {
   color: #a3b18a;
   border: 4px;
   border-style: double;
@@ -152,4 +158,8 @@ h6.no-existen {
   text-shadow: 1px 1px 1px #a3b18a;
   background-color: #dad7cd;
   background-color: #dad7cd;
+}
+
+.modal {
+  margin: auto;
 }

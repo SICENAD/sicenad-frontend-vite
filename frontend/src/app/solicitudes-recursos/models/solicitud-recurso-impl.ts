@@ -23,6 +23,10 @@ export class SolicitudRecursoImpl implements SolicitudRecurso {
   recurso: Recurso | any;
   otros: string;
   etiqueta: string;
+  idUsuarioNormal: string;
+  idUnidadUsuarioNormal: string;
+  idRecurso: string;
 
   constructor() {}
+
 }
