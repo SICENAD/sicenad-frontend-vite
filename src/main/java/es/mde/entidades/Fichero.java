@@ -11,6 +11,11 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Representa la entidad que controla los archivos adjuntos
+ * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ *
+ */
 @Entity
 @Table(name = "FICHEROS")
 public class Fichero {
@@ -22,7 +27,7 @@ public class Fichero {
 	private String nombreArchivo;
 	@Lob	
 	private String descripcion;
-	private String imagen;
+	private String imagen;	//campo no usado
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CATEGORIA_FICHERO", nullable = false)
 	private CategoriaFichero categoriaFichero;
@@ -36,61 +41,114 @@ public class Fichero {
 	@JoinColumn(name = "SOLICITUDRECURSO_UNIDAD")
 	private SolicitudRecurso solicitudRecursoUnidad;
 
+	/**
+	 * Crea un fichero
+	 */
 	public Fichero() {
 	}
 
+	/**
+	 * Devuelve el Id de un fichero
+	 * @return Devuelve el Id de un fichero
+	 */
 	public Long getId() {
 		return id;
 	}
 
+	/**
+	 * Guarda el id de un fichero
+	 * @param id Id del fichero
+	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+	/**
+	 * Devuelve el nombre del fichero
+	 * @return Devuelve el nombre del fichero
+	 */
 	public String getNombre() {
 		return nombre;
 	}
 
+	/**
+	 * Guarda el nombre del fichero
+	 * @param nombre Nombre del fichero
+	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
+	/**
+	 * Devuelve el nombre del archivo del fichero
+	 * @return Devuelve el nombre del archivo del fichero
+	 */
 	public String getNombreArchivo() {
 		return nombreArchivo;
 	}
 	
+	/**
+	 * Guarda el nombre del archivo del fichero
+	 * @param nombreArchivo Nombre del archivo del fichero
+	 */
 	public void setNombreArchivo(String nombreArchivo) {
 		this.nombreArchivo = nombreArchivo;
 	}
 	
+	/**
+	 * Devuelve la descripcion del fichero
+	 * @return Devuelve la descripcion del fichero
+	 */
 	public String getDescripcion() {
 		return descripcion;
 	}
 
+	/**
+	 * Guarda la descripcion del fichero
+	 * @param descripcion Descripcion del fichero
+	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 	
+	//campo no usado
 	public String getImagen() {
 		return imagen;
 	}
 	
+	//campo no usado
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
 
+	/**
+	 * Devuelve la categoria de fichero
+	 * @return Devuelve la categoria del fichero
+	 */
 	public CategoriaFichero getCategoriaFichero() {
 		return categoriaFichero;
 	}
 
+	/**
+	 * Guarda la categoria del fichero
+	 * @param categoriaFichero Tipo de fichero
+	 */
 	public void setCategoriaFichero(CategoriaFichero categoriaFichero) {
 		this.categoriaFichero = categoriaFichero;
 	}
 
+	/**
+	 * Devuelve el recurso al que pertenece el fichero
+	 * @return Devuelve el recurso al que pertenece el fichero
+	 */
 	public Recurso getRecurso() {
 		return recurso;
 	}
 
+	/**
+	 * Guarda el recurso al que pertenece el fichero
+	 * @param recurso Recurso al que pertenece el fichero
+	 */
 	public void setRecurso(Recurso recurso) {
 		this.recurso = recurso;
 	}

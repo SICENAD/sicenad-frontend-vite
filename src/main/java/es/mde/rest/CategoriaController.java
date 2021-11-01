@@ -15,16 +15,29 @@ import es.mde.entidades.Categoria;
 import es.mde.entidades.Recurso;
 import es.mde.repositorios.CategoriaDAO;
 
+/**
+ * Controlador que maneja los metodos personalizados de las categorias
+ */
 @RepositoryRestController
 @RequestMapping(path = "/categorias")
 @Configuration
 public class CategoriaController {
 	private CategoriaDAO categoriaDAO;
 
+	/**
+	 * Controlador para ejecutar los metodos personalizados
+	 * @param categoriaDAO DAO de categoria
+	 */
 	public CategoriaController(CategoriaDAO categoriaDAO) {
 		this.categoriaDAO = categoriaDAO;
 	}
 	
+	/**
+	 * Metodo que agrupa las subcategorias anidadas de una categoria
+	 * @param id Id de la categoria
+	 * @param assembler
+	 * @return Lista de subcategorias anidadas
+	 */
 	@GetMapping("/{id}/subcategoriasAnidadas")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getSubcategoriasAnidadas(@PathVariable Long id,
@@ -35,6 +48,12 @@ public class CategoriaController {
 		return assembler.toCollectionModel(categorias);
 	}
 	
+	/**
+	 * Metodo que agrupa los recursos de las subcategorias de una categoria
+	 * @param id Id de la categoria
+	 * @param assembler
+	 * @return Lista de los recursos de las subcategorias
+	 */
 	@GetMapping("/{id}/recursosDeSubcategorias")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getRecursosDeSubcategorias(@PathVariable Long id,
@@ -45,6 +64,11 @@ public class CategoriaController {
 		return assembler.toCollectionModel(recursos);
 	}
 	
+	/**
+	 * Metodo que agrupa las categorias padre de la aplicacion
+	 * @param assembler
+	 * @return Lista de categorias padre de la aplicacion
+	 */
 	@GetMapping("/padre")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCategoriasPadre(PersistentEntityResourceAssembler assembler) {

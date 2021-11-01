@@ -10,6 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import es.mde.entidades.CategoriaFichero;
 import es.mde.entidades.Fichero;
 
+/**
+ * Representa la clase implementada con los metodos personalizados de los recursos 
+ * @author JOSE LUIS PUENTES ÁLAMOS - MIGUEL PRADA MUÑOZ
+ *
+ */
 @Transactional(readOnly = true)
 public class RecursoDAOImpl implements RecursoDAOCustom {
 	@Autowired
@@ -18,7 +23,11 @@ public class RecursoDAOImpl implements RecursoDAOCustom {
 	@PersistenceContext
 	EntityManager entityManager;
 	
-	@Override//obtiene un listado de las categorias de fichero de los ficheros que tiene un recurso concreto
+	@Override
+	/**
+	 * Devuelve una lista de las categorias de ficheros que tienen los ficheros de un recurso
+	 * @param id Id del recurso
+	 */
 	public List<CategoriaFichero> getCategoriasFicheroDeRecurso(Long id) {
 
 		List<CategoriaFichero> categoriasFichero = new ArrayList<CategoriaFichero>();

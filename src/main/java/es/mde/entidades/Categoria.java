@@ -15,7 +15,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import es.mde.repositorios.CategoriaListener;
-
+/**
+ * Categoría va a representar la jerarquía de los recursos de un CENAD/CMT
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
+ *
+ */
 @Entity
 @EntityListeners(CategoriaListener.class)
 @Table(name="CATEGORIAS")
@@ -37,76 +41,137 @@ public class Categoria {
 	@JoinColumn(name = "CATEGORIA_PADRE")
 	private Categoria categoriaPadre;
 	
+	/**
+	 * Crea una categoría
+	 */
 	public Categoria() {}
 	
+	/**
+	 * Devuelve el Id de una categoría
+	 * @return Devuelve el Id de la categoría
+	 */
 	public Long getId() {
 		return id;
 	}
 	
+	/**
+	 * Guarda el Id de una categoría
+	 * @param id Id de la categoría
+	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	
+	/**
+	 * Devuelve el nombre de una categoría
+	 * @return Devuelve el nombre de la categoría
+	 */
 	public String getNombre() {
 		return nombre;
 	}
 
+	/**
+	 * Guarda el nombre de una categoría
+	 * @param nombre Nombre de la categoría
+	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 	
+	/**
+	 * Devuelve la descripción de una categoría
+	 * @return Devuelve la descripción de la categoría
+	 */
 	public String getDescripcion() {
 		return descripcion;
 	}
 	
+	/**
+	 * Guarda la descripción de una categoría
+	 * @param descripcion Descripción de la categoría
+	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 	
+	/**
+	 * Devuelve los recursos de una categoría
+	 * @return Devuelve los recursos de la categoría
+	 */
 	public Collection<Recurso> getRecursos() {
 		return recursos;
 	}
 	
+	/**
+	 * Guarda los recursos de una categoría
+	 * @param recursos Recursos de la categoría
+	 */
 	public void setRecursos(Collection<Recurso> recursos) {
 		this.recursos = recursos;
 	}
 	
+	/**
+	 * Devuelve las subcategorías de una categoría
+	 * @return Devuelve las subcategorías de la categoría
+	 */
 	public Collection<Categoria> getSubcategorias() {
 		return subcategorias;
 	}
 	
+	/**
+	 * Guarda las subcategorías de una categoría
+	 * @param subcategorias Subcategorías de la categoría
+	 */
 	public void setSubcategorias(Collection<Categoria> subcategorias) {
 		this.subcategorias = subcategorias;
 	}
 	
+	/**
+	 * Devuelve la categoría Padre de una categoría
+	 * @return Devuelve la categoría Padre de la categoría
+	 */
 	public Categoria getCategoriaPadre() {
 		return categoriaPadre;
 	}
 	
+	/**
+	 * Guarda la categoría Padre de una categoría
+	 * @param categoriaPadre Categoría Padre de la categoría
+	 */
 	public void setCategoriaPadre(Categoria categoriaPadre) {
 		this.categoriaPadre = categoriaPadre;
 	}
 	
+	/**
+	 * Devuelve el CENAD/CMT de una categoría
+	 * @return Devuelve el CENAD/CMT de la categoría
+	 */
 	public Cenad getCenad() {
 		return cenad;
 	}
 	
+	/**
+	 * Guarda el CENAD/CMT de una categoría
+	 * @param cenad CENAD/CMT de la categoría
+	 */
 	public void setCenad(Cenad cenad) {
 		this.cenad = cenad;
 	}
-	
-	// Establece la relacion en los dos sentidos
+	/**
+	 * Añade la subcategoría a la categoría. Establece la relacion en los dos sentidos
+	 * @param categoria Subcategoría añadida a la categoría
+	 */ 
 	public void addSubcategoria(Categoria categoria) {
 		getSubcategorias().add(categoria);
 		categoria.setCategoriaPadre(this);
 	}
+	
+	/**
+	 * Añade el recurso a la categoría. Establece la relacion en los dos sentidos
+	 * @param recurso Recurso añadido a la categoría
+	 */ 
 	public void addRecurso(Recurso recurso) {
 		getRecursos().add(recurso);
 		recurso.setCategoria(this);
-	}
-
-	@Override
-	public String toString() {
-		return "Categoria [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + "]";
 	}
 }

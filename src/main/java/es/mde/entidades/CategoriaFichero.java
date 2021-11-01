@@ -12,6 +12,11 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ * CategoríaFichero va a representar los diferentes tipos de fichero que considera la aplicación.
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
+ *
+ */
 @Entity
 @Table(name = "CATEGORIAS_FICHERO")
 public class CategoriaFichero {
@@ -27,62 +32,120 @@ public class CategoriaFichero {
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Cartografia.class, mappedBy = "categoriaFichero")
 	private Collection<Cartografia> cartografias = new ArrayList<>();
 	
+	/**
+	 * Crea una categoría de fichero
+	 */
 	public CategoriaFichero() {}
 
+	/**
+	 * Devuelve el Id de una categoría de fichero
+	 * @return Devuelve el Id de la categoría de fichero
+	 */
 	public Long getId() {
 		return id;
 	}
 
+	/**
+	 * Guarda el Id de una categoría de fichero
+	 * @param id Id de la categoría de fichero
+	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+	/**
+	 * Devuelve el nombre de una categoría de fichero
+	 * @return Devuelve el nombre de la categoría de fichero
+	 */
 	public String getNombre() {
 		return nombre;
 	}
 
+	/**
+	 * Guarda el nombre de una categoría de fichero
+	 * @param nombre Nombre de la categoría de fichero
+	 */
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
+	/**
+	 * Devuelve la descripción de una categoría de fichero
+	 * @return Devuelve la descripción de la categoría de fichero
+	 */
 	public String getDescripcion() {
 		return descripcion;
 	}
 
+	/**
+	 * Guarda la descripción de una categoría de fichero
+	 * @param descripcion Descripción de la categoría de fichero
+	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 
+	/**
+	 * Devuelve el tipo de una categoría de fichero
+	 * @return Devuelve el tipo de la categoría de fichero
+	 */
 	public int getTipo() {
 		return tipo;
 	}
 
+	/**
+	 * Guarda el tipo de una categoría de fichero
+	 * @param tipo Tipo de la categoría de fichero
+	 */
 	public void setTipo(int tipo) {
 		this.tipo = tipo;
 	}
 	
+	/**
+	 * Devuelve los ficheros que pertenecen a una categoría de fichero
+	 * @return Devuelve los ficheros que pertenecen a la categoría de fichero
+	 */
 	public Collection<Fichero> getFicheros() {
 		return ficheros;
 	}
 	
+	/**
+	 * Guarda los ficheros que pertenecen a una categoría de fichero
+	 * @param ficheros Ficheros que pertenecen a la categoría de fichero
+	 */
 	public void setFicheros(Collection<Fichero> ficheros) {
 		this.ficheros = ficheros;
 	}
 	
+	/**
+	 * Devuelve las cartografías que pertenecen a una categoría de fichero
+	 * @return Devuelve las cartografías que pertenecen a la categoría de fichero
+	 */
 	public Collection<Cartografia> getCartografias() {
 		return cartografias;
 	}
 	
+	/**
+	 * Guarda las cartografías que pertenecen a una categoría de fichero
+	 * @param ficheros Cartografías que pertenecen a la categoría de fichero
+	 */
 	public void setCartografias(Collection<Cartografia> cartografias) {
 		this.cartografias = cartografias;
 	}
 	
-	// Establece la relacion en los dos sentidos
+	/**
+	 * Añade el fichero a la categoría de fichero. Establece la relacion en los dos sentidos
+	 * @param fichero Fichero añadido a la categoría de fichero
+	 */ 
 	public void addFichero(Fichero fichero) {
 		getFicheros().add(fichero);
 		fichero.setCategoriaFichero(this);
 	}
 	
+	/**
+	 * Añade la cartografía a la categoría de fichero. Establece la relacion en los dos sentidos
+	 * @param cartografía Cartografía añadida a la categoría de fichero
+	 */ 
 	public void addCartografia(Cartografia cartografia) {
 		getCartografias().add(cartografia);
 		cartografia.setCategoriaFichero(this);

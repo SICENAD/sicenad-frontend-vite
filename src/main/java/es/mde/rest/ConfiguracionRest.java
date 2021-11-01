@@ -28,7 +28,13 @@ import es.mde.entidades.Categoria;
 import es.mde.entidades.Cenad;
 import es.mde.entidades.Recurso;
 
-
+/**
+ * Clase de configuracion que recoge la configuración de los controladores y de
+ * la seguridad
+ * 
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
+ *
+ */
 @Configuration
 public class ConfiguracionRest {
 	@Bean

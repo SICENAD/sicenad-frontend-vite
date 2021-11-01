@@ -17,16 +17,28 @@ import es.mde.entidades.Recurso;
 import es.mde.entidades.SolicitudRecurso;
 import es.mde.repositorios.CenadDAO;
 
+/**
+ * Controlador que maneja los metodos personalizados de los CENADS
+ */
 @RepositoryRestController
 @RequestMapping(path = "/cenads")
 @Configuration
 public class CenadController {
 	private CenadDAO cenadDAO;
 
+	/**
+	 * Controlador para ejecutar los metodos personalizados
+	 * @param cenadDAO DAO de CENAD
+	 */
 	public CenadController(CenadDAO cenadDAO) {
 		this.cenadDAO = cenadDAO;
 	}
 	
+	/**
+	 * Metodo para recuperar los CENAD,s sin administrador
+	 * @param assembler
+	 * @return Lista de CENAD,s sin administrador
+	 */
 	@GetMapping("/sinAdmin")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCenadsSinAdmin(PersistentEntityResourceAssembler assembler) {
@@ -36,6 +48,12 @@ public class CenadController {
 		return assembler.toCollectionModel(cenads);
 	}
 	
+	/**
+	 * Metodo que agrupa las categorias Padre de un CENAD
+	 * @param id Id del CENAD
+	 * @param assembler
+	 * @return Lista de las categorias Padre de un CENAD
+	 */
 	@GetMapping("/{id}/categoriasPadre")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCategoriasPadreCenad(@PathVariable Long id,
@@ -46,6 +64,12 @@ public class CenadController {
 		return assembler.toCollectionModel(categorias);
 	}
 	
+	/**
+	 * Metodo que agrupa los recursos de un CENAD
+	 * @param id Id del CENAD
+	 * @param assembler
+	 * @return Lista de los recursos de un CENAD
+	 */
 	@GetMapping("/{id}/recursos")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getRecursosCenad(@PathVariable Long id,
@@ -56,6 +80,12 @@ public class CenadController {
 		return assembler.toCollectionModel(recursos);
 	}
 	
+	/**
+	 * Metodo que agrupa las solicitudes de un CENAD
+	 * @param id Id del CENAD
+	 * @param assembler
+	 * @return Lista de las solicitudes de un CENAD
+	 */
 	@GetMapping("/{id}/solicitudes")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getSolicitudesCenad(@PathVariable Long id,

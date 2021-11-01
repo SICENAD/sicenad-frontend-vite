@@ -13,16 +13,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.mde.entidades.CategoriaFichero;
 import es.mde.repositorios.RecursoDAO;
 
+/**
+ * Controlador que maneja los metodos personalizados de los recursos
+ */
 @RepositoryRestController
 @RequestMapping(path = "recursos/{id}")
 @Configuration
 public class RecursoController {
 	private RecursoDAO recursoDAO;
 
+	/**
+	 * Controlador para ejecutar los metodos personalizados
+	 * @param recursoDAO DAO de recurso
+	 */
 	public RecursoController(RecursoDAO recursoDAO) {
 		this.recursoDAO = recursoDAO;
 	}
 	
+	/**
+	 * Metodo que agrupa las categorias de fichero de los ficheros de un recurso
+	 * @param id Id del recurso
+	 * @param assembler
+	 * @return Lista de categorias de fichero de ese recurso
+	 */
 	@GetMapping("/categoriasFichero")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCategoriasFicheroDeRecurso(@PathVariable Long id,
