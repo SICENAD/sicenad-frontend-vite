@@ -12,7 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
  * Representa las solicitudes de recursos
+ * 
  * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
@@ -74,29 +77,14 @@ public class SolicitudRecurso {
 	// ZONA DE CAIDA DE PROYECTILES/EXPLOSIVOS
 
 	private String zonaCaida;
-	private Boolean conMunTrazadoraIluminanteFumigena;
-	private String arma1ZC;
-	private String arma1ZCAsentamiento;
-	private String arma1ZCCoordAsentamiento;
-	private String arma1ZCCoordPuntoCaida;
-	private String arma1ZCAlturaMax;
-	private String arma2ZC;
-	private String arma2ZCAsentamiento;
-	private String arma2ZCCoordAsentamiento;
-	private String arma2ZCCoordPuntoCaida;
-	private String arma2ZCAlturaMax;
-	private String arma3ZC;
-	private String arma3ZCAsentamiento;
-	private String arma3ZCCoordAsentamiento;
-	private String arma3ZCCoordPuntoCaida;
-	private String arma3ZCAlturaMax;
-
-	// COMUNES CAMPO DE TIRO
-
-	private String campoTiro;
+	private Boolean isConMunTrazadoraIluminanteFumigena;
+	@ManyToMany
+	@JoinTable(name = "SOLICITUDES_ARMAS", joinColumns = @JoinColumn(name = "SOL_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ARMA_ID", referencedColumnName = "ID"))
+	private Collection<Arma> armas;
 
 	// CAMPO DE TIRO DE CARROS, VCI/C, PRECISICION
 
+	private String campoTiroCarros;
 	private String tipoEjercicio;
 	private String armaPral;
 	private String armaPrpalNumDisparosPrev;
@@ -106,6 +94,7 @@ public class SolicitudRecurso {
 	// CAMPO DE TIRO LASER (se han creado hasta 5 tipos de blancos para hacerlo
 	// compatible con cualquier CENAD/CMT)
 
+	private String campoTiroLaser;
 	private int numBlancosFijosA;
 	private int numBlancosFijosB;
 	private int numBlancosFijosC;
@@ -117,17 +106,18 @@ public class SolicitudRecurso {
 	private int numBlancosMovilesD;
 	private int numBlancosMovilesE;
 
-	// CAMPO DE TIRO/EXPLOSIVOS
+	// CAMPO DE TIRO
 
+	private String campoTiro;
 	private String arma1CT;
 	private String arma1CTlongitud;
-	private String arma1CTalturaMax;
 	private String arma2CT;
 	private String arma2CTlongitud;
-	private String arma2CTalturaMax;
-	private String arma3CT;
-	private String arma3CTlongitud;
-	private String arma3CTalturaMax;
+
+	// CAMPO EXPLOSIVOS
+
+	private String campoExplosivos;
+	private String explosivo;
 
 	// POLIGONO DE COMBATE EN ZONAS URBANAS
 	// no tiene atributos específicos
@@ -149,21 +139,17 @@ public class SolicitudRecurso {
 	private String actividad;
 
 	// LOGISTICA
-	// COMUNES
-
-	private int numPersonas; // Zona de vida de Batallón y Zona de Espera
-
 	// ACANTONAMIENTO/VIVAC
 
 	private String vivac;
-	private String vivacCoord;
 
 	// ZONA DE VIDA DE BATALLON
 
-	private Boolean conUsoCocina;
+	private Boolean isConUsoCocina;
+	private int numPersonasZVB;
 
 	// ZONA DE ESPERA
-	// no contiene atributos específicos
+	private int numPersonasZE;
 
 	// LAVADEROS
 
@@ -180,43 +166,9 @@ public class SolicitudRecurso {
 	private int numSimuladores;
 	private String usoEstacionSeg;
 
-	// PETICION DATOS LOGISTICOS DE ACTIVADES A REALIZAR EN BASE
-	// DOCUMENTACION
-	// RELACION DE PERSONAL, ARMAMENTO Y MATERIAL
-
-	private int ofGral;
-	private int coronel;
-	private int oficiales;
-	private int suboficiales;
-	private int tropa;
-	private int reservistas;
-	private int civiles;
-	private int totalPersonal;
-	private int carrosComate;
-	private int vcrr;
-	private int vci_vec;
-	private int piezas_aca;
-	private int piezas_aaa;
-	private int otrosArmamentoPral;
-	private int totalArmamentoPral;
-	private int blindadosCadenas;
-	private int blindadosRuedas;
-	private int pesadosRuedas;
-	private int ligerosRuedas;
-	private int motos;
-	private int otrosVehiculos;
-	private int totalVehiculos;
-
-	// PARTE NOVEDADES DEL USO DE RECURSOS
-	// no contiene atributos específicos
-
-	// ENVIO PUBLICACION NOTAM
-
-	private String notamRef;
-	private String notamAlturaMax;
-
 	// OTROS RECURSOS
 	// no contiene atributos específicos
+	private String otrosDatosEspecificos;
 
 	/**
 	 * Crea una solicitud
@@ -561,6 +513,7 @@ public class SolicitudRecurso {
 	// Establece la relacion en los dos sentidos
 	/**
 	 * Agrega un fichero a la solicitud
+	 * 
 	 * @param fichero Fichero agregado a la solicitud
 	 */
 	public void addDocumentacionCenad(Fichero fichero) {
@@ -569,6 +522,7 @@ public class SolicitudRecurso {
 
 	/**
 	 * Agrega un fichero a la solicitud
+	 * 
 	 * @param fichero Fichero agregado a la solicitud
 	 */
 	public void addDocumentacionUnidad(Fichero fichero) {
@@ -587,140 +541,12 @@ public class SolicitudRecurso {
 		this.zonaCaida = zonaCaida;
 	}
 
-	public Boolean isConMunTrazadoraIluminanteFumigena() {
-		return conMunTrazadoraIluminanteFumigena;
+	public String getCampoTiroCarros() {
+		return campoTiroCarros;
 	}
 
-	public void setConMunTrazadoraIluminanteFumigena(Boolean conMunTrazadoraIluminanteFumigena) {
-		this.conMunTrazadoraIluminanteFumigena = conMunTrazadoraIluminanteFumigena;
-	}
-
-	public String getArma1ZC() {
-		return arma1ZC;
-	}
-
-	public void setArma1ZC(String arma1zc) {
-		arma1ZC = arma1zc;
-	}
-
-	public String getArma1ZCAsentamiento() {
-		return arma1ZCAsentamiento;
-	}
-
-	public void setArma1ZCAsentamiento(String arma1zcAsentamiento) {
-		arma1ZCAsentamiento = arma1zcAsentamiento;
-	}
-
-	public String getArma1ZCCoordAsentamiento() {
-		return arma1ZCCoordAsentamiento;
-	}
-
-	public void setArma1ZCCoordAsentamiento(String arma1zcCoordAsentamiento) {
-		arma1ZCCoordAsentamiento = arma1zcCoordAsentamiento;
-	}
-
-	public String getArma1ZCCoordPuntoCaida() {
-		return arma1ZCCoordPuntoCaida;
-	}
-
-	public void setArma1ZCCoordPuntoCaida(String arma1zcCoordPuntoCaida) {
-		arma1ZCCoordPuntoCaida = arma1zcCoordPuntoCaida;
-	}
-
-	public String getArma1ZCAlturaMax() {
-		return arma1ZCAlturaMax;
-	}
-
-	public void setArma1ZCAlturaMax(String arma1zcAlturaMax) {
-		arma1ZCAlturaMax = arma1zcAlturaMax;
-	}
-
-	public String getArma2ZC() {
-		return arma2ZC;
-	}
-
-	public void setArma2ZC(String arma2zc) {
-		arma2ZC = arma2zc;
-	}
-
-	public String getArma2ZCAsentamiento() {
-		return arma2ZCAsentamiento;
-	}
-
-	public void setArma2ZCAsentamiento(String arma2zcAsentamiento) {
-		arma2ZCAsentamiento = arma2zcAsentamiento;
-	}
-
-	public String getArma2ZCCoordAsentamiento() {
-		return arma2ZCCoordAsentamiento;
-	}
-
-	public void setArma2ZCCoordAsentamiento(String arma2zcCoordAsentamiento) {
-		arma2ZCCoordAsentamiento = arma2zcCoordAsentamiento;
-	}
-
-	public String getArma2ZCCoordPuntoCaida() {
-		return arma2ZCCoordPuntoCaida;
-	}
-
-	public void setArma2ZCCoordPuntoCaida(String arma2zcCoordPuntoCaida) {
-		arma2ZCCoordPuntoCaida = arma2zcCoordPuntoCaida;
-	}
-
-	public String getArma2ZCAlturaMax() {
-		return arma2ZCAlturaMax;
-	}
-
-	public void setArma2ZCAlturaMax(String arma2zcAlturaMax) {
-		arma2ZCAlturaMax = arma2zcAlturaMax;
-	}
-
-	public String getArma3ZC() {
-		return arma3ZC;
-	}
-
-	public void setArma3ZC(String arma3zc) {
-		arma3ZC = arma3zc;
-	}
-
-	public String getArma3ZCAsentamiento() {
-		return arma3ZCAsentamiento;
-	}
-
-	public void setArma3ZCAsentamiento(String arma3zcAsentamiento) {
-		arma3ZCAsentamiento = arma3zcAsentamiento;
-	}
-
-	public String getArma3ZCCoordAsentamiento() {
-		return arma3ZCCoordAsentamiento;
-	}
-
-	public void setArma3ZCCoordAsentamiento(String arma3zcCoordAsentamiento) {
-		arma3ZCCoordAsentamiento = arma3zcCoordAsentamiento;
-	}
-
-	public String getArma3ZCCoordPuntoCaida() {
-		return arma3ZCCoordPuntoCaida;
-	}
-
-	public void setArma3ZCCoordPuntoCaida(String arma3zcCoordPuntoCaida) {
-		arma3ZCCoordPuntoCaida = arma3zcCoordPuntoCaida;
-	}
-
-	public String getArma3ZCAlturaMax() {
-		return arma3ZCAlturaMax;
-	}
-
-	public void setArma3ZCAlturaMax(String arma3zcAlturaMax) {
-		arma3ZCAlturaMax = arma3zcAlturaMax;
-	}
-
-	public String getCampoTiro() {
-		return campoTiro;
-	}
-
-	public void setCampoTiro(String campoTiro) {
-		this.campoTiro = campoTiro;
+	public void setCampoTiroCarros(String campoTiroCarros) {
+		this.campoTiroCarros = campoTiroCarros;
 	}
 
 	public String getTipoEjercicio() {
@@ -761,6 +587,14 @@ public class SolicitudRecurso {
 
 	public void setArmaSecundNumDisparosPrev(String armaSecundNumDisparosPrev) {
 		this.armaSecundNumDisparosPrev = armaSecundNumDisparosPrev;
+	}
+
+	public String getCampoTiroLaser() {
+		return campoTiroLaser;
+	}
+
+	public void setCampoTiroLaser(String campoTiroLaser) {
+		this.campoTiroLaser = campoTiroLaser;
 	}
 
 	public int getNumBlancosFijosA() {
@@ -843,6 +677,14 @@ public class SolicitudRecurso {
 		this.numBlancosMovilesE = numBlancosMovilesE;
 	}
 
+	public String getCampoTiro() {
+		return campoTiro;
+	}
+
+	public void setCampoTiro(String campoTiro) {
+		this.campoTiro = campoTiro;
+	}
+
 	public String getArma1CT() {
 		return arma1CT;
 	}
@@ -857,14 +699,6 @@ public class SolicitudRecurso {
 
 	public void setArma1CTlongitud(String arma1cTlongitud) {
 		arma1CTlongitud = arma1cTlongitud;
-	}
-
-	public String getArma1CTalturaMax() {
-		return arma1CTalturaMax;
-	}
-
-	public void setArma1CTalturaMax(String arma1cTalturaMax) {
-		arma1CTalturaMax = arma1cTalturaMax;
 	}
 
 	public String getArma2CT() {
@@ -883,36 +717,20 @@ public class SolicitudRecurso {
 		arma2CTlongitud = arma2cTlongitud;
 	}
 
-	public String getArma2CTalturaMax() {
-		return arma2CTalturaMax;
+	public String getCampoExplosivos() {
+		return campoExplosivos;
 	}
 
-	public void setArma2CTalturaMax(String arma2cTalturaMax) {
-		arma2CTalturaMax = arma2cTalturaMax;
+	public void setCampoExplosivos(String campoExplosivos) {
+		this.campoExplosivos = campoExplosivos;
 	}
 
-	public String getArma3CT() {
-		return arma3CT;
+	public String getExplosivo() {
+		return explosivo;
 	}
 
-	public void setArma3CT(String arma3ct) {
-		arma3CT = arma3ct;
-	}
-
-	public String getArma3CTlongitud() {
-		return arma3CTlongitud;
-	}
-
-	public void setArma3CTlongitud(String arma3cTlongitud) {
-		arma3CTlongitud = arma3cTlongitud;
-	}
-
-	public String getArma3CTalturaMax() {
-		return arma3CTalturaMax;
-	}
-
-	public void setArma3CTalturaMax(String arma3cTalturaMax) {
-		arma3CTalturaMax = arma3cTalturaMax;
+	public void setExplosivo(String explosivo) {
+		this.explosivo = explosivo;
 	}
 
 	public String getActividad() {
@@ -921,15 +739,7 @@ public class SolicitudRecurso {
 
 	public void setActividad(String actividad) {
 		this.actividad = actividad;
-	}
-
-	public int getNumPersonas() {
-		return numPersonas;
-	}
-
-	public void setNumPersonas(int numPersonas) {
-		this.numPersonas = numPersonas;
-	}
+	}	
 
 	public String getVivac() {
 		return vivac;
@@ -937,22 +747,6 @@ public class SolicitudRecurso {
 
 	public void setVivac(String vivac) {
 		this.vivac = vivac;
-	}
-
-	public String getVivacCoord() {
-		return vivacCoord;
-	}
-
-	public void setVivacCoord(String vivacCoord) {
-		this.vivacCoord = vivacCoord;
-	}
-
-	public Boolean isConUsoCocina() {
-		return conUsoCocina;
-	}
-
-	public void setConUsoCocina(Boolean conUsoCocina) {
-		this.conUsoCocina = conUsoCocina;
 	}
 
 	public int getNumVehCadenas() {
@@ -1011,195 +805,68 @@ public class SolicitudRecurso {
 		this.usoEstacionSeg = usoEstacionSeg;
 	}
 
-	public int getOfGral() {
-		return ofGral;
+	public Boolean isConMunTrazadoraIluminanteFumigena() {
+		return isConMunTrazadoraIluminanteFumigena;
 	}
 
-	public void setOfGral(int ofGral) {
-		this.ofGral = ofGral;
+	public void setIsConMunTrazadoraIluminanteFumigena(Boolean isConMunTrazadoraIluminanteFumigena) {
+		this.isConMunTrazadoraIluminanteFumigena = isConMunTrazadoraIluminanteFumigena;
 	}
 
-	public int getCoronel() {
-		return coronel;
+	public Collection<Arma> getArmas() {
+		return armas;
 	}
 
-	public void setCoronel(int coronel) {
-		this.coronel = coronel;
+	public void setArmas(Collection<Arma> armas) {
+		this.armas = armas;
 	}
 
-	public int getOficiales() {
-		return oficiales;
+	public Boolean isConUsoCocina() {
+		return isConUsoCocina;
 	}
 
-	public void setOficiales(int oficiales) {
-		this.oficiales = oficiales;
+	public void setIsConUsoCocina(Boolean isConUsoCocina) {
+		this.isConUsoCocina = isConUsoCocina;
 	}
 
-	public int getSuboficiales() {
-		return suboficiales;
+	public int getNumPersonasZVB() {
+		return numPersonasZVB;
 	}
 
-	public void setSuboficiales(int suboficiales) {
-		this.suboficiales = suboficiales;
+	public void setNumPersonasZVB(int numPersonasZVB) {
+		this.numPersonasZVB = numPersonasZVB;
 	}
 
-	public int getTropa() {
-		return tropa;
+	public int getNumPersonasZE() {
+		return numPersonasZE;
 	}
 
-	public void setTropa(int tropa) {
-		this.tropa = tropa;
+	public void setNumPersonasZE(int numPersonasZE) {
+		this.numPersonasZE = numPersonasZE;
 	}
 
-	public int getReservistas() {
-		return reservistas;
+	/**
+	 * Devuelve otros datos especificos de la solicitud
+	 * 
+	 * @return Devuelve otros datos especificos de la solicitud
+	 */
+
+	public String getOtrosDatosEspecificos() {
+		return otrosDatosEspecificos;
 	}
 
-	public void setReservistas(int reservistas) {
-		this.reservistas = reservistas;
+	/**
+	 * Guarda otros datos especificos de la solicitud
+	 * 
+	 * @param otrosDatosEspecificos Otros datos especificos de la solicitud
+	 */
+
+	public void setOtrosDatosEspecificos(String otrosDatosEspecificos) {
+		this.otrosDatosEspecificos = otrosDatosEspecificos;
 	}
 
-	public int getCiviles() {
-		return civiles;
-	}
-
-	public void setCiviles(int civiles) {
-		this.civiles = civiles;
-	}
-
-	public int getTotalPersonal() {
-		return totalPersonal;
-	}
-
-	public void setTotalPersonal(int totalPersonal) {
-		this.totalPersonal = totalPersonal;
-	}
-
-	public int getCarrosComate() {
-		return carrosComate;
-	}
-
-	public void setCarrosComate(int carrosComate) {
-		this.carrosComate = carrosComate;
-	}
-
-	public int getVcrr() {
-		return vcrr;
-	}
-
-	public void setVcrr(int vcrr) {
-		this.vcrr = vcrr;
-	}
-
-	public int getVci_vec() {
-		return vci_vec;
-	}
-
-	public void setVci_vec(int vci_vec) {
-		this.vci_vec = vci_vec;
-	}
-
-	public int getPiezas_aca() {
-		return piezas_aca;
-	}
-
-	public void setPiezas_aca(int piezas_aca) {
-		this.piezas_aca = piezas_aca;
-	}
-
-	public int getPiezas_aaa() {
-		return piezas_aaa;
-	}
-
-	public void setPiezas_aaa(int piezas_aaa) {
-		this.piezas_aaa = piezas_aaa;
-	}
-
-	public int getOtrosArmamentoPral() {
-		return otrosArmamentoPral;
-	}
-
-	public void setOtrosArmamentoPral(int otrosArmamentoPral) {
-		this.otrosArmamentoPral = otrosArmamentoPral;
-	}
-
-	public int getTotalArmamentoPral() {
-		return totalArmamentoPral;
-	}
-
-	public void setTotalArmamentoPral(int totalArmamentoPral) {
-		this.totalArmamentoPral = totalArmamentoPral;
-	}
-
-	public int getBlindadosCadenas() {
-		return blindadosCadenas;
-	}
-
-	public void setBlindadosCadenas(int blindadosCadenas) {
-		this.blindadosCadenas = blindadosCadenas;
-	}
-
-	public int getBlindadosRuedas() {
-		return blindadosRuedas;
-	}
-
-	public void setBlindadosRuedas(int blindadosRuedas) {
-		this.blindadosRuedas = blindadosRuedas;
-	}
-
-	public int getPesadosRuedas() {
-		return pesadosRuedas;
-	}
-
-	public void setPesadosRuedas(int pesadosRuedas) {
-		this.pesadosRuedas = pesadosRuedas;
-	}
-
-	public int getLigerosRuedas() {
-		return ligerosRuedas;
-	}
-
-	public void setLigerosRuedas(int ligerosRuedas) {
-		this.ligerosRuedas = ligerosRuedas;
-	}
-
-	public int getMotos() {
-		return motos;
-	}
-
-	public void setMotos(int motos) {
-		this.motos = motos;
-	}
-
-	public int getOtrosVehiculos() {
-		return otrosVehiculos;
-	}
-
-	public void setOtrosVehiculos(int otrosVehiculos) {
-		this.otrosVehiculos = otrosVehiculos;
-	}
-
-	public int getTotalVehiculos() {
-		return totalVehiculos;
-	}
-
-	public void setTotalVehiculos(int totalVehiculos) {
-		this.totalVehiculos = totalVehiculos;
-	}
-
-	public String getNotamRef() {
-		return notamRef;
-	}
-
-	public void setNotamRef(String notamRef) {
-		this.notamRef = notamRef;
-	}
-
-	public String getNotamAlturaMax() {
-		return notamAlturaMax;
-	}
-
-	public void setNotamAlturaMax(String notamAlturaMax) {
-		this.notamAlturaMax = notamAlturaMax;
+	public void addArma(Arma arma) {
+		getArmas().add(arma);
+		arma.getSolicitudes().add(this);
 	}
 }
