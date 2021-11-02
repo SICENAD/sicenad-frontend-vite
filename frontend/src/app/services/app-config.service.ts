@@ -40,9 +40,19 @@ export class AppConfigService {
   get sizeMaxDocSolicitud() {
 
     if (!this.appConfig) {
-      throw Error('Config file not loaded!');
+      throw Error('No se ha cargado el archivo de configuración!');
     }
 
     return this.appConfig.sizeMaxDocSolicitud;
+  }
+
+
+  get tiempoMaximoLocalStorage() {
+
+    if (!this.appConfig) {
+      throw Error('No se ha cargado el archivo de configuración!');
+    }
+
+    return this.appConfig.tiempoMaximoLocalStorage;
   }
 }

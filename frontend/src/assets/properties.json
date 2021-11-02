@@ -1,5 +1,6 @@
 {
   "sizeMaxEscudo": 2,
   "sizeMaxDocRecurso": 30,
-  "sizeMaxDocSolicitud": 30 
+  "sizeMaxDocSolicitud": 30,
+  "tiempoMaximoLocalStorage": 1 
 }

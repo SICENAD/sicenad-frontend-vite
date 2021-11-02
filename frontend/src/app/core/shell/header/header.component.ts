@@ -1,16 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CategoriaService } from 'src/app/categorias/service/categoria.service';
 import { CategoriaFicheroService } from 'src/app/categoriasFichero/service/categoriaFichero.service';
-import { HeaderPrincipalComponent } from 'src/app/principal-cenad/shell-principal/header-principal/header-principal.component';
-import { RecursoService } from 'src/app/recursos/service/recurso.service';
+import { HomePrincipalComponent } from 'src/app/principal-cenad/home-principal/home-principal.component';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { CenadService } from 'src/app/superadministrador/service/cenad.service';
 import { TipoFormularioService } from 'src/app/tiposFormulario/service/tipoFormulario.service';
 import { UnidadService } from 'src/app/unidades/service/unidad.service';
-import { UsuarioAdministrador } from 'src/app/usuarios/models/usuarioAdministrador';
-import { UsuarioGestor } from 'src/app/usuarios/models/usuarioGestor';
-import { UsuarioNormal } from 'src/app/usuarios/models/usuarioNormal';
-import { UsuarioSuperadministrador } from 'src/app/usuarios/models/usuarioSuperadministrador';
 import { UsuarioAdministradorService } from 'src/app/usuarios/service/usuarioAdministrador.service';
 import { UsuarioGestorService } from 'src/app/usuarios/service/usuarioGestor.service';
 import { UsuarioNormalService } from 'src/app/usuarios/service/usuarioNormal.service';
@@ -22,31 +17,21 @@ import { UsuarioSuperadministradorService } from 'src/app/usuarios/service/usuar
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  //variables que guardan los usuarios de cada tipo
-  // usuariosSuperadministrador: UsuarioSuperadministrador [] = [];
-  // usuariosAdministrador: UsuarioAdministrador [] = [];
-  // usuariosGestor: UsuarioGestor [] = [];
-  // usuariosNormal: UsuarioNormal [] = [];
   //variables que guardan los datos del usuario loggeado
   nombreUsuario: string ='';
   password: string = '';
   tipoUsuario: string = '';
-  // static idCenad: string = '';
   nombreCenad: string = '';
-  // static idUnidad: string = '';
   nombreUnidad: string = '';
-  // static idUsuario: string = '';
   //compondra tipo de usuario y cenad/unidad, para escribir como quien se ha loggeado
   loggedAs: string = '';
   //variable que indica que el nombre de usuario existe o no
   usuarioExiste: boolean = false;
-  //variable que indica si se esta loggeado
-  // static isLogged: boolean = false;
-  //variables que indican si eres de un tipo concreto de usuario
-  // static isSuperAdmin: boolean = false;
-  // static isAdmin: boolean = false;
-  // static isGestor: boolean = false;
-  // static isNormal: boolean = false;
+  //variable que guarda la fecha-hora de la última conexion al local storage (se actualiza cada vez que cargue el header)
+  fechaHoraConexionActual: Date = new Date();
+  //variable que definde en horas cuanto tiempo tarda en resetear el Local Storage desde la ultima conexion
+  tiempoMaximoLocalStorage: number;
+  idCenad: any;
 
   constructor(private usuarioSuperadministradorService: UsuarioSuperadministradorService,
               private usuarioAdministradorService: UsuarioAdministradorService,
@@ -56,33 +41,14 @@ export class HeaderComponent implements OnInit {
               private categoriaFicheroService: CategoriaFicheroService,
               private tipoFormularioService: TipoFormularioService,
               private unidadService: UnidadService,
-              private router: Router) { }
+              private router: Router, 
+              private appConfigService: AppConfigService) { }
 
   ngOnInit(): void {//recupero de la BD todos los usuarios, cenads, categorias de fichero, tipos de formulario y unidades y los guardo en el local storage
-    if(!localStorage.usuariosSuperadministrador) {
-      this.usuarioSuperadministradorService.getUsuarios().subscribe((response) => localStorage.usuariosSuperadministrador = JSON.stringify(this.usuarioSuperadministradorService.extraerUsuarios(response)));
-    }
-    if(!localStorage.usuariosAdministrador) {
-      this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
-    }
-    if(!localStorage.usuariosGestor) {
-      this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
-    }
-    if(!localStorage.usuariosNormal) {
-      this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
-    }
-    if(!localStorage.cenads) {
-      this.cenadService.getCenads().subscribe((response) => localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response)));
-    }
-    if(!localStorage.categoriasFichero) {
-      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response)));
-    }
-    if(!localStorage.tiposFormulario) {
-      this.tipoFormularioService.getTiposFormulario().subscribe((response) => localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response)));
-    }
-    if(!localStorage.unidades) {
-      this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
-    }
+    //recupero del properties.json el tiempo maximo para resetear el Local Storage
+    this.tiempoMaximoLocalStorage = this.appConfigService.tiempoMaximoLocalStorage;
+    this.actualizarLocalStorage();
+    this.resetearLocalStorage();
     //con esto evito que si actualizo la pagina se ven vacios los campos esteticos de logging
     if(sessionStorage.nombreCenad) {
       this.nombreCenad = sessionStorage.nombreCenad;
@@ -188,8 +154,9 @@ export class HeaderComponent implements OnInit {
         }
       });
     }
+    
     //CUIDADO !!!  location.reload() resetea los valores (idCenad e idUnidad) del sessionStorage
-    // sessionStorage.isLogged == "true" ? location.reload() : "";
+    sessionStorage.isLogged === "true" ? this.router.navigate([`/`]) : "";
     //this.router.navigate([`${location.href.substr(location.host.length + 8)}`]);
     //es el unico caso que queda
     if(!this.usuarioExiste) {
@@ -211,5 +178,48 @@ export class HeaderComponent implements OnInit {
   //metodo para acceder desde el html a la variable estatica
   getLogged(): boolean {
     return (sessionStorage.isLogged === 'true');
+  }
+
+  //metodo que actualiza el Local Storage. 
+  actualizarLocalStorage(): void {
+    if(!localStorage.usuariosSuperadministrador) {
+      this.usuarioSuperadministradorService.getUsuarios().subscribe((response) => localStorage.usuariosSuperadministrador = JSON.stringify(this.usuarioSuperadministradorService.extraerUsuarios(response)));
+    }
+    if(!localStorage.usuariosAdministrador) {
+      this.usuarioAdministradorService.getUsuarios().subscribe((response) => localStorage.usuariosAdministrador = JSON.stringify(this.usuarioAdministradorService.extraerUsuarios(response)));
+    }
+    if(!localStorage.usuariosGestor) {
+      this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
+    }
+    if(!localStorage.usuariosNormal) {
+      this.usuarioNormalService.getUsuarios().subscribe((response) => localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response)));
+    }
+    if(!localStorage.cenads) {
+      this.cenadService.getCenads().subscribe((response) => localStorage.cenads = JSON.stringify(this.cenadService.extraerCenads(response)));
+    }
+    if(!localStorage.categoriasFichero) {
+      this.categoriaFicheroService.getCategoriasFichero().subscribe((response) => localStorage.categoriasFichero = JSON.stringify(this.categoriaFicheroService.extraerCategoriasFichero(response)));
+    }
+    if(!localStorage.tiposFormulario) {
+      this.tipoFormularioService.getTiposFormulario().subscribe((response) => localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response)));
+    }
+    if(!localStorage.unidades) {
+      this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
+    }
+
+  }
+
+  //metodo que resetea el local storage si ha pasado X tiempo (se definira en el properties.json)
+  resetearLocalStorage(): void {
+    if(!localStorage.fechaHoraUltimaEntrada) {
+      localStorage.fechaHoraUltimaEntrada = JSON.stringify(this.fechaHoraConexionActual.valueOf());
+    }
+    else {
+      if(JSON.parse(localStorage.fechaHoraUltimaEntrada) < (this.fechaHoraConexionActual.valueOf() - this.tiempoMaximoLocalStorage * 60 * 60 *1000)) {
+        localStorage.clear();
+        this.actualizarLocalStorage();
+      }
+      localStorage.fechaHoraUltimaEntrada = JSON.stringify(this.fechaHoraConexionActual.valueOf());
+    }
   }
 }
