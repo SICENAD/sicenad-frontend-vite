@@ -12,9 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -76,15 +74,12 @@ public class SolicitudRecurso {
 
 	// ZONA DE CAIDA DE PROYECTILES/EXPLOSIVOS
 
-	private String zonaCaida;
 	private Boolean isConMunTrazadoraIluminanteFumigena;
-	@ManyToMany
-	@JoinTable(name = "SOLICITUDES_ARMAS", joinColumns = @JoinColumn(name = "SOL_ID", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ARMA_ID", referencedColumnName = "ID"))
-	private Collection<Arma> armas;
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = SolicitudArma.class, mappedBy = "solicitud")
+	private Collection<SolicitudArma> solicitudesArmas = new ArrayList<>();
 
 	// CAMPO DE TIRO DE CARROS, VCI/C, PRECISICION
 
-	private String campoTiroCarros;
 	private String tipoEjercicio;
 	private String armaPral;
 	private String armaPrpalNumDisparosPrev;
@@ -94,7 +89,6 @@ public class SolicitudRecurso {
 	// CAMPO DE TIRO LASER (se han creado hasta 5 tipos de blancos para hacerlo
 	// compatible con cualquier CENAD/CMT)
 
-	private String campoTiroLaser;
 	private int numBlancosFijosA;
 	private int numBlancosFijosB;
 	private int numBlancosFijosC;
@@ -108,7 +102,6 @@ public class SolicitudRecurso {
 
 	// CAMPO DE TIRO
 
-	private String campoTiro;
 	private String arma1CT;
 	private String arma1CTlongitud;
 	private String arma2CT;
@@ -116,7 +109,6 @@ public class SolicitudRecurso {
 
 	// CAMPO EXPLOSIVOS
 
-	private String campoExplosivos;
 	private String explosivo;
 
 	// POLIGONO DE COMBATE EN ZONAS URBANAS
@@ -149,6 +141,7 @@ public class SolicitudRecurso {
 	private int numPersonasZVB;
 
 	// ZONA DE ESPERA
+
 	private int numPersonasZE;
 
 	// LAVADEROS
@@ -158,7 +151,6 @@ public class SolicitudRecurso {
 
 	// SIMULACION REAL LASER
 
-	private String tipoSimulador;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]")
 	private Date fechaHoraMontaje;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]")
@@ -510,6 +502,14 @@ public class SolicitudRecurso {
 		this.etiqueta = etiqueta;
 	}
 
+	public Collection<SolicitudArma> getSolicitudesArmas() {
+		return solicitudesArmas;
+	}
+
+	public void setSolicitudesArmas(Collection<SolicitudArma> solicitudesArmas) {
+		this.solicitudesArmas = solicitudesArmas;
+	}
+
 	// Establece la relacion en los dos sentidos
 	/**
 	 * Agrega un fichero a la solicitud
@@ -518,6 +518,7 @@ public class SolicitudRecurso {
 	 */
 	public void addDocumentacionCenad(Fichero fichero) {
 		getDocumentacionCenad().add(fichero);
+		fichero.setSolicitudRecursoCenad(this);
 	}
 
 	/**
@@ -527,27 +528,18 @@ public class SolicitudRecurso {
 	 */
 	public void addDocumentacionUnidad(Fichero fichero) {
 		getDocumentacionUnidad().add(fichero);
+		fichero.setSolicitudRecursoUnidad(this);
+
+	}
+
+	public void addSolicitudArma(SolicitudArma solicitudArma) {
+		getSolicitudesArmas().add(solicitudArma);
+		solicitudArma.setSolicitud(this);
 	}
 
 	// ***************************************************
 	// getters y setters DATOS ESPECIFICOS DE LOS RECURSOS
 	// ***************************************************
-
-	public String getZonaCaida() {
-		return zonaCaida;
-	}
-
-	public void setZonaCaida(String zonaCaida) {
-		this.zonaCaida = zonaCaida;
-	}
-
-	public String getCampoTiroCarros() {
-		return campoTiroCarros;
-	}
-
-	public void setCampoTiroCarros(String campoTiroCarros) {
-		this.campoTiroCarros = campoTiroCarros;
-	}
 
 	public String getTipoEjercicio() {
 		return tipoEjercicio;
@@ -587,14 +579,6 @@ public class SolicitudRecurso {
 
 	public void setArmaSecundNumDisparosPrev(String armaSecundNumDisparosPrev) {
 		this.armaSecundNumDisparosPrev = armaSecundNumDisparosPrev;
-	}
-
-	public String getCampoTiroLaser() {
-		return campoTiroLaser;
-	}
-
-	public void setCampoTiroLaser(String campoTiroLaser) {
-		this.campoTiroLaser = campoTiroLaser;
 	}
 
 	public int getNumBlancosFijosA() {
@@ -677,14 +661,6 @@ public class SolicitudRecurso {
 		this.numBlancosMovilesE = numBlancosMovilesE;
 	}
 
-	public String getCampoTiro() {
-		return campoTiro;
-	}
-
-	public void setCampoTiro(String campoTiro) {
-		this.campoTiro = campoTiro;
-	}
-
 	public String getArma1CT() {
 		return arma1CT;
 	}
@@ -717,14 +693,6 @@ public class SolicitudRecurso {
 		arma2CTlongitud = arma2cTlongitud;
 	}
 
-	public String getCampoExplosivos() {
-		return campoExplosivos;
-	}
-
-	public void setCampoExplosivos(String campoExplosivos) {
-		this.campoExplosivos = campoExplosivos;
-	}
-
 	public String getExplosivo() {
 		return explosivo;
 	}
@@ -739,7 +707,7 @@ public class SolicitudRecurso {
 
 	public void setActividad(String actividad) {
 		this.actividad = actividad;
-	}	
+	}
 
 	public String getVivac() {
 		return vivac;
@@ -763,14 +731,6 @@ public class SolicitudRecurso {
 
 	public void setNumVehRuedas(int numVehRuedas) {
 		this.numVehRuedas = numVehRuedas;
-	}
-
-	public String getTipoSimulador() {
-		return tipoSimulador;
-	}
-
-	public void setTipoSimulador(String tipoSimulador) {
-		this.tipoSimulador = tipoSimulador;
 	}
 
 	public Date getFechaHoraMontaje() {
@@ -811,14 +771,6 @@ public class SolicitudRecurso {
 
 	public void setIsConMunTrazadoraIluminanteFumigena(Boolean isConMunTrazadoraIluminanteFumigena) {
 		this.isConMunTrazadoraIluminanteFumigena = isConMunTrazadoraIluminanteFumigena;
-	}
-
-	public Collection<Arma> getArmas() {
-		return armas;
-	}
-
-	public void setArmas(Collection<Arma> armas) {
-		this.armas = armas;
 	}
 
 	public Boolean isConUsoCocina() {
@@ -865,8 +817,4 @@ public class SolicitudRecurso {
 		this.otrosDatosEspecificos = otrosDatosEspecificos;
 	}
 
-	public void addArma(Arma arma) {
-		getArmas().add(arma);
-		arma.getSolicitudes().add(this);
-	}
 }

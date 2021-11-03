@@ -1,13 +1,15 @@
 package es.mde.entidades;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -20,12 +22,9 @@ public class Arma {
 	private Long id;
 	private String nombre;
 	private String tipoTiro;
-	private String coordAsentamiento;
-	private String coordPuntoCaida;
-	private String alcanceMax;
-	private String zonaSegAngulo;
-	@ManyToMany(mappedBy = "armas")
-	private Collection<SolicitudRecurso> solicitudes;
+
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = SolicitudArma.class, mappedBy = "arma")
+	private Collection<SolicitudArma> armasSolicitudes = new ArrayList<>();
 
 	public Arma() {
 		super();
@@ -55,49 +54,17 @@ public class Arma {
 		this.tipoTiro = tipoTiro;
 	}
 
-	public String getCoordAsentamiento() {
-		return coordAsentamiento;
+	public Collection<SolicitudArma> getArmasSolicitudes() {
+		return armasSolicitudes;
 	}
 
-	public void setCoordAsentamiento(String coordAsentamiento) {
-		this.coordAsentamiento = coordAsentamiento;
+	public void setArmasSolicitudes(Collection<SolicitudArma> armasSolicitudes) {
+		this.armasSolicitudes = armasSolicitudes;
 	}
 
-	public String getCoordPuntoCaida() {
-		return coordPuntoCaida;
-	}
-
-	public void setCoordPuntoCaida(String coordPuntoCaida) {
-		this.coordPuntoCaida = coordPuntoCaida;
-	}
-
-	public String getAlcanceMax() {
-		return alcanceMax;
-	}
-
-	public void setAlcanceMax(String alcanceMax) {
-		this.alcanceMax = alcanceMax;
-	}
-
-	public String getZonaSegAngulo() {
-		return zonaSegAngulo;
-	}
-
-	public void setZonaSegAngulo(String zonaSegAngulo) {
-		this.zonaSegAngulo = zonaSegAngulo;
-	}
-
-	public Collection<SolicitudRecurso> getSolicitudes() {
-		return solicitudes;
-	}
-
-	public void setSolicitudes(Collection<SolicitudRecurso> solicitudes) {
-		this.solicitudes = solicitudes;
-	}
-
-	public void addSolicitud(SolicitudRecurso solicitud) {
-		getSolicitudes().add(solicitud);
-		solicitud.getArmas().add(this);
+	public void addArmaSolicitud(SolicitudArma solicitudArma) {
+		getArmasSolicitudes().add(solicitudArma);
+		solicitudArma.setArma(this);
 	}
 
 }

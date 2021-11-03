@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 /**
  * Representa la entidad que controla los archivos adjuntos
+ * 
  * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
@@ -25,9 +26,9 @@ public class Fichero {
 	private Long id;
 	private String nombre;
 	private String nombreArchivo;
-	@Lob	
+	@Lob
 	private String descripcion;
-	private String imagen;	//campo no usado
+	private String imagen; // campo no usado
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CATEGORIA_FICHERO", nullable = false)
 	private CategoriaFichero categoriaFichero;
@@ -49,6 +50,7 @@ public class Fichero {
 
 	/**
 	 * Devuelve el Id de un fichero
+	 * 
 	 * @return Devuelve el Id de un fichero
 	 */
 	public Long getId() {
@@ -57,6 +59,7 @@ public class Fichero {
 
 	/**
 	 * Guarda el id de un fichero
+	 * 
 	 * @param id Id del fichero
 	 */
 	public void setId(Long id) {
@@ -65,6 +68,7 @@ public class Fichero {
 
 	/**
 	 * Devuelve el nombre del fichero
+	 * 
 	 * @return Devuelve el nombre del fichero
 	 */
 	public String getNombre() {
@@ -73,6 +77,7 @@ public class Fichero {
 
 	/**
 	 * Guarda el nombre del fichero
+	 * 
 	 * @param nombre Nombre del fichero
 	 */
 	public void setNombre(String nombre) {
@@ -81,22 +86,25 @@ public class Fichero {
 
 	/**
 	 * Devuelve el nombre del archivo del fichero
+	 * 
 	 * @return Devuelve el nombre del archivo del fichero
 	 */
 	public String getNombreArchivo() {
 		return nombreArchivo;
 	}
-	
+
 	/**
 	 * Guarda el nombre del archivo del fichero
+	 * 
 	 * @param nombreArchivo Nombre del archivo del fichero
 	 */
 	public void setNombreArchivo(String nombreArchivo) {
 		this.nombreArchivo = nombreArchivo;
 	}
-	
+
 	/**
 	 * Devuelve la descripcion del fichero
+	 * 
 	 * @return Devuelve la descripcion del fichero
 	 */
 	public String getDescripcion() {
@@ -105,24 +113,26 @@ public class Fichero {
 
 	/**
 	 * Guarda la descripcion del fichero
+	 * 
 	 * @param descripcion Descripcion del fichero
 	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	
-	//campo no usado
+
+	// campo no usado
 	public String getImagen() {
 		return imagen;
 	}
-	
-	//campo no usado
+
+	// campo no usado
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
 	}
 
 	/**
 	 * Devuelve la categoria de fichero
+	 * 
 	 * @return Devuelve la categoria del fichero
 	 */
 	public CategoriaFichero getCategoriaFichero() {
@@ -131,6 +141,7 @@ public class Fichero {
 
 	/**
 	 * Guarda la categoria del fichero
+	 * 
 	 * @param categoriaFichero Tipo de fichero
 	 */
 	public void setCategoriaFichero(CategoriaFichero categoriaFichero) {
@@ -139,6 +150,7 @@ public class Fichero {
 
 	/**
 	 * Devuelve el recurso al que pertenece el fichero
+	 * 
 	 * @return Devuelve el recurso al que pertenece el fichero
 	 */
 	public Recurso getRecurso() {
@@ -147,9 +159,48 @@ public class Fichero {
 
 	/**
 	 * Guarda el recurso al que pertenece el fichero
+	 * 
 	 * @param recurso Recurso al que pertenece el fichero
 	 */
 	public void setRecurso(Recurso recurso) {
 		this.recurso = recurso;
 	}
+
+	/**
+	 * Devuelve la solicitudRecurso al que pertenece el fichero
+	 * 
+	 * @return solicitudRecurso
+	 */
+	public SolicitudRecurso getSolicitudRecursoCenad() {
+		return solicitudRecursoCenad;
+	}
+	
+	/**
+	 * Guarda la solicitudRecurso a la que pertenece el fichero
+	 * 
+	 * @param solicitudRecursoCenad
+	 */
+	public void setSolicitudRecursoCenad(SolicitudRecurso solicitudRecursoCenad) {
+		this.solicitudRecursoCenad = solicitudRecursoCenad;
+	}
+
+	
+	/**
+	 * Devuelve la solicitudRecurso al que pertenece el fichero
+	 * 
+	 * @return solicitudRecurso
+	 */
+	public SolicitudRecurso getSolicitudRecursoUnidad() {
+		return solicitudRecursoUnidad;
+	}
+
+	/**
+	 * Guarda la solicitudRecurso a la que pertenece el fichero
+	 * 
+	 * @param solicitudRecursoUnidad
+	 */
+	public void setSolicitudRecursoUnidad(SolicitudRecurso solicitudRecursoUnidad) {
+		this.solicitudRecursoUnidad = solicitudRecursoUnidad;
+	}
+
 }
