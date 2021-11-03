@@ -6,6 +6,7 @@ import { Categoria } from 'src/app/categorias/models/categoria';
 import { CategoriaImpl } from 'src/app/categorias/models/categoria-impl';
 import { CategoriaFichero } from 'src/app/categoriasFichero/models/categoriaFichero';
 import { CategoriaFicheroImpl } from 'src/app/categoriasFichero/models/categoriaFichero-impl';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { TipoFormulario } from 'src/app/tiposFormulario/models/tipoFormulario';
 import { TipoFormularioImpl } from 'src/app/tiposFormulario/models/tipoFormulario-impl';
 import { UsuarioGestor } from 'src/app/usuarios/models/usuarioGestor';
@@ -27,7 +28,11 @@ export class RecursoService {
   //endpoint del almacenamiento de archivos
   private urlFiles = `${this.host}files/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private appConfigService: AppConfigService) {
+    this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+    this.urlEndPoint = `${this.host}recursos/`;
+    this.urlFiles = `${this.host}files/`;
+   }
   
   //metodo para subir un archivo a la subcarpeta de un recurso
   upload(file: File, idRecurso: string): Observable<HttpEvent<any>> {

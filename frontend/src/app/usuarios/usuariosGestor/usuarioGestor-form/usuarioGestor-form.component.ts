@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { AppConfigService } from 'src/app/services/app-config.service';
+import { environment } from 'src/environments/environment';
 import { UsuarioGestorImpl } from '../../models/usuarioGestor-impl';
 import { UsuarioGestorService } from '../../service/usuarioGestor.service';
 
@@ -18,10 +20,14 @@ export class UsuarioGestorFormComponent implements OnInit {
   faVolver = faArrowAltCircleLeft;
   //variable para poner la ruta de vuelta
   volver: string = '';
+  //variable que recoge el host
+  host: string = environment.hostSicenad;
 
   constructor(
     private usuarioGestorService: UsuarioGestorService,
-    private router: Router, private activateRoute: ActivatedRoute) { }
+    private router: Router, private activateRoute: ActivatedRoute, private appConfigService: AppConfigService) {
+      this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+     }
 
   ngOnInit(): void {
     //resacata el id del cenad de la barra de navegacion
@@ -31,7 +37,7 @@ export class UsuarioGestorFormComponent implements OnInit {
 
   //metodo para crear un usuarioGestor
   crearUsuarioGestor(): void {
-    this.usuarioGestor.cenad = `environment.hostSicenad/cenads/${this.idCenad}`;
+    this.usuarioGestor.cenad = `${this.host}cenads/${this.idCenad}`;
     this.usuarioGestorService.create(this.usuarioGestor).subscribe((response) => {
       //actualizo el local storage
       this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));

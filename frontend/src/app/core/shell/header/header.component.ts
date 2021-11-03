@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ArmaService } from 'src/app/armas/service/arma.service';
 import { CategoriaFicheroService } from 'src/app/categoriasFichero/service/categoriaFichero.service';
-import { HomePrincipalComponent } from 'src/app/principal-cenad/home-principal/home-principal.component';
 import { AppConfigService } from 'src/app/services/app-config.service';
 import { CenadService } from 'src/app/superadministrador/service/cenad.service';
 import { TipoFormularioService } from 'src/app/tiposFormulario/service/tipoFormulario.service';
@@ -41,6 +41,7 @@ export class HeaderComponent implements OnInit {
               private categoriaFicheroService: CategoriaFicheroService,
               private tipoFormularioService: TipoFormularioService,
               private unidadService: UnidadService,
+              private armaService: ArmaService,
               private router: Router, 
               private appConfigService: AppConfigService) { }
 
@@ -206,7 +207,9 @@ export class HeaderComponent implements OnInit {
     if(!localStorage.unidades) {
       this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
     }
-
+    if(!localStorage.armas) {
+      this.armaService.getArmas().subscribe((response) => localStorage.armas = JSON.stringify(this.armaService.extraerArmas(response)));
+    }
   }
 
   //metodo que resetea el local storage si ha pasado X tiempo (se definira en el properties.json)

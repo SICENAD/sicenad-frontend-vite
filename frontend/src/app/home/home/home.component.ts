@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ArmaService } from 'src/app/armas/service/arma.service';
 import { CategoriaFicheroService } from 'src/app/categoriasFichero/service/categoriaFichero.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadService } from 'src/app/superadministrador/service/cenad.service';
@@ -52,7 +53,8 @@ export class HomeComponent implements OnInit {
     private cenadService: CenadService,
     private categoriaFicheroService: CategoriaFicheroService,
     private tipoFormularioService: TipoFormularioService,
-    private unidadService: UnidadService) { }
+    private unidadService: UnidadService,
+    private armaService: ArmaService) { }
 
   ngOnInit() {
     this.cenads = JSON.parse(localStorage.cenads);
@@ -80,6 +82,7 @@ export class HomeComponent implements OnInit {
   }
 
   actualizarLocalStorage(): void {
+    localStorage.clear();
     if(!localStorage.usuariosSuperadministrador) {
       this.usuarioSuperadministradorService.getUsuarios().subscribe((response) => localStorage.usuariosSuperadministrador = JSON.stringify(this.usuarioSuperadministradorService.extraerUsuarios(response)));
     }
@@ -103,6 +106,9 @@ export class HomeComponent implements OnInit {
     }
     if(!localStorage.unidades) {
       this.unidadService.getUnidades().subscribe((response) => localStorage.unidades = JSON.stringify(this.unidadService.extraerUnidades(response)));
+    }
+    if(!localStorage.armas) {
+      this.armaService.getArmas().subscribe((response) => localStorage.armas = JSON.stringify(this.armaService.extraerArmas(response)));
     }
   }
 }

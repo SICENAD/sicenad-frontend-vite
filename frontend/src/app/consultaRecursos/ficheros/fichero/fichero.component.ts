@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faDownload, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FicheroImpl } from 'src/app/recursos/models/fichero-impl';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -26,7 +27,8 @@ export class FicheroComponent implements OnInit {
   nombreMostrado: string = '';
   descripcionMostrada: string = '';
 
-  constructor(private recursoService: RecursoService) {}
+  constructor(private recursoService: RecursoService,
+    private appConfigService: AppConfigService) {}
 
   ngOnInit() {
     //asigna al campo recurso del fichero el valor del recurso
@@ -36,7 +38,7 @@ export class FicheroComponent implements OnInit {
     setTimeout(() => {
       //construye el path relativo para la url de descarga del archivo
       if (this.fichero.recurso) {
-        this.pathRelativo = `${environment.hostSicenad}files/docRecursos/${this.fichero.recurso.idRecurso}/`;
+        this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.fichero.recurso.idRecurso}/` : `${environment.hostSicenad}files/docRecursos/${this.fichero.recurso.idRecurso}/`;
       }
     }, 3000);
     this.nombreMostrado = this.recortarTexto(this.fichero.nombre, 45);

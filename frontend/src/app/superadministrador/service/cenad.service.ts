@@ -2,6 +2,7 @@ import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { UsuarioAdministradorImpl } from 'src/app/usuarios/models/usuarioAdministrador-impl';
 import { environment } from 'src/environments/environment';
 import { Cenad } from '../models/cenad';
@@ -18,7 +19,13 @@ export class CenadService {
   //endpoint para almacenamiento de archivos
   private urlFiles = `${this.host}files/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private appConfigService: AppConfigService) { 
+      this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+      this.urlEndPoint = `${this.host}cenads/`;
+      this.urlFiles = `${this.host}files/`;
+    
+    }
 
   //metodo para subir un archivo
   upload(file: File): Observable<HttpEvent<any>> {

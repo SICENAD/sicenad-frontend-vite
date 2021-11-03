@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { environment } from 'src/environments/environment';
@@ -14,7 +15,11 @@ export class HomeService {
   //endpoint especifico de los cenads
   private urlEndPoint: string = `${this.host}cenads/`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, 
+    private appConfigService: AppConfigService) {
+      this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+      this.urlEndPoint = `${this.host}cenads/`;
+    }
 
   //metodo que rescata de la BD todos los cenads
   getCenads(): Observable<any> {

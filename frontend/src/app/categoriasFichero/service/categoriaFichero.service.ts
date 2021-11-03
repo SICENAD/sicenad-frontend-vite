@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { environment } from 'src/environments/environment';
 import { CategoriaFichero } from '../models/categoriaFichero';
 import { CategoriaFicheroImpl } from '../models/categoriaFichero-impl';
@@ -16,7 +17,10 @@ export class CategoriaFicheroService {
   private urlEndPoint: string = `${this.host}categorias_fichero/`;
 
   constructor(
-    private http: HttpClient) { }
+    private http: HttpClient, private appConfigService: AppConfigService) { 
+      this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+      this.urlEndPoint = `${this.host}categorias_fichero/`;
+    }
 
   //metodo que recupera de la BD todas las categorias de fichero
   getCategoriasFichero(): Observable<any> {

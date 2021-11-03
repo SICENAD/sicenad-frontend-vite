@@ -53,8 +53,7 @@ export class CenadFormComponent implements OnInit {
   ngOnInit(): void {//rescata del local storage todos los administradores
       this.administradores = JSON.parse(localStorage.usuariosAdministrador);
       //para que coja la variable del properties.json
-      this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
-  }
+      this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;  }
 
   crearCenad(): void {//sube el archivo, le asigna el nombre al campo escudo y crea el cenad
     this.upload();

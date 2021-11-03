@@ -67,6 +67,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/` : `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
     //recupera del Local Storage todas las categorias de fichero y las guarda en la variable para poder seleccionarlas si se añade un fichero nuevo
     this.categoriasFichero = JSON.parse(localStorage.categoriasFichero);
     //se recupera el id del recurso de la barra de navegacion
@@ -96,11 +97,11 @@ export class ConsultaRecursoFormComponent implements OnInit {
       //recupera de la BD la categoria del recurso y se la asigna al campo de la variable del mismo
       this.recursoService.getCategoria(this.idRecurso).subscribe((response) => this.recurso.categoria = this.recursoService.mapearCategoria(response));
       //asigna el path relativo, que junto con el nombreArchivo del fichero formara la url en la que se encuentra el archivo
-      this.pathRelativo = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;  
+      this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/` : `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
     }, 1000);
     //para que use el valor del properties.json
-    this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso;
-    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
+    this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso ? this.appConfigService.sizeMaxDocRecurso : environment.sizeMaxDocRecurso;
+    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;
   }
 
   //metodo que habilita el formulario para crear fichero
@@ -128,7 +129,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
     //cierra el formulario de crear fichero y resetea la variable
     this.nuevoFichero = false;
     this.fichero = new FicheroImpl();
-    this.fichero.recurso = `${environment.hostSicenad}recursos/${this.recurso.idRecurso}`;    
+    this.fichero.recurso = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}recursos/${this.recurso.idRecurso}/` : `${environment.hostSicenad}recursos/${this.recurso.idRecurso}`;    
   }
 
   //metodo para eliminar un fichero

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { UsuarioNormal } from 'src/app/usuarios/models/usuarioNormal';
 import { UsuarioNormalImpl } from 'src/app/usuarios/models/usuarioNormal-impl';
 import { environment } from 'src/environments/environment';
@@ -17,7 +18,10 @@ export class UnidadService {
   //endpoint especifico de las unidades
   private urlEndPoint: string = `${this.host}unidades/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private appConfigService: AppConfigService) {
+    this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+    this.urlEndPoint = `${this.host}unidades/`;
+   }
 
   //metodo que rescata de la BD todas unidades
   getUnidades(): Observable<any> {

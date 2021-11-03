@@ -22,7 +22,6 @@ import { UsuarioGestorService } from 'src/app/usuarios/service/usuarioGestor.ser
   styleUrls: ['./header-principal.component.css']
 })
 export class HeaderPrincipalComponent implements OnInit {
-
   //variables de iconos varios
   faRecurso = faFolderOpen;
   faConsultar = faEdge;

@@ -8,10 +8,11 @@ export const environment = {
   sizeMaxEscudo: 2,
   sizeMaxDocRecurso: 10,
   sizeMaxDocSolicitud: 10,
+  tiposTiro:  ["Tiro directo", "Tiro indirecto", "Tiro antiaereo"],
   //endpoint para trabajar en local a H2
-  // hostSicenad: 'http://localhost:8080/api/'
+  hostSicenad: 'http://localhost:8080/api/'
   //endpoint para trabajar en local a la BD MINERVA
-  hostSicenad: 'http://192.168.100.199:8080/api/'
+  // hostSicenad: 'http://192.168.100.199:8080/api/'
   //endpoint para atacar la app desplegada en heroku
   //  hostSicenad: 'https://sicenad.herokuapp.com/api/'
   //  hostSicenad: 'https://sicenad2.herokuapp.com/api/'

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { environment } from 'src/environments/environment';
@@ -17,8 +18,10 @@ export class UsuarioGestorService {
   //endpoint especifico de los usuarios gestor
   private urlEndPoint: string = `${this.host}usuarios_gestor/`;
 
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient, private appConfigService: AppConfigService) {
+    this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+    this.urlEndPoint = `${this.host}usuarios_gestor/`;
+   }
   //metodo que recupera de la BD todos los usuarios gestor
   getUsuarios(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);

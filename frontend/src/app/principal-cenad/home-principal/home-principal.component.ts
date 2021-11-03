@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faEdge } from '@fortawesome/free-brands-svg-icons';
 import { faBusinessTime, faCalendarAlt, faFolderOpen, faLink, faMap } from '@fortawesome/free-solid-svg-icons';
 import { HeaderComponent } from 'src/app/core/shell/header/header.component';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { environment } from 'src/environments/environment';
@@ -37,7 +38,9 @@ export class HomePrincipalComponent implements OnInit {
   pathRelativo: string = `${environment.hostSicenad}files/escudos/`;
   pathImg: string = "";
 
-  constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute) { }
+  constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute, private appConfigService: AppConfigService) {
+    this.pathRelativo = appConfigService.hostSicenad ? `${appConfigService.hostSicenad}files/escudos/` : `${environment.hostSicenad}files/escudos/`;
+   }
 
   ngOnInit() {
     this.cargarCenad();

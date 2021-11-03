@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CanActivateChild, Router } from '@angular/router';
-import { HeaderComponent } from '../core/shell/header/header.component';
 
 @Injectable()
 export class CanActivateViaLoggingSuperadministrador implements CanActivateChild {
@@ -14,7 +13,6 @@ export class CanActivateViaLoggingSuperadministrador implements CanActivateChild
             alert('Debes identificarte como superadministrador para continuar');
             return false;
         }
-
         return true;
     }
 }

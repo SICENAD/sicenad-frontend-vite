@@ -55,4 +55,24 @@ export class AppConfigService {
 
     return this.appConfig.tiempoMaximoLocalStorage;
   }
+
+
+  get tiposTiro() {
+
+    if (!this.appConfig) {
+      throw Error('No se ha cargado el archivo de configuración!');
+    }
+
+    return this.appConfig.tiposTiro;
+  }
+
+
+  get hostSicenad() {
+
+    if (!this.appConfig) {
+      throw Error('No se ha cargado el archivo de configuración!');
+    }
+
+    return this.appConfig.hostSicenad;
+  }
 }

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { environment } from 'src/environments/environment';
@@ -17,7 +18,10 @@ export class UsuarioAdministradorService {
   //endpoint especifico de los usuarios administrador
   private urlEndPoint: string = `${this.host}usuarios_administrador/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private appConfigService: AppConfigService) {
+    this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+    this.urlEndPoint = `${this.host}usuarios_administrador/`;
+   }
 
   //metodo que recupera de la BD todos los usuarios administrador
   getUsuarios(): Observable<any> {

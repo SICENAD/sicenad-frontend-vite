@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Recurso } from 'src/app/recursos/models/recurso';
 import { RecursoImpl } from 'src/app/recursos/models/recurso-impl';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { Cenad } from 'src/app/superadministrador/models/cenad';
 import { CenadImpl } from 'src/app/superadministrador/models/cenad-impl';
 import { environment } from 'src/environments/environment';
@@ -20,7 +21,12 @@ export class CategoriaService {
   private urlEndPoint: string = `${this.host}categorias/`;
 
   constructor(
-    private http: HttpClient) { }
+    private http: HttpClient,
+    private appConfigService: AppConfigService) { 
+      this.host = this.appConfigService.hostSicenad ? this.appConfigService.hostSicenad : environment.hostSicenad;
+      this.urlEndPoint =  `${this.host}categorias/`;
+    }
+
 
   //metodo que recupera de la BD las categorias de un CENAD/CMT
   getCategoriasDeCenad(idCenad:string): Observable<any> {

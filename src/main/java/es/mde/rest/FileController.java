@@ -395,113 +395,113 @@ public class FileController {
 		return ResponseEntity.status(HttpStatus.OK).body(files);
 	}
 
-	// ************************************************************
-	// Métodos para tratar los ficheros asociados a las cartografias
-	// ************************************************************
-
-	/**
-	 * Genera el endpoint para subir varios archivos de un conjunto cartografico
-	 * @param files Archivos a subir
-	 * @param id    Id del conjunto cartografico
-	 * @return La respuesta de la API...
-	 * @throws Exception
-	 */
-	@PostMapping("/subirCartografias/{id}")
-	public ResponseEntity<Response> uploadFileCartografias(@RequestParam("files") List<MultipartFile> files,
-			@PathVariable("id") String id) throws Exception {
-		fileServiceAPI.saveCartografias(files, id);
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
-	}
-
-	/**
-	 * Genera el endpoint para subir un archivo de un conjunto cartografico
-	 * @param file Archivo a subir
-	 * @param id Id del conjunto cartografico
-	 * @return La respuesta de la API...
-	 * @throws Exception
-	 */
-	@PostMapping("/subirCartografia/{id}")
-	public ResponseEntity<Response> uploadFileCartografia(@RequestParam("file") MultipartFile file,
-			@PathVariable("id") String id) throws Exception {
-		fileServiceAPI.saveCartografia(file, id);
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new Response("El archivo fue cargado correctamente al servidor"));
-	}
-
-	/**
-	 * Genera el endpoint para borrar un archivo de un conjunto cartografico
-	 * @param filename Nombre del archivo
-	 * @param id Id del conjunto cartografico
-	 * @return La respuesta de la API...
-	 * @throws Exception
-	 */
-	@GetMapping("/borrarCartografia/{id}/{filename:.+}")
-	public ResponseEntity<Response> borrarFileCartografia(@PathVariable String filename, @PathVariable("id") String id)
-			throws Exception {
-		fileServiceAPI.borrarCartografia(filename, id);
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new Response("El archivo fue borrado correctamente del servidor"));
-	}
-
-	/**
-	 * Genera el endpoint para borrar la carpeta de un conjunto cartografico
-	 * @param id Id del conjunto cartografico
-	 * @return La respuesta de la API...
-	 * @throws Exception
-	 */
-	@GetMapping("/borrarCarpetaCartografia/{id}")
-	public ResponseEntity<Response> borrarCarpetaCartografia(@PathVariable("id") String id) throws Exception {
-		fileServiceAPI.borrarCarpetaCartografia(id);
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new Response("La carpeta de la cartografía fue borrada correctamente del servidor"));
-	}
-
-	/**
-	 * Genera el endpoint para cargar un archivo de un conjunto cartografico
-	 * @param filename Nombre del archivo
-	 * @param id Id del conjunto cartografico
-	 * @return La respuesta de la API...
-	 * @throws Exception
-	 */
-	@GetMapping("/cartografias/{id}/{filename:.+}")
-	public ResponseEntity<Resource> getFileCartografia(@PathVariable String filename, @PathVariable("id") String id)
-			throws Exception {
-		Resource resource = fileServiceAPI.loadCartografia(filename, id);
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-				.body(resource);
-	}
-
-	/**
-	 * Genera el endpoint para cargar un archivo de un conjunto cartografico
-	 * @param filename Nombre del archivo
-	 * @return La respuesta de la API...
-	 * @throws Exception
-	 */
-	@GetMapping("/cartografias/{filename:.+}")
-	public ResponseEntity<Resource> getFileCartografia(@PathVariable String filename) throws Exception {
-		Resource resource = fileServiceAPI.loadCartografia(filename);
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-				.body(resource);
-	}
-
-	/**
-	 * Genera el endpoint para cargar los archivos de un conjunto cartografico
-	 * @param id Id del conjunto cartografico
-	 * @return La respuesta de la API...
-	 * @throws Exception
-	 */
-	@GetMapping("/cartografias/{id}/all")
-	public ResponseEntity<List<File>> getAllFilesCartografia(@PathVariable("id") String id) throws Exception {
-		List<File> files = fileServiceAPI.loadAllCartografias(id).map(path -> {
-			String filename = path.getFileName().toString();
-			String url = MvcUriComponentsBuilder
-					.fromMethodName(FileController.class, "getFileCartografia", path.getFileName().toString()).build()
-					.toString();
-			return new File(filename, url);
-		}).collect(Collectors.toList());
-		return ResponseEntity.status(HttpStatus.OK).body(files);
-	}
+//	// ************************************************************
+//	// Métodos para tratar los ficheros asociados a las cartografias
+//	// ************************************************************
+//
+//	/**
+//	 * Genera el endpoint para subir varios archivos de un conjunto cartografico
+//	 * @param files Archivos a subir
+//	 * @param id    Id del conjunto cartografico
+//	 * @return La respuesta de la API...
+//	 * @throws Exception
+//	 */
+//	@PostMapping("/subirCartografias/{id}")
+//	public ResponseEntity<Response> uploadFileCartografias(@RequestParam("files") List<MultipartFile> files,
+//			@PathVariable("id") String id) throws Exception {
+//		fileServiceAPI.saveCartografias(files, id);
+//		return ResponseEntity.status(HttpStatus.OK)
+//				.body(new Response("Los archivos fueron cargados correctamente al servidor"));
+//	}
+//
+//	/**
+//	 * Genera el endpoint para subir un archivo de un conjunto cartografico
+//	 * @param file Archivo a subir
+//	 * @param id Id del conjunto cartografico
+//	 * @return La respuesta de la API...
+//	 * @throws Exception
+//	 */
+//	@PostMapping("/subirCartografia/{id}")
+//	public ResponseEntity<Response> uploadFileCartografia(@RequestParam("file") MultipartFile file,
+//			@PathVariable("id") String id) throws Exception {
+//		fileServiceAPI.saveCartografia(file, id);
+//		return ResponseEntity.status(HttpStatus.OK)
+//				.body(new Response("El archivo fue cargado correctamente al servidor"));
+//	}
+//
+//	/**
+//	 * Genera el endpoint para borrar un archivo de un conjunto cartografico
+//	 * @param filename Nombre del archivo
+//	 * @param id Id del conjunto cartografico
+//	 * @return La respuesta de la API...
+//	 * @throws Exception
+//	 */
+//	@GetMapping("/borrarCartografia/{id}/{filename:.+}")
+//	public ResponseEntity<Response> borrarFileCartografia(@PathVariable String filename, @PathVariable("id") String id)
+//			throws Exception {
+//		fileServiceAPI.borrarCartografia(filename, id);
+//		return ResponseEntity.status(HttpStatus.OK)
+//				.body(new Response("El archivo fue borrado correctamente del servidor"));
+//	}
+//
+//	/**
+//	 * Genera el endpoint para borrar la carpeta de un conjunto cartografico
+//	 * @param id Id del conjunto cartografico
+//	 * @return La respuesta de la API...
+//	 * @throws Exception
+//	 */
+//	@GetMapping("/borrarCarpetaCartografia/{id}")
+//	public ResponseEntity<Response> borrarCarpetaCartografia(@PathVariable("id") String id) throws Exception {
+//		fileServiceAPI.borrarCarpetaCartografia(id);
+//		return ResponseEntity.status(HttpStatus.OK)
+//				.body(new Response("La carpeta de la cartografía fue borrada correctamente del servidor"));
+//	}
+//
+//	/**
+//	 * Genera el endpoint para cargar un archivo de un conjunto cartografico
+//	 * @param filename Nombre del archivo
+//	 * @param id Id del conjunto cartografico
+//	 * @return La respuesta de la API...
+//	 * @throws Exception
+//	 */
+//	@GetMapping("/cartografias/{id}/{filename:.+}")
+//	public ResponseEntity<Resource> getFileCartografia(@PathVariable String filename, @PathVariable("id") String id)
+//			throws Exception {
+//		Resource resource = fileServiceAPI.loadCartografia(filename, id);
+//		return ResponseEntity.ok()
+//				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//				.body(resource);
+//	}
+//
+//	/**
+//	 * Genera el endpoint para cargar un archivo de un conjunto cartografico
+//	 * @param filename Nombre del archivo
+//	 * @return La respuesta de la API...
+//	 * @throws Exception
+//	 */
+//	@GetMapping("/cartografias/{filename:.+}")
+//	public ResponseEntity<Resource> getFileCartografia(@PathVariable String filename) throws Exception {
+//		Resource resource = fileServiceAPI.loadCartografia(filename);
+//		return ResponseEntity.ok()
+//				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//				.body(resource);
+//	}
+//
+//	/**
+//	 * Genera el endpoint para cargar los archivos de un conjunto cartografico
+//	 * @param id Id del conjunto cartografico
+//	 * @return La respuesta de la API...
+//	 * @throws Exception
+//	 */
+//	@GetMapping("/cartografias/{id}/all")
+//	public ResponseEntity<List<File>> getAllFilesCartografia(@PathVariable("id") String id) throws Exception {
+//		List<File> files = fileServiceAPI.loadAllCartografias(id).map(path -> {
+//			String filename = path.getFileName().toString();
+//			String url = MvcUriComponentsBuilder
+//					.fromMethodName(FileController.class, "getFileCartografia", path.getFileName().toString()).build()
+//					.toString();
+//			return new File(filename, url);
+//		}).collect(Collectors.toList());
+//		return ResponseEntity.status(HttpStatus.OK).body(files);
+//	}
 }

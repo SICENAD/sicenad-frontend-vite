@@ -48,8 +48,7 @@ export class CenadFichaComponent implements OnInit {
   ngOnInit(): void {
     this.actualizarAdministrador();
     //para que coja la variable del properties.json
-    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
-  }
+    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;  }
 
   //metodo que rescata el nombre del administrador del cenad
   actualizarAdministrador(): void {

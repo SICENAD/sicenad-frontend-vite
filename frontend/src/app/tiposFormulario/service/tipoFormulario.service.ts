@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Recurso } from 'src/app/recursos/models/recurso';
 import { RecursoImpl } from 'src/app/recursos/models/recurso-impl';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { environment } from 'src/environments/environment';
 import { TipoFormulario } from '../models/tipoFormulario';
 import { TipoFormularioImpl } from '../models/tipoFormulario-impl';
@@ -17,7 +18,10 @@ export class TipoFormularioService {
   //endpoint especifico de los tipos de formulario
   private urlEndPoint: string = `${this.host}tipos_formulario/`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private appConfigService: AppConfigService) {
+    this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+    this.urlEndPoint = `${this.host}tipos_formulario/`;
+   }
 
   //metodo que rescata de la BD todos los tipos de formulario
   getTiposFormulario(): Observable<any> {

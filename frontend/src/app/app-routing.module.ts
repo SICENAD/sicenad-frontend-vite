@@ -9,9 +9,9 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
   },
   {//mostrara la pagina principal de cada cenad, sin necesidad de estar logged
-     path: 'principalCenad/:idCenad',
-     loadChildren: () => import('./principal-cenad/principal-cenad.module').then(m => m.PrincipalCenadModule)
-   },
+    path: 'principalCenad/:idCenad',
+    loadChildren: () => import('./principal-cenad/principal-cenad.module').then(m => m.PrincipalCenadModule)
+  },
   {//mostrara el modulo de superadministrador, si estas logged como superadministrador
     path: 'superadministrador',
     loadChildren: () => import('./superadministrador/superadministrador.module').then(m => m.SuperadministradorModule),
@@ -35,6 +35,11 @@ const routes: Routes = [
   {//mostrara el modulo de usuarios, si estas logged como superadministrador. los administradores usan otra ruta
     path: 'usuarios',
     loadChildren: () => import('./usuarios/usuarios.module').then(m => m.UsuariosModule),
+    canActivateChild: [CanActivateViaLoggingSuperadministrador]
+  },
+  {//mostrara el modulo de armas, si estas logged como superadministrador
+    path: 'armas',
+    loadChildren: () => import('./armas/armas.module').then(m => m.ArmasModule),
     canActivateChild: [CanActivateViaLoggingSuperadministrador]
   },
   {

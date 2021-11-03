@@ -42,8 +42,8 @@ export class FicheroFichaComponent implements OnInit {
     //asigna los valores seleccionados a los select de los campos del recurso
     this.actualizarNgModels();
     //para que use la variable del properties.json
-    this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso;
-    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo;
+    this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso ? this.appConfigService.sizeMaxDocRecurso : environment.sizeMaxDocRecurso;
+    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;
   }
 
   //metodo para poder mostrar en los select los valores seleccionados

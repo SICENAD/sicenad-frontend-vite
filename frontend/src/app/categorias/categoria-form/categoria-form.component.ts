@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { environment } from 'src/environments/environment';
 import { Categoria } from '../models/categoria';
 import { CategoriaImpl } from '../models/categoria-impl';
@@ -12,6 +13,8 @@ import { CategoriaService } from '../service/categoria.service';
   styleUrls: ['./categoria-form.component.css']
 })
 export class CategoriaFormComponent implements OnInit {
+  //variable que recogera el host del properties.json
+  hostSicenad: string = environment.hostSicenad;
   //variable para recuperar el id del CENAD/CMT
   idCenad: string = "";
   //variable con la que guardar la nueva categoria
@@ -24,15 +27,20 @@ export class CategoriaFormComponent implements OnInit {
   constructor(
     private categoriaService: CategoriaService,
     private router: Router,
-    private activateRoute: ActivatedRoute) { }
+    private activateRoute: ActivatedRoute,
+    private appConfigService: AppConfigService) {
+      this.hostSicenad = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+     }
 
   ngOnInit() {
     //recuperamos el id del CENAD de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     //metemos en la variable todas las categorias del cenad, para seleccionar la categoria padre
     this.categorias = JSON.parse(localStorage.getItem(`categorias_${this.idCenad}`));
+    //recuperamos del properties.json, si existe, el host
+    this.hostSicenad = this.appConfigService.hostSicenad ? this.appConfigService.hostSicenad : environment.hostSicenad;
     //asignamos el CENAD a la categoria que creamos
-    this.categoria.cenad = `${environment.hostSicenad}cenads/${this.idCenad}`;
+    this.categoria.cenad = `${this.hostSicenad}cenads/${this.idCenad}`;
   }
 
   //metodo para crear una nueva categoria y volver al listado de categorias de ese cenad

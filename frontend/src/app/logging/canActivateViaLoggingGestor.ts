@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CanActivateChild, Router } from '@angular/router';
-import { HeaderComponent } from '../core/shell/header/header.component';
 import {Location} from '@angular/common';
 
 @Injectable()
@@ -19,7 +18,6 @@ export class CanActivateViaLoggingGestor implements CanActivateChild {
             alert('Debes identificarte como gestor para continuar');
             return false;
         }
-
         return true;
     }
 
