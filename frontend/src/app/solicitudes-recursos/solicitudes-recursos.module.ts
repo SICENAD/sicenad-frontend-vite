@@ -8,10 +8,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SolicitudRecursoComponent } from './solicitud-recurso/solicitud-recurso.component';
 import { SolicitudRecursoFormComponent } from './solicitud-recurso-form/solicitud-recurso-form.component';
 import { SolicitudesTodasComponent } from './solicitudes-todas/solicitudes-todas.component';
+import { ArmaComponent } from './solicitud-recurso-form/arma/arma.component';
+import { FicheroSolicitudComponent } from './ficheros-solicitud/fichero-solicitud/fichero-solicitud.component';
+import { FicheroSolicitudFichaComponent } from './ficheros-solicitud/fichero-solicitud-ficha/fichero-solicitud-ficha.component';
 
 
 @NgModule({
-  declarations: [SolicitudesRecursosComponent, SolicitudRecursoComponent, SolicitudRecursoFormComponent, SolicitudesTodasComponent],
+  declarations: [SolicitudesRecursosComponent, SolicitudRecursoComponent, SolicitudRecursoFormComponent, SolicitudesTodasComponent, 
+    ArmaComponent, FicheroSolicitudComponent, FicheroSolicitudFichaComponent ],
   imports: [
     CommonModule,
     SolicitudesRecursosRoutingModule,

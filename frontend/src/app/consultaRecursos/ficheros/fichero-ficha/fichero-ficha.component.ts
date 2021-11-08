@@ -82,13 +82,18 @@ export class FicheroFichaComponent implements OnInit {
     } else {
       this.archivoSubido = (this.currentFile.size > this.sizeMaxDocRecurso * 1024 * 1024) ? false : true;
     }
-    this.recursoService.upload(this.currentFile, this.fichero.recurso.idRecurso).subscribe(
+    this.recursoService.upload(this.currentFile, this.getId(this.fichero.recurso)).subscribe(
       );
     this.selectedFiles = undefined;
   }
 
   //metodo para borrar el archivo del fichero
   delete_Archivo(fichero: FicheroImpl) {
-    this.recursoService.deleteArchivo(this.fichero.nombreArchivo, this.fichero.recurso.idRecurso).subscribe(); 
+    this.recursoService.deleteArchivo(fichero.nombreArchivo, this.getId(fichero.recurso)).subscribe(); 
+  }
+
+  //metodo que pasandole el endpoint (url), obtiene el id del objeto
+  getId(url: string): string {
+    return url.slice(url.lastIndexOf('/') + 1, url.length);
   }
 }

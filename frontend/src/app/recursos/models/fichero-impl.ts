@@ -1,4 +1,5 @@
 import { CategoriaFichero } from "src/app/categoriasFichero/models/categoriaFichero";
+import { SolicitudRecurso } from "src/app/solicitudes-recursos/models/solicitud-recurso";
 import { Fichero } from "./fichero";
 import { Recurso } from "./recurso";
 
@@ -10,6 +11,8 @@ export class FicheroImpl implements Fichero {
   imagen: string;
   categoriaFichero: CategoriaFichero | any;
   recurso: Recurso | any;
+  solicitudRecursoCenad: SolicitudRecurso | any;
+  solicitudRecursoUnidad: SolicitudRecurso | any;
   url: string;
 
   constructor() {}

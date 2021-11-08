@@ -21,6 +21,7 @@ import { RecursoImpl } from '../models/recurso-impl';
   providedIn: 'root'
 })
 export class RecursoService {
+
   //endpoint raiz de la API
   private host: string = environment.hostSicenad;
   //endpoint especifico de los recursos
@@ -32,8 +33,51 @@ export class RecursoService {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
     this.urlEndPoint = `${this.host}recursos/`;
     this.urlFiles = `${this.host}files/`;
-   }
-  
+  }
+
+  //metodo que obtiene los ficheros del Cenad de una solicitud
+  getFicherosSolicitudCenad(idSolicitud: string): Observable<any> {
+    return this.http.get<any>(`${this.host}solicitudes/${idSolicitud}/documentacionCenad/?page=0&size=1000`);
+  }
+
+  //metodo que obtiene los ficheros de una Unidad de una solicitud
+  getFicherosSolicitudUnidad(idSolicitud: string): Observable<any> {
+    return this.http.get<any>(`${this.host}solicitudes/${idSolicitud}/documentacionUnidad/?page=0&size=1000`);
+  }
+
+
+  //metodo para obtener el recurso de un fichero
+  getSolicitudDeFicheroDeCenad(idFichero: String) {
+    return this.http.get<any>(`${this.host}ficheros/${idFichero}/solicitudRecursoCenad/?page=0&size=1000`);
+  }
+
+  //metodo para obtener el recurso de un fichero
+  getSolicitudDeFicheroDeUnidad(idFichero: String) {
+    return this.http.get<any>(`${this.host}ficheros/${idFichero}/solicitudRecursoUnidad/?page=0&size=1000`);
+  }
+
+  //metodo para subir un archivo a la subcarpeta de un recurso
+  uploadSolicitud(file: File, idSolicitud: string): Observable<HttpEvent<any>> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    const req = new HttpRequest('POST', `${this.urlFiles}subirDocSolicitud/${idSolicitud}`, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+    return this.http.request(req).pipe(
+      catchError((e) => {
+        if (e.status === 413) {
+          alert("El archivo tiene un tamaño superior al permitido");
+          return throwError(e);
+        }
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
+
   //metodo para subir un archivo a la subcarpeta de un recurso
   upload(file: File, idRecurso: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
@@ -53,7 +97,23 @@ export class RecursoService {
         }
         return throwError(e);
       })
-    );  }
+    );
+  }
+
+  //metodo para borrar un archivo de la subcarpeta de una solicitud
+  deleteArchivoSolicitud(fileName: string, idSolicitud: string): Observable<any> {
+    return this.http.get(`${this.urlFiles}borrarDocSolicitud/${idSolicitud}/${fileName}`).pipe(
+      catchError((e) => {
+        if (e.status === 400) {
+          return throwError(e);
+        }
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
 
   //metodo para borrar un archivo de la subcarpeta de un recurso
   deleteArchivo(fileName: string, idRecurso: string): Observable<any> {
@@ -93,7 +153,7 @@ export class RecursoService {
   //metodo para extraer el [] de recursos
   extraerRecursos(respuestaApi: any): Recurso[] {
     const recursos: Recurso[] = [];
-    respuestaApi._embedded.recursos.forEach(r => 
+    respuestaApi._embedded.recursos.forEach(r =>
       recursos.push(this.mapearRecurso(r)));
     return recursos;
   }
@@ -108,8 +168,8 @@ export class RecursoService {
     recurso.datosEspecificosSolicitud = recursoApi.datosEspecificosSolicitud;
     recurso.url = recursoApi._links.self.href;
     recurso.idRecurso = recurso.getId(recurso.url);
-    this.getCategoria(recurso.idRecurso).subscribe((response) => 
-    recurso.categoria= this.mapearCategoria(response));
+    this.getCategoria(recurso.idRecurso).subscribe((response) =>
+      recurso.categoria = this.mapearCategoria(response));
     return recurso;
   }
 
@@ -176,65 +236,65 @@ export class RecursoService {
   //metodo para obtener el gestor de un recurso
   getUsuarioGestor(recurso: Recurso): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${recurso.idRecurso}/usuarioGestor`)
-    .pipe(
-      catchError((e) => {
-        if (e.status === 400) {
+      .pipe(
+        catchError((e) => {
+          if (e.status === 400) {
+            return throwError(e);
+          }
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
           return throwError(e);
-        }
-        if (e.error.mensaje) {
-          console.error(e.error.mensaje);
-        }
-        return throwError(e);
-      })
-    );
+        })
+      );
   }
 
   //metodo para obtener el gestor de un recurso
   getUsuarioGestorDeIdRecurso(idRecurso: string): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${idRecurso}/usuarioGestor`)
-    .pipe(
-      catchError((e) => {
-        if (e.status === 400) {
+      .pipe(
+        catchError((e) => {
+          if (e.status === 400) {
+            return throwError(e);
+          }
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
           return throwError(e);
-        }
-        if (e.error.mensaje) {
-          console.error(e.error.mensaje);
-        }
-        return throwError(e);
-      })
-    );
+        })
+      );
   }
 
   //metodo para obtener la categoria de un recurso
   getCategoria(idRecurso: string): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${idRecurso}/categoria`)
-    .pipe(
-      catchError((e) => {
-        if (e.status === 400) {
+      .pipe(
+        catchError((e) => {
+          if (e.status === 400) {
+            return throwError(e);
+          }
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
           return throwError(e);
-        }
-        if (e.error.mensaje) {
-          console.error(e.error.mensaje);
-        }
-        return throwError(e);
-      })
-    );
+        })
+      );
   }
 
   //metodo para obtener el tipo de formulario de un recurso
   getTipoFormulario(recurso: Recurso): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${recurso.idRecurso}/tipoFormulario`)
-    .pipe(
-      catchError((e) => {
-        if (e.status === 400) {
+      .pipe(
+        catchError((e) => {
+          if (e.status === 400) {
+            return throwError(e);
+          }
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
           return throwError(e);
-        }
-        if (e.error.mensaje) {
-          console.error(e.error.mensaje);
-        }
-        return throwError(e);
-      })
-    );
+        })
+      );
   }
 
   //metodo para obetener todos los tipos de formulario
@@ -245,7 +305,7 @@ export class RecursoService {
   //metodos para extraer el [] de tipos de formulario
   extraerTiposFormulario(respuestaApi: any): TipoFormulario[] {
     const tiposFormulario: TipoFormulario[] = [];
-    respuestaApi._embedded.tipos_formulario.forEach(r => 
+    respuestaApi._embedded.tipos_formulario.forEach(r =>
       tiposFormulario.push(this.mapearTipoFormulario(r)));
     return tiposFormulario;
   }
@@ -262,34 +322,34 @@ export class RecursoService {
   }
 
   //metodo para obtener las categorias de un cenad
-  getCategoriasDeCenad(idCenad:string): Observable<any> {
+  getCategoriasDeCenad(idCenad: string): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/${idCenad}/categorias/?page=0&size=1000`);
   }
 
   //metodo para obtener las categorias padre de un cenad
-  getCategoriasPadreDeCenad(idCenad:string): Observable<any> {
+  getCategoriasPadreDeCenad(idCenad: string): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/${idCenad}/categoriasPadre/?page=0&size=1000`);
   }
 
   //metodo para obetenr la categoria padre de una categoria
-  getCategoriaPadre(categoria:Categoria): Observable<any> {
+  getCategoriaPadre(categoria: Categoria): Observable<any> {
     return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/categoriaPadre`);
   }
 
   //metodo para obtener las subcategorias de una categoria
-  getSubcategorias(categoria:Categoria): Observable<any> {
+  getSubcategorias(categoria: Categoria): Observable<any> {
     return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/subcategorias/`);
   }
 
   //metodo para obetenr recursivamente todas las subcategorias anidadas a una categoria
-  getSubcategoriasAnidadas(categoria:Categoria): Observable<any> {
+  getSubcategoriasAnidadas(categoria: Categoria): Observable<any> {
     return this.http.get<any>(`${this.host}categorias/${categoria.idCategoria}/subcategoriasAnidadas/`);
   }
 
   //metodo para extraer el [] de categorias
   extraerCategorias(respuestaApi: any): Categoria[] {
     const categorias: Categoria[] = [];
-    respuestaApi._embedded.categorias.forEach(c => 
+    respuestaApi._embedded.categorias.forEach(c =>
       categorias.push(this.mapearCategoria(c)));
     return categorias;
   }
@@ -312,7 +372,7 @@ export class RecursoService {
   //metodo para extraer el [] de usuarios
   extraerUsuarios(respuestaApi: any): UsuarioGestor[] {
     const usuarios: UsuarioGestor[] = [];
-    respuestaApi._embedded.usuarios_gestor.forEach(u => 
+    respuestaApi._embedded.usuarios_gestor.forEach(u =>
       usuarios.push(this.mapearUsuario(u)));
     return usuarios;
   }
@@ -351,7 +411,7 @@ export class RecursoService {
   //metodo para extraer el [] de ficheros
   extraerFicheros(respuestaApi: any): Fichero[] {
     const ficheros: Fichero[] = [];
-    respuestaApi._embedded.ficheros.forEach(f => 
+    respuestaApi._embedded.ficheros.forEach(f =>
       ficheros.push(this.mapearFichero(f)));
     return ficheros;
   }
@@ -365,8 +425,8 @@ export class RecursoService {
     fichero.descripcion = ficheroApi.descripcion;
     fichero.url = ficheroApi._links.self.href;
     fichero.idFichero = fichero.getId(fichero.url);
-    this.getCategoriaFichero(fichero.idFichero).subscribe((response) => 
-      fichero.categoriaFichero= this.mapearCategoriaFichero(response));
+    this.getCategoriaFichero(fichero.idFichero).subscribe((response) =>
+      fichero.categoriaFichero = this.mapearCategoriaFichero(response));
     return fichero;
   }
 
@@ -408,7 +468,7 @@ export class RecursoService {
   //metodo para extraer el [] de categorias de fichero
   extraerCategoriasFichero(respuestaApi: any): CategoriaFichero[] {
     const categoriasFichero: CategoriaFichero[] = [];
-    respuestaApi._embedded.categorias_fichero.forEach(c => 
+    respuestaApi._embedded.categorias_fichero.forEach(c =>
       categoriasFichero.push(this.mapearCategoriaFichero(c)));
     return categoriasFichero;
   }
@@ -439,8 +499,8 @@ export class RecursoService {
     return this.http.get<any>(`${this.urlEndPoint}${idRecurso}/categoriasFichero/?page=0&size=1000`);
   }
 
-    //metodo para recuperar de la BD los recursos de un gestor
-    getRecursosDeGestor(idGestor: string): Observable<any> {
-      return this.http.get<any>(`${this.host}usuarios_gestor/${idGestor}/recursos/?page=0&size=1000`);
-    }
+  //metodo para recuperar de la BD los recursos de un gestor
+  getRecursosDeGestor(idGestor: string): Observable<any> {
+    return this.http.get<any>(`${this.host}usuarios_gestor/${idGestor}/recursos/?page=0&size=1000`);
+  }
 }
