@@ -155,7 +155,7 @@ export class SolicitudesTodasComponent implements OnInit {
     let stringDate = this.miDatePipe.transform(date, 'dd-MM-yyyy');
     let arrayDate: any[] = stringDate.split(/[/\s\:\-]/g);
     let fechaDate: Date = new Date(arrayDate[2], arrayDate[1] - 1, arrayDate[0]);
-    console.log(fechaDate);
+   // console.log(fechaDate);
     return fechaDate;
   }
 

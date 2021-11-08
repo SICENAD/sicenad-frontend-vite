@@ -3,16 +3,25 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faReadme } from '@fortawesome/free-brands-svg-icons';
 import { faArrowAltCircleLeft, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { Arma } from 'src/app/armas/models/arma';
 import { Categoria } from 'src/app/categorias/models/categoria';
 import { CategoriaImpl } from 'src/app/categorias/models/categoria-impl';
+import { CategoriaFichero } from 'src/app/categoriasFichero/models/categoriaFichero';
+import { Fichero } from 'src/app/recursos/models/fichero';
+import { FicheroImpl } from 'src/app/recursos/models/fichero-impl';
 import { Recurso } from 'src/app/recursos/models/recurso';
+import { RecursoImpl } from 'src/app/recursos/models/recurso-impl';
 import { RecursoService } from 'src/app/recursos/service/recurso.service';
+import { AppConfigService } from 'src/app/services/app-config.service';
 import { TipoFormulario } from 'src/app/tiposFormulario/models/tipoFormulario';
 import { Unidad } from 'src/app/unidades/models/unidad';
 import { UnidadImpl } from 'src/app/unidades/models/unidad-impl';
 import { UnidadService } from 'src/app/unidades/service/unidad.service';
 import { UsuarioAdministrador } from 'src/app/usuarios/models/usuarioAdministrador';
 import { UsuarioNormal } from 'src/app/usuarios/models/usuarioNormal';
+import { environment } from 'src/environments/environment';
+import { SolicitudArma } from '../models/solicitud-arma';
+import { SolicitudArmaImpl } from '../models/solicitud-arma-impl';
 import { SolicitudRecurso } from '../models/solicitud-recurso';
 import { SolicitudRecursoImpl } from '../models/solicitud-recurso-impl';
 import { SolicitudRecursoService } from '../service/solicitud-recurso.service';
@@ -27,7 +36,7 @@ import { SolicitudesRecursosComponent } from '../solicitudes-recursos/solicitude
 export class SolicitudRecursoFormComponent implements OnInit {
 
   //iconos FontAwesome
-  faVolver =faArrowAltCircleLeft;
+  faVolver = faArrowAltCircleLeft;
   faLectura = faReadme;
   faEdit = faEdit;
   //id de la solicitud
@@ -38,6 +47,9 @@ export class SolicitudRecursoFormComponent implements OnInit {
   fechaSolicitudParse: string;
   fechaInicioParse: string;
   fechaFinParse: string;
+  fechaMontajeParse: string;
+  fechaDesmontajeParse: string;
+  fechaFinDocuParse: string;
   //estado seleccionado de la solicitud
   estadoSeleccionado: string = "";
   //estado anterior de la solicitud
@@ -62,6 +74,16 @@ export class SolicitudRecursoFormComponent implements OnInit {
   isValidada: boolean = false;
   //si el estado de la solicitud es Solicitada
   isSolicitada: boolean = false;
+  //si la solicitud ha sido ya creada
+  isSolicitudCreada: boolean = false;
+  //si la fecha de fin documentacion es igual a la fecha actual
+  isFechaFinDocu: boolean = false;
+  //id de la solicitud creada
+  //si se entra en el formulario de edicion del fichero con atributos de solo consulta
+  isSoloConsultaGestor: boolean = false;
+  //si se entra en el formulario de edicion del fichero con atributos de solo consulta
+  isSoloConsultaUser: boolean = false;
+  idSolicitudCreada: string = "";
   //instancia objeto SolicitudRecurso
   solicitud: SolicitudRecurso = new SolicitudRecursoImpl();
   //instancia objeto usuario Administrador
@@ -74,22 +96,26 @@ export class SolicitudRecursoFormComponent implements OnInit {
   unidadSeleccionada: Unidad = new UnidadImpl();
   //endpoint del recurso seleccionado
   uRlRecursoSeleccionado: string = "";
+  //instancia objeto Recurso
+  recurso: Recurso = new RecursoImpl();
   //array[] de Recursos de una categoría
-  recursosDeCategoria: Recurso [] = [];
+  recursosDeCategoria: Recurso[] = [];
   //array[] de las categorías de un Cenad
-  categoriasCenad: Categoria [] = [];
+  categoriasCenad: Categoria[] = [];
   //array[] de las categorias filtradas
-  categoriasFiltradas: Categoria [] = [];
+  categoriasFiltradas: Categoria[] = [];
   //array[] de Unidades
-  unidades: Unidad [] = [];
+  unidades: Unidad[] = [];
   //array[] de Usuarios Normales
-  usuariosNormales: UsuarioNormal [] = [];
+  usuariosNormales: UsuarioNormal[] = [];
   //array[] de Tipos de Formularios
-  tiposFormulario: TipoFormulario [] = [];
+  tiposFormulario: TipoFormulario[] = [];
   //array[] de Solicitudes del Cenad
-  solicitudesCenad: SolicitudRecurso [] = [];
+  solicitudesCenad: SolicitudRecurso[] = [];
+  //array[] de Solicitudes del cenad
+  solicitudesCenadTrabajo: SolicitudRecurso[] = [];
   //array[] de disponibildiad de Solicitudes del Cenad
-  solicitudesDisponibilidadCenad: SolicitudRecurso [] = [];
+  solicitudesDisponibilidadCenad: SolicitudRecurso[] = [];
   //fecha actual del sistema
   fechaActual: string;
   //nombre del usuario loggeado
@@ -102,23 +128,96 @@ export class SolicitudRecursoFormComponent implements OnInit {
   nombreUnidad: string = "";
   //endpoint usuario normal loggeado
   urlUsuarioNormal: string = "";
-  //codigo del Tipo de Formulario seleccionado
+  //id del Tipo de Formulario seleccionado
   codTipoFormSeleccionado: string = "";
-
+  // DATOS ESPECIFICOS
+  //Zona Caida Proyectiles/Explosivos
+  isZonaCaida: boolean = true;
+  isConMunTrazIluFumig: boolean = false;
+  //variable estática que contiene el array de solicitudesArmas
+  static solicitudesArmasZCdeSolicitud: SolicitudArma[] = [];
+  solicitudesArmas: SolicitudArma[] = [];
+  armas: Arma[] = [];
+  solicitudArma: SolicitudArma = new SolicitudArmaImpl();
+  solicitudArmaVerDatos: SolicitudArma = new SolicitudArmaImpl();
+  nuevaArma: boolean = false;
+  idArmaSeleccionada: string = "";
+  tipoTiroSeleccionado: string = "";
+  //Campo Tiro Carros, VCI/C, Precisión
+  isCTcarros: boolean = false;
+  //Campo Tiro Laser
+  isCTlaser: boolean = false;
+  //Campo Tiro
+  isCampoTiro: boolean = false;
+  //Explosivos
+  isCampoExplosivos: boolean = false;
+  //Ejercicio Zona Restringida
+  isZonaRestringida: boolean = false;
+  //Acantonamiento-Vivac
+  isAcanVivac: boolean = false;
+  //Zona de vida Batallón
+  isZonaVidaBon: boolean = false;
+  //Zona de Espera
+  isZonaEspera: boolean = false;
+  //Lavaderos
+  isLavaderos: boolean = false;
+  //Simulación Real Láser
+  isSimulacionRealLaser: boolean = false;
+  //Otros
+  isOtros: boolean = false;
+  //variable que da visibilidad al formulario de crear fichero
+  nuevoFichero: boolean = false;
+  //variable que comunicara los datos del fichero
+  ficheroVerDatos: FicheroImpl;
+  //variable sobre la que crearemos un fichero nuevo Cenad
+  fichero: Fichero = new FicheroImpl();
+  //variable con todos los ficheros del Cenad
+  ficherosCenad: Fichero[] = [];
+  //variable con todos los ficheros de la Unidad
+  ficherosUnidad: Fichero[] = [];
+  //variable para dar al gestor la opcion de elegir que categoria de fichero asignar a cada fichero
+  categoriasFichero: CategoriaFichero[] = [];
+  //variables para subida de archivos
+  pathRelativo: string = `${environment.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}/`;
+  selectedFiles: FileList;
+  currentFile: File;
+  sizeMaxDocSolicitud: number = environment.sizeMaxDocSolicitud;
+  sizeMaxEscudo: number = environment.sizeMaxEscudo;
+  archivoSubido: boolean = false;
 
   constructor(private activateRoute: ActivatedRoute, private solicitudService: SolicitudRecursoService,
-    private recursoService: RecursoService, private router: Router, private miDatePipe: DatePipe, private unidadService: UnidadService) { }
+    private recursoService: RecursoService, private router: Router, private miDatePipe: DatePipe,
+    private unidadService: UnidadService, private appConfigService: AppConfigService) { }
 
   ngOnInit() {
+    this.resetearVariables();
     this.getParams();
+    this.iniVarFicheros();
     this.comprobarUser();
     this.getFechaActual();
     this.getCategorias();
     this.getUcos();
+    this.getArmas();
     this.getUsuariosNormales();
     this.getTiposFormulario();
     this.cargaDatos();
     this.iniCreateEditSolicitud();
+  }
+
+  //método que resetea las variables
+  resetearVariables(): void {
+    this.isZonaCaida = false;
+    this.isCTcarros = false;
+    this.isCTlaser = false;
+    this.isCampoTiro = false;
+    this.isCampoExplosivos = false;
+    this.isZonaRestringida = false;
+    this.isAcanVivac = false;
+    this.isZonaVidaBon = false;
+    this.isZonaEspera = false;
+    this.isLavaderos = false;
+    this.isSimulacionRealLaser = false;
+    this.isOtros = false;
   }
 
   //método que captura los parámetros (idSolicitud y idCenad) de la barra de navegación
@@ -157,27 +256,55 @@ export class SolicitudRecursoFormComponent implements OnInit {
     this.unidades = JSON.parse(localStorage.unidades);
   }
 
+  //método que obtiene del local storage todas las armas
+  getArmas(): void {
+    this.armas = JSON.parse(localStorage.armas);
+  }
+
   //metodo que obtiene del local storage todos los Usuarios Normales
   getUsuariosNormales(): void {
     this.usuariosNormales = JSON.parse(localStorage.usuariosNormal);
   }
 
+  //metodo que obtiene del local storage los tipos de formulario
   getTiposFormulario(): void {
     this.tiposFormulario = JSON.parse(localStorage.tiposFormulario);
-    //console.log('tiposForm', this.tiposFormulario);
   }
 
-  //método para cargar datos de pruebas
+  //método para cargar los datos iniciales
   cargaDatos(): void {
     this.nombreUser = sessionStorage.nombreUsuario;
     this.idUser = sessionStorage.idUsuario;
     if (sessionStorage.isNormal == "true") {
-        this.idUnidad = sessionStorage.idUnidad;
-        this.unidades.forEach(u => {
-          u.idUnidad == this.idUnidad ? this.nombreUnidad = u.nombre : "";
-        });
+      this.idUnidad = sessionStorage.idUnidad;
+      this.unidades.forEach(u => {
+        u.idUnidad == this.idUnidad ? this.nombreUnidad = u.nombre : "";
+      });
     }
     this.solicitudesCenad = SolicitudesRecursosComponent.solicitudesCenad;
+    // this.solicitudesArmasNuevas = [];
+  }
+
+  //inicializa variables de ficheros
+  iniVarFicheros(): void {
+    //recupera del Local Storage todas las categorias de fichero y las guarda en la variable para poder seleccionarlas si se añade un fichero nuevo
+    this.categoriasFichero = JSON.parse(localStorage.categoriasFichero);
+    //para que use el valor del properties.json
+    this.sizeMaxDocSolicitud = this.appConfigService.sizeMaxDocSolicitud ? this.appConfigService.sizeMaxDocSolicitud : environment.sizeMaxDocSolicitud;
+    this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;
+  }
+
+
+  //carga los ficheros de una solicitud
+  cargarDatosFicheros(): void {
+    //recupera de la BD los ficheros del recurso y los asigna a la variable
+    this.recursoService.getFicherosSolicitudCenad(this.idSolicitud).subscribe((response) =>
+      this.ficherosCenad = this.recursoService.extraerFicheros(response));
+    //recupera de la BD los ficheros del recurso y los asigna a la variable
+    this.recursoService.getFicherosSolicitudUnidad(this.idSolicitud).subscribe((response) =>
+      this.ficherosUnidad = this.recursoService.extraerFicheros(response));
+    //asigna el path relativo, que junto con el nombreArchivo del fichero formara la url en la que se encuentra el archivo
+    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}/` : `${environment.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}/`;
   }
 
 
@@ -189,29 +316,55 @@ export class SolicitudRecursoFormComponent implements OnInit {
       this.boton = false;
       this.solicitudService.getSolicitud(this.idSolicitud).subscribe((response) => {
         this.solicitud = this.solicitudService.mapearSolicitud(response);
+        if (this.isGestor) {
+          this.fichero.solicitudRecursoCenad = this.solicitudService.mapearSolicitud(response).url;
+        }
+        if (this.isUsuarioNormal) {
+          this.fichero.solicitudRecursoUnidad = this.solicitudService.mapearSolicitud(response).url;
+        }
         this.fechaSolicitudParse = this.actualizarFechaInv(this.solicitud.fechaSolicitud);
+        if (this.solicitud.fechaFinDocumentacion) {
+          this.fechaFinDocuParse = this.actualizarFechaInv(this.solicitud.fechaFinDocumentacion);
+        }
         this.fechaInicioParse = this.solicitud.fechaHoraInicioRecurso;
         this.fechaFinParse = this.solicitud.fechaHoraFinRecurso;
         this.solicitud.estado === "Borrador" ? this.isBorrador = true : this.isBorrador = false;
-        this.solicitud.estado == "Solicitada" ? this.isSolicitada = true : this.isSolicitada = false;
-        this.solicitud.estado == "Validada" ? this.isValidada = true : this.isValidada = false;
+        this.solicitud.estado === "Solicitada" ? this.isSolicitada = true : this.isSolicitada = false;
+        this.solicitud.estado === "Validada" ? this.isValidada = true : this.isValidada = false;
         this.isAdministrador ? this.estadoSeleccionado = this.solicitud.estado : this.estado = this.solicitud.estado;
-      });
-      setTimeout(()=> {
-        this.solicitudService.getUsuarioNormalDeSolicitud(this.idSolicitud).subscribe((response)=> {
-             this.solicitud.usuarioNormal = this.solicitudService.mapearUsuarioNormal(response);
-          });
-        this.solicitudService.getRecursoDeSolicitud(this.idSolicitud).subscribe((response)=> {
-              this.solicitud.recurso = this.solicitudService.mapearRecurso((response));
-          });
-      }, 600);
 
-      setTimeout(()=> {
+      });
+      setTimeout(() => {
+        this.solicitudService.getUsuarioNormalDeSolicitud(this.idSolicitud).subscribe((response) => {
+          this.solicitud.usuarioNormal = this.solicitudService.mapearUsuarioNormal(response);
+        });
+        this.solicitudService.getRecursoDeSolicitud(this.idSolicitud).subscribe((response) => {
+          this.solicitud.recurso = this.solicitudService.mapearRecurso((response));
+        });
+      }, 700);
+
+      setTimeout(() => {
         this.uRlRecursoSeleccionado = this.solicitud.recurso.url;
+        //si el tipo de formulario del recurso es "Simulacion real laser, codTipo = 10"
+        if (this.solicitud.recurso.tipoFormulario.codTipo == "10") {
+          this.fechaMontajeParse = this.actualizarFechaInv2(this.solicitud.fechaHoraMontaje);
+          this.fechaDesmontajeParse = this.actualizarFechaInv2(this.solicitud.fechaHoraDesmontaje);
+        }
+        //si el tipo de formulario del recurso es "Zona de Caida de proyectiles/eplosivos, codTipo = 1"
+        //obtiene todas las solicitudesArmas de esa solicitud
+        if (this.solicitud.recurso.tipoFormulario.codTipo == "1") {
+          this.getSolicitudesArmasdeSolicitud();
+          this.isConMunTrazIluFumig = this.solicitud.isConMunTrazadoraIluminanteFumigena;
+        }
         this.categoriaSeleccionada = this.solicitud.recurso.categoria;
         this.unidad = this.solicitud.usuarioNormal.unidad.nombre;
+
+        // console.log(this.solicitud.otrosDatosEspecificos);
+        this.cargarDatosFicheros();
+        this.filtrarTipoFormulario();
         this.filtrar();
-      }, 800);
+        this.solicitud.fechaFinDocumentacion ? this.comprobarFechaFinDocu() : "";
+      }, 900);
 
     } else { //creación
       this.estado = "Borrador";
@@ -219,15 +372,27 @@ export class SolicitudRecursoFormComponent implements OnInit {
       this.isBorrador = true;
       this.unidad = this.nombreUnidad;
       this.fechaSolicitudParse = this.fechaActual;
+      this.solicitudesArmas = SolicitudRecursoFormComponent.solicitudesArmasZCdeSolicitud = [];
     }
+  }
 
+  //método que compara la fecha de fin de documentacion con la fecha actual
+  comprobarFechaFinDocu(): void {
+    this.cambiarFormatoDate2(this.fechaFinDocuParse) >= this.cambiarFormatoDate2(this.fechaActual) ? this.isFechaFinDocu = true : this.isFechaFinDocu = false;
   }
 
   //método que asigna los valores de las fechas del formulario a los distintos campos del objeto solicitud
   actualizarFechas(): void {
     this.solicitud.fechaSolicitud = this.actualizarFechaSolicitud(this.fechaSolicitudParse);
+    if (this.isGestor) {
+      !this.fechaFinDocuParse ? this.solicitud.fechaFinDocumentacion = "" : this.solicitud.fechaFinDocumentacion = this.actualizarFechaSolicitud(this.fechaFinDocuParse);
+    }
     this.solicitud.fechaHoraInicioRecurso = this.fechaInicioParse;
     this.solicitud.fechaHoraFinRecurso = this.fechaFinParse;
+    if (this.isSimulacionRealLaser) {
+      this.solicitud.fechaHoraMontaje = this.fechaMontajeParse + "[.000][.00][.0]";
+      this.solicitud.fechaHoraDesmontaje = this.fechaDesmontajeParse + "[.000][.00][.0]";
+    }
   }
 
   //metodo que busca en el array de usuarios normales su endpoint
@@ -242,16 +407,21 @@ export class SolicitudRecursoFormComponent implements OnInit {
   //método que actualiza datos
   actualizarDatos(): void {
     this.actualizarFechas();
+    this.codTipoFormSeleccionado == "1" ? this.solicitud.isConMunTrazadoraIluminanteFumigena = this.isConMunTrazIluFumig : "";
     if (this.isAdministrador) {
-    //si el usuario logeado es administrador puede cambiar el estado de una solicitud
-    this.solicitud.estado = this.estadoSeleccionado;
-    //buscar el usuario normal de la solicitud y asigna su endpoint
-    this.buscarUserNormal(this.solicitud.usuarioNormal.idUsuario);
+      //si el usuario logeado es administrador puede cambiar el estado de una solicitud
+      this.solicitud.estado = this.estadoSeleccionado;
+      //buscar el usuario normal de la solicitud y asigna su endpoint
+      this.buscarUserNormal(this.solicitud.usuarioNormal.idUsuario);
     }
     if (this.isUsuarioNormal) {
-    //asigna el endpoint del usuario normal que ha realizado la solicitud
-    this.buscarUserNormal(this.idUser);
-  }
+      //asigna el endpoint del usuario normal que ha realizado la solicitud
+      this.buscarUserNormal(this.idUser);
+    }
+    if (this.isGestor) {
+      //buscar el usuario normal de la solicitud y asigna su endpoint
+      this.buscarUserNormal(this.solicitud.usuarioNormal.idUsuario);
+    }
     this.solicitud.usuarioNormal = this.urlUsuarioNormal;
     //asigna el endopint del recurso seleccionado en la solicitud
     this.solicitud.recurso = this.uRlRecursoSeleccionado;
@@ -260,7 +430,7 @@ export class SolicitudRecursoFormComponent implements OnInit {
   //método que crea una solicitud con los datos del formulario y redirecciona a la página de solicitudes de recursos
   create(): void {
     this.actualizarDatos();
-    this.solicitudService.create(this.solicitud).subscribe((response)=> {
+    this.solicitudService.create(this.solicitud).subscribe((response) => {
       this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
     });
   }
@@ -268,8 +438,8 @@ export class SolicitudRecursoFormComponent implements OnInit {
   //método que borra una solicitud, solicitando previamente confirmación
   borrarSolicitud(): void {
     if (confirm('Va a eliminar una Solicitud, ¿Está seguro?')) {
-      this.solicitudService.delete(this.solicitud).subscribe((response)=> {
-       this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
+      this.solicitudService.delete(this.solicitud).subscribe((response) => {
+        this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
       });
     }
   }
@@ -280,16 +450,16 @@ export class SolicitudRecursoFormComponent implements OnInit {
   actualizar(): void {
     this.actualizarDatos();
     if (this.isAdministrador && !this.isValidada && this.estadoSeleccionado != "Validada") {
-      if (confirm ('¿Validar la Solicitud?')) {
+      if (confirm('¿Validar la Solicitud?')) {
         this.solicitud.estado = "Validada";
       }
     }
     if (this.isUsuarioNormal) {
-      if (confirm ('¿Tramitar la Solicitud?')) {
-      this.solicitud.estado = "Solicitada";
+      if (confirm('¿Tramitar la Solicitud?')) {
+        this.solicitud.estado = "Solicitada";
       }
     }
-    this.solicitudService.update(this.solicitud).subscribe((response)=> {
+    this.solicitudService.update(this.idSolicitud, this.solicitud).subscribe((response) => {
       this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
     });
   }
@@ -299,12 +469,12 @@ export class SolicitudRecursoFormComponent implements OnInit {
   //en caso afirmativo actualiza los datos y posteriormente los guarda y redirecciona a la página de
   //solicitudes de recursos
   tramitarSolicitud(): void {
-      this.solicitud.estado = "Solicitada";
-      this.actualizarDatos();
-      this.solicitudService.update(this.solicitud).subscribe((response)=> {
-       // console.log(response);
-       this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
-      });
+    this.solicitud.estado = "Solicitada";
+    this.actualizarDatos();
+    this.solicitudService.update(this.idSolicitud, this.solicitud).subscribe((response) => {
+      // console.log(response);
+      this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
+    });
   }
 
   //método que se ejecuta al hacer click sobre el botón Validar Solicitud
@@ -312,67 +482,93 @@ export class SolicitudRecursoFormComponent implements OnInit {
   validarSolicitud(): void {
     this.actualizarDatos();
     this.solicitud.estado = "Validada";
-    this.solicitudService.update(this.solicitud).subscribe((response)=> {
-     //console.log(response);
-     this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
-  });
-}
+    this.solicitudService.update(this.idSolicitud, this.solicitud).subscribe((response) => {
+      //console.log(response);
+      this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
+    });
+  }
 
   //método que se ejecuta cuando se produce un cambio en el imput de la fecha del formulario
   //comprueba si la fecha de fin de recurso es menor que la fecha de inicio
   //en caso afirmativo muestra un mensaje por pantalla e inicializa el valor de la fecha
   verificarFechas(): void {
-    if (this.fechaFinParse < this.fechaInicioParse) {
+    if (this.cambiarFormatoDate2(this.fechaFinParse) < this.cambiarFormatoDate2(this.fechaInicioParse)) {
       alert('La fecha de FIN debe ser mayor que la de INICIO');
       this.fechaFinParse = "";
     }
   }
 
+  //metodo que comprueba las fechas de montaje introducidas por el usuario
+  verificarFechasMontaje(): void {
+    if (this.cambiarFormatoDate2(this.fechaMontajeParse) < this.cambiarFormatoDate2(this.fechaInicioParse)) {
+      alert('La fecha de Montaje debe ser mayor que la de INICIO');
+      this.fechaMontajeParse = "";
+    }
+    if (this.cambiarFormatoDate2(this.fechaMontajeParse) > this.cambiarFormatoDate2(this.fechaFinParse)) {
+      alert('La fecha de Montaje debe ser menor que la de FIN');
+      this.fechaMontajeParse = "";
+    }
+    if (this.cambiarFormatoDate2(this.fechaDesmontajeParse) < this.cambiarFormatoDate2(this.fechaMontajeParse)) {
+      alert('La fecha de Desmontaje debe ser mayor que la de Montaje');
+      this.fechaDesmontajeParse = "";
+    }
+    if (this.cambiarFormatoDate2(this.fechaDesmontajeParse) > this.cambiarFormatoDate2(this.fechaFinParse)) {
+      alert('La fecha de Desmontaje debe ser menor que la de FIN');
+      this.fechaDesmontajeParse = "";
+    }
+  }
+
   //método que recibe un parámetro Date y lo transforma a un Date con formato yyyy-MM-dd HH:mm:ss
   cambiarFormatoDate(date: Date): Date {
-    let stringDate =  this.miDatePipe.transform(date, 'dd-MM-yyyy HH:mm:ss');
+    let stringDate = this.miDatePipe.transform(date, 'dd-MM-yyyy HH:mm:ss');
     let arrayDate: any[] = stringDate.split(/[/\s\:\-]/g);
-    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1]-1, arrayDate[0], arrayDate[3], arrayDate[4], arrayDate[5]);
+    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1] - 1, arrayDate[0], arrayDate[3], arrayDate[4], arrayDate[5]);
     return fechaDate;
   }
 
- //método que recibe un parámetro Date y lo transforma a un Date con formato yyyy-MM-dd
+  //método que recibe un parámetro Date y lo transforma a un Date con formato yyyy-MM-dd
   cambiarFormatoDatesinHora(date: Date): Date {
-    let stringDate =  this.miDatePipe.transform(date, 'dd-MM-yyyy');
+    let stringDate = this.miDatePipe.transform(date, 'dd-MM-yyyy');
     let arrayDate: any[] = stringDate.split(/[/\s\:\-]/g);
-    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1]-1, arrayDate[0]);
+    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1] - 1, arrayDate[0]);
     return fechaDate;
   }
 
   //método que recibe un parámetro string y lo transforma a un Date con formato yyyy-MM-dd HH:mm:ss
   cambiarFormatoDate2(date: string): Date {
     let arrayDate: any[] = date.split(/[/\s\:\-]/g);
-    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1]-1, arrayDate[0], arrayDate[3], arrayDate[4], arrayDate[5]);
+    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1] - 1, arrayDate[0], arrayDate[3], arrayDate[4], arrayDate[5]);
     return fechaDate;
   }
 
-  //método que recibe un parámetro string y lo transforma a un Date con formato yyyy-MM-dd HH:mm:ss
+  //método que recibe un parámetro string y lo transforma a un Date con formato yyyy-MM-dd
   cambiarFormatoDate2sinHora(date: string): Date {
-     let arrayDate: any[] = date.split(/[/\s\:\-]/g);
-     let fechaDate: Date = new Date(arrayDate[2], arrayDate[1]-1, arrayDate[0]);
-     return fechaDate;
-   }
+    let arrayDate: any[] = date.split(/[/\s\:\-]/g);
+    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1] - 1, arrayDate[0]);
+    return fechaDate;
+  }
 
-   //método que recibe un parámetro string y lo transforma a un string con formato yyyy-MM-dd
-   cambiarFormatoDateStringsinHora(date: string): string {
-     let stringDate =  this.miDatePipe.transform(date, 'yyyy-MM-dd');
-     return stringDate;
-   }
+  //método que recibe un parámetro string y lo transforma a un string con formato yyyy-MM-dd
+  cambiarFormatoDateStringsinHora(date: string): string {
+    let stringDate = this.miDatePipe.transform(date, 'yyyy-MM-dd');
+    return stringDate;
+  }
 
-   //método que recibe un parámetro string y lo transforma a un string con formato yyyy-MM-dd
-   actualizarFechaInv(fecha: string): string {
-    let fechaActualizadaInv = fecha.slice(6,10) + "-" + fecha.slice(3,5) + "-" + fecha.slice(0,2);
-    return  fechaActualizadaInv;
+  //método que recibe un parámetro string y lo transforma a un string con formato yyyy-MM-dd HH:mm:ss
+  actualizarFechaInv2(fecha: string): string {
+    let fechaActualizadaInv = fecha.slice(0, 2) + "-" + fecha.slice(3, 5) + "-" + fecha.slice(6, 10) + " " + fecha.slice(11, 13) + ":" + fecha.slice(14, 16) + ":" + fecha.slice(17, 19);
+    return fechaActualizadaInv;
+  }
+
+  //método que recibe un parámetro string y lo transforma a un string con formato yyyy-MM-dd
+  actualizarFechaInv(fecha: string): string {
+    let fechaActualizadaInv = fecha.slice(6, 10) + "-" + fecha.slice(3, 5) + "-" + fecha.slice(0, 2);
+    return fechaActualizadaInv;
   }
 
   //método que recibe como parámetro string la fecha de la solicitud y lo transforma a un string con formato dd-MM-yyyy 00:00:00
   actualizarFechaSolicitud(fecha: string): string {
-    let fechaActualizada = fecha.slice(8,11) + "-" + fecha.slice(5,7) + "-" + fecha.slice(0,4) + " 00:00:00";
+    let fechaActualizada = fecha.slice(8, 11) + "-" + fecha.slice(5, 7) + "-" + fecha.slice(0, 4) + " 00:00:00";
     return fechaActualizada;
   }
 
@@ -384,15 +580,15 @@ export class SolicitudRecursoFormComponent implements OnInit {
     setTimeout(() => {
       //si la categoria seleccionada no tiene subcategorias muestra los recursos de esa categoria
       if (this.categoriasFiltradas.length === 0) {
-    //rescatamos de la BD los recursos de ese cenad de esa categoria seleccionada
+        //rescatamos de la BD los recursos de ese cenad de esa categoria seleccionada
         this.recursoService.getRecursosDeCategoria(this.categoriaSeleccionada).subscribe((response) => {
           if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
             this.recursosDeCategoria = this.recursoService.extraerRecursos(response);
           }
         });
       } else {//muestra los recursos de sus subcategorias, esten al nivel que esten
-              this.recursoService.getRecursosDeSubcategorias(this.categoriaSeleccionada).subscribe((response) => this.recursosDeCategoria = this.recursoService.extraerRecursos(response));
-          }
+        this.recursoService.getRecursosDeSubcategorias(this.categoriaSeleccionada).subscribe((response) => this.recursosDeCategoria = this.recursoService.extraerRecursos(response));
+      }
     }, 500);
   }
 
@@ -403,10 +599,12 @@ export class SolicitudRecursoFormComponent implements OnInit {
     //rescatamos del local storage los recursos de ese cenad
     this.recursosDeCategoria = JSON.parse(localStorage.getItem(`recursos_${this.idCenad}`));
     //resetea la categoria seleccionada
-    this.categoriaSeleccionada = null;
+    this.categoriaSeleccionada = new CategoriaImpl();
   }
 
-  //
+  //metodo que filtra del array de solicitudes todas las que cumplen que sean del mismo recurso
+  //que el de la solicitud que estoy consultando, que sean Validadas y que la fecha de inicio del recurso solicitado
+  //esté comprendido entre las fecha de inicio y fin del recurso validado
   comprobarDisponibilidad(): void {
     this.solicitudesDisponibilidadCenad = [];
     this.solicitudesDisponibilidadCenad = this.solicitudesCenad.filter(s => this.cambiarFormatoDate2(s.fechaHoraInicioRecurso) <= this.cambiarFormatoDate2(this.solicitud.fechaHoraInicioRecurso)
@@ -419,5 +617,269 @@ export class SolicitudRecursoFormComponent implements OnInit {
         }
         return resultado;
       });
+  }
+
+  //metodo que se ejecuta al seleccionar un recurso
+  //y filtra los campos adicionales según el tipo de formulario
+  filtrarTipoFormulario(): void {
+    this.resetearVariables();
+    //boton = true -> Creacion
+    if (this.boton === false) { //edicion solicitudRecurso
+      this.codTipoFormSeleccionado = this.solicitud.recurso.tipoFormulario.codTipo;
+    } else { //creación solicitudRecurso
+      // console.log('urlrecurso', this.uRlRecursoSeleccionado);
+      this.solicitudService.getRecursoUrl(this.uRlRecursoSeleccionado).subscribe((response) => {
+        this.recurso = this.solicitudService.mapearRecurso(response);
+        setTimeout(() => {
+          this.codTipoFormSeleccionado = this.recurso.tipoFormulario.codTipo;
+          this.solicitud.otrosDatosEspecificos = this.recurso.datosEspecificosSolicitud;
+          //console.log('codtipoform', this.codTipoFormSeleccionado);        
+        }, 700);
+
+      });
+    }
+    setTimeout(() => {
+      switch (this.codTipoFormSeleccionado.toString()) {
+        case "1":
+          this.isZonaCaida = true;
+          break;
+        case "2":
+          this.isCTcarros = true;
+          break;
+        case "3":
+          this.isCTlaser = true;
+          break;
+        case "4":
+          this.isCampoTiro = true;
+          break;
+        case "5":
+          this.isCampoExplosivos = true;
+          break;
+        case "6":
+          this.isZonaRestringida = true;
+          break;
+        case "7":
+          this.isAcanVivac = true;
+          break;
+        case "8":
+          this.isZonaVidaBon = true;
+          break;
+        case "9":
+          this.isLavaderos = true;
+          break;
+        case "10":
+          this.isSimulacionRealLaser = true;
+          break;
+        case "11":
+          this.isOtros = true;
+          break;
+        case "12":
+          this.isZonaEspera = true;
+          break;
+
+        default: "";
+          break;
+      }
+
+    }, 900);
+
+  }
+
+  //metodo que habilita el formulario para crear un arma Zona Caida
+  mostrarNuevaArma() {
+    this.nuevaArma = true;
+  }
+
+  //metodo que crea una nueva arma en la zona de caida
+  crearArma(): void {
+    //si la solicitud no ha sido creada 
+    if (!this.solicitud.idSolicitud) {
+      alert('Se va a crear una solicitud Borrador, para guardar los cambios, sólo tiene que ACTUALIZAR');
+      //crea una solicitud
+      this.actualizarDatos();
+      this.solicitudService.create(this.solicitud).subscribe((response) => {
+        console.log(response);
+        //this.isSolicitudCreada = true;
+      });
+      setTimeout(() => {
+        this.solicitudService.getSolicitudesDeCenad(this.idCenad).subscribe((response) => {
+          this.solicitudesCenadTrabajo = this.solicitudService.extraerSolicitudes(response);
+          console.log(response);
+          setTimeout(() => {
+            this.solicitudesCenadTrabajo.sort((a, b) => {
+              return (Number(a.idSolicitud) > Number(b.idSolicitud) ? 1 : (Number(a.idSolicitud) < Number(b.idSolicitud) ? -1 : 0));
+            });
+            console.log('this.solicitudesCenadTrabajo', this.solicitudesCenadTrabajo);
+            if (this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].estado == "Borrador"
+              && this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].unidadUsuaria == this.solicitud.unidadUsuaria
+              && this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].jefeUnidadUsuaria == this.solicitud.jefeUnidadUsuaria) {
+              console.log('ultima solicitud url', this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].url);
+              this.solicitudArma.solicitud = this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].url;
+              this.idSolicitud = this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].idSolicitud;
+            }
+          }, 2000);
+        });
+      }, 700);
+
+    } else {//si se está editando la solicitud
+      this.solicitudService.getSolicitud(this.idSolicitud).subscribe((response) => {
+        this.solicitudArma.solicitud = this.solicitudService.mapearSolicitud(response).url;
+      });
+    }
+    this.armas.forEach(a => {
+      a.idArma == this.idArmaSeleccionada ? this.solicitudArma.arma = a.url : "";
+    });
+    setTimeout(() => {
+      console.log('solicitudArma.solicitud', this.solicitudArma.solicitud);
+      console.log('this.idsolicitud', this.idSolicitud);
+      this.solicitudService.createSolicitudArma(this.solicitudArma).subscribe((response) => {
+        console.log(response);
+      });
+      setTimeout(() => {
+        //cierra el formulario de crear arma y resetea la variable
+        SolicitudRecursoFormComponent.solicitudesArmasZCdeSolicitud.push(this.solicitudArma);
+        this.solicitudesArmas = SolicitudRecursoFormComponent.solicitudesArmasZCdeSolicitud;
+        console.log('this.solicitudesArmas', this.solicitudesArmas);
+        this.solicitudArma = new SolicitudArmaImpl();
+        this.nuevaArma = false;
+        //para ocultar el boton de crear solicitud
+        this.boton = false;
+      }, 700);
+    }, 3500);
+  }
+
+
+  //método que recorre el array de armas, selecciona el arma por su id, y asigna su valor del tipo de tiro
+  //a la variable tipoTiroSeleccionado 
+  mostrarTipoTiro(): void {
+    this.armas.forEach(a => {
+      a.idArma === this.idArmaSeleccionada ? this.tipoTiroSeleccionado = a.tipoTiro : "";
+    });
+  }
+
+  //método que obtiene todas las solicitudesArmas y filtra las que sean de la solicitud
+  getSolicitudesArmasdeSolicitud(): void {
+    this.solicitudService.getSolicitudesArmasDeSolicitud(this.solicitud.idSolicitud).subscribe((response) => {
+      SolicitudRecursoFormComponent.solicitudesArmasZCdeSolicitud = this.solicitudService.extraerSolicitudesArmas(response);
+      //console.log('this.solicitudesArmas', this.solicitudesArmas);
+    });
+    setTimeout(() => {
+      this.solicitudesArmas = SolicitudRecursoFormComponent.solicitudesArmasZCdeSolicitud;
+    }, 700);
+  }
+
+  //metodo que habilita el formulario para crear fichero
+  mostrarNuevoFichero(): void {
+    this.nuevoFichero = true;
+  }
+
+  //metodo para crear un nuevo fichero
+  crearFichero(): void {
+    this.solicitudService.getSolicitud(this.idSolicitud).subscribe((response) => {
+      if (this.isGestor) {
+        this.fichero.solicitudRecursoCenad = this.solicitudService.mapearSolicitud(response).url;
+      }
+      if (this.isUsuarioNormal) {
+        this.fichero.solicitudRecursoUnidad = this.solicitudService.mapearSolicitud(response).url;
+      }
+    });
+
+    //sube el archivo
+    this.upload();
+    //asigna el nombre del mismo al campo del fichero
+    this.fichero.nombreArchivo = this.currentFile.name;
+    //compruebo que el archivo se sube antes de crear el fichero
+    if (this.archivoSubido) {
+      this.fichero.recurso = this.uRlRecursoSeleccionado;
+      //crea el fichero propiamente dicho
+      this.recursoService.createFichero(this.fichero).subscribe((response) => {
+        console.log(response);
+        console.log(`He creado el fichero ${this.fichero.nombre}`);
+        if (this.isGestor) {
+          //actualiza el [] con los ficheros de la solicitud
+          this.recursoService.getFicherosSolicitudCenad(this.idSolicitud).subscribe((response) =>
+            this.ficherosCenad = this.recursoService.extraerFicheros(response));
+        }
+        if (this.isUsuarioNormal) {
+          //actualiza el [] con los ficheros de la solicitud          
+          this.recursoService.getFicherosSolicitudUnidad(this.idSolicitud).subscribe((response) =>
+            this.ficherosUnidad = this.recursoService.extraerFicheros(response));
+        }
+      });
+    }
+    setTimeout(() => {
+      //para ocultar el boton de crear solicitud
+      this.boton = false;
+      //cierra el formulario de crear fichero y resetea la variable
+      this.nuevoFichero = false;
+      this.fichero = new FicheroImpl();
+      if (this.isGestor) {
+        this.fichero.solicitudRecursoCenad = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}solicitudes/${this.solicitud.idSolicitud}/` : `${environment.hostSicenad}solicitudes/${this.solicitud.idSolicitud}`;
+      }
+      if (this.isUsuarioNormal) {
+        this.fichero.solicitudRecursoUnidad = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}solicitudes/${this.solicitud.idSolicitud}/` : `${environment.hostSicenad}solicitudes/${this.solicitud.idSolicitud}`;
+      }
+    }, 800);
+  }
+
+  //metodo para eliminar un fichero
+  onEliminarFichero(fichero: FicheroImpl): void {
+    this.recursoService.deleteFichero(fichero).subscribe(response => {
+      console.log(`He eliminado el fichero ${fichero.nombre}`);
+      //actualiza el [] con los ficheros del recurso
+      if (this.isGestor) {
+        this.recursoService.getFicherosSolicitudCenad(this.idSolicitud).subscribe((response) =>
+          this.ficherosCenad = this.recursoService.extraerFicheros(response));
+      }
+      if (this.isUsuarioNormal) {
+        this.recursoService.getFicherosSolicitudUnidad(this.idSolicitud).subscribe((response) =>
+          this.ficherosUnidad = this.recursoService.extraerFicheros(response));
+      }
+    });
+  }
+
+  //metodo para seleccionar el archivo a subir
+  selectFile(event) {
+    this.selectedFiles = event.target.files;
+  }
+
+  //metodo para subir un archivo
+  upload(): void {
+    this.currentFile = this.selectedFiles.item(0);
+    //compruebo si es imagen para aplicarle el tamaño maximo de imagen o el de docRecurso
+    if (this.currentFile.type.includes("image")) {//si supera el tamaño archivoSubido sera false, y no se creara el fichero
+      this.archivoSubido = (this.currentFile.size > this.sizeMaxEscudo * 1024 * 1024) ? false : true;//debo pasarlo a bytes
+    } else {
+      this.archivoSubido = (this.currentFile.size > this.sizeMaxDocSolicitud * 1024 * 1024) ? false : true;
+    }
+    this.recursoService.uploadSolicitud(this.currentFile, this.solicitud.idSolicitud).subscribe();
+    this.selectedFiles = undefined;
+  }
+
+  //metodo para construir la url del archivo a mostrar o descargar
+  pathArchivo(nombreArchivo: string): string {
+    const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
+    return pathImg;
+  }
+
+  //metodo para traspasar los datos del fichero
+  verDatosFichero(fichero: FicheroImpl): void {
+    this.ficheroVerDatos = fichero;
+  }
+
+  //metodo para editar un fichero
+  onFicheroEditar(fichero: FicheroImpl): void {
+    this.recursoService.updateFichero(fichero).subscribe(response => {
+      console.log(`He actualizado el fichero ${fichero.nombre}`);
+      //actualiza el [] con los ficheros del recurso
+      if (this.isGestor) {
+        this.recursoService.getFicherosSolicitudCenad(this.idSolicitud).subscribe((response) =>
+          this.ficherosCenad = this.recursoService.extraerFicheros(response));
+      }
+      if (this.isUsuarioNormal) {
+        this.recursoService.getFicherosSolicitudUnidad(this.idSolicitud).subscribe((response) =>
+          this.ficherosUnidad = this.recursoService.extraerFicheros(response));
+      }
+    });
   }
 }

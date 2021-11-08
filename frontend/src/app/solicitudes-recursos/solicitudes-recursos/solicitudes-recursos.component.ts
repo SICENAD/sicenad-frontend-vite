@@ -140,7 +140,7 @@ export class SolicitudesRecursosComponent implements OnInit {
               return a.fechaSolicitud > b.fechaSolicitud ? 1 : a.fechaSolicitud < b.fechaSolicitud ? -1 : 0;
             }).slice(0, 5);
         }
-      }, 1000);
+      }, 3000);
     });
   }
 
@@ -151,5 +151,25 @@ export class SolicitudesRecursosComponent implements OnInit {
   verTodas(tipo: string): void {
     SolicitudesRecursosComponent.estadoSolicitud = tipo;
     this.router.navigate([`principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}/solicitudesTodas/${this.idCenad}`]);
+  }
+
+  //método que recibe como parámetro un dato tipo string y devuelve un dato tipo Date con el formato 'yyyy-MM-dd'
+  cambiarFormatoDate2sinHora(date: string): Date {
+    let arrayDate: any[] = date.split(/[/\s\:\-]/g);
+    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1] - 1, arrayDate[0]);
+    console.log(fechaDate);
+    return fechaDate;
+  }
+   //método que recibe un parámetro string y lo transforma a un string con formato yyyy-MM-dd HH:mm:ss
+   actualizarFechaInv2(fecha: string): string {
+    let fechaActualizadaInv = fecha.slice(0,2) + "-" + fecha.slice(3,5) + "-" + fecha.slice(6,10) + " " +  fecha.slice(11,13) + ":" + fecha.slice(14,16) + ":" + fecha.slice(17,19);
+    return  fechaActualizadaInv;
+  }
+
+  //método que recibe como parámetro un dato tipo string y devuelve un dato tipo Date con el formato 'yyyy-MM-dd HH:mm:ss'
+  cambiarFormatoDate2(date: string): Date {
+    let arrayDate: any[] = date.split(/[/\s\:\-]/g);
+    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1] - 1, arrayDate[0], arrayDate[3], arrayDate[4], arrayDate[5]);
+    return fechaDate;
   }
 }

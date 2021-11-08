@@ -2,15 +2,21 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { Arma } from "src/app/armas/models/arma";
+import { ArmaImpl } from "src/app/armas/models/arma-impl";
 import { Categoria } from "src/app/categorias/models/categoria";
 import { CategoriaImpl } from "src/app/categorias/models/categoria-impl";
+import { Recurso } from "src/app/recursos/models/recurso";
 import { RecursoImpl } from "src/app/recursos/models/recurso-impl";
+import { AppConfigService } from "src/app/services/app-config.service";
 import { TipoFormularioImpl } from "src/app/tiposFormulario/models/tipoFormulario-impl";
 import { Unidad } from "src/app/unidades/models/unidad";
 import { UnidadImpl } from "src/app/unidades/models/unidad-impl";
 import { UsuarioGestorImpl } from "src/app/usuarios/models/usuarioGestor-impl";
 import { UsuarioNormalImpl } from "src/app/usuarios/models/usuarioNormal-impl";
 import { environment } from "src/environments/environment";
+import { SolicitudArma } from "../models/solicitud-arma";
+import { SolicitudArmaImpl } from "../models/solicitud-arma-impl";
 import { SolicitudRecurso } from "../models/solicitud-recurso";
 import { SolicitudRecursoImpl } from "../models/solicitud-recurso-impl";
 
@@ -21,13 +27,53 @@ export class SolicitudRecursoService {
   private host: string = environment.hostSicenad;
   private urlEndPoint: string = `${this.host}solicitudes/`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private appConfigService: AppConfigService) {
+    this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+    this.urlEndPoint = `${this.host}solicitudes/`;
+  }
 
   //método que pasándole el endpoint devuele el id de un objeto
   getId(url: string): string {
     let posicionFinal: number = url.lastIndexOf("/");
     let numId: string = url.slice(posicionFinal + 1, url.length);
     return numId;
+  }
+
+  //método que pasándole el endpoint obtiene un recurso
+  getRecursoUrl(url: string): Observable<Recurso> {
+    return this.http.get<Recurso>(`${url}`).pipe(
+      catchError((e) => {
+        if (e.status !== 401 && e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  } 
+  
+  
+  //método que pasándole el endpoint obtiene una solicitud
+   getSolicitudUrl(url: string): Observable<SolicitudRecurso> {
+    return this.http.get<SolicitudRecurso>(`${url}`).pipe(
+      catchError((e) => {
+        if (e.status !== 401 && e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
+
+  //método que pasándole el endpoint obtiene una solicitud
+  getArmaUrl(url: string): Observable<Arma> {
+    return this.http.get<Arma>(`${url}`).pipe(
+      catchError((e) => {
+        if (e.status !== 401 && e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
   }
 
   //método que pasándole el su id obtiene una solicitud
@@ -40,6 +86,21 @@ export class SolicitudRecursoService {
         return throwError(e);
       })
     );
+  }
+
+  //método que obtiene todas las Armas
+  getArmas(): Observable<any> {
+    return this.http.get<any>(`${this.host}armas?page=0&size=1000`);
+  }
+  
+  //método que obtiene todas las solicitudesArmas
+  getSolicitudesArmas(): Observable<any> {
+    return this.http.get<any>(`${this.host}solicitudesArmas?page=0&size=1000`);
+  }
+
+  //metodo que obtiene todas las solicituesArmas de una solicitudRecurso
+  getSolicitudesArmasDeSolicitud(idSolicitud: string): Observable<any> {
+    return this.http.get<any>(`${this.host}solicitudes/${idSolicitud}/solicitudesArmas?page=0&size=1000`);
   }
 
   //método que obtiene todas las unidades
@@ -65,6 +126,25 @@ export class SolicitudRecursoService {
       `${this.host}cenads/${idCenad}/categorias?page=0&size=1000`
     );
   }
+
+  //método que extrae un array [] de Armas
+  extraerArmas(respuestaApi: any): Arma[] {
+    const armas: Arma[] = [];
+    respuestaApi._embedded.armas.forEach((s) => {
+      armas.push(this.mapearArma(s));
+    });
+    return armas;
+  } 
+ 
+  //método que extrae un array [] de SolicitudesArmas
+  extraerSolicitudesArmas(respuestaApi: any): SolicitudArma[] {
+    const solicitudesArmas: SolicitudArma[] = [];
+    respuestaApi._embedded.solicitudesArmas.forEach((s) => {
+      solicitudesArmas.push(this.mapearSolicitudArma(s));
+    });
+    return solicitudesArmas;
+  }
+
 
   //método que extrae un array [] de Unidades
   extraerUnidades(respuestaApi: any): Unidad[] {
@@ -93,6 +173,39 @@ export class SolicitudRecursoService {
     return solicitudes;
   }
 
+  //método que mapea un objeto Arma con un registro de la entidad
+  mapearArma(armaApi: any): ArmaImpl {
+    const arma = new ArmaImpl();
+    arma.url = armaApi._links.self.href;
+    arma.idArma = this.getId(arma.url);
+    arma.nombre = armaApi.nombre;
+    arma.tipoTiro = armaApi.tipoTiro;
+
+    return arma;
+  }
+
+  //método que mapea un objeto SolicitudArma con un registro de la entidad
+  mapearSolicitudArma(solicitudArmaApi: any): SolicitudArmaImpl {
+    const solicitudArma: SolicitudArma = new SolicitudArmaImpl();
+    solicitudArma.url = solicitudArmaApi._links.self.href;
+    solicitudArma.idSolicitudArma = this.getId(solicitudArma.url);
+    solicitudArma.coordAsentamiento = solicitudArmaApi.coordAsentamiento;
+    solicitudArma.coordPuntoCaida = solicitudArmaApi.coordPuntoCaida;
+    solicitudArma.alcanceMax = solicitudArmaApi.alcanceMax;
+    solicitudArma.zonaSegAngulo = solicitudArmaApi.zonaSegAngulo;
+    solicitudArma.armaUrl = solicitudArmaApi._links.arma.href;
+    solicitudArma.solicitudUrl = solicitudArmaApi._links.solicitud.href;
+    this.getSolicitudUrl(solicitudArma.solicitudUrl).subscribe((response) => {
+      solicitudArma.solicitudId = this.mapearSolicitud(response).idSolicitud;
+    });
+    this.getArmaUrl(solicitudArma.armaUrl).subscribe((response) => {
+      solicitudArma.armaId = this.mapearArma(response).idArma;
+    });
+
+    return solicitudArma;
+  }
+
+
   //método que mapea un objeto solicitud con un registro de la entidad
   mapearSolicitud(solicitudApi: any): SolicitudRecursoImpl {
     const solicitud: SolicitudRecurso = new SolicitudRecursoImpl();
@@ -114,18 +227,95 @@ export class SolicitudRecursoService {
       solicitud.usuarioNormal = this.mapearUsuarioNormal(response);
       });
 
-    solicitud.documentacionCenad = [];
-    solicitud.documentacionUnidad = [];
     this.getRecursoDeSolicitud(solicitud.idSolicitud).subscribe((response) => {
       solicitud.recurso = this.mapearRecurso(response);
     });
-    solicitud.otros = solicitudApi.otros;
     solicitud.etiqueta = solicitudApi.etiqueta;
+    //DATOS ESPECIFICOS
+    // ZONA DE CAIDA DE PROYECTILES/EXPLOSIVOS
+    solicitud.isConMunTrazadoraIluminanteFumigena = solicitudApi.conMunTrazadoraIluminanteFumigena;
+	  // CAMPO DE TIRO DE CARROS, VCI/C, PRECISICION
+    solicitud.tipoEjercicio = solicitudApi.tipoEjercicio;
+    solicitud.armaPral = solicitudApi.armaPral;
+    solicitud.armaPrpalNumDisparosPrev = solicitudApi.armaPrpalNumDisparosPrev;
+    solicitud.armaSecund = solicitudApi.armaSecund;
+    solicitud.armaSecundNumDisparosPrev = solicitudApi.armaSecundNumDisparosPrev;
+	  // CAMPO DE TIRO LASER (se han creado hasta 5 tipos de blancos para hacerlo
+	  // compatible con cualquier CENAD/CMT)
+    solicitud.numBlancosFijosA = solicitudApi.numBlancosFijosA;
+    solicitud.numBlancosFijosB = solicitudApi.numBlancosFijosB;
+    solicitud.numBlancosFijosC = solicitudApi.numBlancosFijosC;
+    solicitud.numBlancosFijosD = solicitudApi.numBlancosFijosD;
+    solicitud.numBlancosFijosE = solicitudApi.numBlancosFijosE;
+    solicitud.numBlancosMovilesA = solicitudApi.numBlancosMovilesA;
+    solicitud.numBlancosMovilesB = solicitudApi.numBlancosMovilesB;
+    solicitud.numBlancosMovilesC = solicitudApi.numBlancosMovilesC;
+    solicitud.numBlancosMovilesD = solicitudApi.numBlancosMovilesD;
+    solicitud.numBlancosMovilesE = solicitudApi.numBlancosMovilesE;
+	  // CAMPO DE TIRO
+    solicitud.arma1CT = solicitudApi.arma1CT;
+    solicitud.arma1CTlongitud = solicitudApi.arma1CTlongitud;
+    solicitud.arma2CT = solicitudApi.arma2CT;
+    solicitud.arma2CTlongitud = solicitudApi.arma2CTlongitud;
+	  // CAMPO EXPLOSIVOS
+    solicitud.explosivo = solicitudApi.explosivo;
+    // POLIGONO DE COMBATE EN ZONAS URBANAS
+    // no tiene atributos específicos
+
+    // COMBATE URBANO
+    // no tiene atributos específicos
+
+    // TORRE MULTIUSOS
+    // no tiene atributos específicos
+
+    // CASA 3 ALTURAS
+    // no tiene atributos específicos
+
+    // PISTA DE CONDUCCION TT/OBSTACULOS
+    // no tiene atributos específicos
+
+    // EJERCICIOS ZONA RESTRINGIDA
+    solicitud.actividad = solicitudApi.actividad;
+    // LOGISTICA
+    // ACANTONAMIENTO/VIVAC
+    solicitud.vivac = solicitudApi.vivac;
+	  // ZONA DE VIDA DE BATALLON
+    solicitud.isConUsoCocina = solicitudApi.conUsoCocina;
+    solicitud.numPersonasZVB = solicitudApi.numPersonasZVB;
+	  // ZONA DE ESPERA
+    solicitud.numPersonasZE = solicitudApi.numPersonasZE;
+	  // LAVADEROS
+    solicitud.numVehCadenas = solicitudApi.numVehCadenas;
+    solicitud.numVehRuedas = solicitudApi.numVehRuedas;
+	  // SIMULACION REAL LASER
+    solicitud.fechaHoraMontaje = solicitudApi.fechaHoraMontaje;
+    solicitud.fechaHoraDesmontaje = solicitudApi.fechaHoraDesmontaje;
+    solicitud.numSimuladores = solicitudApi.numSimuladores;
+    solicitud.usoEstacionSeg = solicitudApi.usoEstacionSeg;
+    // OTROS RECURSOS
+    // no contiene atributos específicos
+    solicitud.otrosDatosEspecificos = solicitudApi.otrosDatosEspecificos;
+
     return solicitud;
   }
 
   //método que pasándole un objeto solicitud crea un registro en la entidad
-  create(solicitud: SolicitudRecurso): Observable<any> {
+  createSolicitudArma(solicitudArma: SolicitudArma): Observable<any> {
+    return this.http.post(`${this.host}solicitudesArmas`, solicitudArma).pipe(
+      catchError((e) => {
+        if (e.status === 400) {
+          return throwError(e);
+        }
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
+
+   //método que pasándole un objeto solicitud crea un registro en la entidad
+   create(solicitud: SolicitudRecurso): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, solicitud).pipe(
       catchError((e) => {
         if (e.status === 400) {
@@ -137,6 +327,20 @@ export class SolicitudRecursoService {
         return throwError(e);
       })
     );
+  }
+
+  //método que pasándole un objeto solicitud, borra su registro de la entidad
+  deleteSolicitudArma(solicitudArma: SolicitudArma): Observable<SolicitudArma> {
+    return this.http
+      .delete<SolicitudArma>(`${this.host}solicitudesArmas/${solicitudArma.idSolicitudArma}`)
+      .pipe(
+        catchError((e) => {
+          if (e.status === 405) {
+            console.error("El metodo está bien hecho");
+          }
+          return throwError(e);
+        })
+      );
   }
 
   //método que pasándole un objeto solicitud, borra su registro de la entidad
@@ -154,9 +358,26 @@ export class SolicitudRecursoService {
   }
 
   // método que pasándole un objeto solicitud, actualiza su registro en la entidad
-  update(solicitud: SolicitudRecurso): Observable<any> {
+  updateSolicitudArma(solicitudArma: SolicitudArma): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${solicitud.idSolicitud}`, solicitud)
+      .patch<any>(`${this.host}solicitudesArmas/${solicitudArma.idSolicitudArma}`, solicitudArma)
+      .pipe(
+        catchError((e) => {
+          if (e.status === 400) {
+            return throwError(e);
+          }
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  // método que pasándole un objeto solicitud, actualiza su registro en la entidad
+  update(idSolicitud:string, solicitud: SolicitudRecurso): Observable<any> {
+    return this.http
+      .patch<any>(`${this.urlEndPoint}${idSolicitud}`, solicitud)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -270,6 +491,8 @@ export class SolicitudRecursoService {
     this.getCategoria(recurso.idRecurso).subscribe((response) => {
       recurso.categoria = this.mapearCategoria(response);
     });
+    recurso.conDatosEspecificosSolicitud = recursoApi.conDatosEspecificosSolicitud;
+    recurso.datosEspecificosSolicitud = recursoApi.datosEspecificosSolicitud;
 
     return recurso;
   }

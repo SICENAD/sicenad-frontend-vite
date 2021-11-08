@@ -11,8 +11,11 @@ import { SolicitudRecursoService } from '../service/solicitud-recurso.service';
 })
 export class SolicitudRecursoComponent implements OnInit {
 
+  //variable que recibe el objeto solicitud
   @Input() solicitud: SolicitudRecurso;
+  //variable que recibe el id del Cenad
   @Input() idCenad: string;
+  //si se está en el modal
   @Input() isModal: boolean = false;
   //variable icono FontAwesome
   faEdit = faEdit;

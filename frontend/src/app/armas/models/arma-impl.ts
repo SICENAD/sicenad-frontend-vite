@@ -1,5 +1,5 @@
+import { SolicitudArma } from "src/app/solicitudes-recursos/models/solicitud-arma";
 import { Arma } from "./arma";
-import { SolicitudArma } from "./solicitudArma";
 
 export class ArmaImpl implements Arma {
   idArma: string;

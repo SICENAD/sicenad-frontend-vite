@@ -501,10 +501,22 @@ public class SolicitudRecurso {
 	public void setEtiqueta(String etiqueta) {
 		this.etiqueta = etiqueta;
 	}
+	
+	/**
+	 * Devuelve las solicitudesArmas de una solicitud
+	 * 
+	 * @return las solicitudesArmas
+	 */
 
 	public Collection<SolicitudArma> getSolicitudesArmas() {
 		return solicitudesArmas;
 	}
+	
+	/**
+	 * Guarda las solicitudesArmas de una solicitud
+	 * 
+	 * @param solicitudesArmas de una solicitud
+	 */
 
 	public void setSolicitudesArmas(Collection<SolicitudArma> solicitudesArmas) {
 		this.solicitudesArmas = solicitudesArmas;
@@ -521,6 +533,7 @@ public class SolicitudRecurso {
 		fichero.setSolicitudRecursoCenad(this);
 	}
 
+	// Establece la relación en los dos sentidos
 	/**
 	 * Agrega un fichero a la solicitud
 	 * 
@@ -529,8 +542,14 @@ public class SolicitudRecurso {
 	public void addDocumentacionUnidad(Fichero fichero) {
 		getDocumentacionUnidad().add(fichero);
 		fichero.setSolicitudRecursoUnidad(this);
-
 	}
+	
+	//Establece la relación en los dos sentidos
+	/**
+	 * Agrega una solicitudArma a la solicitud
+	 * 
+	 * @param solicitudArma
+	 */
 
 	public void addSolicitudArma(SolicitudArma solicitudArma) {
 		getSolicitudesArmas().add(solicitudArma);
@@ -541,258 +560,578 @@ public class SolicitudRecurso {
 	// getters y setters DATOS ESPECIFICOS DE LOS RECURSOS
 	// ***************************************************
 
+	/**
+	 * Devuelve el tipo de Ejercicio
+	 * 
+	 * @return tipoEjericio
+	 */
 	public String getTipoEjercicio() {
 		return tipoEjercicio;
 	}
 
+	/**
+	 * Guarda el tipo de Ejercicio
+	 * 
+	 * @param tipoEjercicio
+	 */
 	public void setTipoEjercicio(String tipoEjercicio) {
 		this.tipoEjercicio = tipoEjercicio;
 	}
 
+	/**
+	 * Devuelve el arma principal
+	 * 
+	 * @return el arma principal
+	 */
 	public String getArmaPral() {
 		return armaPral;
 	}
 
+	/**
+	 * Guarda el arma principal
+	 * 
+	 * @param armaPral
+	 */
 	public void setArmaPral(String armaPral) {
 		this.armaPral = armaPral;
 	}
 
+	/**
+	 * Devuelve el numero de disparos previstos del arma principal
+	 * 
+	 * @return numero de disparos previstos del arma principal
+	 */
 	public String getArmaPrpalNumDisparosPrev() {
 		return armaPrpalNumDisparosPrev;
 	}
 
+	/**
+	 * Guarda el numero de disparos previstos del arma principal
+	 * 
+	 * @param armaPrpalNumDisparosPrev
+	 */
 	public void setArmaPrpalNumDisparosPrev(String armaPrpalNumDisparosPrev) {
 		this.armaPrpalNumDisparosPrev = armaPrpalNumDisparosPrev;
 	}
 
+	/**
+	 * Devuelve el arma sencuandaria
+	 * 
+	 * @return el arma secundaria
+	 */
 	public String getArmaSecund() {
 		return armaSecund;
 	}
 
+	/**
+	 * Guarda el arma secuandaria
+	 * 
+	 * @param armaSecund
+	 */
 	public void setArmaSecund(String armaSecund) {
 		this.armaSecund = armaSecund;
 	}
 
+	/**
+	 * Devuelve el numero de disparos previsto del arma secundaria
+	 * 
+	 * @return numero de disparos previstos del arma secuandaria
+	 */	
 	public String getArmaSecundNumDisparosPrev() {
 		return armaSecundNumDisparosPrev;
 	}
 
+	/**
+	 * Guarda el numero de disparos previstos del arma secundaria
+	 * 
+	 * @param armaSecundNumDisparosPrev
+	 */	
 	public void setArmaSecundNumDisparosPrev(String armaSecundNumDisparosPrev) {
 		this.armaSecundNumDisparosPrev = armaSecundNumDisparosPrev;
 	}
 
+	/**
+	 * Devuelve el numero de blancos fijos A
+	 * 
+	 * @return umero de blancos fijos A
+	 */
 	public int getNumBlancosFijosA() {
 		return numBlancosFijosA;
 	}
 
+	/**
+	 * Guarda el numero de blancos fijos A
+	 * 
+	 * @param numBlancosFijosA
+	 */
 	public void setNumBlancosFijosA(int numBlancosFijosA) {
 		this.numBlancosFijosA = numBlancosFijosA;
 	}
 
+	/**
+	 * Devuelve el numero de blancos fijos B
+	 * 
+	 * @return numero de blancos fijos B
+	 */
 	public int getNumBlancosFijosB() {
 		return numBlancosFijosB;
 	}
 
+	/**
+	 * Guarda numero de blancos fijos B
+	 * 
+	 * @param numBlancosFijosB
+	 */
 	public void setNumBlancosFijosB(int numBlancosFijosB) {
 		this.numBlancosFijosB = numBlancosFijosB;
 	}
 
+	/**
+	 * Devuelve numero de blancos fijos C
+	 * 
+	 * @return numero de blancos fijos C
+	 */
 	public int getNumBlancosFijosC() {
 		return numBlancosFijosC;
 	}
 
+	/**
+	 * Guarda el numero de blancos fijos C
+	 * 
+	 * @param numBlancosFijosC
+	 */
 	public void setNumBlancosFijosC(int numBlancosFijosC) {
 		this.numBlancosFijosC = numBlancosFijosC;
 	}
 
+	/**
+	 * Devuelve el numero de blancos fijos D
+	 * 
+	 * @return numero de blancos fijos D
+	 */
 	public int getNumBlancosFijosD() {
 		return numBlancosFijosD;
 	}
 
+	/**
+	 * Guarda el numero de blancos fijos D
+	 * 
+	 * @param numBlancosFijosD
+	 */
 	public void setNumBlancosFijosD(int numBlancosFijosD) {
 		this.numBlancosFijosD = numBlancosFijosD;
 	}
 
+	/**
+	 * Devuelve el numero de blancos fijos E
+	 * 
+	 * @return el numero de blancos fijos E
+	 */
 	public int getNumBlancosFijosE() {
 		return numBlancosFijosE;
 	}
 
+	/**
+	 * Guarda el numero de blancos fijos E
+	 * 
+	 * @param numBlancosFijosE
+	 */
 	public void setNumBlancosFijosE(int numBlancosFijosE) {
 		this.numBlancosFijosE = numBlancosFijosE;
 	}
 
+	/**
+	 * Devuelve el numero de blancos moviles A
+	 * 
+	 * @return el numero de blancos moviles A
+	 */
 	public int getNumBlancosMovilesA() {
 		return numBlancosMovilesA;
 	}
 
+	/**
+	 * Guarda el numero de blancos moviles A
+	 * 
+	 * @param numBlancosMovilesA
+	 */
 	public void setNumBlancosMovilesA(int numBlancosMovilesA) {
 		this.numBlancosMovilesA = numBlancosMovilesA;
 	}
 
+	/**
+	 * Devuelve el numero de blancos moviles B
+	 * 
+	 * @return el numero de blancos moviles B
+	 */
 	public int getNumBlancosMovilesB() {
 		return numBlancosMovilesB;
 	}
 
+	/**
+	 * Guarda el numero de blancos moviles B
+	 * 
+	 * @param numBlancosMovilesB
+	 */
 	public void setNumBlancosMovilesB(int numBlancosMovilesB) {
 		this.numBlancosMovilesB = numBlancosMovilesB;
 	}
 
+	/**
+	 * Devuelve el numero de blancos moviles C
+	 * 
+	 * @return el numero de blancos moviles C
+	 */
 	public int getNumBlancosMovilesC() {
 		return numBlancosMovilesC;
 	}
 
+	/**
+	 * Guarda el numero de blancos moviles C
+	 * 
+	 * @param numBlancosMovilesC
+	 */
 	public void setNumBlancosMovilesC(int numBlancosMovilesC) {
 		this.numBlancosMovilesC = numBlancosMovilesC;
 	}
 
+	/**
+	 * Devuelve el numero de blancos moviles D
+	 * 
+	 * @return el numero de blancos moviles D
+	 */
 	public int getNumBlancosMovilesD() {
 		return numBlancosMovilesD;
 	}
 
+	/**
+	 * Guarda el numero de blancos moviles D
+	 * 
+	 * @param numBlancosMovilesD
+	 */
 	public void setNumBlancosMovilesD(int numBlancosMovilesD) {
 		this.numBlancosMovilesD = numBlancosMovilesD;
 	}
 
+	/**
+	 * Devuelve el numero de blancos moviles E
+	 * 
+	 * @return el numero de blancos moviles E
+	 */
 	public int getNumBlancosMovilesE() {
 		return numBlancosMovilesE;
 	}
 
+	/**
+	 * Guarda el numero de blancos moviles E
+	 * 
+	 * @param numBlancosMovilesE
+	 */
 	public void setNumBlancosMovilesE(int numBlancosMovilesE) {
 		this.numBlancosMovilesE = numBlancosMovilesE;
 	}
 
+	/**
+	 * Devuelve el arma1 del Campo de Tiro
+	 * 
+	 * @return el arma1 del Campo de Tiro
+	 */
 	public String getArma1CT() {
 		return arma1CT;
 	}
 
+	/**
+	 * Guarda el arma1 del Campo de Tiro
+	 * 
+	 * @param arma1ct
+	 */
 	public void setArma1CT(String arma1ct) {
 		arma1CT = arma1ct;
 	}
 
+	/**
+	 * Devuelve la longitud del arma1 del Campo de Tiro
+	 * 
+	 * @return la longitud del arma1 del Campo de Tiro
+	 */
 	public String getArma1CTlongitud() {
 		return arma1CTlongitud;
 	}
 
+	/**
+	 * Guarda la longitud del arma1 del Campo de Tiro
+	 * 
+	 * @param arma1cTlongitud
+	 */
 	public void setArma1CTlongitud(String arma1cTlongitud) {
 		arma1CTlongitud = arma1cTlongitud;
 	}
 
+	/**
+	 * Devuelve el arma2 del Campo de Tiro
+	 * 
+	 * @return el arma2 del Campo de Tiro
+	 */
 	public String getArma2CT() {
 		return arma2CT;
 	}
 
+	/**
+	 * Guarda el arma2 del Campo de Tiro
+	 * 
+	 * @param arma2ct
+	 */
 	public void setArma2CT(String arma2ct) {
 		arma2CT = arma2ct;
 	}
 
+	/**
+	 * Devuelve la longitud del arma2 del Campo de Tiro
+	 * 
+	 * @return la longitud del arma2 del Campo de Tiro
+	 */
 	public String getArma2CTlongitud() {
 		return arma2CTlongitud;
 	}
 
+	/**
+	 * Guarda la longitud del arma2 del Campo de Tiro
+	 * 
+	 * @param arma2cTlongitud
+	 */
 	public void setArma2CTlongitud(String arma2cTlongitud) {
 		arma2CTlongitud = arma2cTlongitud;
 	}
 
+	/**
+	 * Devuelve el explosivo utilizado en el Campo de Tiro
+	 * 
+	 * @return el explosivo utilizado en el Campo de Tiro
+	 */
 	public String getExplosivo() {
 		return explosivo;
 	}
 
+	/**
+	 * Guarda el explosivo utilizado en el Campo de Tiro
+	 * 
+	 * @param explosivo
+	 */
 	public void setExplosivo(String explosivo) {
 		this.explosivo = explosivo;
 	}
 
+	/**
+	 * Devuelve la actividad a realizar en la zona restringida
+	 * 
+	 * @return la actividad a realizar en la zona restringida
+	 */
 	public String getActividad() {
 		return actividad;
 	}
 
+	/**
+	 * Guarda la actividad a realizar en la zona restringida
+	 * 
+	 * @param actividad
+	 */
 	public void setActividad(String actividad) {
 		this.actividad = actividad;
 	}
 
+	/**
+	 * Devuelve las observaciones al vivac
+	 * 
+	 * @return las observaciones al vivac
+	 */
 	public String getVivac() {
 		return vivac;
 	}
 
+	/**
+	 * Guarda las observaciones al vivac
+	 * 
+	 * @param vivac
+	 */
 	public void setVivac(String vivac) {
 		this.vivac = vivac;
 	}
 
+	/**
+	 * Devuelve el numero de vehiculos de cadenas en el Lavadero
+	 * 
+	 * @return el numero de vehiculos de cadenas en el Lavadero
+	 */
 	public int getNumVehCadenas() {
 		return numVehCadenas;
 	}
 
+	/**
+	 * Guarda el numero de vehiculos de cadenas en el Lavadero
+	 * 
+	 * @param numVehCadenas
+	 */
 	public void setNumVehCadenas(int numVehCadenas) {
 		this.numVehCadenas = numVehCadenas;
 	}
 
+	/**
+	 * Devuelve el numero de vehiculos de ruedas en el Lavadero
+	 * 
+	 * @return el numero de vehiculos de ruedas en el Lavadero
+	 */
 	public int getNumVehRuedas() {
 		return numVehRuedas;
 	}
 
+	/**
+	 * Guarda el numero de vehiculos de ruedas en el Lavadero
+	 * 
+	 * @param numVehRuedas
+	 */
 	public void setNumVehRuedas(int numVehRuedas) {
 		this.numVehRuedas = numVehRuedas;
 	}
 
+	/**
+	 * Devuelve la fecha de montaje de los simuladores
+	 * 
+	 * @return la fecha de montaje de los simuladores
+	 */
 	public Date getFechaHoraMontaje() {
 		return fechaHoraMontaje;
 	}
 
+	/**
+	 * Guarda la fecha de montaje de los simuladores
+	 * 
+	 * @param fechaHoraMontaje
+	 */
 	public void setFechaHoraMontaje(Date fechaHoraMontaje) {
 		this.fechaHoraMontaje = fechaHoraMontaje;
 	}
 
+	/**
+	 * Devuelve la fecha de desmontaje de los simuladores
+	 * 
+	 * @return la fecha de desmontaje de los simuladores
+	 */
 	public Date getFechaHoraDesmontaje() {
 		return fechaHoraDesmontaje;
 	}
 
+	/**
+	 * Guarda la fecha de desmontaje de los simuladores
+	 * 
+	 * @param fechaHoraDesmontaje
+	 */
 	public void setFechaHoraDesmontaje(Date fechaHoraDesmontaje) {
 		this.fechaHoraDesmontaje = fechaHoraDesmontaje;
 	}
 
+	/**
+	 * Devuelve el numero de simuladores (simulacion real laser)
+	 * 
+	 * @return el numero de simuladores (simulacion real laser)
+	 */
 	public int getNumSimuladores() {
 		return numSimuladores;
 	}
 
+	/**
+	 * Guarda el numero de simuladores (simulacion real laser)
+	 * 
+	 * @param numSimuladores
+	 */
 	public void setNumSimuladores(int numSimuladores) {
 		this.numSimuladores = numSimuladores;
 	}
 
+	/**
+	 * Devuelve el uso que se le va a dar a la estacion seguimiento (simulacion real laser)
+	 * 
+	 * @return el uso que se le va a dar a la estacion seguimiento (simulacion real laser)
+	 */
 	public String getUsoEstacionSeg() {
 		return usoEstacionSeg;
 	}
 
+	/**
+	 * Guarda el uso que se le va a dar a la estacion seguimiento (simulacion real laser)
+	 * 
+	 * @param usoEstacionSeg
+	 */
 	public void setUsoEstacionSeg(String usoEstacionSeg) {
 		this.usoEstacionSeg = usoEstacionSeg;
 	}
 
+	/**
+	 * Devuelve si se va utilizar municion Trazadora/Iluminante/Fumigena en la Zona Caida Proyectiles
+	 * 
+	 * @return si se va utilizar municion Trazadora/Iluminante/Fumigena en la Zona Caida Proyectiles
+	 */
 	public Boolean isConMunTrazadoraIluminanteFumigena() {
 		return isConMunTrazadoraIluminanteFumigena;
 	}
 
+	/**
+	 * Guarda si se va utilizar municion Trazadora/Iluminante/Fumigena en la Zona Caida Proyectiles
+	 * 
+	 * @param isConMunTrazadoraIluminanteFumigena
+	 */
 	public void setIsConMunTrazadoraIluminanteFumigena(Boolean isConMunTrazadoraIluminanteFumigena) {
 		this.isConMunTrazadoraIluminanteFumigena = isConMunTrazadoraIluminanteFumigena;
 	}
 
+	/**
+	 * Devuelve si en la Zona Vida Bon se va a solicitar apoyo cocina
+	 * 
+	 * @return si en la Zona Vida Bon se va a solicitar apoyo cocina
+	 */
 	public Boolean isConUsoCocina() {
 		return isConUsoCocina;
 	}
 
+	/**
+	 * Guarda si en la Zona Vida Bon se va a solicitar apoyo cocina
+	 * 
+	 * @param isConUsoCocina
+	 */
 	public void setIsConUsoCocina(Boolean isConUsoCocina) {
 		this.isConUsoCocina = isConUsoCocina;
 	}
 
+	/**
+	 * Devuelve el numero de personas de la Zona Vida Bon
+	 * 
+	 * @return el numero de personas de la Zona Vida Bon
+	 */
 	public int getNumPersonasZVB() {
 		return numPersonasZVB;
 	}
 
+	/**
+	 * Guarda el numero de personas de la Zona Vida Bon
+	 * 
+	 * @param numPersonasZVB
+	 */
 	public void setNumPersonasZVB(int numPersonasZVB) {
 		this.numPersonasZVB = numPersonasZVB;
 	}
 
+	/**
+	 * Devuelve el numero de personas de la Zona de Espera
+	 * 
+	 * @return el numero de personas de la Zona de Espera
+	 */
 	public int getNumPersonasZE() {
 		return numPersonasZE;
 	}
 
+	/**
+	 * Guarda el numero de personas de la Zona de Espera
+	 * 
+	 * @param numPersonasZE
+	 */
 	public void setNumPersonasZE(int numPersonasZE) {
 		this.numPersonasZE = numPersonasZE;
 	}
@@ -812,7 +1151,6 @@ public class SolicitudRecurso {
 	 * 
 	 * @param otrosDatosEspecificos Otros datos especificos de la solicitud
 	 */
-
 	public void setOtrosDatosEspecificos(String otrosDatosEspecificos) {
 		this.otrosDatosEspecificos = otrosDatosEspecificos;
 	}
