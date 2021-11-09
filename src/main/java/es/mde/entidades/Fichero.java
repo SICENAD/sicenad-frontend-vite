@@ -33,7 +33,7 @@ public class Fichero {
 	@JoinColumn(name = "CATEGORIA_FICHERO", nullable = false)
 	private CategoriaFichero categoriaFichero;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "RECURSO", nullable = false)
+	@JoinColumn(name = "RECURSO")
 	private Recurso recurso;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SOLICITUDRECURSO_CENAD")

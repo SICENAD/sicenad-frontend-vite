@@ -30,9 +30,9 @@ public class Cartografia {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CATEGORIA_FICHERO", nullable = false)
 	private CategoriaFichero categoriaFichero;
-	private String imagen;
 	private String escala;
 	private String sistemaReferencia;
+	private String descripcion;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date fechaCartografia;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -109,22 +109,6 @@ public class Cartografia {
 	}
 	
 	/**
-	 * Devuelve el nombre del archivo de imagen
-	 * @return Devuelve el nombre del archivo de imagen
-	 */
-	public String getImagen() {
-		return imagen;
-	}
-	
-	/**
-	 * Guarda la imagen
-	 * @param imagen Nombre del archivo de imagen
-	 */
-	public void setImagen(String imagen) {
-		this.imagen = imagen;
-	}
-
-	/**
 	 * Devuelve la escala de un mapa
 	 * @return Devuelve la escala del mapa
 	 */
@@ -154,6 +138,22 @@ public class Cartografia {
 	 */
 	public void setSistemaReferencia(String sistemaReferencia) {
 		this.sistemaReferencia = sistemaReferencia;
+	}
+	
+	/**
+	 * Devuelve la descripción del conjunto cartográfico
+	 * @return Devuelve la descripción del conjunto cartográfico
+	 */
+	public String getDescripcion() {
+		return descripcion;
+	}
+	
+	/**
+	 * Guarda la descripción del conjunto cartográfico
+	 * @param descripcion Descripción del conjunto cartográfico
+	 */
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	/**

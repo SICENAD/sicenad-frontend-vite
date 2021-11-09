@@ -164,60 +164,60 @@ public interface FileServiceAPI {
 	 */
 	public Stream<Path> loadAllDocSolicitudes(String id) throws Exception;	
 	
-//	// *******************************
-//	// Métodos para tratar las cartografías
-//	// *******************************
-//	
-//	/**
-//	 * Metodo para guardar un archivo de un conjunto cartografico
-//	 * @param file Archivo a subir
-//	 * @param id Id del conjunto cartografico
-//	 * @throws Exception
-//	 */
-//	public void saveCartografia(MultipartFile file, String id) throws Exception;
-//	
-//	/**
-//	 * Metodo para borrar un archivo de un conjunto cartografico
-//	 * @param name Nombre del archivo
-//	 * @param id Id del conjunto cartografico
-//	 * @throws Exception
-//	 */
-//	public void borrarCartografia(String name, String id) throws Exception;
-//	
-//	/**
-//	 * Metodo para borrar la carpeta de un conjunto cartografico
-//	 * @param id Id del conjunto cartografico
-//	 * @throws Exception
-//	 */
-//	public void borrarCarpetaCartografia(String id) throws Exception;
-//
-//	/**
-//	 * Metodo para cargar un archivo de un conjunto cartografico
-//	 * @param name Nombre del archivo
-//	 * @param id Id del conjunto cartografico
-//	 * @throws Exception
-//	 */
-//	public Resource loadCartografia(String name, String id) throws Exception;
-//	
-//	/**
-//	 * Metodo para cargar un archivo de un conjunto cartografico
-//	 * @param name Nombre del archivo
-//	 * @throws Exception
-//	 */
-//	public 	Resource loadCartografia(String name) throws Exception;
-//	
-//	/**
-//	 * Metodo para guardar varios archivos de un conjunto cartografico
-//	 * @param files Lista de archivos a subir
-//	 * @param id Id del conjunto cartografico
-//	 * @throws Exception
-//	 */
-//	public void saveCartografias(List<MultipartFile> files, String id) throws Exception;
-//	
-//	/**
-//	 * Metodo para cargar varios archivos de un conjunto cartografico
-//	 * @param id Id del conjunto cartografico
-//	 * @throws Exception
-//	 */
-//	public Stream<Path> loadAllCartografias(String id) throws Exception;
+	// *******************************
+	// Métodos para tratar las cartografías
+	// *******************************
+	
+	/**
+	 * Metodo para guardar un archivo de un conjunto cartografico
+	 * @param file Archivo a subir
+	 * @param id Id del conjunto cartografico
+	 * @throws Exception
+	 */
+	public void saveCartografia(MultipartFile file, String id) throws Exception;
+	
+	/**
+	 * Metodo para borrar un archivo de un conjunto cartografico
+	 * @param name Nombre del archivo
+	 * @param id Id del conjunto cartografico
+	 * @throws Exception
+	 */
+	public void borrarCartografia(String name, String id) throws Exception;
+	
+	/**
+	 * Metodo para borrar la carpeta de un conjunto cartografico
+	 * @param id Id del conjunto cartografico
+	 * @throws Exception
+	 */
+	public void borrarCarpetaCartografia(String id) throws Exception;
+
+	/**
+	 * Metodo para cargar un archivo de un conjunto cartografico
+	 * @param name Nombre del archivo
+	 * @param id Id del conjunto cartografico
+	 * @throws Exception
+	 */
+	public Resource loadCartografia(String name, String id) throws Exception;
+	
+	/**
+	 * Metodo para cargar un archivo de un conjunto cartografico
+	 * @param name Nombre del archivo
+	 * @throws Exception
+	 */
+	public 	Resource loadCartografia(String name) throws Exception;
+	
+	/**
+	 * Metodo para guardar varios archivos de un conjunto cartografico
+	 * @param files Lista de archivos a subir
+	 * @param id Id del conjunto cartografico
+	 * @throws Exception
+	 */
+	public void saveCartografias(List<MultipartFile> files, String id) throws Exception;
+	
+	/**
+	 * Metodo para cargar varios archivos de un conjunto cartografico
+	 * @param id Id del conjunto cartografico
+	 * @throws Exception
+	 */
+	public Stream<Path> loadAllCartografias(String id) throws Exception;
 }
