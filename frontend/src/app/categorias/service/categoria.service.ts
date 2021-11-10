@@ -41,8 +41,10 @@ export class CategoriaService {
   //metodo que extrae el [] de categorias
   extraerCategorias(respuestaApi: any): Categoria[] {
     const categorias: Categoria[] = [];
-    respuestaApi._embedded.categorias.forEach(c => 
-      categorias.push(this.mapearCategoria(c)));
+    if(respuestaApi._embedded) {
+      respuestaApi._embedded.categorias.forEach(c => 
+        categorias.push(this.mapearCategoria(c)));
+    }
     return categorias;
   }
 

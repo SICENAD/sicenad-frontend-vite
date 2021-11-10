@@ -20,6 +20,7 @@ export class FicheroFichaComponent implements OnInit {
   //variables para la subida de archivos de escudos
   selectedFiles: FileList;
   currentFile: File;
+  archivoSubido: boolean = false;
   sizeMaxDocRecurso: number = environment.sizeMaxDocRecurso;
   sizeMaxEscudo: number = environment.sizeMaxEscudo;
   //variables para poder mostrar el valor inicial de los campos select
@@ -29,7 +30,6 @@ export class FicheroFichaComponent implements OnInit {
   categoriasFichero: CategoriaFichero[] = [];
   //variable para recoger los recursos
   recursos: Recurso[] = [];
-  archivoSubido: boolean = false;
 
   constructor(private recursoService: RecursoService, private appConfigService: AppConfigService) { }
 

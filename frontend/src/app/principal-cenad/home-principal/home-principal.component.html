@@ -11,7 +11,7 @@
             <fa-icon class="mr-2" [icon]="faCalendario"></fa-icon>Calendario</a></li>
           <li class="pt-4"><a [routerLink]="['consultaRecursos', idCenad]" routerLinkActive="router-link-active">
             <fa-icon class="mr-2" [icon]="faRecurso"></fa-icon>Consultar Recursos</a></li>
-          <li class="pt-4"><a routerLink="#">
+          <li class="pt-4"><a [routerLink]="['cartografias', idCenad]" routerLinkActive="router-link-active">
             <fa-icon class="mr-2" [icon]="faCartografia"></fa-icon>Cartografía</a></li>
           <li class="pt-4" [hidden]="!isUserNormal"><a [routerLink]="['solicitudesRecursos', idCenad, 'formulario', idCenad, idSolicitud]">
             <fa-icon class="mr-2" [icon]="faSolicitar"></fa-icon>Solicitar Recurso</a></li>

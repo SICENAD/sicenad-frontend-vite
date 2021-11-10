@@ -153,8 +153,10 @@ export class RecursoService {
   //metodo para extraer el [] de recursos
   extraerRecursos(respuestaApi: any): Recurso[] {
     const recursos: Recurso[] = [];
-    respuestaApi._embedded.recursos.forEach(r =>
-      recursos.push(this.mapearRecurso(r)));
+    if(respuestaApi._embedded) {
+      respuestaApi._embedded.recursos.forEach(r =>
+        recursos.push(this.mapearRecurso(r)));
+      }
     return recursos;
   }
 

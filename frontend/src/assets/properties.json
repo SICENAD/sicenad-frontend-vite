@@ -2,7 +2,9 @@
   "sizeMaxEscudo": 2,
   "sizeMaxDocRecurso": 30,
   "sizeMaxDocSolicitud": 30,
+  "sizeMaxCartografia": 3,
   "tiempoMaximoLocalStorage": 1,
   "tiposTiro": ["Tiro directo", "Tiro indirecto", "Tiro antiaereo"],
-  "hostSicenad": "http://localhost:8080/api/"
+  "hostSicenad": "http://localhost:8080/api/",
+  "categoriaFicheroCartografia": "1"
 }

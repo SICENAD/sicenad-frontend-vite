@@ -75,4 +75,22 @@ export class AppConfigService {
 
     return this.appConfig.hostSicenad;
   }
+
+  get categoriaFicheroCartografia() {
+
+    if (!this.appConfig) {
+      throw Error('No se ha cargado el archivo de configuración!');
+    }
+
+    return this.appConfig.categoriaFicheroCartografia;
+  }
+
+  get sizeMaxCartografia() {
+
+    if (!this.appConfig) {
+      throw Error('No se ha cargado el archivo de configuración!');
+    }
+
+    return this.appConfig.sizeMaxCartografia;
+  }
 }
