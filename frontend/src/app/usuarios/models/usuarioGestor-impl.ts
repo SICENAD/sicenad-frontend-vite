@@ -10,8 +10,8 @@ export class UsuarioGestorImpl implements UsuarioGestor {
   cenad: Cenad | any;
   tipo:string;
   descripcion:string;
-  url: string;
-  
+  emailAdmitido: boolean;
+  url: string;  
   constructor() {}
   getId(url: string): string {
     return url.slice(url.lastIndexOf('/') + 1, url.length);

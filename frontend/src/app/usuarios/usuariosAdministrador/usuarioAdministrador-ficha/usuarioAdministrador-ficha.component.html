@@ -26,7 +26,7 @@
     <div class="col-lg-4 col-md-12">
       <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
       <input type="tel" class="form-control letra" [(ngModel)]="usuarioAdministrador.tfno"
-        placeholder="Teléfono de contacto del usuario" name="telefono" required minlength="9" maxlength="9"
+        placeholder="Teléfono de contacto del usuario" name="telefono" required minlength="7" maxlength="9"
         #telefono="ngModel" [ngClass]="{ 'is-invalid': telefono.invalid && (telefono.dirty || telefono.touched),
         'is-valid': !telefono.invalid }" />
       <div class="text-danger" *ngIf="telefono.invalid && (telefono.dirty || telefono.touched)">
@@ -34,7 +34,7 @@
           El Teléfono del usuario es obligatorio
         </div>
         <div *ngIf="telefono.errors.minlength || telefono.errors.maxlength">
-          El Teléfono debe tener 9 carácteres
+          El Teléfono debe tener 7-9 carácteres
         </div>
       </div>
     </div>
@@ -59,6 +59,10 @@
           El Email del usuario es obligatorio
         </div>
       </div>
+    </div>
+    <div class="col-lg-3 col-md-12 pt-3">
+      <label class="titulo pr-2"><b>RECIBIR NOTIFICACIONES</b></label><br>
+      <input type="checkbox" class="form-control" name="emailAdmitido" [(ngModel)]='usuarioAdministrador.emailAdmitido'/>
     </div>
     <div class="col-lg-6 col-md-12 pt-3" hidden>
       <label class="titulo"><b>CENAD<sup class="text-danger">*</sup></b></label>

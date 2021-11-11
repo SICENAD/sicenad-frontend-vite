@@ -170,6 +170,8 @@ export class ConsultaRecursoFormComponent implements OnInit {
     if (id) {
       this.recursoService.getRecurso(id).subscribe((recurso) => {
         this.recurso = this.recursoService.mapearRecurso(recurso);
+        this.recursoService.getTipoFormulario(this.recurso).subscribe((response => 
+          this.recurso.tipoFormulario = this.recursoService.mapearTipoFormulario(response)));
         //asigna al campo recurso del fichero que se vaya a crear el valor de ese recurso
         this.fichero.recurso = this.recursoService.mapearRecurso(recurso).url;    
       });
@@ -179,6 +181,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
   //metodo para modificar el recurso y volver al listado de los recursos de ese cenad
   actualizar(): void {
     this.recurso.categoria = this.recurso.categoria.url;
+    this.recurso.tipoFormulario = this.recurso.tipoFormulario.url;
     this.recursoService.update(this.recurso).subscribe(
       (recurso) => {
         console.log(`He actualizado el recurso ${this.recurso.nombre}`);

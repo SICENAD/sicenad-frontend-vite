@@ -31,6 +31,7 @@ public abstract class Usuario {
 	private String email;
 	private String tfno;
 	private String descripcion;
+	private boolean emailAdmitido;
 
 	/**
 	 * Crea un usuario
@@ -137,5 +138,21 @@ public abstract class Usuario {
 	 */
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+	
+	/**
+	 * Devuelve un boolean que le permitirá recibir emails o no
+	 * @return Devuelve un boolean que le permitirá recibir emails o no
+	 */
+	public boolean isEmailAdmitido() {
+		return emailAdmitido;
+	}
+	
+	/**
+	 * Guarda un boolean que le permitirá recibir emails o no
+	 * @param emailAdmitido Variable boolean que le permitirá recibir emails o no
+	 */
+	public void setEmailAdmitido(boolean emailAdmitido) {
+		this.emailAdmitido = emailAdmitido;
 	}
 }

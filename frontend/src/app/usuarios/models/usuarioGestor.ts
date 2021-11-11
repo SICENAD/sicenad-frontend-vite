@@ -9,5 +9,5 @@ export interface UsuarioGestor {
   cenad: Cenad | any;
   tipo:string;
   descripcion:string;
-  url: string;
-}
+  emailAdmitido: boolean;
+  url: string;}

@@ -9,5 +9,5 @@ export interface UsuarioNormal {
   unidad: Unidad | any;
   tipo:string;
   descripcion:string;
-  url: string;
-}
+  emailAdmitido: boolean;
+  url: string;}

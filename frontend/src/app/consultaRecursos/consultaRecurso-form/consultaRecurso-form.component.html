@@ -32,11 +32,7 @@
         <label class="titulo pr-2"><b>CATEGORÍA:</b></label><br>
         <input type="text" class="form-control letra" name="categoria" [placeholder]='recurso.categoria.nombre' readonly />
       </div>
-      <div class="col-lg-3 col-md-12">
-        <label class="titulo pr-2"><b>DATOS ESPECIFICOS (SOLICITUD):</b></label><br>
-        <input type="checkbox" class="form-control" name="conDatosEspecificosSolicitud" [(ngModel)]='recurso.conDatosEspecificosSolicitud'/>
-      </div>
-      <div class="col-lg-12 col-md-12 pt-3" *ngIf='recurso.conDatosEspecificosSolicitud'>
+      <div class="col-lg-12 col-md-12 pt-3" *ngIf='recurso.tipoFormulario.codTipo == "11"'>
         <label class="titulo"><b>DATOS ESPECÍFICOS DE LA SOLICITUD<sup class="text-danger">*</sup></b></label>
         <textarea class="form-control letra" [(ngModel)]="recurso.datosEspecificosSolicitud" placeholder="Datos específicos de la solicitud del recurso"
           name="datosEspecificosSolicitud" required #datosEspecificosSolicitud="ngModel" [ngClass]="{ 'is-invalid': datosEspecificosSolicitud.invalid && (datosEspecificosSolicitud.dirty || datosEspecificosSolicitud.touched),

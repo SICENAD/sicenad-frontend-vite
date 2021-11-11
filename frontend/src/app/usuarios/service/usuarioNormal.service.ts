@@ -42,6 +42,7 @@ export class UsuarioNormalService {
     usuario.password = usuarioApi.password;
     usuario.tfno = usuarioApi.tfno;
     usuario.email = usuarioApi.email;
+    usuario.emailAdmitido = usuarioApi.emailAdmitido;
     usuario.descripcion = usuarioApi.descripcion;
     usuario.url = usuarioApi._links.self.href;
     usuario.idUsuario = usuario.getId(usuario.url);

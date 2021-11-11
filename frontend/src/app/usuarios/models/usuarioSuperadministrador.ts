@@ -6,5 +6,6 @@ export interface UsuarioSuperadministrador {
   email: string;
   tipo:string;
   descripcion:string;
+  emailAdmitido: boolean;
   url: string;
 }

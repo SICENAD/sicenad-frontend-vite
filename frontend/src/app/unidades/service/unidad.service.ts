@@ -108,14 +108,15 @@ export class UnidadService {
   }
 
   //metodo que mapea un usuario normal segun la interfaz
-  mapearUsuarioNormal(recursoApi: any): UsuarioNormalImpl {
+  mapearUsuarioNormal(usuarioApi: any): UsuarioNormalImpl {
     const usuarioNormal = new UsuarioNormalImpl();
-    usuarioNormal.nombre = recursoApi.nombre;
-    usuarioNormal.password = recursoApi.password;
-    usuarioNormal.email = recursoApi.email;
-    usuarioNormal.tfno = recursoApi.tfno;
-    usuarioNormal.descripcion = recursoApi.descripcion;
-    usuarioNormal.url = recursoApi._links.self.href;
+    usuarioNormal.nombre = usuarioApi.nombre;
+    usuarioNormal.password = usuarioApi.password;
+    usuarioNormal.email = usuarioApi.email;
+    usuarioNormal.emailAdmitido = usuarioApi.emailAdmitido;
+    usuarioNormal.tfno = usuarioApi.tfno;
+    usuarioNormal.descripcion = usuarioApi.descripcion;
+    usuarioNormal.url = usuarioApi._links.self.href;
     usuarioNormal.idUsuario = usuarioNormal.getId(usuarioNormal.url);
     usuarioNormal.tipo ='normal';
     return usuarioNormal;
