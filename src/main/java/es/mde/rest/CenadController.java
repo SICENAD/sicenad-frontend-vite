@@ -95,4 +95,20 @@ public class CenadController {
 
 		return assembler.toCollectionModel(solicitudes);
 	}
+	
+	/**
+	 * Metodo que agrupa las solicitudes de un CENAD
+	 * @param id del Cenad y estado de la solicitud
+	 * @param assembler
+	 * @return Lista de las solicitudes de un CENAD
+	 */
+	@GetMapping("/{id}/solicitudesEstado/{estado}")
+	@ResponseBody
+	public CollectionModel<PersistentEntityResource> getSolicitudesCenadEstado(@PathVariable Long id, @PathVariable String estado,
+			PersistentEntityResourceAssembler assembler) {
+
+		List<SolicitudRecurso> solicitudes = cenadDAO.getSolicitudesCenadEstado(id, estado);
+
+		return assembler.toCollectionModel(solicitudes);
+	}
 }

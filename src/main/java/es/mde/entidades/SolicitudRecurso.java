@@ -74,7 +74,7 @@ public class SolicitudRecurso {
 
 	// ZONA DE CAIDA DE PROYECTILES/EXPLOSIVOS
 
-	private Boolean isConMunTrazadoraIluminanteFumigena;
+	private Boolean conMunTrazadoraIluminanteFumigena;
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = SolicitudArma.class, mappedBy = "solicitud")
 	private Collection<SolicitudArma> solicitudesArmas = new ArrayList<>();
 
@@ -82,9 +82,9 @@ public class SolicitudRecurso {
 
 	private String tipoEjercicio;
 	private String armaPral;
-	private String armaPrpalNumDisparosPrev;
+	private int armaPrpalNumDisparosPrev;
 	private String armaSecund;
-	private String armaSecundNumDisparosPrev;
+	private int armaSecundNumDisparosPrev;
 
 	// CAMPO DE TIRO LASER (se han creado hasta 5 tipos de blancos para hacerlo
 	// compatible con cualquier CENAD/CMT)
@@ -103,9 +103,9 @@ public class SolicitudRecurso {
 	// CAMPO DE TIRO
 
 	private String arma1CT;
-	private String arma1CTlongitud;
+	private int arma1CTlongitud;
 	private String arma2CT;
-	private String arma2CTlongitud;
+	private int arma2CTlongitud;
 
 	// CAMPO EXPLOSIVOS
 
@@ -137,7 +137,7 @@ public class SolicitudRecurso {
 
 	// ZONA DE VIDA DE BATALLON
 
-	private Boolean isConUsoCocina;
+	private Boolean conUsoCocina;
 	private int numPersonasZVB;
 
 	// ZONA DE ESPERA
@@ -151,9 +151,9 @@ public class SolicitudRecurso {
 
 	// SIMULACION REAL LASER
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date fechaHoraMontaje;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss[.SSS][.SS][.S]")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
 	private Date fechaHoraDesmontaje;
 	private int numSimuladores;
 	private String usoEstacionSeg;
@@ -601,7 +601,7 @@ public class SolicitudRecurso {
 	 * 
 	 * @return numero de disparos previstos del arma principal
 	 */
-	public String getArmaPrpalNumDisparosPrev() {
+	public int getArmaPrpalNumDisparosPrev() {
 		return armaPrpalNumDisparosPrev;
 	}
 
@@ -610,7 +610,7 @@ public class SolicitudRecurso {
 	 * 
 	 * @param armaPrpalNumDisparosPrev
 	 */
-	public void setArmaPrpalNumDisparosPrev(String armaPrpalNumDisparosPrev) {
+	public void setArmaPrpalNumDisparosPrev(int armaPrpalNumDisparosPrev) {
 		this.armaPrpalNumDisparosPrev = armaPrpalNumDisparosPrev;
 	}
 
@@ -637,7 +637,7 @@ public class SolicitudRecurso {
 	 * 
 	 * @return numero de disparos previstos del arma secuandaria
 	 */	
-	public String getArmaSecundNumDisparosPrev() {
+	public int getArmaSecundNumDisparosPrev() {
 		return armaSecundNumDisparosPrev;
 	}
 
@@ -646,7 +646,7 @@ public class SolicitudRecurso {
 	 * 
 	 * @param armaSecundNumDisparosPrev
 	 */	
-	public void setArmaSecundNumDisparosPrev(String armaSecundNumDisparosPrev) {
+	public void setArmaSecundNumDisparosPrev(int armaSecundNumDisparosPrev) {
 		this.armaSecundNumDisparosPrev = armaSecundNumDisparosPrev;
 	}
 
@@ -853,7 +853,7 @@ public class SolicitudRecurso {
 	 * 
 	 * @return la longitud del arma1 del Campo de Tiro
 	 */
-	public String getArma1CTlongitud() {
+	public int getArma1CTlongitud() {
 		return arma1CTlongitud;
 	}
 
@@ -862,7 +862,7 @@ public class SolicitudRecurso {
 	 * 
 	 * @param arma1cTlongitud
 	 */
-	public void setArma1CTlongitud(String arma1cTlongitud) {
+	public void setArma1CTlongitud(int arma1cTlongitud) {
 		arma1CTlongitud = arma1cTlongitud;
 	}
 
@@ -889,7 +889,7 @@ public class SolicitudRecurso {
 	 * 
 	 * @return la longitud del arma2 del Campo de Tiro
 	 */
-	public String getArma2CTlongitud() {
+	public int getArma2CTlongitud() {
 		return arma2CTlongitud;
 	}
 
@@ -898,7 +898,7 @@ public class SolicitudRecurso {
 	 * 
 	 * @param arma2cTlongitud
 	 */
-	public void setArma2CTlongitud(String arma2cTlongitud) {
+	public void setArma2CTlongitud(int arma2cTlongitud) {
 		arma2CTlongitud = arma2cTlongitud;
 	}
 
@@ -1070,7 +1070,7 @@ public class SolicitudRecurso {
 	 * @return si se va utilizar municion Trazadora/Iluminante/Fumigena en la Zona Caida Proyectiles
 	 */
 	public Boolean isConMunTrazadoraIluminanteFumigena() {
-		return isConMunTrazadoraIluminanteFumigena;
+		return conMunTrazadoraIluminanteFumigena;
 	}
 
 	/**
@@ -1078,8 +1078,8 @@ public class SolicitudRecurso {
 	 * 
 	 * @param isConMunTrazadoraIluminanteFumigena
 	 */
-	public void setIsConMunTrazadoraIluminanteFumigena(Boolean isConMunTrazadoraIluminanteFumigena) {
-		this.isConMunTrazadoraIluminanteFumigena = isConMunTrazadoraIluminanteFumigena;
+	public void setConMunTrazadoraIluminanteFumigena(Boolean conMunTrazadoraIluminanteFumigena) {
+		this.conMunTrazadoraIluminanteFumigena = conMunTrazadoraIluminanteFumigena;
 	}
 
 	/**
@@ -1088,7 +1088,7 @@ public class SolicitudRecurso {
 	 * @return si en la Zona Vida Bon se va a solicitar apoyo cocina
 	 */
 	public Boolean isConUsoCocina() {
-		return isConUsoCocina;
+		return conUsoCocina;
 	}
 
 	/**
@@ -1096,8 +1096,8 @@ public class SolicitudRecurso {
 	 * 
 	 * @param isConUsoCocina
 	 */
-	public void setIsConUsoCocina(Boolean isConUsoCocina) {
-		this.isConUsoCocina = isConUsoCocina;
+	public void setconUsoCocina(Boolean conUsoCocina) {
+		this.conUsoCocina = conUsoCocina;
 	}
 
 	/**

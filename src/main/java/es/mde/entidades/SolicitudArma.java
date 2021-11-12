@@ -23,10 +23,10 @@ public class SolicitudArma {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
-	private String coordAsentamiento;
-	private String coordPuntoCaida;
-	private String alcanceMax;
-	private String zonaSegAngulo;
+	private int coordAsentamiento;
+	private int coordPuntoCaida;
+	private int alcanceMax;
+	private int zonaSegAngulo;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ARMA")
 	private Arma arma;
@@ -61,7 +61,7 @@ public class SolicitudArma {
 	 * Devuelve las coordenadas del asentamiento del "par" SOLICITUD-ARMA
 	 * @return Devuelve las coordenadas del asentamiento del "par" SOLICITUD-ARMA
 	 */
-	public String getCoordAsentamiento() {
+	public int getCoordAsentamiento() {
 		return coordAsentamiento;
 	}
 
@@ -69,7 +69,7 @@ public class SolicitudArma {
 	 * Guarda las coordenadas del asentamiento del "par" SOLICITUD-ARMA
 	 * @param coordAsentamiento Coordenadas del asentamiento del "par" SOLICITUD-ARMA
 	 */
-	public void setCoordAsentamiento(String coordAsentamiento) {
+	public void setCoordAsentamiento(int coordAsentamiento) {
 		this.coordAsentamiento = coordAsentamiento;
 	}
 
@@ -77,7 +77,7 @@ public class SolicitudArma {
 	 * Devuelve las coordenadas del punto de caída del "par" SOLICITUD-ARMA
 	 * @return Devuelve las coordenadas del punto de caída del "par" SOLICITUD-ARMA
 	 */
-	public String getCoordPuntoCaida() {
+	public int getCoordPuntoCaida() {
 		return coordPuntoCaida;
 	}
 
@@ -85,7 +85,7 @@ public class SolicitudArma {
 	 * Guarda las coordenadas del punto de caída del "par" SOLICITUD-ARMA
 	 * @param coordPuntoCaida Coordenadas del punto de caída del "par" SOLICITUD-ARMA
 	 */
-	public void setCoordPuntoCaida(String coordPuntoCaida) {
+	public void setCoordPuntoCaida(int coordPuntoCaida) {
 		this.coordPuntoCaida = coordPuntoCaida;
 	}
 
@@ -93,7 +93,7 @@ public class SolicitudArma {
 	 * Devuelve el alcance máximo del "par" SOLICITUD-ARMA
 	 * @return Devuelve el alcance máximo del "par" SOLICITUD-ARMA
 	 */
-	public String getAlcanceMax() {
+	public int getAlcanceMax() {
 		return alcanceMax;
 	}
 
@@ -101,7 +101,7 @@ public class SolicitudArma {
 	 * Guarda el alcance máximo del "par" SOLICITUD-ARMA
 	 * @param alcanceMax Alcance máximo del "par" SOLICITUD-ARMA
 	 */
-	public void setAlcanceMax(String alcanceMax) {
+	public void setAlcanceMax(int alcanceMax) {
 		this.alcanceMax = alcanceMax;
 	}
 
@@ -109,7 +109,7 @@ public class SolicitudArma {
 	 * Devuelve el ángulo de la zona de seguridad del "par" SOLICITUD-ARMA
 	 * @return Devuelve el ángulo de la zona de seguridad del "par" SOLICITUD-ARMA
 	 */
-	public String getZonaSegAngulo() {
+	public int getZonaSegAngulo() {
 		return zonaSegAngulo;
 	}
 
@@ -117,7 +117,7 @@ public class SolicitudArma {
 	 * Guarda el ángulo de la zona de seguridad del "par" SOLICITUD-ARMA
 	 * @param zonaSegAngulo Ángulo de la zona de seguridad del "par" SOLICITUD-ARMA
 	 */
-	public void setZonaSegAngulo(String zonaSegAngulo) {
+	public void setZonaSegAngulo(int zonaSegAngulo) {
 		this.zonaSegAngulo = zonaSegAngulo;
 	}
 

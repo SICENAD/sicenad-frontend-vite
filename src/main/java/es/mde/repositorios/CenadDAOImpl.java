@@ -3,6 +3,7 @@ package es.mde.repositorios;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +72,17 @@ public class CenadDAOImpl implements CenadDAOCustom {
 		List<Cenad> cenads = cenadDAO.findAll().stream()
 				.filter(j -> j.getUsuarioAdministrador() == null).collect(Collectors.toList());
 		return cenads;
+	}
+	
+	/**
+	 * Devuelve una lista de las solicitudes de un Cenad que tienen ese estado
+	 * @return lista de solicitudes
+	 * 
+	 */
+	@Override
+	public List<SolicitudRecurso> getSolicitudesCenadEstado(Long id, String estado) {
+		List<SolicitudRecurso> solicitudes = new ArrayList<SolicitudRecurso>();
+		solicitudes = this.getSolicitudesCenad(id).stream().filter(s -> s.getEstado().equalsIgnoreCase(estado)).collect(Collectors.toList());		
+		return solicitudes;
 	}	
 }

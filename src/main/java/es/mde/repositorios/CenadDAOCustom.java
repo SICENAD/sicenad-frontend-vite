@@ -31,6 +31,12 @@ public interface CenadDAOCustom {
 	 */
 	List<SolicitudRecurso> getSolicitudesCenad(Long id);
 	/**
+	 * Devuelve una lista de las solicitudes de un Cenad que tienen ese estado
+	 * @param id del Cenad y estado de la solicitud
+	 * @return Devuelve una lista de las solicitudes de un Cenad que tienen ese estado
+	 */
+	List<SolicitudRecurso> getSolicitudesCenadEstado(Long id, String estado);
+	/**
 	 * Devuelve una lista de los CENAD sin administrador
 	 * @return Devuelve una lista de los CENAD sin administrador
 	 */
