@@ -12,6 +12,16 @@ import { CanActivateViaLoggingSuperadministrador } from './logging/canActivateVi
 import { APP_INITIALIZER } from '@angular/core';
 import { AppConfigService } from './services/app-config.service';
 import { CanActivateViaLoggingLogeado } from './logging/canActivateViaLoggingLogeado';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
+
+FullCalendarModule.registerPlugins([
+  dayGridPlugin,
+  timeGridPlugin,
+  listPlugin
+])
 
 @NgModule({
   declarations: [
@@ -23,7 +33,8 @@ import { CanActivateViaLoggingLogeado } from './logging/canActivateViaLoggingLog
     AppRoutingModule,
     CoreModule,
     HttpClientModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    FullCalendarModule
   ],
   //hay que declarar los "guards"
   providers: [CanActivateViaLoggingAdministrador, CanActivateViaLoggingGestor, CanActivateViaLoggingNormal, CanActivateViaLoggingSuperadministrador, CanActivateViaLoggingLogeado,
