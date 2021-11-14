@@ -24,7 +24,7 @@
                   CENAD/CMT</a>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [ngClass]= "{'disabled': isAutenticado}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <fa-icon class='mr-2' [icon]="faConsultar"></fa-icon>Consultar
                 </a>
                 <div class="dropdown-menu consultar" aria-labelledby="navbarDropdownMenuLink">
@@ -66,8 +66,12 @@
                     <fa-icon class='mr-2' [icon]="faEnlace"></fa-icon>Enlaces de Interés</a>
                 </div>
               </li>
-              <li class="nav-item" *ngIf= "isAdminGestorNormal">
+              <li class="nav-item" *ngIf= "isGestorNormal">
                 <a class="nav-link" [routerLink]="['solicitudesRecursos', idCenad]" routerLinkActive="router-link-active">
+                  <fa-icon class='mr-2' [icon]="faSolicitar"></fa-icon>Solicitudes</a>
+              </li>
+              <li class="nav-item" *ngIf= "isAdminEsteCenad">
+                <a class="nav-link" [routerLink]="['calendarios', idCenad]" routerLinkActive="router-link-active">
                   <fa-icon class='mr-2' [icon]="faSolicitar"></fa-icon>Solicitudes</a>
               </li>
               <li class="nav-item dropdown" [hidden]= "!isAdminEsteCenad">

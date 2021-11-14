@@ -3,10 +3,10 @@ import { SolicitudArma } from "./solicitud-arma";
 export class SolicitudArmaImpl implements SolicitudArma {
   url: string;
   idSolicitudArma: string;
-  coordAsentamiento: string;
-  coordPuntoCaida: string;
-  alcanceMax: string;
-  zonaSegAngulo: string;
+  coordAsentamiento: number;
+	coordPuntoCaida: number;
+	alcanceMax: number;
+	zonaSegAngulo: number;
   armaUrl: string;
   arma: string;
   solicitudUrl: string;

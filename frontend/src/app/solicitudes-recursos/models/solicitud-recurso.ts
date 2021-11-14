@@ -12,7 +12,7 @@ export interface SolicitudRecurso {
 	jefeUnidadUsuaria: string;
 	pocEjercicio: string;
 	tlfnRedactor: string;
-	estado: string; // Borrador, Pendiente, Aprobada, Denegada, Cancelada, Finalizada
+	estado: string; // Borrador, Pendiente, Aprobada, Denegada, Cancelada, Finalizada, Planificada
 	fechaSolicitud: string;
 	fechaUltModSolicitud: string;
 	fechaHoraInicioRecurso: string;
@@ -36,9 +36,9 @@ export interface SolicitudRecurso {
   //Campo Tiro Carros, VCI/C, Precisión
   tipoEjercicio: string;
 	armaPral: string;
-	armaPrpalNumDisparosPrev: string;
+	armaPrpalNumDisparosPrev: number;
 	armaSecund: string;
-	armaSecundNumDisparosPrev: string;
+	armaSecundNumDisparosPrev: number;
   //Campo Tiro Laser
   numBlancosFijosA: number;
 	numBlancosFijosB: number;
@@ -52,9 +52,9 @@ export interface SolicitudRecurso {
 	numBlancosMovilesE: number;
   //Campo Tiro
   arma1CT: string;
-	arma1CTlongitud: string;
+	arma1CTlongitud: number;
 	arma2CT: string;
-	arma2CTlongitud: string;
+	arma2CTlongitud: number;
   //Campo Explosivos
   explosivo: string;
   //Ejercicio Zona Restringida

@@ -1,12 +1,17 @@
 <!-- Componente FORMULARIO para edición y consulta de Solicitudes -->
 <div class="container-fluid">
   <div class="row ml-4 pl-3 mb-3 mt-2 pb-0">
-    <div class="col-lg-3 col-md-12">
+    <div class="col-lg-2 col-md-12">
       <a class="nav-link text-center volver" routerLink="../../../" routerLinkActive="router-link-active">
-        <fa-icon class="fa-1x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver</strong>
+        <fa-icon class="fa-1x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver Solicitudes</strong>
       </a>
     </div>
-    <div class="col-lg-6 col-md-12">
+    <div class="col-lg-2 col-md-12" *ngIf="isAdministrador">
+      <a class="nav-link text-center volver" [routerLink]="['/principalCenad', idCenad, 'calendarios', idCenad]" routerLinkActive="router-link-active">
+        <fa-icon class="fa-1x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver Calendario</strong>
+      </a>
+    </div>
+    <div class="col-lg-5 col-md-12">
       <h5 class="text-center">{{ nombreUser | uppercase }}</h5>
     </div>
     <div class="col-lg-3 col-md-12">
@@ -224,7 +229,7 @@
       </div>
       <!-- Consulta -->
       <div *ngIf="!isBorrador">
-        <div *ngIf="solicitudesArmas; else elseArmas">
+        <div *ngIf='solicitudesArmas; else elseArmas'>
           <div class="row mt-2 titulos">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>ARMA</b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>TIPO TIRO</b></div>
@@ -237,13 +242,13 @@
           </div>
           <div *ngFor="let solicitudArma of solicitudesArmas">
             <app-arma [solicitudArma]="solicitudArma" [isConsulta]="true"></app-arma>
-          </div>
-          <ng-template #elseArmas>
-            <div class="row justify-content-center pt-2 mb-2">
-              <h6 class="no-existen">NO EXISTEN ARMAS</h6>
-            </div>
-          </ng-template>
+          </div>         
         </div>
+        <ng-template #elseArmas>
+          <div class="row justify-content-center pt-2 mb-2">
+            <h6 class="no-existen">NO EXISTEN ARMAS</h6>
+          </div>
+        </ng-template>
       </div>
       <!-- Edicion -->
       <div class="form-row py-2 mt-2 justify-content-between">
@@ -268,9 +273,9 @@
             </div>
             <div class="col-lg-3 col-md-12 ml-2 mr-2">
               <label>Coord Asentamiento: <sup class="text-danger">*</sup></label>
-              <input type="text" class="form-control" [(ngModel)]="solicitudArma.coordAsentamiento"
+              <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordAsentamiento"
                 placeholder="Coordenadas del Asentamiento" name="coordAsentamiento"
-                [readonly]="!isAdministrador && !isBorrador" required minlength="10" maxlength="30"
+                [readonly]="!isAdministrador && !isBorrador" required 
                 #coordAsentamiento="ngModel" [ngClass]="{
                     'is-invalid': coordAsentamiento.invalid && (coordAsentamiento.dirty || coordAsentamiento.touched),
                     'is-valid': !coordAsentamiento.invalid
@@ -280,16 +285,13 @@
                 <div *ngIf="coordAsentamiento.errors.required">
                   El campo es obligatorio
                 </div>
-                <div *ngIf="coordAsentamiento.errors.minlength">
-                  El campo debe tener al menos 10 caracteres
-                </div>
               </div>
             </div>
             <div class="col-lg-3 col-md-12 ml-2 mr-2">
               <label>Coord Punto Caida: <sup class="text-danger">*</sup></label>
-              <input type="text" class="form-control" [(ngModel)]="solicitudArma.coordPuntoCaida"
-                placeholder="Coordenadas del Punto de Caida" name="coordPuntoCaida" required minlength="10"
-                maxlength="30" #coordPuntoCaida="ngModel" [readonly]="!isAdministrador && !isBorrador" [ngClass]="{
+              <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordPuntoCaida"
+                placeholder="Coordenadas del Punto de Caida" name="coordPuntoCaida" required 
+                #coordPuntoCaida="ngModel" [readonly]="!isAdministrador && !isBorrador" [ngClass]="{
                     'is-invalid': coordPuntoCaida.invalid && (coordPuntoCaida.dirty || coordPuntoCaida.touched),
                     'is-valid': !coordPuntoCaida.invalid
                   }" />
@@ -298,16 +300,13 @@
                 <div *ngIf="coordPuntoCaida.errors.required">
                   El cmapo es obligatorio
                 </div>
-                <div *ngIf="coordPuntoCaida.errors.minlength">
-                  El campo debe tener al menos 10 caracteres
-                </div>
               </div>
             </div>
             <div class="col-lg-3 col-md-12 ml-2 mr-2">
               <label>Alcance Max: <sup class="text-danger">*</sup></label>
-              <input type="text" class="form-control" [(ngModel)]="solicitudArma.alcanceMax"
+              <input type="number" class="form-control" [(ngModel)]="solicitudArma.alcanceMax"
                 placeholder="Coordenadas del Punto de Caida" name="alcanceMax"
-                [readonly]="!isAdministrador && !isBorrador" required minlength="2" maxlength="10" #alcanceMax="ngModel"
+                [readonly]="!isAdministrador && !isBorrador" required #alcanceMax="ngModel"
                 [ngClass]="{
                     'is-invalid': alcanceMax.invalid && (alcanceMax.dirty || alcanceMax.touched),
                     'is-valid': !alcanceMax.invalid
@@ -316,16 +315,13 @@
                 <div *ngIf="alcanceMax.errors.required">
                   El campo es obligatorio
                 </div>
-                <div *ngIf="alcanceMax.errors.minlength">
-                  El campo debe tener al menos 2 caracteres
-                </div>
               </div>
             </div>
             <div class="col-lg-3 col-md-12 ml-2 mr-2">
               <label>Zona Seguridad Angulo: <sup class="text-danger">*</sup></label>
-              <input type="text" class="form-control" [(ngModel)]="solicitudArma.zonaSegAngulo"
+              <input type="number" class="form-control" [(ngModel)]="solicitudArma.zonaSegAngulo"
                 placeholder="Angulo de la zona de seguridad" name="zonaSegAng"
-                [readonly]="!isAdministrador && !isBorrador" minlength="2" maxlength="10" #zonaSegAng="ngModel"
+                [readonly]="!isAdministrador && !isBorrador" #zonaSegAng="ngModel"
                 [ngClass]="{
                     'is-invalid': zonaSegAng.invalid && (zonaSegAng.dirty || zonaSegAng.touched),
                     'is-valid': !zonaSegAng.invalid
@@ -333,9 +329,6 @@
               <div class="text-danger" *ngIf="zonaSegAng.invalid && (zonaSegAng.dirty || zonaSegAng.touched)">
                 <div *ngIf="zonaSegAng.errors.required">
                   El campo es obligatorio
-                </div>
-                <div *ngIf="zonaSegAng.errors.minlength">
-                  El campo debe tener al menos 2 caracteres
                 </div>
               </div>
             </div>
@@ -361,13 +354,13 @@
           <div *ngFor="let solicitudArma of solicitudesArmas">
             <!-- (idSolicitudArmaBorrada)="onActualizarSolArmasNuevas(idArmaSeleccionada)" -->
             <app-arma [solicitudArma]="solicitudArma" *ngIf='solicitudArma' [isConsulta]="false"></app-arma>
-          </div>
-          <ng-template #elseArmas>
-            <div class="row justify-content-center pt-2 mb-2">
-              <h6 class="no-existen">NO EXISTEN ARMAS</h6>
-            </div>
-          </ng-template>
+          </div>          
         </div>
+        <ng-template #elseArmas>
+          <div class="row justify-content-center pt-2 mb-2">
+            <h6 class="no-existen">NO EXISTEN ARMAS</h6>
+          </div>
+        </ng-template>
       </div>
     </div>
 
@@ -417,9 +410,9 @@
         </div>
         <div class="col-lg-3 col-md-12 ml-2 mr-2">
           <label>Arma Principal num disparos previstos: <sup class="text-danger">*</sup></label>
-          <input type="text" class="form-control" [readonly]="!isAdministrador && !isBorrador"
+          <input type="number" class="form-control" [readonly]="!isAdministrador && !isBorrador"
             [(ngModel)]="solicitud.armaPrpalNumDisparosPrev" placeholder="Numero de disparos previstos"
-            name="armappaldisprev" required minlength="1" maxlength="5" #armappaldisprev="ngModel" [ngClass]="{
+            name="armappaldisprev" required #armappaldisprev="ngModel" [ngClass]="{
                 'is-invalid': armappaldisprev.invalid && (armappaldisprev.dirty || armappaldisprev.touched),
                 'is-valid': !armappaldisprev.invalid
               }" />
@@ -427,9 +420,6 @@
             *ngIf="armappaldisprev.invalid && (armappaldisprev.dirty || armappaldisprev.touched)">
             <div *ngIf="armappaldisprev.errors.required">
               El campo es obligatorio
-            </div>
-            <div *ngIf="armappaldisprev.errors.minlength">
-              El campo debe tener al menos 1 caracter
             </div>
           </div>
         </div>
@@ -454,9 +444,9 @@
         </div>
         <div class="col-lg-3 col-md-12 ml-2 mr-2">
           <label>Arma Secundaria num disparos previstos: <sup class="text-danger">*</sup></label>
-          <input type="text" class="form-control" [(ngModel)]="solicitud.armaSecundNumDisparosPrev"
+          <input type="number" class="form-control" [(ngModel)]="solicitud.armaSecundNumDisparosPrev"
             placeholder="Numero de disparos previstos" name="armasecunddisprev"
-            [readonly]="!isAdministrador && !isBorrador" required minlength="1" maxlength="5"
+            [readonly]="!isAdministrador && !isBorrador" required 
             #armasecunddisprev="ngModel" [ngClass]="{
                 'is-invalid': armasecunddisprev.invalid && (armasecunddisprev.dirty || armasecunddisprev.touched),
                 'is-valid': !armasecunddisprev.invalid
@@ -465,9 +455,6 @@
             *ngIf="armasecunddisprev.invalid && (armasecunddisprev.dirty || armasecunddisprev.touched)">
             <div *ngIf="armasecunddisprev.errors.required">
               El campo es obligatorio
-            </div>
-            <div *ngIf="armasecunddisprev.errors.minlength">
-              El campo debe tener al menos 1 caracter
             </div>
           </div>
         </div>
@@ -579,8 +566,8 @@
         </div>
         <div class="col-lg-3 col-md-12 ml-2 mr-2">
           <label>Arma 1 Longitud: <sup class="text-danger">*</sup></label>
-          <input type="text" class="form-control" [(ngModel)]="solicitud.arma1CTlongitud" placeholder="Longitud Arma 1"
-            name="arma1Long" [readonly]="!isAdministrador && !isBorrador" required minlength="1" maxlength="8"
+          <input type="number" class="form-control" [(ngModel)]="solicitud.arma1CTlongitud" placeholder="Longitud Arma 1"
+            name="arma1Long" [readonly]="!isAdministrador && !isBorrador" required 
             #arma1Long="ngModel" [ngClass]="{
                 'is-invalid': arma1Long.invalid && (arma1Long.dirty || arma1Long.touched),
                 'is-valid': !arma1Long.invalid
@@ -588,9 +575,6 @@
           <div class="text-danger" *ngIf="arma1Long.invalid && (arma1Long.dirty || arma1Long.touched)">
             <div *ngIf="arma1Long.errors.required">
               El campo es obligatorio
-            </div>
-            <div *ngIf="arma1Long.errors.minlength">
-              El campo debe tener al menos 1 caracter
             </div>
           </div>
         </div>
@@ -611,15 +595,15 @@
         </div>
         <div class="col-lg-3 col-md-12 ml-2 mr-2">
           <label>Arma 2 Longitud: <sup class="text-danger">*</sup></label>
-          <input type="text" class="form-control" [(ngModel)]="solicitud.arma2CTlongitud" placeholder="Longitud Arma 2"
-            name="arma2Long" [readonly]="!isAdministrador && !isBorrador" minlength="1" maxlength="8"
+          <input type="number" class="form-control" [(ngModel)]="solicitud.arma2CTlongitud" placeholder="Longitud Arma 2"
+            name="arma2Long" [readonly]="!isAdministrador && !isBorrador"
             #arma2Long="ngModel" [ngClass]="{
                   'is-invalid': arma2Long.invalid && (arma2Long.dirty || arma2Long.touched),
                   'is-valid': !arma2Long.invalid
                 }" />
           <div class="text-danger" *ngIf="arma2Long.invalid && (arma2Long.dirty || arma2Long.touched)">
-            <div *ngIf="arma2Long.errors.minlength">
-              El campo debe tener al menos 1 caracter
+            <div *ngIf="arma1Long.errors.required">
+              El campo es obligatorio
             </div>
           </div>
         </div>
@@ -724,7 +708,7 @@
           <label>Numero de Personas: <sup class="text-danger">*</sup></label>
           <input type="number" class="form-control" [(ngModel)]="solicitud.numPersonasZE"
             placeholder="Numero de Personas" name="numPersonas" [readonly]="!isAdministrador && !isBorrador" required
-            #alcanceMax="ngModel" [ngClass]="{
+            #numPersonas="ngModel" [ngClass]="{
                 'is-invalid': numPersonas.invalid && (numPersonas.dirty || numPersonas.touched),
                 'is-valid': !numPersonas.invalid
               }" />
@@ -953,10 +937,10 @@
           </div>
         </div>
         <div class="col-5 text-right" *ngIf="!isFechaFinDocu">
-          <button class="btn text-white" [disabled]="isUsuarioNormal" (click)='mostrarNuevoFichero()'>Nuevo Fichero Cenad</button>
+          <button class="btn text-white" [disabled]="isUsuarioNormal" (click)='mostrarNuevoFicheroCenad()'>Nuevo Fichero Cenad</button>
         </div>
       </div>
-      <div class="card text-left mt-2" *ngIf='nuevoFichero'>
+      <div class="card text-left mt-2" *ngIf='nuevoFicheroCenad'>
         <img class="card-img-top" alt="">
         <div class="card-body">
           <form>
@@ -1032,10 +1016,10 @@
             readonly />         
         </div>
         <div class="col-5 text-right" *ngIf="!isFechaFinDocu">
-          <button class="btn text-white" [disabled]="isGestor" (click)='mostrarNuevoFichero()'>Nuevo Fichero Unidad</button>
+          <button class="btn text-white" [disabled]="isGestor" (click)='mostrarNuevoFicheroUnidad()'>Nuevo Fichero Unidad</button>
         </div>
       </div>
-      <div class="card text-left mt-5" *ngIf='nuevoFichero'>
+      <div class="card text-left mt-5" *ngIf='nuevoFicheroUnidad'>
         <img class="card-img-top" alt="">
         <div class="card-body">
           <form>

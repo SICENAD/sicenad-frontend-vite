@@ -165,8 +165,10 @@ export class SolicitudRecursoFormComponent implements OnInit {
   isSimulacionRealLaser: boolean = false;
   //Otros
   isOtros: boolean = false;
-  //variable que da visibilidad al formulario de crear fichero
-  nuevoFichero: boolean = false;
+  //variable que da visibilidad al formulario de crear un fichero para el Cenad
+  nuevoFicheroCenad: boolean = false;
+  //variable que da visibilidad al formulario de crear un fichero para la Unidad
+  nuevoFicheroUnidad: boolean = false;
   //variable que comunicara los datos del fichero
   ficheroVerDatos: FicheroImpl;
   //variable sobre la que crearemos un fichero nuevo Cenad
@@ -769,9 +771,14 @@ export class SolicitudRecursoFormComponent implements OnInit {
     }, 700);
   }
 
-  //metodo que habilita el formulario para crear fichero
-  mostrarNuevoFichero(): void {
-    this.nuevoFichero = true;
+   //metodo que habilita el formulario para crear un fichero para el Cenad
+   mostrarNuevoFicheroCenad(): void {
+    this.nuevoFicheroCenad = true;
+  }
+
+  //metodo que habilita el formulario para crear un fichero para la Unidad
+  mostrarNuevoFicheroUnidad(): void {
+    this.nuevoFicheroUnidad = true;
   }
 
   //metodo para crear un nuevo fichero
@@ -812,7 +819,8 @@ export class SolicitudRecursoFormComponent implements OnInit {
       //para ocultar el boton de crear solicitud
       this.boton = false;
       //cierra el formulario de crear fichero y resetea la variable
-      this.nuevoFichero = false;
+      this.nuevoFicheroCenad = false;
+      this.nuevoFicheroUnidad = false;
       this.fichero = new FicheroImpl();
       if (this.isGestor) {
         this.fichero.solicitudRecursoCenad = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}solicitudes/${this.solicitud.idSolicitud}/` : `${environment.hostSicenad}solicitudes/${this.solicitud.idSolicitud}`;

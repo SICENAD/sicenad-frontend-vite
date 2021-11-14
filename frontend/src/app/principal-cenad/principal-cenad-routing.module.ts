@@ -46,6 +46,10 @@ const routes: Routes = [
       {//listado de cartografias de cada cenad
         path: 'cartografias/:idCenad',
         loadChildren: () => import('../cartografias/cartografias.module').then(m => m.CartografiasModule)
+      },
+      {//calendario de solicitudes de cada cenad
+        path: 'calendarios/:idCenad',
+        loadChildren: () => import('../calendarios/calendarios.module').then(m => m.CalendariosModule)
       }
     ]
   }

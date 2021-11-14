@@ -57,9 +57,11 @@ export class HeaderPrincipalComponent implements OnInit {
   isCenadZaragoza: boolean = false;
   //variable que guarda todos los cenads
   cenads: Cenad[] = [];
-  // variables estáticas para logging...
+  //
+  isGestorNormal: boolean = false;
   isAdminGestorNormal: boolean = false;
   isAdminEsteCenad: boolean = false;
+  // variables estáticas para logging...
   static userAdminLogeado: UsuarioAdministrador = new UsuarioAdministradorImpl();
   static userGestorLogeado: UsuarioGestor = new UsuarioGestorImpl();
   static userNormalLogeado: UsuarioNormal = new UsuarioNormalImpl();
@@ -77,6 +79,8 @@ export class HeaderPrincipalComponent implements OnInit {
     this.isAdminEsteCenad = (this.idCenad === sessionStorage.idCenad && (sessionStorage.isAdmin === 'true'));
     //comprueba si estas loggeado como administrador, gestor o usuario normal
     this.isAdminGestorNormal = (sessionStorage.isAdmin === "true" || sessionStorage.isGestor === "true" || sessionStorage.isNormal === "true");
+    //comprueba si estas loggeado como gestor o usuario normal
+    this.isGestorNormal = (sessionStorage.isGestor === "true" || sessionStorage.isNormal === "true");
     //recupera al local storage las categorias padre, categorias, recursos y gestores de ese cenad
     if(!localStorage.getItem(`categorias_${this.idCenad}`)) {
       this.categoriaService.getCategoriasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`categorias_${this.idCenad}`, JSON.stringify(this.categoriaService.extraerCategorias(response))));

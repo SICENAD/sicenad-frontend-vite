@@ -4,6 +4,8 @@ import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { Arma } from "src/app/armas/models/arma";
 import { ArmaImpl } from "src/app/armas/models/arma-impl";
+import { SolicitudCalendario } from "src/app/calendarios/models/solicitud-calendario";
+import { SolicitudCalendarioImpl } from "src/app/calendarios/models/solicitud-calendario-impl";
 import { Categoria } from "src/app/categorias/models/categoria";
 import { CategoriaImpl } from "src/app/categorias/models/categoria-impl";
 import { Recurso } from "src/app/recursos/models/recurso";
@@ -13,6 +15,7 @@ import { TipoFormularioImpl } from "src/app/tiposFormulario/models/tipoFormulari
 import { Unidad } from "src/app/unidades/models/unidad";
 import { UnidadImpl } from "src/app/unidades/models/unidad-impl";
 import { UsuarioGestorImpl } from "src/app/usuarios/models/usuarioGestor-impl";
+import { UsuarioNormal } from "src/app/usuarios/models/usuarioNormal";
 import { UsuarioNormalImpl } from "src/app/usuarios/models/usuarioNormal-impl";
 import { environment } from "src/environments/environment";
 import { SolicitudArma } from "../models/solicitud-arma";
@@ -120,6 +123,13 @@ export class SolicitudRecursoService {
     );
   }
 
+  //método que pasándole el id de un Cenad y un estado, obtiene todas sus solicitudes
+  getSolicitudesDeCenadEstado(idCenad: string, estado: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.host}cenads/${idCenad}/solicitudesEstado/${estado}?page=0&size=1000`
+    );
+  }
+
   //método que pasándole el id de un Cenad, obtiene todas sus categorías
   getCategoriasDeCenad(idCenad: string): Observable<any> {
     return this.http.get<any>(
@@ -164,6 +174,17 @@ export class SolicitudRecursoService {
     return categorias;
   }
 
+   //método que extrae un array [] de Solicitudes
+   extraerSolicitudesCalendario(respuestaApi: any): any[] {
+    const solicitudes: any[] = [];
+    if (respuestaApi._embedded) {
+    respuestaApi._embedded.solicitudes.forEach((s) => {
+      solicitudes.push(this.mapearSolicitudCalendarioCenad(s));
+    });
+  }
+    return solicitudes;
+  }
+  
   //método que extrae un array [] de Solicitudes
   extraerSolicitudes(respuestaApi: any): SolicitudRecurso[] {
     const solicitudes: SolicitudRecurso[] = [];
@@ -203,6 +224,55 @@ export class SolicitudRecursoService {
     });
 
     return solicitudArma;
+  }
+
+  //metodo que mapea un objeto solicitudCalendario con un registro de la entidad solicitudRecurso
+  mapearSolicitudCalendarioCenad(solicitudApi: any): any {
+    const solicitudCalendario: SolicitudCalendario = new SolicitudCalendarioImpl();
+    let title: string = "";
+    let recurso: string  = "";
+    let idRecurso: string = "";
+    let usuario: string = "";
+    let urlUsuarioNormal: string = solicitudApi._links.usuarioNormal.href;
+    let urlRecurso: string = solicitudApi._links.recurso.href;
+    let usuarioNormal: UsuarioNormal = new UsuarioNormalImpl();
+    let unidad: Unidad = new UnidadImpl();
+    const url: string = solicitudApi._links.self.href;
+    const id: string = this.getId(url);
+    const estado: string = solicitudApi.estado;
+    const start: Date = this.cambiarFormatoDate2(solicitudApi.fechaHoraInicioRecurso.toString());
+    const end: Date = this.cambiarFormatoDate2(solicitudApi.fechaHoraFinRecurso.toString());
+    const color: string = solicitudApi.etiqueta;     
+    
+    //funcion anonima asincrona autoejecutable
+    (async () => {
+      this.getRecursoDeSolicitud(id).subscribe(async (response) => {
+      solicitudCalendario.recurso = this.mapearRecurso(response).nombre;
+        recurso = await solicitudCalendario.recurso;
+      });
+    })();
+
+    this.getUsuarioNormalDeSolicitud(id).subscribe((response) => {
+      usuarioNormal = this.mapearUsuarioNormal(response);
+    setTimeout(() => {
+      this.getUnidadDeUsuarioNormal(usuarioNormal.idUsuario).subscribe((response) => {
+        unidad = this.mapearUnidad(response);
+        title = unidad.nombre;
+      });
+      }, 800);  
+    });  
+
+    const solicitud = {id, estado, start, end, color, url, recurso, idRecurso, title, urlRecurso, urlUsuarioNormal, usuario};
+  
+    return solicitud;
+  }
+  
+
+  //método que recibe como parámetro un dato tipo string y devuelve un dato tipo Date con el formato 'yyyy-MM-dd HH:mm:ss'
+  cambiarFormatoDate2(date: string): Date {
+    let arrayDate: any[] = date.split(/[/\s\:\-]/g);
+    let fechaDate: Date = new Date(arrayDate[2], arrayDate[1] - 1, arrayDate[0], arrayDate[3], arrayDate[4], arrayDate[5]);
+    return fechaDate;
   }
 
 
