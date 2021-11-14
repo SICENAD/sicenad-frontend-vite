@@ -584,8 +584,11 @@ export class SolicitudRecursoService {
 
     return categoria;
   }
+  //metodo que envia las notificaciones por cambio de estado
+  enviarNotificacionCambioDeEstado(solicitud: SolicitudRecurso): Observable<any> {
+    console.log('servicio');
+    return this.http.get<any>(`${this.host}notificar/${solicitud.idSolicitud}`);
+  }
 }
-function deferred(arg0: () => void, deferred: any) {
-  throw new Error("Function not implemented.");
-}
+
 

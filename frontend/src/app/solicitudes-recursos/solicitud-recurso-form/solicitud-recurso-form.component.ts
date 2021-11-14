@@ -444,7 +444,7 @@ export class SolicitudRecursoFormComponent implements OnInit {
     }
   }
 
-  //método que se ejecuta al hacer click sobre el botón Actualilzar
+  //método que se ejecuta al hacer click sobre el botón Actualizar
   //actualiza los datos del formulario y solicita confirmación para tramitar la solicitud
   //en caso afirmativo, cambia el estado y redirecciona a la paǵina de solicitudes de recursos
   actualizar(): void {
@@ -460,6 +460,9 @@ export class SolicitudRecursoFormComponent implements OnInit {
       }
     }
     this.solicitudService.update(this.idSolicitud, this.solicitud).subscribe((response) => {
+      if(this.estadoAnterior !== this.estadoSeleccionado) {
+        this.solicitudService.enviarNotificacionCambioDeEstado(this.solicitud).subscribe();
+      }
       this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
     });
   }
@@ -472,7 +475,6 @@ export class SolicitudRecursoFormComponent implements OnInit {
     this.solicitud.estado = "Solicitada";
     this.actualizarDatos();
     this.solicitudService.update(this.idSolicitud, this.solicitud).subscribe((response) => {
-      // console.log(response);
       this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
     });
   }
@@ -483,12 +485,11 @@ export class SolicitudRecursoFormComponent implements OnInit {
     this.actualizarDatos();
     this.solicitud.estado = "Validada";
     this.solicitudService.update(this.idSolicitud, this.solicitud).subscribe((response) => {
-      //console.log(response);
       this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
     });
   }
 
-  //método que se ejecuta cuando se produce un cambio en el imput de la fecha del formulario
+  //método que se ejecuta cuando se produce un cambio en el input de la fecha del formulario
   //comprueba si la fecha de fin de recurso es menor que la fecha de inicio
   //en caso afirmativo muestra un mensaje por pantalla e inicializa el valor de la fecha
   verificarFechas(): void {
