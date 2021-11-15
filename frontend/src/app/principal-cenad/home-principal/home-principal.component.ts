@@ -26,10 +26,12 @@ export class HomePrincipalComponent implements OnInit {
   isLogeado: boolean = false;
   //variable que almacena si un usuario normal está logeado
   isUserNormal: boolean = false;
+  //variable que almacena si un usuario superAdministrador está logeado
+  isSuperAdmin: boolean = false;
   //variable que representa el cenad
   cenad: Cenad = new CenadImpl();
   //variable para el id del CENAD (barra de navegacion)
-  idCenad: string = "";
+  idCenad: string = "";  
   //variable para el id de la Solicitud (barra de navegación). Con este valor entrará en el formulario en modo Creación
   idSolicitud: string = "";
   //variable para almacenar el nombre del campo escudo del cenad y construir la url
@@ -51,6 +53,9 @@ export class HomePrincipalComponent implements OnInit {
   comprobarLogin(): void {
     if (sessionStorage.isNormal == "true") {
       this.isUserNormal = true;
+    }
+    if (sessionStorage.isSuperAdmin == "true") {
+      this.isSuperAdmin = true;
     }
   }
 

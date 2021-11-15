@@ -72,7 +72,11 @@ export class FicheroSolicitudComponent implements OnInit {
 
   //método que comprueba el rol del usuario logeado en el sistema
   comprobarUser(): void {
-    this.isAutenticado = sessionStorage.isLogged;
+    if (sessionStorage.isLogged == undefined) {
+      this.isAutenticado = false;
+    } else {
+    sessionStorage.isLogged.toString() == "true" ? this.isAutenticado = true : this.isAutenticado = false;
+    }
     if (this.isAutenticado) {
     } if (sessionStorage.isGestor == "true" && this.idCenad == sessionStorage.idCenad) {
       this.isGestor = true;

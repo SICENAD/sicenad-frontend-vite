@@ -57,7 +57,8 @@ export class HeaderPrincipalComponent implements OnInit {
   isCenadZaragoza: boolean = false;
   //variable que guarda todos los cenads
   cenads: Cenad[] = [];
-  //
+  //variables para comprobar el usuario logeado
+  isSuperAdmin: boolean = false;
   isGestorNormal: boolean = false;
   isAdminGestorNormal: boolean = false;
   isAdminEsteCenad: boolean = false;
@@ -75,6 +76,8 @@ export class HeaderPrincipalComponent implements OnInit {
     this.cargarCenad();
     // realiza el proceso de carga de todos los CENAD,s/CMT,s y comprueba si el CENAD/CMT seleccionado en el home es el de zaragoza
     this.cargarCenads();
+    //comprueb a si estas logeado como superAdministrador
+    this.isSuperAdmin = (sessionStorage.isSuperAdmin === "true");
     //comprueba si estas loggeado como administrador de este cenad
     this.isAdminEsteCenad = (this.idCenad === sessionStorage.idCenad && (sessionStorage.isAdmin === 'true'));
     //comprueba si estas loggeado como administrador, gestor o usuario normal

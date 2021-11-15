@@ -128,3 +128,10 @@ label.ver-todas {
   background-color: #a3b18a;
 }
 
+.no-existen {
+  margin-top: 10px;
+  color: maroon;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px wheat;
+  font-size: x-large;
+}

@@ -79,7 +79,11 @@ export class SolicitudesTodasComponent implements OnInit {
 
   //método que comprueba el rol del usuario logeado en el sistema
   comprobarUser(): void {
-    this.isAutenticado = sessionStorage.isLogged;
+    if (sessionStorage.isLogged == undefined) {
+      this.isAutenticado = false;
+    } else {
+    sessionStorage.isLogged.toString() == "true" ? this.isAutenticado = true : this.isAutenticado = false;
+    }
     if (this.isAutenticado) {
       if (sessionStorage.isAdmin == "true" && this.idCenad == sessionStorage.idCenad) {
         this.isAdministrador = true;
@@ -329,7 +333,7 @@ export class SolicitudesTodasComponent implements OnInit {
 
   //método que realiza los filtros en el array de solicitudes del cenad
   filtrarTodas(): void {
-    console.log(this.isFechaActual);
+   // console.log(this.isFechaActual);
     if (!this.isFechaActual) {
       if (this.fechaFinSeleccionada >= this.fechaInicioSeleccionada || !this.fechaInicioSeleccionada && !this.fechaFinSeleccionada) {
         if (this.unidadSeleccionada && this.categoriaSeleccionada && this.fechaInicioSeleccionada && this.fechaFinSeleccionada) {

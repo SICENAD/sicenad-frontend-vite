@@ -30,7 +30,7 @@
                 <div class="dropdown-menu consultar" aria-labelledby="navbarDropdownMenuLink">
                   <a class="nav-link" [routerLink]="['consultaRecursos', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon class='mr-2' [icon]="faRecurso"></fa-icon>Recurso</a>
-                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                  <a class="nav-link" [hidden]="isSuperAdmin" [routerLink]="['calendarios', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon class='mr-2' [icon]="faCalendario"></fa-icon>Calendario</a>
                   <a class="nav-link" [routerLink]="['cartografias', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon class='mr-2' [icon]="faCartografia"></fa-icon>Cartografía</a>

@@ -230,11 +230,13 @@ export class SolicitudRecursoService {
   mapearSolicitudCalendarioCenad(solicitudApi: any): any {
     const solicitudCalendario: SolicitudCalendario = new SolicitudCalendarioImpl();
     let title: string = "";
-    let recurso: string  = "";
-    let idRecurso: string = "";
+    let recurso: string  = "";    
     let usuario: string = "";
-    let urlUsuarioNormal: string = solicitudApi._links.usuarioNormal.href;
-    let urlRecurso: string = solicitudApi._links.recurso.href;
+    const idUnidad: string = "";
+    const idRecurso: string = "";
+    const idGestorRecurso: string = "";
+    const urlUsuarioNormal: string = solicitudApi._links.usuarioNormal.href;
+    const urlRecurso: string = solicitudApi._links.recurso.href;
     let usuarioNormal: UsuarioNormal = new UsuarioNormalImpl();
     let unidad: Unidad = new UnidadImpl();
     const url: string = solicitudApi._links.self.href;
@@ -262,7 +264,7 @@ export class SolicitudRecursoService {
       }, 800);  
     });  
 
-    const solicitud = {id, estado, start, end, color, url, recurso, idRecurso, title, urlRecurso, urlUsuarioNormal, usuario};
+    const solicitud = {id, estado, start, end, color, url, recurso, idRecurso, title, urlRecurso, idGestorRecurso, urlUsuarioNormal, usuario, idUnidad};
   
     return solicitud;
   }
