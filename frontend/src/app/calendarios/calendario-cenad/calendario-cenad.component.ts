@@ -37,12 +37,16 @@ export class CalendarioCenadComponent implements OnInit {
   solicitudesCenadCalendarioSolicitadas: any[] = [];
   //solicitudes planificadas por el superadministrador
   solicitudesCenadCalendarioPlanificadas: any[] = [];
+  //solicitudes Solicitadas y Validadas
+  solicitudesCenadCalendarioTodas: any[] = [];
   //solicitudes validadas FILTRADAS por el administrador del Cenad
   solicitudesCenadCalendarioValidadasFiltro: any[] = [];
   //solicitudes solicitadas FILTRADAS por la Unidad
   solicitudesCenadCalendarioSolicitadasFiltro: any[] = [];
   //solicitudes planificadas FILTRADAS por el superadministrador
   solicitudesCenadCalendarioPlanificadasFiltro: any[] = [];
+  //solicitudes Todas (solicitas y validadas) FILTRADAS
+  solicitudesCenadCalendarioTodasFiltro: any[] = [];
   //id del Cenad
   idCenad: string = "";
   //para controlar si el usuario superAdministrador accede al calendario desde
@@ -103,12 +107,15 @@ export class CalendarioCenadComponent implements OnInit {
   recurso: Recurso = new RecursoImpl();
   //si se muestra/oculta el calendario de solicitudes Solicitadas/Validadas
   calendarVisible: boolean = true;
+  //si se muestran las solicitudes Solicitadas y Validadas
+  todasVisible: boolean = false;
   //si se muestra/oculta el calendario de solicitudes Planificadas
   calendarPlanVisible: boolean = true;
   //opciones de los diferentes calendarios
   calendarOptionsSolicitadas: CalendarOptions;
   calendarOptionsValidadas: CalendarOptions;
   calendarOptionsPlanificadas: CalendarOptions;
+  calendarOptionsTodas: CalendarOptions;
 
   constructor(private activateRoute: ActivatedRoute, private solicitudService: SolicitudRecursoService,
     private miDatePipe: DatePipe, private router: Router, private recursoService: RecursoService) { }
@@ -141,8 +148,9 @@ export class CalendarioCenadComponent implements OnInit {
       sessionStorage.isLogged.toString() == "true" ? this.isAutenticado = true : this.isAutenticado = false;
     }
     if (this.isAutenticado == true) {
-      this.isSolicitada = true;
+      this.isSolicitada = false;
       this.isValidada = false;
+      this.todasVisible = true;
       if (sessionStorage.isAdmin == "true" && this.idCenad == sessionStorage.idCenad) {
         this.isAdministrador = true;
       } else if (sessionStorage.isGestor == "true" && this.idCenad == sessionStorage.idCenad) {
@@ -157,6 +165,7 @@ export class CalendarioCenadComponent implements OnInit {
     } else {
       this.isSolicitada = false;
       this.isValidada = true;
+      this.todasVisible = false;
     }
   }
 
@@ -178,11 +187,13 @@ export class CalendarioCenadComponent implements OnInit {
       if (this.isUsuarioNormal) {
         this.solicitudesCenadCalendarioSolicitadas = this.filtarSolicitudes(this.solicitudesCenadCalendarioSolicitadas);
         this.solicitudesCenadCalendarioValidadas = this.filtarSolicitudes(this.solicitudesCenadCalendarioValidadas);
+        this.solicitudesCenadCalendarioTodas = this.filtarSolicitudes(this.solicitudesCenadCalendarioTodas);
       }
       if (this.isGestor) {
         this.solicitudesCenadCalendarioPlanificadas = this.filtarSolicitudes(this.solicitudesCenadCalendarioPlanificadas);
         this.solicitudesCenadCalendarioSolicitadas = this.filtarSolicitudes(this.solicitudesCenadCalendarioSolicitadas);
         this.solicitudesCenadCalendarioValidadas = this.filtarSolicitudes(this.solicitudesCenadCalendarioValidadas);
+        this.solicitudesCenadCalendarioTodas = this.filtarSolicitudes(this.solicitudesCenadCalendarioTodas);
       }
       this.cargarParametrosCalendario();
     }, 2000);
@@ -194,27 +205,44 @@ export class CalendarioCenadComponent implements OnInit {
   cargarSolicitudes(): void {
     //obtiene de la API las solicitudes con estado Validadas
     this.solicitudService.getSolicitudesDeCenadEstado(this.idCenad, "Validada").subscribe((response) => {
-      this.solicitudesCenadCalendarioValidadas = this.solicitudService.extraerSolicitudesCalendario(response);
-      setTimeout(() => {
-        !this.isAutenticado ? this.bloquearUrl = true : this.isSuperAdmin ? this.bloquearUrl = true : this.bloquearUrl = false;
-        this.solicitudesCenadCalendarioValidadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioValidadas);
-      }, 700);
+      if (response) {
+        this.solicitudesCenadCalendarioValidadas = this.solicitudService.extraerSolicitudesCalendario(response);
+        setTimeout(() => {
+          !this.isAutenticado ? this.bloquearUrl = true : this.isSuperAdmin ? this.bloquearUrl = true : this.bloquearUrl = false;
+          this.solicitudesCenadCalendarioValidadas.length != 0 ? this.solicitudesCenadCalendarioValidadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioValidadas) : "";
+        }, 700);
+      }      
     });
     //obtiene de la API las solicitudes con estado Solicitada
     this.solicitudService.getSolicitudesDeCenadEstado(this.idCenad, "Solicitada").subscribe((response) => {
-      this.solicitudesCenadCalendarioSolicitadas = this.solicitudService.extraerSolicitudesCalendario(response);
-      setTimeout(() => {
-        !this.isAutenticado ? this.bloquearUrl = true : this.isSuperAdmin ? this.bloquearUrl = true : this.bloquearUrl = false;
-        this.solicitudesCenadCalendarioSolicitadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioSolicitadas);
-      }, 700);
+      if (response) {
+        this.solicitudesCenadCalendarioSolicitadas = this.solicitudService.extraerSolicitudesCalendario(response);
+        setTimeout(() => {
+          !this.isAutenticado ? this.bloquearUrl = true : this.isSuperAdmin ? this.bloquearUrl = true : this.bloquearUrl = false;
+          this.solicitudesCenadCalendarioSolicitadas.length != 0 ? this.solicitudesCenadCalendarioSolicitadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioSolicitadas) : "";
+        }, 700);
+      }      
     });
+    //una vez que se han  actualizado los arrays de Solicitadas y Validadas, genera el array de todas
+    setTimeout(() => {
+      if (this.solicitudesCenadCalendarioSolicitadas.length != 0 && this.solicitudesCenadCalendarioValidadas.length != 0) {
+        this.solicitudesCenadCalendarioTodas = this.solicitudesCenadCalendarioSolicitadas.concat(this.solicitudesCenadCalendarioValidadas);
+        } else if (this.solicitudesCenadCalendarioSolicitadas.length != 0) {
+          this.solicitudesCenadCalendarioTodas = this.solicitudesCenadCalendarioSolicitadas;
+              } else {
+                this.solicitudesCenadCalendarioTodas = this.solicitudesCenadCalendarioValidadas;
+              }
+     // console.log('todas', this.solicitudesCenadCalendarioTodas);
+    }, 800);
     //obtiene de la API las solicitudes con estado Planificada
     this.solicitudService.getSolicitudesDeCenadEstado(this.idCenad, "Planificada").subscribe((response) => {
-      this.solicitudesCenadCalendarioPlanificadas = this.solicitudService.extraerSolicitudesCalendario(response);
-      setTimeout(() => {
-        this.isSuperAdmin ? this.bloquearUrl = false : this.bloquearUrl = true;
-        this.solicitudesCenadCalendarioPlanificadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioPlanificadas);
-      }, 700);
+      if (response) {
+        this.solicitudesCenadCalendarioPlanificadas = this.solicitudService.extraerSolicitudesCalendario(response);
+        setTimeout(() => {
+          this.isSuperAdmin ? this.bloquearUrl = false : this.bloquearUrl = true;
+          this.solicitudesCenadCalendarioPlanificadas.length != 0 ? this.solicitudesCenadCalendarioPlanificadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioPlanificadas) : "";
+        }, 700);
+      }      
     });
   }
 
@@ -225,9 +253,9 @@ export class CalendarioCenadComponent implements OnInit {
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'listYear,dayGridMonth,timeGridWeek,timeGridDay'
+        right: 'listYear,dayGridMonth,dayGridWeek,timeGridDay'
       },
-      initialView: 'timeGridWeek',
+      initialView: 'dayGridWeek',
       events: this.solicitudesCenadCalendarioSolicitadas,
       weekends: true,
       editable: false,
@@ -243,9 +271,9 @@ export class CalendarioCenadComponent implements OnInit {
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'listYear,dayGridMonth,timeGridWeek,timeGridDay'
+        right: 'listYear,dayGridMonth,dayGridWeek,timeGridDay'
       },
-      initialView: 'timeGridWeek',
+      initialView: 'dayGridWeek',
       events: this.solicitudesCenadCalendarioValidadas,
       weekends: true,
       editable: false,
@@ -261,10 +289,28 @@ export class CalendarioCenadComponent implements OnInit {
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'listYear, dayGridMonth,timeGridWeek,timeGridDay'
+        right: 'listYear, dayGridMonth,dayGridWeek,timeGridDay'
       },
-      initialView: 'listYear',
+      initialView: 'dayGridWeek',
       events: this.solicitudesCenadCalendarioPlanificadas,
+      weekends: true,
+      editable: false,
+      selectable: true,
+      selectMirror: true,
+      dayMaxEvents: true,
+      displayEventEnd: true,
+      displayEventTime: true
+    };
+
+    this.calendarOptionsTodas = {
+      locale: esLocale,
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'listYear, dayGridMonth,dayGridWeek,timeGridDay'
+      },
+      initialView: 'dayGridWeek',
+      events: this.solicitudesCenadCalendarioTodas,
       weekends: true,
       editable: false,
       selectable: true,
@@ -280,14 +326,12 @@ export class CalendarioCenadComponent implements OnInit {
   //gestor, solo puede ver las solicitudes que gestiona
   filtarSolicitudes(arraySolicitudes: any[]): any[] {
     let arraySolicitudesFiltro: any[] = [];
-    console.log('arraysolicitudes', arraySolicitudes);
     if (this.isUsuarioNormal) {
       arraySolicitudesFiltro = arraySolicitudes.filter((s => s.idUnidad.toString() == this.idUnidadUserNormal));
     }
     if (this.isGestor) {
       arraySolicitudesFiltro = arraySolicitudes.filter(s => s.idGestorRecurso.toString() == this.idUserGestorLogeado);
     }
-    console.log('arraysolicitudesFILTRO', arraySolicitudesFiltro);
     return arraySolicitudesFiltro;
   }
 
@@ -349,6 +393,12 @@ export class CalendarioCenadComponent implements OnInit {
       this.isSolicitada = false;
       this.calendarOptionsValidadas.events = this.solicitudesCenadCalendarioValidadasFiltro;
     }
+    if (estado == "Otro" && this.todasVisible) {
+      this.solicitudesCenadCalendarioTodasFiltro = this.solicitudesCenadCalendarioTodas.filter(s => s.idRecurso.valueOf().toString() == this.idRecursoSeleccionado);
+      this.isSolicitada = false;
+      this.isValidada = false;
+      this.calendarOptionsTodas.events = this.solicitudesCenadCalendarioTodasFiltro;
+    }
     if (estado == "borradoFiltros-SolVal" && this.isSolicitada) {
       this.isValidada = false;
       this.calendarOptionsSolicitadas.events = this.solicitudesCenadCalendarioSolicitadas;
@@ -356,6 +406,11 @@ export class CalendarioCenadComponent implements OnInit {
     if (estado == "borradoFiltros-SolVal" && this.isValidada) {
       this.isSolicitada = false;
       this.calendarOptionsValidadas.events = this.solicitudesCenadCalendarioValidadas;
+    }
+    if (estado == "borradoFiltros-SolVal" && this.todasVisible) {
+      this.isSolicitada = false;
+      this.isValidada = false;
+      this.calendarOptionsTodas.events = this.solicitudesCenadCalendarioTodas;
     }
     if (estado == "borradoFiltros-Plan" && this.isPlanificada) {
       this.isPlanificada = false;
@@ -426,10 +481,29 @@ export class CalendarioCenadComponent implements OnInit {
     }
   }
 
-  //método que se ejecuta al hacer click sobre "Ver Todas" redirecciona
-  //al componente SolicitudesTodas
+  //método que se ejecuta al hacer click sobre "Ver Lista" redirecciona
+  //al componente SolicitudesRecursos
   verTodas(): void {
     this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
+  }
+
+  //método que se ejecuta al hacer click sobre "Ver Lista Todas" redirecciona
+  //al componente SolicitudesTodas
+  verTodasSolPla(): void {
+    this.router.navigate([`/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}`]);
+  }
+
+  //método que se ejecuta al hacer click sobre la casilla de verificación mostrarTodas
+  //
+  mostrarTodas(): void {
+    this.todasVisible = !this.todasVisible;
+    if (this.todasVisible) {
+      this.isSolicitada = false;
+      this.isValidada = false;
+    } else {
+      this.isSolicitada = true;
+      this.isValidada = false;
+    }
   }
 
   //
@@ -442,9 +516,11 @@ export class CalendarioCenadComponent implements OnInit {
     if (estado == "Solicitada") {
       this.isSolicitada = true;
       this.isValidada = false;
+      this.todasVisible = false;
     } else {
       this.isSolicitada = false;
       this.isValidada = true;
+      this.todasVisible = false;
     }
   }
 

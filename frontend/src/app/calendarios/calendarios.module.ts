@@ -6,10 +6,11 @@ import { CalendariosRoutingModule } from './calendarios-routing.module';
 import { CalendarioCenadComponent } from './calendario-cenad/calendario-cenad.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
+import { PlanificacionCalendarioFormComponent } from './planificacion-calendario-form/planificacion-calendario-form.component';
 
 
 @NgModule({
-  declarations: [CalendarioCenadComponent],
+  declarations: [CalendarioCenadComponent, PlanificacionCalendarioFormComponent],
   imports: [
     CommonModule,
     CalendariosRoutingModule,
