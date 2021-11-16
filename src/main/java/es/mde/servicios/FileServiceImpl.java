@@ -27,6 +27,7 @@ public class FileServiceImpl implements FileServiceAPI {
 	private static String rutaDocSolicitudes = "archivos/docSolicitudes";
 	private static String rutaCartografias = "archivos/cartografias";
 	private static String rutaNormativas = "archivos/normativas";
+	private static String rutaInfoCenads = "archivos/infoCenads";
 
 	/**
 	 * Me permite inyectar valores desde el archivo properties para poder modificar
@@ -40,20 +41,24 @@ public class FileServiceImpl implements FileServiceAPI {
 	 *                           asociados a solicitudes
 	 * @param rutaCartografias   Define la ruta donde se guardaran los distintos
 	 *                           conjuntos cartograficos
-	 * @param rutaCartografias   Define la ruta donde se guardaran los distintos
+	 * @param rutaNormativas   	 Define la ruta donde se guardaran los distintos
 	 *                           conjuntos de normativas
+	 * @param rutaInfoCenads     Define la ruta donde se guardaran los distintos
+	 *                           infoCenads	 
 	 */
 	@Autowired
 	public FileServiceImpl(@Qualifier("rutaEscudos") String rutaEscudos,
 			@Qualifier("rutaDocRecursos") String rutaDocRecursos,
 			@Qualifier("rutaDocSolicitudes") String rutaDocSolicitudes,
 			@Qualifier("rutaCartografias") String rutaCartografias,
+			@Qualifier("rutaInfoCenads") String rutaInfoCenads,
 			@Qualifier("rutaNormativas") String rutaNormativas) {
 		FileServiceImpl.rutaEscudos = rutaEscudos;
 		FileServiceImpl.rutaDocRecursos = rutaDocRecursos;
 		FileServiceImpl.rutaDocSolicitudes = rutaDocSolicitudes;
 		FileServiceImpl.rutaCartografias = rutaCartografias;
 		FileServiceImpl.rutaNormativas = rutaNormativas;
+		FileServiceImpl.rutaInfoCenads = rutaInfoCenads;
 	}
 
 	private final Path escudosFolder = Paths.get(rutaEscudos);
@@ -61,6 +66,7 @@ public class FileServiceImpl implements FileServiceAPI {
 	private final Path docRecursosFolder = Paths.get(rutaDocRecursos);
 	private final Path cartografiasFolder = Paths.get(rutaCartografias);
 	private final Path normativasFolder = Paths.get(rutaNormativas);
+	private final Path infoCenadsFolder = Paths.get(rutaInfoCenads);
 
 	// *******************************
 	// Métodos para tratar los escudos
@@ -394,8 +400,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	}
 
 	/**
-	 * Metodo para guardar varios archivos de una normativa (en la
-	 * actualidad no se usa por querer añadir informacion individual a cada fichero)
+	 * Metodo para guardar varios archivos de una normativa (en la actualidad no se
+	 * usa por querer añadir informacion individual a cada fichero)
 	 */
 	@Override
 	public void saveNormativas(List<MultipartFile> files, String id) throws Exception {
@@ -412,5 +418,80 @@ public class FileServiceImpl implements FileServiceAPI {
 		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
 		return Files.walk(normativasFolder2, 1).filter(path -> !path.equals(normativasFolder2))
 				.map(normativasFolder2::relativize);
+	}
+
+	// *************************************************************
+	// Métodos para tratar los ficheros asociados a infoCenad
+	// *************************************************************
+
+	/**
+	 * Metodo para guardar el archivo de infoCenad
+	 */
+	@Override
+	public void saveInfoCenad(MultipartFile file, String id) throws Exception {
+		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Files.createDirectories(infoCenadsFolder2);
+		Files.copy(file.getInputStream(), infoCenadsFolder2.resolve(file.getOriginalFilename()));
+	}
+
+	/**
+	 * Metodo para borrar el archivo de infoCenad
+	 */
+	@Override
+	public void borrarInfoCenad(String name, String id) throws Exception {
+		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Path file = infoCenadsFolder2.resolve(name);
+		Files.deleteIfExists(file);
+	}
+
+	/**
+	 * Metodo para borrar la carpeta de infoCenad
+	 */
+	@Override
+	public void borrarCarpetaInfoCenad(String id) throws Exception {
+		Path carpeta = infoCenadsFolder.resolve(id);
+		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+	}
+
+	/**
+	 * Metodo para cargar el archivo de infoCenad
+	 */
+	@Override
+	public Resource loadInfoCenad(String name, String id) throws Exception {
+		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Path file = infoCenadsFolder2.resolve(name);
+		Resource resource = new UrlResource(file.toUri());
+		return resource;
+	}
+
+	/**
+	 * Metodo para cargar el archivo de infoCenad
+	 */
+	@Override
+	public Resource loadInfoCenad(String name) throws Exception {
+		Path file = infoCenadsFolder.resolve(name);
+		Resource resource = new UrlResource(file.toUri());
+		return resource;
+	}
+
+	/**
+	 * Metodo para guardar varios archivos de infoCenad (en la actualidad no se
+	 * usa por querer añadir informacion individual a cada fichero)
+	 */
+	@Override
+	public void saveInfoCenads(List<MultipartFile> files, String id) throws Exception {
+		for (MultipartFile file : files) {
+			this.saveInfoCenad(file, id);
+		}
+	}
+
+	/**
+	 * Metodo para cargar varios archivos de infoCenad
+	 */
+	@Override
+	public Stream<Path> loadAllInfoCenads(String id) throws Exception {
+		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		return Files.walk(infoCenadsFolder2, 1).filter(path -> !path.equals(infoCenadsFolder2))
+				.map(infoCenadsFolder2::relativize);
 	}
 }

@@ -37,6 +37,9 @@ public class ConfiguracionPorJava {
 	@Value("${ruta.normativas}")
 	private String rutaNormativas;
 	
+	@Value("${ruta.infoCenads}")
+	private String rutaInfoCenads;
+	
 	@Value("${size.escudos}")
 	private long sizeLimiteEscudo;
 	
@@ -94,6 +97,16 @@ public class ConfiguracionPorJava {
 	public String getRutaNormativas() {
 
 		return rutaNormativas;
+	}
+	
+	/**
+	 * Devuelve la ruta donde se guardará la imagen del mapa de ayuda a llegar al CENAD
+	 * @return Devuelve la ruta donde se guardará la imagen del mapa de ayuda a llegar al CENAD
+	 */
+	@Bean("rutaInfoCenads")
+	public String getRutaInfoCenads() {
+
+		return rutaInfoCenads;
 	}
 
 	/**

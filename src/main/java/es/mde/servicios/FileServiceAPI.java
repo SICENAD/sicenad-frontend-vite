@@ -262,7 +262,7 @@ public interface FileServiceAPI {
 	public void saveNormativa(MultipartFile file, String id) throws Exception;
 
 	/**
-	 * Metodo para borrar un archivo de normativa 
+	 * Metodo para borrar un archivo de normativa
 	 * 
 	 * @param name Nombre del archivo
 	 * @param id   Id del CENAD
@@ -311,4 +311,68 @@ public interface FileServiceAPI {
 	 * @throws Exception
 	 */
 	public Stream<Path> loadAllNormativas(String id) throws Exception;
+
+	// *******************************
+	// Métodos para tratar las imagenes de InfoCenad
+	// *******************************
+
+	/**
+	 * Metodo para guardar un archivo de información del CENAD
+	 * 
+	 * @param file Archivo a subir
+	 * @param id Id del CENAD
+	 * @throws Exception
+	 */
+	public void saveInfoCenad(MultipartFile file, String id) throws Exception;
+
+	/**
+	 * Metodo para borrar un archivo de información del CENAD
+	 * 
+	 * @param name Nombre del archivo
+	 * @param id   Id del CENAD
+	 * @throws Exception
+	 */
+	public void borrarInfoCenad(String name, String id) throws Exception;
+
+	/**
+	 * Metodo para borrar la carpeta de información del CENAD
+	 * 
+	 * @param id Id del CENAD
+	 * @throws Exception
+	 */
+	public void borrarCarpetaInfoCenad(String id) throws Exception;
+
+	/**
+	 * Metodo para cargar un archivo de información del CENAD
+	 * 
+	 * @param name Nombre del archivo
+	 * @param id   Id del CENAD
+	 * @throws Exception
+	 */
+	public Resource loadInfoCenad(String name, String id) throws Exception;
+
+	/**
+	 * Metodo para cargar un archivo de información del CENAD
+	 * 
+	 * @param name Nombre del archivo
+	 * @throws Exception
+	 */
+	public Resource loadInfoCenad(String name) throws Exception;
+
+	/**
+	 * Metodo para guardar varios archivos de información del CENAD
+	 * 
+	 * @param files Lista de archivos a subir
+	 * @param id    Id del CENAD
+	 * @throws Exception
+	 */
+	public void saveInfoCenads(List<MultipartFile> files, String id) throws Exception;
+
+	/**
+	 * Metodo para cargar varios archivos de información del CENAD
+	 * 
+	 * @param id Id del CENAD
+	 * @throws Exception
+	 */
+	public Stream<Path> loadAllInfoCenads(String id) throws Exception;
 }

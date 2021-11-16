@@ -33,6 +33,7 @@ public class Cenad {
 	private String tfno;
 	private String email;
 	private String escudo;
+	private String infoCenad;
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Categoria.class, mappedBy = "cenad")
 	private Collection<Categoria> categorias = new ArrayList<>();
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Cartografia.class, mappedBy = "cenad")
@@ -179,6 +180,22 @@ public class Cenad {
 		this.escudo = escudo;
 	}
 
+	/**
+	 * Devuelve el nombre del archivo de la imagen del mapa del CENAD
+	 * @return Devuelve el nombre del archivo de la imagen del mapa del CENAD
+	 */
+	public String getInfoCenad() {
+		return infoCenad;
+	}
+
+	/**
+	 * Guarda el nombre del archivo de la imagen del mapa del CENAD
+	 * @param escudo Nombre del archivo de la imagen del mapa del CENAD
+	 */
+	public void setInfoCenad(String infoCenad) {
+		this.infoCenad = infoCenad;
+	}
+	
 	/**
 	 * Devuelve las categorias del CENAD
 	 * @return Devuelve las categorias del CENAD
