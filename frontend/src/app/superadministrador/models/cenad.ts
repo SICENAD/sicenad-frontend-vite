@@ -9,7 +9,8 @@ export interface Cenad {
   email: string;
   escudo: string;
   provincia: number;
+  infoCenad: string;
   url: string;
-  usuarioAdministrador: UsuarioAdministrador;
+  usuarioAdministrador: UsuarioAdministrador | any;
   tieneAdmin: boolean;
 }

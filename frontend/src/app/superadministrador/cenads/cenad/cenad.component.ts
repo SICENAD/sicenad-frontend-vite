@@ -11,20 +11,29 @@ import { CenadService } from '../../service/cenad.service';
   styleUrls: ['./cenad.component.css']
 })
 export class CenadComponent implements OnInit {
-  //variable que trae del otro componente el cenad
+  /**
+   * variable que trae del otro componente el cenad
+   */
   @Input() cenad: Cenad;
-  //variable que trae del otro componente el usuario administrador
-  @Input() usuarioAdministrador: UsuarioAdministrador;
-  //variables que emiten el cenad/administrador al otro componente
+  /**
+   * variable que emite el cenad al otro componente
+   */
   @Output() cenadSeleccionado = new EventEmitter<Cenad>();
-  @Output() usuarioAdministradorSeleccionado = new EventEmitter<UsuarioAdministrador>();
-  //variable del icono "editar"
+  /**
+   * variable del icono "editar"
+   */
   faEdit = faEdit;
-  //variable para capturar el nombre de la provincia
+  /**
+   * variable para capturar el nombre de la provincia
+   */
   provincia: string;
-  //variable para capturar el administrador de ese cenad
-  usuario_Administrador: UsuarioAdministrador;
-  //variable con todas las provincias
+  /**
+   * variable para capturar el administrador de ese cenad
+   */
+  usuarioAdministrador: UsuarioAdministrador;
+  /**
+   * variable con todas las provincias
+   */
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
@@ -44,17 +53,24 @@ export class CenadComponent implements OnInit {
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
 
-  constructor(private cenadService: CenadService,
-    private usuarioAdministradorService: UsuarioAdministradorService) { }
+  /**
+   *
+   * @param cenadService Para usar los metodos propios de Cenad
+   */
+  constructor(private cenadService: CenadService) { }
 
+  /**
+   * Consigue la provincia del Cenad y recupera su administrador
+   */
   ngOnInit() {
-    //devuelve la provincia del cenad
     this.getProvincia(this.cenad);
-    //recupera de la BD el administrador del cenad
-    this.cenadService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.usuario_Administrador = this.usuarioAdministradorService.mapearUsuario(response));
+    this.cenadService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.usuarioAdministrador = this.usuarioAdministradorService.mapearUsuario(response));
   }
 
-  //metodo que devuelve el nombre de la provincia del cenad
+  /**
+   * metodo que devuelve el nombre de la provincia del cenad
+   * @param cenad Cenad
+   */
   getProvincia(cenad: Cenad) {
     this.provincias.forEach(p => {
       if (p.idProvincia === cenad.provincia) {

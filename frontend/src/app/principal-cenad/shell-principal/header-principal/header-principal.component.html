@@ -58,7 +58,7 @@
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <fa-icon class='mr-2' [icon]="faMas"></fa-icon>Otros</a>
                 <div class="dropdown-menu otros" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
+                  <a class="nav-link"  [routerLink]="['infoCenad', idCenad]" routerLinkActive="router-link-active">
                     <fa-icon class='mr-2' [icon]="faInfo"></fa-icon>Información</a>
                   <a class="nav-link" routerLink="#" routerLinkActive="router-link-active">
                     <fa-icon class='mr-2' [icon]="faNormativa"></fa-icon>Normativa</a>

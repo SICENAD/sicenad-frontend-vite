@@ -5,11 +5,11 @@ import { CartografiasComponent } from './cartografias/cartografias.component';
 
 
 const routes: Routes = [
-  {//para ver el listado de cartografias de un cenad
+  {// para ver el listado de cartografias de un cenad
     path: '',
     component: CartografiasComponent
   },
-  {//para crear una cartografia en un cenad
+  {// para crear una cartografia en un cenad
     path: 'formulario/:idCenad',
     component: CartografiaFormComponent
   },

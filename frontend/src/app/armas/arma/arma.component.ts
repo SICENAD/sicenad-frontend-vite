@@ -8,11 +8,17 @@ import { Arma } from '../models/arma';
   styleUrls: ['./arma.component.css']
 })
 export class ArmaComponent implements OnInit {
-  //variable que trae del otro componente el arma
+  /**
+   * Variable que trae del otro componente el arma
+   */
   @Input() arma: Arma;
-  //variable que emite al otro componente un evento con el arma seleccionada
+  /**
+   * variable que emite al otro componente un evento con el arma seleccionada
+   */
   @Output() armaSeleccionada = new EventEmitter<Arma>();
-  //variable para el icono "editar"
+  /**
+   * variable para el icono "editar"
+   */
   faEdit = faEdit;
 
   constructor() {}

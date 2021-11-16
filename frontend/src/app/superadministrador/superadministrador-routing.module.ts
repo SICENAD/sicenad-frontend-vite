@@ -4,11 +4,17 @@ import { CenadFormComponent } from './cenads/cenad-form/cenad-form.component';
 import { SuperadministradorComponent } from './superadministrador/superadministrador.component';
 
 const routes: Routes = [
-  {//muestra la pantalla inicial del superadministrador
+  {
+    /**
+     * muestra la pantalla inicial del superadministrador
+     */
     path: '',
     component: SuperadministradorComponent
   },
-  {//para crear un cenad
+  {
+    /**
+     * para crear un cenad
+     */
     path: 'formulario-cenad',
     component: CenadFormComponent
   }

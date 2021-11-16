@@ -13,13 +13,25 @@ import { ArmaService } from '../service/arma.service';
   styleUrls: ['./arma-form.component.css']
 })
 export class ArmaFormComponent implements OnInit {
-  //variable para guardar el nuevo arma
+  /**
+   * variable para guardar el nuevo arma
+  */
   arma: ArmaImpl = new ArmaImpl();
-  //variable del icono "volver"
+  /**
+   * variable del icono "volver"
+   */
   faVolver = faArrowAltCircleLeft;
-  //variable que recoge los tipos de tiro
+  /**
+   * variable que recoge los tipos de tiro
+   */
   tiposTiro: string[] = environment.tiposTiro;
 
+  /**
+   *
+   * @param armaService Contiene los metodos propios de 'Arma'
+   * @param router Para redirigir...
+   * @param appConfigService Para utilizar las variables del `properties`
+   */
   constructor(
     private armaService: ArmaService,
     private router: Router, private appConfigService: AppConfigService) {
@@ -28,11 +40,13 @@ export class ArmaFormComponent implements OnInit {
 
   ngOnInit() { }
 
-  //metodo que crea un arma y vuelve al listado de armas
+  /**
+   * metodo que crea un arma y vuelve al listado de armas
+   * - actualizo el local storage
+   */
   crearArma(): void {
     this.armaService.create(this.arma).subscribe((response) => {
       console.log(`He creado el arma ${this.arma.nombre}`);
-      //actualizo el local storage
       this.armaService.getArmas().subscribe((response) => {
         localStorage.armas = JSON.stringify(this.armaService.extraerArmas(response));
         this.router.navigate(['/armas']);

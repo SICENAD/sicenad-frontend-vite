@@ -9,25 +9,42 @@ import { ArmaImpl } from '../../models/arma-impl';
   styleUrls: ['./arma-ficha.component.css']
 })
 export class ArmaFichaComponent implements OnInit {
-  //variable que trae del otro componente el arma
+  /**
+   * variable que trae del otro componente el arma
+   */
   @Input() arma: ArmaImpl;
-  //variables que emiten al otro componente los eventos para eliminar/editar el arma
+  /**
+   * variable que emite al otro componente los eventos para eliminar el arma
+   */
   @Output() armaEliminar = new EventEmitter<ArmaImpl>();
+  /**
+   * variable que emite al otro componente los eventos para editar el arma
+   */
   @Output() armaEditar = new EventEmitter<ArmaImpl>();
-  //variable que recoge los tipos de tiro
+  /**
+   * variable que recoge los tipos de tiro
+   */
   tiposTiro: string[] = environment.tiposTiro;
 
+  /**
+   * @param appConfigService Para utilizar las variables del `properties`
+   */
   constructor(private appConfigService: AppConfigService) {
-      this.tiposTiro = appConfigService.tiposTiro ? appConfigService.tiposTiro : environment.tiposTiro;
-    }    
-  ngOnInit(): void {}
+    this.tiposTiro = appConfigService.tiposTiro ? appConfigService.tiposTiro : environment.tiposTiro;
+  }
 
-  //metodo que emite el evento para eliminar el arma
+  ngOnInit(): void { }
+
+  /**
+   * metodo que emite el evento para eliminar el arma
+   */
   eliminar(): void {
     this.armaEliminar.emit(this.arma);
   }
 
-  //metodo que emite el evento para editar el arma
+  /**
+   * metodo que emite el evento para editar el arma
+   */
   editar(): void {
     this.armaEditar.emit(this.arma);
   }

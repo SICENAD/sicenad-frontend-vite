@@ -17,22 +17,57 @@ import { UsuarioSuperadministradorService } from 'src/app/usuarios/service/usuar
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  //variables que guardan los datos del usuario loggeado
+  /**
+   * variable que guarda el nombre del usuario loggeado
+   */
   nombreUsuario: string ='';
+  /**
+   * variable que guarda el password del usuario loggeado
+   */
   password: string = '';
+  /**
+   * variable que guarda el tipoUsuario del usuario loggeado
+   */
   tipoUsuario: string = '';
+  /**
+   * variable que guarda el nombre del Cenad
+   */
   nombreCenad: string = '';
+  /**
+   * variable que guarda el nombre de la unidad
+   */
   nombreUnidad: string = '';
-  //compondra tipo de usuario y cenad/unidad, para escribir como quien se ha loggeado
+  /**
+   * compondra tipo de usuario y cenad/unidad, para escribir como quien se ha loggeado
+   */
   loggedAs: string = '';
-  //variable que indica que el nombre de usuario existe o no
+  /**
+   * variable que indica que el nombre de usuario existe o no
+   */
   usuarioExiste: boolean = false;
-  //variable que guarda la fecha-hora de la última conexion al local storage (se actualiza cada vez que cargue el header)
+  /**
+   * variable que guarda la fecha-hora de la última conexion al local storage (se actualiza cada vez que cargue el header)
+   */
   fechaHoraConexionActual: Date = new Date();
-  //variable que definde en horas cuanto tiempo tarda en resetear el Local Storage desde la ultima conexion
+  /**
+   * variable que definde en horas cuanto tiempo tarda en resetear el Local Storage desde la ultima conexion
+   */
   tiempoMaximoLocalStorage: number;
-  idCenad: any;
 
+  /**
+   *
+   * @param usuarioSuperadministradorService Para usar los metodos propios de Usuario superadministrador
+   * @param usuarioAdministradorService Para usar los metodos propios de Usuario Administrador
+   * @param usuarioGestorService Para usar los metodos propios de Usuario Gestor
+   * @param usuarioNormalService Para usar los metodos propios de Usuario Normal
+   * @param cenadService Para usar los metodos propios de Cenad
+   * @param categoriaFicheroService Para usar los metodos propios de Categoria de Fichero
+   * @param tipoFormularioService Para usar los metodos propios de Tipo de Formulario
+   * @param unidadService Para usar los metodos propios de Unidad
+   * @param armaService Para usar los metodos propios de Arma
+   * @param router Para redirigir
+   * @param appConfigService Para usar las variables del `properties`
+   */
   constructor(private usuarioSuperadministradorService: UsuarioSuperadministradorService,
               private usuarioAdministradorService: UsuarioAdministradorService,
               private usuarioGestorService: UsuarioGestorService,
@@ -42,15 +77,18 @@ export class HeaderComponent implements OnInit {
               private tipoFormularioService: TipoFormularioService,
               private unidadService: UnidadService,
               private armaService: ArmaService,
-              private router: Router, 
+              private router: Router,
               private appConfigService: AppConfigService) { }
 
-  ngOnInit(): void {//recupero de la BD todos los usuarios, cenads, categorias de fichero, tipos de formulario y unidades y los guardo en el local storage
-    //recupero del properties.json el tiempo maximo para resetear el Local Storage
+  /**
+   * - recupero de la BD todos los usuarios, cenads, categorias de fichero, tipos de formulario y unidades y los guardo en el local storage
+   * - recupero del properties.json el tiempo maximo para resetear el Local Storage
+   * - evito que si actualizo la pagina se ven vacios los campos esteticos de logging
+   */
+  ngOnInit(): void {
     this.tiempoMaximoLocalStorage = this.appConfigService.tiempoMaximoLocalStorage;
     this.actualizarLocalStorage();
     this.resetearLocalStorage();
-    //con esto evito que si actualizo la pagina se ven vacios los campos esteticos de logging
     if(sessionStorage.nombreCenad) {
       this.nombreCenad = sessionStorage.nombreCenad;
     }
@@ -68,13 +106,15 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  //metodo que comprueba si el logging es correcto
+  /**
+   * metodo que comprueba si el logging es correcto
+   * - para tener los usuarios actualizados
+   * - resetea el valor de isLogged
+   * - comprueba que el nombre corresponde al superadministrador, administrador, gestor o normal
+   */
   comprobarLogging(): void {
-    //para tener los usuarios actualizados
     this.ngOnInit();
-    //resetea el valor
     sessionStorage.isLogged = false;
-    //comprueba que el nombre corresponde al superadministrador
     JSON.parse(localStorage.usuariosSuperadministrador).forEach(u => {
       if(u.nombre === this.nombreUsuario) {
         this.usuarioExiste = true;
@@ -155,17 +195,15 @@ export class HeaderComponent implements OnInit {
         }
       });
     }
-    
-    //CUIDADO !!!  location.reload() resetea los valores (idCenad e idUnidad) del sessionStorage
     sessionStorage.isLogged === "true" ? this.router.navigate([`/`]) : "";
-    //this.router.navigate([`${location.href.substr(location.host.length + 8)}`]);
-    //es el unico caso que queda
     if(!this.usuarioExiste) {
       alert('El usuario no existe');
     }
   }
 
-  //metodo para cerrar sesion y resetear variables
+  /**
+   * metodo para cerrar sesion y resetear variables
+   */
   cerrarSesion(): void {
     this.ngOnInit();
     this.nombreUsuario = this.password = this.tipoUsuario = sessionStorage.idCenad = sessionStorage.idUnidad =
@@ -176,12 +214,16 @@ export class HeaderComponent implements OnInit {
     this.router.navigate([`/`]);
   }
 
-  //metodo para acceder desde el html a la variable estatica
+  /**
+   * metodo para acceder desde el html a la variable estatica
+   */
   getLogged(): boolean {
     return (sessionStorage.isLogged === 'true');
   }
 
-  //metodo que actualiza el Local Storage. 
+  /**
+   * metodo que actualiza el Local Storage
+   */
   actualizarLocalStorage(): void {
     if(!localStorage.usuariosSuperadministrador) {
       this.usuarioSuperadministradorService.getUsuarios().subscribe((response) => localStorage.usuariosSuperadministrador = JSON.stringify(this.usuarioSuperadministradorService.extraerUsuarios(response)));
@@ -212,7 +254,9 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  //metodo que resetea el local storage si ha pasado X tiempo (se definira en el properties.json)
+  /**
+   * metodo que resetea el local storage si ha pasado X tiempo (se definira en el properties.json)
+   */
   resetearLocalStorage(): void {
     if(!localStorage.fechaHoraUltimaEntrada) {
       localStorage.fechaHoraUltimaEntrada = JSON.stringify(this.fechaHoraConexionActual.valueOf());

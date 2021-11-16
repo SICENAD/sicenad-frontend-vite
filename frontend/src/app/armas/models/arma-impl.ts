@@ -10,6 +10,6 @@ export class ArmaImpl implements Arma {
 
   constructor() {}
   getId(url: string): string {
-    return url.slice(url.lastIndexOf('/') + 1, url.length);
+    return url.slice(url.lastIndexOf("/") + 1, url.length);
   }
 }

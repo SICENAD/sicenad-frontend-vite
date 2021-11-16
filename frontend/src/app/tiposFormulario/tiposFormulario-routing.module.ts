@@ -4,11 +4,17 @@ import { TipoFormularioFormComponent } from './tipoFormulario-form/tipoFormulari
 import { TiposFormularioComponent } from './tiposFormulario/tiposFormulario.component';
 
 const routes: Routes = [
-  {//muestra el listado de tipos de formulario
+  {
+    /**
+     * muestra el listado de tipos de formulario
+     */
     path: '',
     component: TiposFormularioComponent
   },
-  {//para crear un nuevo tipo de formulario
+  {
+    /**
+     * para crear un nuevo tipo de formulario
+     */
     path: 'formulario',
     component: TipoFormularioFormComponent
   },

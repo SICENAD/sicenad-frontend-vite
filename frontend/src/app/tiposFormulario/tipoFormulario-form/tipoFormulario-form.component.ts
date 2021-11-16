@@ -10,11 +10,20 @@ import { TipoFormularioService } from '../service/tipoFormulario.service';
   styleUrls: ['./tipoFormulario-form.component.css']
 })
 export class TipoFormularioFormComponent implements OnInit {
-  //variable para guardar el nuevo tipo de formulario
+  /**
+   * variable para guardar el nuevo tipo de formulario
+   */
   tipoFormulario: TipoFormularioImpl = new TipoFormularioImpl();
-  //variable del icono "volver"
+  /**
+   * variable del icono "volver"
+   */
   faVolver = faArrowAltCircleLeft;
 
+  /**
+   *
+   * @param tipoFormularioService Para usar los metodos propios de TipoFormulario
+   * @param router Para redirigir
+   */
   constructor(
     private tipoFormularioService: TipoFormularioService,
     private router: Router) { }
@@ -22,10 +31,13 @@ export class TipoFormularioFormComponent implements OnInit {
   ngOnInit() {
   }
 
-  //metodo que crea un tipo de formulario y vuelve al listado de tipos de formulario
+  /**
+   * metodo que crea un tipo de formulario y vuelve al listado de tipos de formulario
+   *
+   * Tambien actualizo el localStorage
+   */
   crearTipoFormulario(): void {
     this.tipoFormularioService.create(this.tipoFormulario).subscribe((response) => {
-      //actualizo el local storage
       this.tipoFormularioService.getTiposFormulario().subscribe((response) => {
         localStorage.tiposFormulario = JSON.stringify(this.tipoFormularioService.extraerTiposFormulario(response));
         console.log(`He creado el Tipo de Formulario ${this.tipoFormulario.nombre}`);

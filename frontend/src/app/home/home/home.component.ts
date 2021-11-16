@@ -19,14 +19,25 @@ import { HomeService } from '../service/home.service';
 })
 export class HomeComponent implements OnInit {
   inicio: boolean = true;
-  //variables para la seleccion de la provincia
+  /**
+   * variable para la seleccion de la provincia (id)
+   */
   idProvinciaSeleccionada: number;
+  /**
+   * variable para la seleccion de la provincia (nombre)
+   */
   provinciaSeleccionada: string = "";
-  //variable que recoge todos los cenads
+  /**
+   * variable que recoge todos los cenads
+   */
   cenads: Cenad[] = [];
-  //variable que contendra los cenads de la provincia seleccionada
+  /**
+   * variable que contendra los cenads de la provincia seleccionada
+   */
   cenadsFiltro: Cenad[] = [];
-  //[] que contiene todas las provincias
+  /**
+   * [ ] que contiene todas las provincias
+   */
   provincias = [{idProvincia:15, nombre:"A CORUÑA"}, {idProvincia:1, nombre:"ALAVA"}, {idProvincia:2, nombre:"ALBACETE"},
   {idProvincia:3, nombre:"ALICANTE"}, {idProvincia:4, nombre:"ALMERIA"}, {idProvincia:33, nombre:"ASTURIAS"},
   {idProvincia:5, nombre:"AVILA"}, {idProvincia:6, nombre:"BADAJOZ"}, {idProvincia:8, nombre:"BARCELONA"},
@@ -46,6 +57,20 @@ export class HomeComponent implements OnInit {
   {idProvincia:47, nombre:"VALLADOLID"}, {idProvincia:48, nombre:"VIZCAYA"}, {idProvincia:49, nombre:"ZAMORA"},
   {idProvincia:50, nombre:"ZARAGOZA"}];
 
+  /**
+   *
+   * @param homeService Para usar los metodos propios de Home
+   * @param router Para redirigir
+   * @param usuarioSuperadministradorService Para usar los metodos propios de Usuario Superadministrador
+   * @param usuarioAdministradorService Para usar los metodos propios de Usuario administrador
+   * @param usuarioGestorService Para usar los metodos propios de Usuario Gestor
+   * @param usuarioNormalService Para usar los metodos propios de Usuario Normal
+   * @param cenadService Para usar los metodos propios de Cenad
+   * @param categoriaFicheroService Para usar los metodos propios de Categoria de Fichero
+   * @param tipoFormularioService Para usar los metodos propios de Tipo de Formulario
+   * @param unidadService Para usar los metodos propios de Unidad
+   * @param armaService Para usar los metodos propios de Arma
+   */
   constructor(private homeService: HomeService, private router: Router,private usuarioSuperadministradorService: UsuarioSuperadministradorService,
     private usuarioAdministradorService: UsuarioAdministradorService,
     private usuarioGestorService: UsuarioGestorService,
@@ -56,11 +81,17 @@ export class HomeComponent implements OnInit {
     private unidadService: UnidadService,
     private armaService: ArmaService) { }
 
+  /**
+   * Recupera los CENADS del Local Storage
+   */
   ngOnInit() {
     this.cenads = JSON.parse(localStorage.cenads);
   }
 
-  // Asigna al array cenadsFiltro todos los CENAD,s/CMT,s de una provincia
+  /**
+   * Asigna al array cenadsFiltro todos los CENAD,s/CMT,s de una provincia
+   * @param idProvincia Id de la provincia seleccionada
+   */
   buscarCenads(idProvincia: number): void {
     this.cenadsFiltro = this.cenads.filter(cenad => {
       if (cenad.provincia == idProvincia) {
@@ -75,12 +106,18 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  // Es invocada desde la capa presentación a través del filtro o al hacer click sobre una provincia
+  /**
+   * Es invocada desde la capa presentación a través del filtro o al hacer click sobre una provincia
+   * @param idProvincia Id de la provincia seleccionada
+   */
   respuesta(idProvincia: number): void {
     this.inicio = false;
     this.buscarCenads(idProvincia);
   }
 
+  /**
+   * metodo que actualiza las variables del LocalStorage
+   */
   actualizarLocalStorage(): void {
     localStorage.clear();
     if(!localStorage.usuariosSuperadministrador) {

@@ -8,11 +8,17 @@ import { Unidad } from '../models/unidad';
   styleUrls: ['./unidad.component.css']
 })
 export class UnidadComponent implements OnInit {
-  //variable que trae del otro componente la unidad
+  /**
+   * variable que trae del otro componente la unidad
+   */
   @Input() unidad: Unidad;
-  //variable que emite al otro componente un evento con la unidad seleccionada
+  /**
+   * variable que emite al otro componente un evento con la unidad seleccionada
+   */
   @Output() unidadSeleccionada = new EventEmitter<Unidad>();
-  //variable para el icono "editar"
+  /**
+   * variable para el icono "editar"
+   */
   faEdit = faEdit;
 
   constructor() {}

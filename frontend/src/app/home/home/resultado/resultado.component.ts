@@ -7,7 +7,9 @@ import { Cenad } from 'src/app/superadministrador/models/cenad';
   styleUrls: ['./resultado.component.css']
 })
 export class ResultadoComponent implements OnInit {
-  //variable que trae el cenad seleccionado del otro componente
+  /**
+   * variable que trae el cenad seleccionado del otro componente
+   */
   @Input() cenad: Cenad;
 
   constructor() {}

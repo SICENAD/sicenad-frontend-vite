@@ -8,7 +8,9 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./not-found.component.css']
 })
 export class NotFoundComponent implements OnInit {
-  //variable para el icono "volver"
+  /**
+   * variable para el icono "volver"
+   */
   faHome =faHome;
 
   constructor() {}

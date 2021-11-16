@@ -8,10 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 import es.mde.notificaciones.Notificar;
 import es.mde.notificaciones.SolicitudDTO;
 
-
+/**
+ * Controlador encargado del envio de notificaciones
+ * 
+ * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
+ *
+ */
 @RestController
 @RequestMapping(path = "/api/notificar")
-//@Configuration
 public class NotificacionController {
 	
 	@GetMapping("/{id}")

@@ -5,11 +5,15 @@ import { ArmasComponent } from './armas/armas.component';
 
 
 const routes: Routes = [
-  {//muestra el listado de armas
+  {/**
+    * muestra el listado de armas
+    */
     path: '',
     component: ArmasComponent
   },
-  {//para crear un nuevo arma
+  {/**
+    * para crear un nuevo arma
+    */
     path: 'formulario',
     component: ArmaFormComponent
   }
