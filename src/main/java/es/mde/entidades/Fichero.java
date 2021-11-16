@@ -41,6 +41,9 @@ public class Fichero {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SOLICITUDRECURSO_UNIDAD")
 	private SolicitudRecurso solicitudRecursoUnidad;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "CENAD")
+	private Cenad cenad;
 
 	/**
 	 * Crea un fichero
@@ -203,4 +206,19 @@ public class Fichero {
 		this.solicitudRecursoUnidad = solicitudRecursoUnidad;
 	}
 
+	/**
+	 * Devuelve el CENAD del fichero
+	 * @return Devuelve el CENAD del fichero
+	 */
+	public Cenad getCenad() {
+		return cenad;
+	}
+
+	/**
+	 * Guarda el CENAD del fichero
+	 * @param cenad CENAD del fichero
+	 */
+	public void setCenad(Cenad cenad) {
+		this.cenad = cenad;
+	}	
 }

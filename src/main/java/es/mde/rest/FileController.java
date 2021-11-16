@@ -401,8 +401,9 @@ public class FileController {
 
 	/**
 	 * Genera el endpoint para subir varios archivos de un conjunto cartografico
+	 * 
 	 * @param files Archivos a subir
-	 * @param id    Id del conjunto cartografico
+	 * @param id Id del CENAD
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
@@ -416,8 +417,9 @@ public class FileController {
 
 	/**
 	 * Genera el endpoint para subir un archivo de un conjunto cartografico
+	 * 
 	 * @param file Archivo a subir
-	 * @param id Id del conjunto cartografico
+	 * @param id Id del CENAD
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
@@ -431,8 +433,9 @@ public class FileController {
 
 	/**
 	 * Genera el endpoint para borrar un archivo de un conjunto cartografico
+	 * 
 	 * @param filename Nombre del archivo
-	 * @param id Id del conjunto cartografico
+	 * @param id Id del CENAD
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
@@ -446,7 +449,8 @@ public class FileController {
 
 	/**
 	 * Genera el endpoint para borrar la carpeta de un conjunto cartografico
-	 * @param id Id del conjunto cartografico
+	 * 
+	 * @param id Id del CENAD
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
@@ -459,8 +463,9 @@ public class FileController {
 
 	/**
 	 * Genera el endpoint para cargar un archivo de un conjunto cartografico
+	 * 
 	 * @param filename Nombre del archivo
-	 * @param id Id del conjunto cartografico
+	 * @param id Id del CENAD
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
@@ -475,6 +480,7 @@ public class FileController {
 
 	/**
 	 * Genera el endpoint para cargar un archivo de un conjunto cartografico
+	 * 
 	 * @param filename Nombre del archivo
 	 * @return La respuesta de la API...
 	 * @throws Exception
@@ -489,7 +495,8 @@ public class FileController {
 
 	/**
 	 * Genera el endpoint para cargar los archivos de un conjunto cartografico
-	 * @param id Id del conjunto cartografico
+	 * 
+	 * @param id Id del CENAD
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
@@ -499,6 +506,137 @@ public class FileController {
 			String filename = path.getFileName().toString();
 			String url = MvcUriComponentsBuilder
 					.fromMethodName(FileController.class, "getFileCartografia", path.getFileName().toString()).build()
+					.toString();
+			return new File(filename, url);
+		}).collect(Collectors.toList());
+		return ResponseEntity.status(HttpStatus.OK).body(files);
+	}
+
+	// ************************************************************
+	// Métodos para tratar los ficheros asociados a las normativas
+	// ************************************************************
+
+	/**
+	 * Genera el endpoint para subir varios archivos de una normativa
+	 * 
+	 * @param files Archivos a subir
+	 * @param id Id del CENAD
+	 * @return La respuesta de la API...
+	 * @throws Exception
+	 */
+	@PostMapping("/subirNormativas/{id}")
+	public ResponseEntity<Response> uploadFileNormativas(@RequestParam("files") List<MultipartFile> files,
+			@PathVariable("id") String id) throws Exception {
+		long filesSize = 0;
+		for (MultipartFile multipartFile : files) {
+			filesSize += multipartFile.getSize();
+		}
+		if (filesSize > sizeLimiteDocRecurso) {
+			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+					.body(new Response("Los archivos pesan demasiado"));
+		} else {
+			fileServiceAPI.saveNormativas(files, id);
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new Response("Los archivos fueron cargados correctamente al servidor"));
+		}
+	}
+
+	/**
+	 * Genera el endpoint para subir un archivo de una normativa
+	 * 
+	 * @param file Archivo a subir
+	 * @param id Id del CENAD
+	 * @return La respuesta de la API...
+	 * @throws Exception
+	 */
+	@PostMapping("/subirNormativa/{id}")
+	public ResponseEntity<Response> uploadFileNormativa(@RequestParam("file") MultipartFile file,
+			@PathVariable("id") String id) throws Exception {
+		if (file.getSize() > sizeLimiteDocRecurso) {
+			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+					.body(new Response("El archivo es demasiado pesado"));
+		} else {
+			fileServiceAPI.saveNormativa(file, id);
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new Response("El archivo fue cargado correctamente al servidor"));
+		}
+	}
+
+	/**
+	 * Genera el endpoint para borrar un archivo de una normativa
+	 * 
+	 * @param filename Nombre del archivo
+	 * @param id Id del CENAD
+	 * @return La respuesta de la API...
+	 * @throws Exception
+	 */
+	@GetMapping("/borrarNormativa/{id}/{filename:.+}")
+	public ResponseEntity<Response> borrarFileNormativa(@PathVariable String filename, @PathVariable("id") String id)
+			throws Exception {
+		fileServiceAPI.borrarNormativa(filename, id);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response("El archivo fue borrado correctamente del servidor"));
+	}
+
+	/**
+	 * Genera el endpoint para borrar la carpeta de una normativa
+	 * 
+	 * @param id Id del CENAD
+	 * @return La respuesta de la API...
+	 * @throws Exception
+	 */
+	@GetMapping("/borrarCarpetaNormativa/{id}")
+	public ResponseEntity<Response> borrarCarpetaNormativa(@PathVariable("id") String id) throws Exception {
+		fileServiceAPI.borrarCarpetaNormativa(id);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response("La carpeta de la cartografía fue borrada correctamente del servidor"));
+	}
+
+	/**
+	 * Genera el endpoint para cargar un archivo de una normativa
+	 * 
+	 * @param filename Nombre del archivo
+	 * @param id Id del CENAD
+	 * @return La respuesta de la API...
+	 * @throws Exception
+	 */
+	@GetMapping("/normativas/{id}/{filename:.+}")
+	public ResponseEntity<Resource> getFileNormativa(@PathVariable String filename, @PathVariable("id") String id)
+			throws Exception {
+		Resource resource = fileServiceAPI.loadNormativa(filename, id);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
+
+	/**
+	 * Genera el endpoint para cargar un archivo de una normativa
+	 * 
+	 * @param filename Nombre del archivo
+	 * @return La respuesta de la API...
+	 * @throws Exception
+	 */
+	@GetMapping("/normativas/{filename:.+}")
+	public ResponseEntity<Resource> getFileNormativa(@PathVariable String filename) throws Exception {
+		Resource resource = fileServiceAPI.loadNormativa(filename);
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.body(resource);
+	}
+
+	/**
+	 * Genera el endpoint para cargar los archivos de una normativa
+	 * 
+	 * @param id Id del CENAD
+	 * @return La respuesta de la API...
+	 * @throws Exception
+	 */
+	@GetMapping("/normativas/{id}/all")
+	public ResponseEntity<List<File>> getAllFilesNormativa(@PathVariable("id") String id) throws Exception {
+		List<File> files = fileServiceAPI.loadAllNormativas(id).map(path -> {
+			String filename = path.getFileName().toString();
+			String url = MvcUriComponentsBuilder
+					.fromMethodName(FileController.class, "getFileNormativa", path.getFileName().toString()).build()
 					.toString();
 			return new File(filename, url);
 		}).collect(Collectors.toList());

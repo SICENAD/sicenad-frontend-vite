@@ -34,6 +34,9 @@ public class ConfiguracionPorJava {
 	@Value("${ruta.cartografias}")
 	private String rutaCartografias;
 	
+	@Value("${ruta.normativas}")
+	private String rutaNormativas;
+	
 	@Value("${size.escudos}")
 	private long sizeLimiteEscudo;
 	
@@ -81,6 +84,16 @@ public class ConfiguracionPorJava {
 	public String getRutaCartografias() {
 
 		return rutaCartografias;
+	}
+	
+	/**
+	 * Devuelve la ruta donde se guardarán los documentos de las normativas
+	 * @return Devuelve la ruta donde se guardarán los documentos de las normativas
+	 */
+	@Bean("rutaNormativas")
+	public String getRutaNormativas() {
+
+		return rutaNormativas;
 	}
 
 	/**

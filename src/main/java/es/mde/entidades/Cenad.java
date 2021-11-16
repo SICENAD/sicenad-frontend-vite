@@ -37,6 +37,8 @@ public class Cenad {
 	private Collection<Categoria> categorias = new ArrayList<>();
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Cartografia.class, mappedBy = "cenad")
 	private Collection<Cartografia> cartografias = new ArrayList<>();
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Fichero.class, mappedBy = "cenad")
+	private Collection<Fichero> normativas = new ArrayList<>();
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = UsuarioGestor.class, mappedBy = "cenad")
 	private Collection<UsuarioGestor> usuariosGestores = new ArrayList<>();
 	@OneToOne(cascade = CascadeType.ALL, targetEntity = UsuarioAdministrador.class, mappedBy = "cenad")
@@ -210,6 +212,22 @@ public class Cenad {
 	}
 	
 	/**
+	 * Devuelve las normativas del CENAD
+	 * @return Devuelve las normativas del CENAD
+	 */
+	public Collection<Fichero> getNormativas() {
+		return normativas;
+	}
+	
+	/**
+	 * Guarda las normativas del CENAD
+	 * @param normativas Normativas del CENAD
+	 */
+	public void setNormativas(Collection<Fichero> normativas) {
+		this.normativas = normativas;
+	}
+	
+	/**
 	 * Devuelve los gestores del CENAD
 	 * @return Devuelve los gestores del CENAD
 	 */
@@ -258,6 +276,15 @@ public class Cenad {
 	public void addCartografia(Cartografia cartografia) {
 		getCartografias().add(cartografia);
 		cartografia.setCenad(this);
+	}
+	
+	/**
+	 * Agrega las normativas al CENAD
+	 * @param normativa CNormativa agregada al CENAD
+	 */
+	public void addNormativa(Fichero normativa) {
+		getNormativas().add(normativa);
+		normativa.setCenad(this);
 	}
 	
 	/**

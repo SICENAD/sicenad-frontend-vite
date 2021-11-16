@@ -4,8 +4,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import es.mde.Notificaciones.Notificar;
-import es.mde.Notificaciones.SolicitudDTO;
+
+import es.mde.notificaciones.Notificar;
+import es.mde.notificaciones.SolicitudDTO;
 
 
 @RestController
