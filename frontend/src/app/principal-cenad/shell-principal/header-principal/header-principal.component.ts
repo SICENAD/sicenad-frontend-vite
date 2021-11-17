@@ -26,7 +26,9 @@ import {
   faUserCog,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
+import { CartografiaService } from "src/app/cartografias/service/cartografia.service";
 import { CategoriaService } from "src/app/categorias/service/categoria.service";
+import { NormativaService } from "src/app/normativas/service/normativa.service";
 import { PrincipalService } from "src/app/principal-cenad/service/principal.service";
 import { RecursoService } from "src/app/recursos/service/recurso.service";
 import { Cenad } from "src/app/superadministrador/models/cenad";
@@ -201,8 +203,9 @@ export class HeaderPrincipalComponent implements OnInit {
     private router: Router,
     private categoriaService: CategoriaService,
     private recursoService: RecursoService,
-    private usuarioGestorService: UsuarioGestorService
-  ) { }
+    private usuarioGestorService: UsuarioGestorService,
+    private cartografiaService: CartografiaService,
+    private normativaService: NormativaService) { }
 
   /**
    * - carga el cenad seleccionado
@@ -256,15 +259,14 @@ export class HeaderPrincipalComponent implements OnInit {
           )
         );
     }
-    if (!localStorage.getItem(`usuariosGestor_${this.idCenad}`)) {
-      this.usuarioGestorService
-        .getUsuariosGestoresDeCenad(this.idCenad)
-        .subscribe((response) =>
-          localStorage.setItem(
-            `usuariosGestor_${this.idCenad}`,
-            JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))
-          )
-        );
+    if(!localStorage.getItem(`usuariosGestor_${this.idCenad}`)) {
+      this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
+    }
+    if(!localStorage.getItem(`cartografias_${this.idCenad}`)) {
+      this.cartografiaService.getCartografiasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`cartografias_${this.idCenad}`, JSON.stringify(this.cartografiaService.extraerCartografias(response))));
+    }
+    if(!localStorage.getItem(`normativas_${this.idCenad}`)) {
+      this.normativaService.getNormativasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`normativas_${this.idCenad}`, JSON.stringify(this.normativaService.extraerNormativas(response))));
     }
   }
 

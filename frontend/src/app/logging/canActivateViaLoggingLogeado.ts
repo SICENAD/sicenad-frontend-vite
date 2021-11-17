@@ -22,7 +22,7 @@ export class CanActivateViaLoggingLogeado implements CanActivateChild {
     if (
       !sessionStorage.isAdmin &&
       !sessionStorage.isGestor &&
-      !sessionStorage.isNormal
+      !sessionStorage.isNormal && !sessionStorage.isSuperAdmin
     ) {
       let url = location.toString();
       this.idCenad = this.getId(url);

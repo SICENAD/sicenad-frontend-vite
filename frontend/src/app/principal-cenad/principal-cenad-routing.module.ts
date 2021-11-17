@@ -80,6 +80,13 @@ const routes: Routes = [
       },
       {
         /**
+         * Normativa de cada cenad
+         */
+        path: 'normativas/:idCenad',
+        loadChildren: () => import('../normativas/normativas.module').then(m => m.NormativasModule)
+      },
+      {
+        /**
          * calendario de solicitudes de cada cenad
          */
         path: 'calendarios/:idCenad',

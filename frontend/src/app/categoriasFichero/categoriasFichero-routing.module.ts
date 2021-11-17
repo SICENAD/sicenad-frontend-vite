@@ -4,11 +4,15 @@ import { CategoriaFicheroFormComponent } from './categoriaFichero-form/categoria
 import { CategoriasFicheroComponent } from './categoriasFichero/categoriasFichero.component';
 
 const routes: Routes = [
-  {//para ver el listado de categorias de fichero
+  {/**
+    * para ver el listado de categorias de fichero
+    */
     path: '',
     component: CategoriasFicheroComponent
   },
-  {//para crear una categoria de fichero
+  {/**
+    * para crear una categoria de fichero
+    */
     path: 'formulario',
     component: CategoriaFicheroFormComponent
   },

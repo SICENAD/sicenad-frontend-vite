@@ -11,31 +11,50 @@ import { CategoriaFicheroImpl } from '../models/categoriaFichero-impl';
   providedIn: 'root'
 })
 export class CategoriaFicheroService {
-  //endpoint raiz de la API
+  /**
+   * endpoint raiz de la API
+   */
   private host: string = environment.hostSicenad;
-  //endpoint especifico de las categorias de fichero
+  /**
+   * endpoint especifico de las categorias de fichero
+   */
   private urlEndPoint: string = `${this.host}categorias_fichero/`;
 
+  /**
+   * 
+   * @param http Para usar los metodos de HTTP
+   * @param appConfigService Para usar las variables del `properties`
+   */
   constructor(
-    private http: HttpClient, private appConfigService: AppConfigService) { 
-      this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-      this.urlEndPoint = `${this.host}categorias_fichero/`;
-    }
+    private http: HttpClient, private appConfigService: AppConfigService) {
+    this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
+    this.urlEndPoint = `${this.host}categorias_fichero/`;
+  }
 
-  //metodo que recupera de la BD todas las categorias de fichero
+  /**
+   * metodo que recupera de la BD todas las categorias de fichero
+   */
   getCategoriasFichero(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
 
-  //metodo que extrae el [] de categorias de fichero 
+  /**
+   * metodo que extrae el [ ] de categorias de fichero 
+   * @param respuestaApi [ ] de categorias de fichero API
+   * @returns Devuelve un [ ] de CategoriaFichero
+   */
   extraerCategoriasFichero(respuestaApi: any): CategoriaFichero[] {
     const categoriasFichero: CategoriaFichero[] = [];
-    respuestaApi._embedded.categorias_fichero.forEach(c => 
+    respuestaApi._embedded.categorias_fichero.forEach(c =>
       categoriasFichero.push(this.mapearCategoriaFichero(c)));
     return categoriasFichero;
   }
 
-  //metodo que mapea la categoria de fichero segun la interfaz
+  /**
+   * metodo que mapea la categoria de fichero segun la interfaz
+   * @param categoriaFicheroApi Categoria de fichero API
+   * @returns Devuelve una CategoriaFicheroImpl
+   */
   mapearCategoriaFichero(categoriaFicheroApi: any): CategoriaFicheroImpl {
     const categoriaFichero = new CategoriaFicheroImpl();
     categoriaFichero.nombre = categoriaFicheroApi.nombre;
@@ -46,7 +65,10 @@ export class CategoriaFicheroService {
     return categoriaFichero;
   }
 
-  //metodo que crea en nuestra BD una nueva categoria de fichero 
+  /**
+   * metodo que crea en nuestra BD una nueva categoria de fichero 
+   * @param categoriaFichero Categoria de fichero a crear
+   */
   create(categoriaFichero: CategoriaFichero): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, categoriaFichero).pipe(
       catchError((e) => {
@@ -61,7 +83,10 @@ export class CategoriaFicheroService {
     );
   }
 
-  //metodo que borra de nuestra BD una categoria de fichero
+  /**
+   * metodo que elimina en nuestra BD una nueva categoria de fichero 
+   * @param categoriaFichero Categoria de fichero a eliminar
+   */  
   delete(categoriaFichero): Observable<CategoriaFichero> {
     return this.http.delete<CategoriaFichero>(`${this.urlEndPoint}${categoriaFichero.idCategoriaFichero}`)
       .pipe(
@@ -73,7 +98,11 @@ export class CategoriaFicheroService {
         })
       );
   }
-  //metodo que actualiza en nuestra BD una categoria de fichero
+
+  /**
+   * metodo que edita en nuestra BD una nueva categoria de fichero 
+   * @param categoriaFichero Categoria de fichero a editar
+   */
   update(categoriaFichero: CategoriaFichero): Observable<any> {
     return this.http
       .patch<any>(`${this.urlEndPoint}${categoriaFichero.idCategoriaFichero}`, categoriaFichero)

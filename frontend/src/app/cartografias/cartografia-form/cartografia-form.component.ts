@@ -75,7 +75,7 @@ export class CartografiaFormComponent implements OnInit {
      * - recuperamos el id del CENAD de la barra de navegacion
      * - recuperamos del properties.json, si existe, el host
      * - asigna el path relativo, que junto con el nombreArchivo del fichero formara la url en la que se encuentra el archivo
-     * - asignamos el CENAD a la categoria que creamos
+     * - asignamos el CENAD y la categoria de fichero a la cartografia que creamos
      */
   ngOnInit() {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];

@@ -64,7 +64,7 @@ export class CenadComponent implements OnInit {
    */
   ngOnInit() {
     this.getProvincia(this.cenad);
-    this.cenadService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.usuarioAdministrador = this.usuarioAdministradorService.mapearUsuario(response));
+    this.cenadService.getUsuarioAdministrador(this.cenad).subscribe((response) => this.usuarioAdministrador = this.cenadService.mapearUsuario(response));
   }
 
   /**
