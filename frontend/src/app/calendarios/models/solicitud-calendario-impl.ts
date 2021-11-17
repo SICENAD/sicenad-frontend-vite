@@ -3,21 +3,17 @@ import { UsuarioNormal } from "src/app/usuarios/models/usuarioNormal";
 import { SolicitudCalendario } from "./solicitud-calendario";
 
 export class SolicitudCalendarioImpl implements SolicitudCalendario {
-     //mapeado a IdSolicitud
-     id: string;
-     estado: string;
-     //mapeado a fechaHoraInicioRecurso
-     start: Date; 
-     //mapeado a  fechaHoraFinRecurso
-     end: Date;
-     //mapeado a unidad
-     title: string;
-     idUnidad: string;
-     usuarioNormal: UsuarioNormal | any;
-     recurso: Recurso | any;
-     //mapeado a la etiqueta de la solicitud
-     color: string;
-     url: string;
+     
+    id: string;
+    estado: string;
+    fechaSolicitud: string;
+    fechaHoraInicioRecurso: string;
+    fechaHoraFinRecurso: string;
+    unidadUsuaria: string;
+    etiqueta: string;
+    idUnidad: string;
+    recurso: any;
+    url: string;
 
     constructor() {}
 }

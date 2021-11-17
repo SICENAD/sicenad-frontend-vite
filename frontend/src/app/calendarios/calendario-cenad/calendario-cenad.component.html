@@ -1,12 +1,12 @@
 <!-- Componente que muestra el CALENDARIO de asignación de un recurso de un Cenad/CMT -->
 <div class="container">
   <div class="row mb-2 mt-2 pb-1 Planificadas">
-    <div class="col-12 app-sidebar justify-content-between">
+    <div class="col-12 app-sidebar">
       <div class='app-sidebar-section titulos'>
-        <h5 class="text-center titulo-planificadas">PLANIFICADAS<label class="ml-5 pl-5 ver-todas"
-            [hidden]="!isSuperAdmin" (click)="verTodasPlanificadas()">
-            <fa-icon [icon]="faVista" class="ml-5 pl-5 mr-2"></fa-icon>Ver Lista
-          </label></h5>
+        <h5 class="text-center titulo-planificadas">PLANIFICADAS</h5>
+      </div>
+      <div class="row justify-content-end mr-5">
+        <button class="btn nueva-solicitud p-1" [hidden]="!isSuperAdmin" [routerLink]="['formulario', idCenad, idSolicitud]">Nueva Solicitud</button>
       </div>
       <div class="row ml-4 mr-4 mb-2 mt-0 justify-content-between">
         <div class="col-lg-3 col-md-12 ml-2">

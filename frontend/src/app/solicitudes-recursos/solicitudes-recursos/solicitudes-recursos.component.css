@@ -137,3 +137,12 @@ label.ver-todas {
   font-weight: bold;
   text-shadow: 10px 10px 20px yellowgreen;
 }
+
+a.volver {
+  color: #3a5a40;
+  font-size: 16px;
+}
+
+a.volver:hover {
+  color: #a3b18a;
+}

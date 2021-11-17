@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faGlasses } from '@fortawesome/free-solid-svg-icons';
+import { faArrowAltCircleLeft, faGlasses } from '@fortawesome/free-solid-svg-icons';
 import { SolicitudRecurso } from '../models/solicitud-recurso';
 import { SolicitudRecursoService } from '../service/solicitud-recurso.service';
 
@@ -13,6 +13,7 @@ export class SolicitudesRecursosComponent implements OnInit {
 
   //icono FontAwesome
   faVista = faGlasses;
+  faVolver = faArrowAltCircleLeft;
   //id del Cenad
   idCenad: string = "";
   //id de la solicitud

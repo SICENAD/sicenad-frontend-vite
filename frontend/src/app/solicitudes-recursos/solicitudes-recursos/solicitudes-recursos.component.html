@@ -1,7 +1,12 @@
 <!-- Componente principal que muestra las solicitudes agrupadas por estados -->
 <div class="container-fluid">
   <div class="row mt-2 text-center ml-5 pl-5">
-    <div class="col-10 ml-5 pl-5">
+    <div class="col-lg-2 col-md-12">
+      <a class="nav-link text-center volver" [routerLink]="['/principalCenad', idCenad, 'calendarios', idCenad]" routerLinkActive="router-link-active">
+        <fa-icon class="fa-1x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver Calendario</strong>
+      </a>
+    </div>
+    <div class="col-18 ml-5 pl-5">
       <h3 class="titulo1 ml-5 pl-5"><u>SOLICITUDES</u></h3>
     </div>
     <div class="col-2">

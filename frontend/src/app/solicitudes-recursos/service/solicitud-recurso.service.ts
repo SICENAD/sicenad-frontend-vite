@@ -80,7 +80,19 @@ export class SolicitudRecursoService {
   }
 
   //método que pasándole el su id obtiene una solicitud
-  getSolicitud(id: string): Observable<SolicitudRecurso> {
+  getSolicitudCalendario(id: string): Observable<SolicitudCalendario> {
+    return this.http.get<SolicitudCalendario>(`${this.urlEndPoint}${id}`).pipe(
+      catchError((e) => {
+        if (e.status !== 401 && e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
+
+   //método que pasándole el su id obtiene una solicitud
+   getSolicitud(id: string): Observable<SolicitudRecurso> {
     return this.http.get<SolicitudRecurso>(`${this.urlEndPoint}${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
@@ -186,6 +198,15 @@ export class SolicitudRecursoService {
   }
   
   //método que extrae un array [] de Solicitudes
+  extraerSolicitudesPlanificadas(respuestaApi: any): SolicitudCalendario[] {
+    const solicitudes: SolicitudCalendario[] = [];
+    respuestaApi._embedded.solicitudes.forEach((s) => {
+      solicitudes.push(this.mapearSolicitudPlanificada(s));
+    });
+    return solicitudes;
+  }
+
+  //método que extrae un array [] de Solicitudes
   extraerSolicitudes(respuestaApi: any): SolicitudRecurso[] {
     const solicitudes: SolicitudRecurso[] = [];
     respuestaApi._embedded.solicitudes.forEach((s) => {
@@ -228,7 +249,6 @@ export class SolicitudRecursoService {
 
   //metodo que mapea un objeto solicitudCalendario con un registro de la entidad solicitudRecurso
   mapearSolicitudCalendarioCenad(solicitudApi: any): any {
-    const solicitudCalendario: SolicitudCalendario = new SolicitudCalendarioImpl();
     let title: string = "";
     let recurso: string  = "";    
     let usuario: string = "";
@@ -237,34 +257,16 @@ export class SolicitudRecursoService {
     const idGestorRecurso: string = "";
     const urlUsuarioNormal: string = solicitudApi._links.usuarioNormal.href;
     const urlRecurso: string = solicitudApi._links.recurso.href;
-    let usuarioNormal: UsuarioNormal = new UsuarioNormalImpl();
-    let unidad: Unidad = new UnidadImpl();
     const url: string = solicitudApi._links.self.href;
     const id: string = this.getId(url);
     const estado: string = solicitudApi.estado;
+    const unidadUsuaria: string = solicitudApi.unidadUsuaria;
     const start: Date = this.cambiarFormatoDate2(solicitudApi.fechaHoraInicioRecurso.toString());
     const end: Date = this.cambiarFormatoDate2(solicitudApi.fechaHoraFinRecurso.toString());
-    const color: string = solicitudApi.etiqueta;     
-    
-    //funcion anonima asincrona autoejecutable
-    (async () => {
-      this.getRecursoDeSolicitud(id).subscribe(async (response) => {
-      solicitudCalendario.recurso = this.mapearRecurso(response).nombre;
-        recurso = await solicitudCalendario.recurso;
-      });
-    })();
+    const color: string = solicitudApi.etiqueta;
+    const textColor: string = "black";
 
-    this.getUsuarioNormalDeSolicitud(id).subscribe((response) => {
-      usuarioNormal = this.mapearUsuarioNormal(response);
-    setTimeout(() => {
-      this.getUnidadDeUsuarioNormal(usuarioNormal.idUsuario).subscribe((response) => {
-        unidad = this.mapearUnidad(response);
-        title = unidad.nombre;
-      });
-      }, 800);  
-    });  
-
-    const solicitud = {id, estado, start, end, color, url, recurso, idRecurso, title, urlRecurso, idGestorRecurso, urlUsuarioNormal, usuario, idUnidad};
+    const solicitud = {id, estado, start, end, color, url, recurso, textColor, idRecurso, title, urlRecurso, idGestorRecurso, urlUsuarioNormal, usuario, unidadUsuaria, idUnidad};
   
     return solicitud;
   }
@@ -277,6 +279,23 @@ export class SolicitudRecursoService {
     return fechaDate;
   }
 
+   //método que mapea un objeto solicitud con un registro de la entidad
+   mapearSolicitudPlanificada(solicitudApi: any): SolicitudCalendarioImpl {
+    const solicitud: SolicitudCalendario = new SolicitudCalendarioImpl();
+    solicitud.url = solicitudApi._links.self.href;
+    solicitud.id = this.getId(solicitud.url);
+    solicitud.estado = solicitudApi.estado;
+    solicitud.fechaSolicitud = solicitudApi.fechaSolicitud;
+    solicitud.fechaHoraInicioRecurso = solicitudApi.fechaHoraInicioRecurso;
+    solicitud.fechaHoraFinRecurso = solicitudApi.fechaHoraFinRecurso;
+    solicitud.unidadUsuaria = solicitudApi.unidadUsuaria;
+    this.getRecursoDeSolicitud(solicitud.id).subscribe((response) => {
+      solicitud.recurso = this.mapearRecurso(response);
+    });
+    solicitud.etiqueta = solicitudApi.etiqueta; 
+
+    return solicitud;
+  }
 
   //método que mapea un objeto solicitud con un registro de la entidad
   mapearSolicitud(solicitudApi: any): SolicitudRecursoImpl {
@@ -387,6 +406,21 @@ export class SolicitudRecursoService {
   }
 
    //método que pasándole un objeto solicitud crea un registro en la entidad
+   createSolicitudCalendario(solicitud: SolicitudCalendario): Observable<any> {
+    return this.http.post(`${this.urlEndPoint}`, solicitud).pipe(
+      catchError((e) => {
+        if (e.status === 400) {
+          return throwError(e);
+        }
+        if (e.error.mensaje) {
+          console.error(e.error.mensaje);
+        }
+        return throwError(e);
+      })
+    );
+  }
+
+   //método que pasándole un objeto solicitud crea un registro en la entidad
    create(solicitud: SolicitudRecurso): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, solicitud).pipe(
       catchError((e) => {
@@ -416,6 +450,20 @@ export class SolicitudRecursoService {
   }
 
   //método que pasándole un objeto solicitud, borra su registro de la entidad
+  deleteSolicitudCalendario(solicitud: SolicitudCalendario): Observable<SolicitudCalendario> {
+    return this.http
+      .delete<SolicitudCalendario>(`${this.urlEndPoint}${solicitud.id}`)
+      .pipe(
+        catchError((e) => {
+          if (e.status === 405) {
+            console.error("El metodo está bien hecho");
+          }
+          return throwError(e);
+        })
+      );
+  }
+  
+  //método que pasándole un objeto solicitud, borra su registro de la entidad
   delete(solicitud: SolicitudRecurso): Observable<SolicitudRecurso> {
     return this.http
       .delete<SolicitudRecurso>(`${this.urlEndPoint}${solicitud.idSolicitud}`)
@@ -433,6 +481,23 @@ export class SolicitudRecursoService {
   updateSolicitudArma(solicitudArma: SolicitudArma): Observable<any> {
     return this.http
       .patch<any>(`${this.host}solicitudesArmas/${solicitudArma.idSolicitudArma}`, solicitudArma)
+      .pipe(
+        catchError((e) => {
+          if (e.status === 400) {
+            return throwError(e);
+          }
+          if (e.error.mensaje) {
+            console.error(e.error.mensaje);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  // método que pasándole un objeto solicitud, actualiza su registro en la entidad
+  updateSolicitudCalendario(idSolicitud:string, solicitud: SolicitudCalendario): Observable<any> {
+    return this.http
+      .patch<any>(`${this.urlEndPoint}${idSolicitud}`, solicitud)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
