@@ -9,15 +9,28 @@ import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.
   styleUrls: ['./usuarioAdministrador.component.css']
 })
 export class UsuarioAdministradorComponent implements OnInit {
-  //variable que trae del otro componente el usuarioAdministrador
+  /**
+   * variable que trae del otro componente el usuarioAdministrador
+   */
   @Input() usuarioAdministrador: UsuarioAdministrador;
-  //variable que emitira al otro componente el usuarioAdministrador para mostrar los datos
+  /**
+   * variable que emitira al otro componente el usuarioAdministrador para mostrar los datos
+   */
   @Output() usuarioAdministradorSeleccionado = new EventEmitter<UsuarioAdministrador>();
-  //variable del icono "editar"
+  /**
+   * variable del icono "editar"
+   */
   faEdit = faEdit;
 
+  /**
+   * 
+   * @param usuarioAdministradorService Para usar los metodos propios de Administrador
+   */
   constructor(private usuarioAdministradorService: UsuarioAdministradorService) {}
 
+  /**
+   * Recupera el Cenad de ese administrador
+   */
   ngOnInit() {
     this.usuarioAdministradorService.getCenad(this.usuarioAdministrador).subscribe((response) =>
       this.usuarioAdministrador.cenad = this.usuarioAdministradorService.mapearCenad(response));

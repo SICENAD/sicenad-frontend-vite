@@ -9,38 +9,61 @@ import { UsuarioGestorService } from '../../service/usuarioGestor.service';
   styleUrls: ['./usuarioGestor-ficha.component.css']
 })
 export class UsuarioGestorFichaComponent implements OnInit {
-  //variable que trae del otro componente el usuarioGestor
+  /**
+   * variable que trae del otro componente el usuarioGestor
+   */
   @Input() usuarioGestor: UsuarioGestorImpl;
-  //variables que emitiran al otro componente los eventos para editarlo/eliminarlo
+  /**
+   * variable que emitira al otro componente el evento para eliminarlo
+   */
   @Output() usuarioGestorEliminar = new EventEmitter<UsuarioGestorImpl>();
+  /**
+   * variable que emitira al otro componente el evento para editarlo
+   */
   @Output() usuarioGestorEditar = new EventEmitter<UsuarioGestorImpl>();
-  //variable para cargar todas los cenads
+  /**
+   * variable para cargar todas los cenads
+   */
   cenads: Cenad[] = [];
-  //variables para poder mostrar el valor inicial del cenad en el campo select
+  /**
+   * variables para poder mostrar el valor inicial del cenad en el campo select
+   */
   cenadSeleccionado: string;
 
+  /**
+   * 
+   * @param usuarioGestorService Para usar los metodos propios de UsuarioGestor
+   */
   constructor(
     private usuarioGestorService: UsuarioGestorService) { }
 
+  /**
+   * - rescata del local storage los cenads
+   * - asigna los valores seleccionados a los select de los campos del usuario
+   */
   ngOnInit(): void {
-    //rescata del local storage los cenads
     this.cenads = JSON.parse(localStorage.cenads);
-    //asigna los valores seleccionados a los select de los campos del usuario
     this.actualizarNgModels();
   }
 
-  //metodo para emitir el usuario a eliminar
+  /**
+   * metodo para emitir el usuario a eliminar
+   */
   eliminar(): void {
     this.usuarioGestorEliminar.emit(this.usuarioGestor);
   }
 
-  //metodo para emitir el usuario a editar
+  /**
+   * metodo para emitir el usuario a editar
+   */
   editar(): void {
     this.usuarioGestor.cenad = this.cenadSeleccionado;
     this.usuarioGestorEditar.emit(this.usuarioGestor);
   }
 
-  //metodo para poder mostrar en los select los valores seleccionados
+  /**
+   * metodo para poder mostrar en los select los valores seleccionados
+   */
   actualizarNgModels(): void {
     this.cenadSeleccionado = this.usuarioGestor.cenad.url;
   }

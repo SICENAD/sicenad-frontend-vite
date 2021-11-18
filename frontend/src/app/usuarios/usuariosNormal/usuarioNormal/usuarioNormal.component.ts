@@ -9,15 +9,28 @@ import { UsuarioNormalService } from '../../service/usuarioNormal.service';
   styleUrls: ['./usuarioNormal.component.css']
 })
 export class UsuarioNormalComponent implements OnInit {
-  //variable que trae del otro componente el usuario normal
+  /**
+   * variable que trae del otro componente el usuario normal
+   */
   @Input() usuarioNormal: UsuarioNormal;
-  //variable que emitira al otro componente el usuario normal para mostrar los datos
+  /**
+   * variable que emitira al otro componente el usuario normal para mostrar los datos
+   */
   @Output() usuarioNormalSeleccionado = new EventEmitter<UsuarioNormal>();
-  //variable del icono "editar"
+  /**
+   * variable del icono "editar"
+   */
   faEdit = faEdit;
 
+  /**
+   * 
+   * @param usuarioNormalService Para usar los metodos propios de UsuarioNormal
+   */
   constructor(private usuarioNormalService: UsuarioNormalService) {}
 
+  /**
+   * Recupera la unidad del Usuario
+   */
   ngOnInit() {
     this.usuarioNormalService.getUnidad(this.usuarioNormal.idUsuario).subscribe((response) => 
       this.usuarioNormal.unidad = this.usuarioNormalService.mapearUnidad(response));

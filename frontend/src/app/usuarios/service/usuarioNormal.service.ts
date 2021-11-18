@@ -13,29 +13,49 @@ import { UsuarioNormalImpl } from '../models/usuarioNormal-impl';
   providedIn: 'root'
 })
 export class UsuarioNormalService {
-  //endpoint raiz de la API
+  /**
+   * endpoint raiz de la API
+   */
   private host: string = environment.hostSicenad;
-  //endpoint especifico de los usuarios normal
+  /**
+   * endpoint especifico de los usuarios normal
+   */
   private urlEndPoint: string = `${this.host}usuarios_normal/`;
 
+  /**
+   * 
+   * @param http Para usar los metodos propios de HTTP
+   * @param appConfigService Para usar las variables del `properties`
+   */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
     this.urlEndPoint = `${this.host}usuarios_normal/`;
-   }
-  //metodo que recupera de la Bd todos los usuarios normal
+  }
+
+  /**
+   * metodo que recupera de la BD todos los usuarios normal
+   */
   getUsuarios(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
 
-  //metodo que extrae el [] de usuarios normal
+  /**
+   * metodo que extrae el [ ] de usuarios normal
+   * @param respuestaApi [ ] de Usuarios normal API
+   * @returns Devuelve un [ ] de UsuarioNormal
+   */  
   extraerUsuarios(respuestaApi: any): UsuarioNormal[] {
     const usuarios: UsuarioNormal[] = [];
-    respuestaApi._embedded.usuarios_normal.forEach(u => 
+    respuestaApi._embedded.usuarios_normal.forEach(u =>
       usuarios.push(this.mapearUsuario(u)));
     return usuarios;
   }
 
-  //metodo para mapear un usuario normal segun la interfaz
+  /**
+   * metodo para mapear un usuario normal segun la interfaz
+   * @param usuarioApi Usuario normal API
+   * @returns Devuelve un UsuarioNormalImpl
+   */  
   mapearUsuario(usuarioApi: any): UsuarioNormalImpl {
     const usuario = new UsuarioNormalImpl();
     usuario.nombre = usuarioApi.nombre;
@@ -46,13 +66,16 @@ export class UsuarioNormalService {
     usuario.descripcion = usuarioApi.descripcion;
     usuario.url = usuarioApi._links.self.href;
     usuario.idUsuario = usuario.getId(usuario.url);
-    this.getUnidad(usuario.idUsuario).subscribe((response) => 
-      usuario.unidad= this.mapearUnidad(response)); 
+    this.getUnidad(usuario.idUsuario).subscribe((response) =>
+      usuario.unidad = this.mapearUnidad(response));
     usuario.tipo = 'normal';
     return usuario;
   }
 
-  //metodo para crear un usuario normal
+  /**
+   * metodo para crear un usuario normal
+   * @param usuario Usuario a crear
+   */  
   create(usuario: UsuarioNormal): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, usuario).pipe(
       catchError((e) => {
@@ -67,7 +90,10 @@ export class UsuarioNormalService {
     );
   }
 
-  //metodo para borrar un usuario normal
+  /**
+   * metodo para eliminar un usuario normal
+   * @param usuario Usuario a eliminar
+   */    
   delete(usuario): Observable<UsuarioNormal> {
     return this.http.delete<UsuarioNormal>(`${this.urlEndPoint}${usuario.idUsuario}`)
       .pipe(
@@ -80,7 +106,10 @@ export class UsuarioNormalService {
       );
   }
 
-  //metodo para editar un usuario normal
+  /**
+   * metodo para editar un usuario normal
+   * @param usuario Usuario a editar
+   */    
   update(usuario: UsuarioNormal): Observable<any> {
     return this.http
       .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
@@ -97,8 +126,11 @@ export class UsuarioNormalService {
       );
   }
 
-  //metodo para recuperar un usuario normal concreto
-  getUsuario(id): Observable<any> {
+  /**
+   * metodo para recuperar un usuario normal concreto
+   * @param id Id del usuario
+   */
+    getUsuario(id): Observable<any> {
     return this.http.get<UsuarioNormal>(`${this.urlEndPoint}${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
@@ -109,20 +141,30 @@ export class UsuarioNormalService {
     );
   }
 
-  //metodo que rescata de la BD todas unidades
+  /**
+   * metodo que recupera de la BD todas las unidades
+   */
   getUnidades(): Observable<any> {
     return this.http.get<any>(`${this.host}unidades/?page=0&size=1000`);
   }
 
-  //metodo que extrae el [] de unidades
+  /**
+   * metodo que extrae el [ ] de unidades
+   * @param respuestaApi [ ] de unidades API
+   * @returns Devuelve un [ ] de Unidad
+   */
   extraerUnidades(respuestaApi: any): Unidad[] {
     const unidades: Unidad[] = [];
-    respuestaApi._embedded.unidades.forEach(u => 
+    respuestaApi._embedded.unidades.forEach(u =>
       unidades.push(this.mapearUnidad(u)));
     return unidades;
   }
 
-  //metodo que mapea una unidad segun la interfaz
+  /**
+   * metodo para mapear una unidad segun la interfaz
+   * @param unidadApi Unidad API
+   * @returns Devuelve una UnidadImpl
+   */
   mapearUnidad(unidadApi: any): UnidadImpl {
     const unidad = new UnidadImpl();
     unidad.nombre = unidadApi.nombre;
@@ -135,8 +177,11 @@ export class UsuarioNormalService {
     return unidad;
   }
 
-    //metodo que rescata de la BD la unidad del usuarioNormal seleccionado
-    getUnidad(idUsuario: string): Observable<any> {
-      return this.http.get<any>(`${this.urlEndPoint}${idUsuario}/unidad/`);
-    }
+  /**
+   * metodo que rescata de la BD la unidad del usuarioNormal seleccionado
+   * @param idUsuario Id del usuario
+   */
+  getUnidad(idUsuario: string): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}${idUsuario}/unidad/`);
+  }
 }

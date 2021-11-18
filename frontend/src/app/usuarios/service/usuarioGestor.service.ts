@@ -13,29 +13,48 @@ import { UsuarioGestorImpl } from '../models/usuarioGestor-impl';
   providedIn: 'root'
 })
 export class UsuarioGestorService {
-  //endpoint raiz de la API
+  /**
+   * endpoint raiz de la API
+   */
   private host: string = environment.hostSicenad;
-  //endpoint especifico de los usuarios gestor
+  /**
+   * endpoint especifico de los usuarios gestor
+   */
   private urlEndPoint: string = `${this.host}usuarios_gestor/`;
 
+  /**
+   * 
+   * @param http Para usar los metodos propios de HTTP
+   * @param appConfigService Para usar las variables del `properties`
+   */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
     this.urlEndPoint = `${this.host}usuarios_gestor/`;
-   }
-  //metodo que recupera de la BD todos los usuarios gestor
+  }
+  /**
+   * metodo que recupera de la BD todos los usuarios gestor
+   */
   getUsuarios(): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}?page=0&size=1000`);
   }
 
-  //metodo que extrae el [] de usuarios gestor
+  /**
+   * metodo que extrae el [ ] de usuarios gestor
+   * @param respuestaApi [ ] de Usuarios gestor API
+   * @returns Devuelve un [ ] de UsuarioGestor
+   */  
   extraerUsuarios(respuestaApi: any): UsuarioGestor[] {
     const usuarios: UsuarioGestor[] = [];
-    respuestaApi._embedded.usuarios_gestor.forEach(u => 
+    respuestaApi._embedded.usuarios_gestor.forEach(u =>
       usuarios.push(this.mapearUsuario(u)));
     return usuarios;
   }
 
-  //metodo para mapear un usuario gestor segun la interfaz
+  /**
+   * metodo para mapear un usuario gestor segun la interfaz
+   * @param usuarioApi Usuario gestor API
+   * @returns Devuelve un UsuarioGestorImpl
+   */  
   mapearUsuario(usuarioApi: any): UsuarioGestorImpl {
     const usuario = new UsuarioGestorImpl();
     usuario.nombre = usuarioApi.nombre;
@@ -51,7 +70,10 @@ export class UsuarioGestorService {
     return usuario;
   }
 
-  //metodo para crear un usuario gestor
+  /**
+   * metodo para crear un usuario gestor
+   * @param usuario Usuario a crear
+   */  
   create(usuario: UsuarioGestor): Observable<any> {
     return this.http.post(`${this.urlEndPoint}`, usuario).pipe(
       catchError((e) => {
@@ -66,7 +88,10 @@ export class UsuarioGestorService {
     );
   }
 
-  //metodo para borrar un usuario gestor
+  /**
+   * metodo para eliminar un usuario gestor
+   * @param usuario Usuario a eliminar
+   */      
   delete(usuario): Observable<UsuarioGestor> {
     return this.http.delete<UsuarioGestor>(`${this.urlEndPoint}${usuario.idUsuario}`)
       .pipe(
@@ -79,7 +104,10 @@ export class UsuarioGestorService {
       );
   }
 
-  //metodo para editar un usuario gestor
+  /**
+   * metodo para editar un usuario gestor
+   * @param usuario Usuario a editar
+   */    
   update(usuario: UsuarioGestor): Observable<any> {
     return this.http
       .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
@@ -96,7 +124,10 @@ export class UsuarioGestorService {
       );
   }
 
-  //metodo para recuperar un usuario gestor concreto
+  /**
+   * metodo para recuperar un usuario gestor concreto
+   * @param id Id del usuario
+   */  
   getUsuario(id): Observable<any> {
     return this.http.get<UsuarioGestor>(`${this.urlEndPoint}${id}`).pipe(
       catchError((e) => {
@@ -108,21 +139,27 @@ export class UsuarioGestorService {
     );
   }
 
-  //metodo para recuperar los gestores de un cenad
+  /**
+   * metodo para recuperar los gestores de un cenad
+   * @param idCenad Id del Cenad del que se quiere el administrador
+   */  
   getUsuariosGestoresDeCenad(idCenad: string): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/${idCenad}/usuariosGestores/`)
-    .pipe(
-      catchError((e) => {
-        if (e.status === 404) {
-          console.error('Este CENAD/CMT aún no tiene Usuarios Gestores');
-        }
-        else;
-        return throwError(e);
-      })
-    );
+      .pipe(
+        catchError((e) => {
+          if (e.status === 404) {
+            console.error('Este CENAD/CMT aún no tiene Usuarios Gestores');
+          }
+          else;
+          return throwError(e);
+        })
+      );
   }
 
-  //metodo para recuperar el cenad de un gestor
+  /**
+   * metodo para recuperar el cenad de un usuarioGestor
+   * @param usuarioGestor usuarioGestor del que se quiere el Cenad
+   */  
   getCenad(usuarioGestor: UsuarioGestor): Observable<any> {
     return this.http.get<any>(`${this.urlEndPoint}${usuarioGestor.idUsuario}/cenad/`)
       .pipe(
@@ -135,12 +172,18 @@ export class UsuarioGestorService {
       );
   }
 
-  //metodo que recupera de la BD todos los cenads
+  /**
+   * metodo que recupera de la BD todos los cenads
+   */  
   getCenads(): Observable<any> {
     return this.http.get<any>(`${this.host}cenads/?page=0&size=1000`);
   }
 
-  //metodo que extrae el [] de cenads
+  /**
+   * metodo que extrae el [ ] de cenads
+   * @param respuestaApi [ ] de Cenad API
+   * @returns Devuelve un [ ] de Cenad
+   */  
   extraerCenads(respuestaApi: any): Cenad[] {
     const cenads: Cenad[] = [];
     respuestaApi._embedded.cenads.forEach(c =>
@@ -148,7 +191,11 @@ export class UsuarioGestorService {
     return cenads;
   }
 
-  //metodo para mapear un cenad segun la interfaz
+  /**
+   * metodo para mapear un cenad segun la interfaz
+   * @param cenadApi Cenad API
+   * @returns Devuelve un CenadImpl
+   */  
   mapearCenad(cenadApi: any): CenadImpl {
     const cenad = new CenadImpl();
     cenad.nombre = cenadApi.nombre;

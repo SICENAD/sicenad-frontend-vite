@@ -4,11 +4,15 @@ import { ConsultaRecursoFormComponent } from './consultaRecurso-form/consultaRec
 import { ConsultaRecursosComponent } from './consultaRecursos/consultaRecursos.component';
 
 const routes: Routes = [
-  {//muestra el listado de los recursos de un cenad
+  {/**
+    * muestra el listado de los recursos de un cenad
+    */
     path: '',
     component: ConsultaRecursosComponent
   },
-  {//muestra el contenido de un recurso, en vista "gestor" o vista "usuario" segun este logueado
+  {/**
+    * muestra el contenido de un recurso, en vista "gestor" o vista "usuario" segun este logueado
+    */
     path: 'formulario/:idRecurso',
     component: ConsultaRecursoFormComponent
   }

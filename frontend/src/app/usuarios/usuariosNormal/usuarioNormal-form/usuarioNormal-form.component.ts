@@ -11,42 +11,65 @@ import { UsuarioNormalService } from '../../service/usuarioNormal.service';
   styleUrls: ['./usuarioNormal-form.component.css']
 })
 export class UsuarioNormalFormComponent implements OnInit {
-  //variable boolean que dice si es administrador o no 
+  /**
+   * variable boolean que dice si es administrador o no 
+   */
   isAdministrador: boolean = false;
-  //variable para capturar el idCenad en el caso de que el que acceda sea el administrador de un cenad
+  /**
+   * variable para capturar el idCenad en el caso de que el que acceda sea el administrador de un cenad
+   */
   idCenad: string = "";
-  //variable que recogera el string para el routerLink de volver atras en funcion de donde viene
+  /**
+   * variable que recogera el string para el routerLink de volver atras en funcion de donde viene
+   */
   volver: string = '';    
-  //variable en la que se grabara el nuevo usuario normal
+  /**
+   * variable en la que se grabara el nuevo usuario normal
+   */
   usuarioNormal: UsuarioNormalImpl = new UsuarioNormalImpl();
-  //variable para cargar todas las unidades
+  /**
+   * variable para cargar todas las unidades
+   */
   unidades: Unidad[] = [];
-  //variable del icono "volver"
+  /**
+   * variable del icono "volver"
+   */
   faVolver = faArrowAltCircleLeft;
 
+  /**
+   * 
+   * @param usuarioNormalService Para usar los metodos propios de UsuarioNormal
+   * @param router Para redirigir
+   * @param activateRoute Para recuperar el id de la barra de navegacion
+   */
   constructor(
     private usuarioNormalService: UsuarioNormalService,
     private router: Router, private activateRoute: ActivatedRoute) { }
 
+  /**
+   * - captura el id del cenad de la barra de navegacion
+   * - la variable volver nos llevara a "usuarios"o a "ppalCenad/{id}/usuarios/{id}"
+   * - debo sacar el idCenad del administrador que esta logueado
+   * - rescata del local storage las unidades
+   */
   ngOnInit(): void {
-    //captura el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     this.isAdministrador = (this.idCenad !==undefined);
-    if (this.isAdministrador) {//la variable volver nos llevara a "usuarios"o a "ppalCenad/{id}/usuarios/{id}"
-      //aqui debo sacar el idCenad del administrador que esta logueado
+    if (this.isAdministrador) {
       this.volver = `/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`;
     } else {
       this.volver = `/usuarios`;
     }
-    //rescata del local storage las unidades
     this.unidades = JSON.parse(localStorage.unidades);
   }
 
-  //metodo para crear un usuario normal
+  /**
+   * metodo para crear un usuario normal
+   * - actualizo el local storage
+   */
   crearUsuarioNormal(): void {
     let ruta: string = (this.idCenad !==undefined) ? `principalCenad/${this.idCenad}/usuarios/${this.idCenad}` : 'usuarios'
     this.usuarioNormalService.create(this.usuarioNormal).subscribe((response) => {
-      //actualizo el local storage
       this.usuarioNormalService.getUsuarios().subscribe((response) => {
         localStorage.usuariosNormal = JSON.stringify(this.usuarioNormalService.extraerUsuarios(response));
         console.log(`He creado el Usuario Normal ${this.usuarioNormal.nombre}`);

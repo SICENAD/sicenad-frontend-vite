@@ -9,38 +9,61 @@ import { UsuarioAdministradorService } from '../../service/usuarioAdministrador.
   styleUrls: ['./usuarioAdministrador-ficha.component.css']
 })
 export class UsuarioAdministradorFichaComponent implements OnInit {
-  //variable que trae del otro componente el usuarioAdministrador
+  /**
+   * variable que trae del otro componente el usuarioAdministrador
+   */
   @Input() usuarioAdministrador: UsuarioAdministradorImpl;
-  //variables que emitiran al otro componente los eventos para editarlo/eliminarlo
+  /**
+   * variable que emitira al otro componente el evento para eliminarlo
+   */
   @Output() usuarioAdministradorEliminar = new EventEmitter<UsuarioAdministradorImpl>();
+  /**
+   * variable que emitira al otro componente el evento para editarlo
+   */
   @Output() usuarioAdministradorEditar = new EventEmitter<UsuarioAdministradorImpl>();
-  //variable para cargar todas los cenads
+  /**
+   * variable para cargar todas los cenads
+   */
   cenads: Cenad[] = [];
-  //variables para poder mostrar el valor inicial del cenad en el campo select
+  /**
+   * variables para poder mostrar el valor inicial del cenad en el campo select
+   */
   cenadSeleccionado: string;
 
+  /**
+   * 
+   * @param usuarioAdministradorService Para usar los metodos propios de UsuarioAdministrador
+   */
   constructor(
     private usuarioAdministradorService: UsuarioAdministradorService) { }
 
+  /**
+   * - rescata del local storage los cenads
+   * - asigna los valores seleccionados a los select de los campos del usuario
+   */
   ngOnInit(): void {
-    //rescata del local storage los cenads
     this.cenads = JSON.parse(localStorage.cenads);
-    //asigna los valores seleccionados a los select de los campos del usuario
     this.actualizarNgModels();
   }
 
-  //metodo para emitir el usuario a eliminar
+  /**
+   * metodo para emitir el usuario a eliminar
+   */
   eliminar(): void {
     this.usuarioAdministradorEliminar.emit(this.usuarioAdministrador);
   }
 
-  //metodo para emitir el usuario a editar
+  /**
+   * metodo para emitir el usuario a editar
+   */
   editar(): void {
     this.usuarioAdministrador.cenad = this.cenadSeleccionado;
     this.usuarioAdministradorEditar.emit(this.usuarioAdministrador);
   }
 
-  //metodo para poder mostrar en los select los valores seleccionados
+  /**
+   * metodo para poder mostrar en los select los valores seleccionados
+   */
   actualizarNgModels(): void {
     this.cenadSeleccionado = this.usuarioAdministrador.cenad.url;
   }

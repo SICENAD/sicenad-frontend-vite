@@ -9,38 +9,61 @@ import { UsuarioNormalService } from '../../service/usuarioNormal.service';
   styleUrls: ['./usuarioNormal-ficha.component.css']
 })
 export class UsuarioNormalFichaComponent implements OnInit {
-  //variable que trae del otro componente el usuario normal
+  /**
+   * variable que trae del otro componente el usuario normal
+   */
   @Input() usuarioNormal: UsuarioNormalImpl;
-  //variables que emitiran al otro componente los eventos para editarlo/eliminarlo
+  /**
+   * variable que emitira al otro componente el evento para eliminarlo
+   */
   @Output() usuarioNormalEliminar = new EventEmitter<UsuarioNormalImpl>();
+  /**
+   * variable que emitira al otro componente el evento para editarlo
+   */
   @Output() usuarioNormalEditar = new EventEmitter<UsuarioNormalImpl>();
-  //variable para cargar todas las unidades
+  /**
+   * variable para cargar todas las unidades
+   */
   unidades: Unidad[] = [];
-  //variables para poder mostrar el valor inicial de la unidad en el campo select
+  /**
+   * variables para poder mostrar el valor inicial de la unidad en el campo select
+   */
   unidadSeleccionada: string;
 
+  /**
+   * 
+   * @param usuarioNormalService Para usar los metodos de UsuarioNormal
+   */
   constructor(
     private usuarioNormalService: UsuarioNormalService) { }
 
+  /**
+   * - rescata del local storage las unidades
+   * - asigna los valores seleccionados a los select de los campos del recurso
+   */
   ngOnInit(): void {
-    //rescata del local storage las unidades
     this.unidades = JSON.parse(localStorage.unidades);
-    //asigna los valores seleccionados a los select de los campos del recurso
     this.actualizarNgModels();
   }
 
-  //metodo para emitir el usuario a eliminar
+  /**
+   * metodo para emitir el usuario a eliminar
+   */
   eliminar(): void {
     this.usuarioNormalEliminar.emit(this.usuarioNormal);
   }
 
-  //metodo para emitir el usuario a editar
+  /**
+   * metodo para emitir el usuario a editar
+   */
   editar(): void {
     this.usuarioNormal.unidad = this.unidadSeleccionada;
     this.usuarioNormalEditar.emit(this.usuarioNormal);
   }
 
-  //metodo para poder mostrar en los select los valores seleccionados
+  /**
+   * metodo para poder mostrar en los select los valores seleccionados
+   */
   actualizarNgModels(): void {
     this.unidadSeleccionada = this.usuarioNormal.unidad.url;
   }

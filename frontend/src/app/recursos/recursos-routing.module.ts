@@ -4,11 +4,15 @@ import { RecursoFormComponent } from './recurso-form/recurso-form.component';
 import { RecursosComponent } from './recursos/recursos.component';
 
 const routes: Routes = [
-  {//muestra listado de los recursos de un cenad
+  {/**
+    * muestra listado de los recursos de un cenad
+    */
     path: '',
     component: RecursosComponent
   },
-  {//para crear nuevos recursos de un cenad
+  {/**
+    * para crear nuevos recursos de un cenad
+    */
     path: 'formulario/:idCenad',
     component: RecursoFormComponent
   },

@@ -10,67 +10,98 @@ import { RecursoService } from 'src/app/recursos/service/recurso.service';
   styleUrls: ['./consultaRecursos.component.css']
 })
 export class ConsultaRecursosComponent implements OnInit {
-  //variable que define el usuario gestor que accede para modificar recursos
+  /**
+   * variable que define el usuario gestor que accede para modificar recursos
+   */
   idUsuarioGestor: string = '';
-  //variable que dice si el usuario esta loggeado como gestor de ese cenad
+  /**
+   * variable que dice si el usuario esta loggeado como gestor de ese cenad
+   */
   isGestorCenad: boolean = false;
-  //variable con la que se muestra o no el boton de ver todas o solo las tuyas
+  /**
+   * variable con la que se muestra o no el boton de ver todas o solo las tuyas
+   */
   cambioBoton: boolean = false;
-  //variable con la que rescatamos de la barra de navegacion el idCenad
+  /**
+   * variable con la que rescatamos de la barra de navegacion el idCenad
+   */
   idCenad: string = "";
-  //variable en la que se guardan todos los recursos del cenad
+  /**
+   * variable en la que se guardan todos los recursos del cenad
+   */
   recursos: Recurso[] = [];
-  //variable que recoge las categorias del cenad. inicialmente las padre, luego van filtrandose
+  /**
+   * variable que recoge las categorias del cenad. inicialmente las padre, luego van filtrandose
+   */
   categoriasFiltradas: Categoria[] = [];
-  //variable que recoge los recursos pertenecientes a las categorias filtradas
+  /**
+   * variable que recoge los recursos pertenecientes a las categorias filtradas
+   */
   recursosFiltrados: Recurso[] = [];
-  //con esta variable vamos mostrando la categoria con la que he filtrado y de ella se sacan subcategorias y recursos
+  /**
+   * con esta variable vamos mostrando la categoria con la que he filtrado y de ella se sacan subcategorias y recursos
+   */
   categoriaSeleccionada: Categoria;
 
+  /**
+   *
+   * @param recursoService Para usar los metodos propios de Recurso
+   * @param router Para redirigir
+   * @param activateRoute Para recuperar el id de la barra de navegacion
+   */
   constructor(
     private recursoService: RecursoService,
     private router: Router, private activateRoute: ActivatedRoute) { }
 
+    /**
+     * - rescatamos el id del Cenad de la barra de navegacion
+     * - rescatamos del local storage los recursos de ese cenad
+     * - asignamos a la variable categorias filtradas las categorias padre del cenad, para comenzar a filtrar
+     * - comprobamos si el usuario es un gestor de este cenad
+     */
   ngOnInit(): void {
-    //rescatamos el id del Cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
-    //rescatamos del local storage los recursos de ese cenad
     this.recursos = JSON.parse(localStorage.getItem(`recursos_${this.idCenad}`));
-    //asignamos a la variable categorias filtradas las categorias padre del cenad, para comenzar a filtrar
     this.categoriasFiltradas = JSON.parse(localStorage.getItem(`categoriasPadre_${this.idCenad}`));
-    //comprobamos si el usuario es un gestor de este cenad
     if((sessionStorage.isGestor ==='true') && (sessionStorage.idCenad === this.idCenad)) {
       this.idUsuarioGestor = sessionStorage.idUsuario;
       this.isGestorCenad = this.cambioBoton = true;
     }
   }
 
-  //metodo que filtra por la categoria seleccionada y muestra los recursos de la misma o sus hijas...
+  /**
+   * metodo que filtra por la categoria seleccionada y muestra los recursos de la misma o sus hijas...
+   * - se asigna a la variable de categorias filtradas las subcategorias de la categoria seleccionada
+   * - si la categoria seleccionada no tiene subcategorias, los recursos a mostrar son los suyos
+   * - los recursos a mostrar son los que tenga cualquier subcategoria de la seleccionada, sea el nivel de subcategoria que sea
+   */
   filtrar() {
-    //se asigna a la variable de categorias filtradas las subcategorias de la categoria seleccionada
     this.recursoService.getSubcategorias(this.categoriaSeleccionada).subscribe((response) =>
       this.categoriasFiltradas = this.recursoService.extraerCategorias(response));
     setTimeout(() => {
-      //si la categoria seleccionada no tiene subcategorias, los recursos a mostrar son los suyos
       if (this.categoriasFiltradas.length === 0) {
         this.recursoService.getRecursosDeCategoria(this.categoriaSeleccionada).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
       }
-      else {//los recursos a mostrar son los que tenga cualquier subcategoria de la seleccionada, sea el nivel de subcategoria que sea
+      else {
         this.recursoService.getRecursosDeSubcategorias(this.categoriaSeleccionada).subscribe((response) => this.recursos = this.recursoService.extraerRecursos(response));
       }
     }, 1000);
   }
 
-  //metodo para resetear los filtros y volver a mostrar todos los recursos del cenad
+  /**
+   * metodo para resetear los filtros y volver a mostrar todos los recursos del cenad
+   */
   borrarFiltros() {
     this.categoriasFiltradas = JSON.parse(localStorage.getItem(`categoriasPadre_${this.idCenad}`));
     this.recursos = JSON.parse(localStorage.getItem(`recursos_${this.idCenad}`));
     this.categoriaSeleccionada = null;
   }
 
-  //metodo para conseguir los recursos de un gestor
+  /**
+   * metodo para conseguir los recursos de un gestor
+   */
   verSoloMisRecursos(): void {
-    this.recursoService.getRecursosDeGestor(this.idUsuarioGestor).subscribe((response) => { 
+    this.recursoService.getRecursosDeGestor(this.idUsuarioGestor).subscribe((response) => {
       if (response._embedded) {//con este condicional elimino el error de consola si no hay ningun recurso
         this.recursos = this.recursoService.extraerRecursos(response);
       }});

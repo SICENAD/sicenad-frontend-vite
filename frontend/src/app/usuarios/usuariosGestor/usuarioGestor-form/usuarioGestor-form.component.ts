@@ -12,34 +12,55 @@ import { UsuarioGestorService } from '../../service/usuarioGestor.service';
   styleUrls: ['./usuarioGestor-form.component.css']
 })
 export class UsuarioGestorFormComponent implements OnInit {
-  //variable para capturar el id del cenad de la barra de navegacion
+  /**
+   * variable para capturar el id del cenad de la barra de navegacion
+   */
   idCenad: string = "";
-  //variable en la que se grabara el nuevo usuarioGestor
+  /**
+   * variable en la que se grabara el nuevo usuarioGestor
+   */
   usuarioGestor: UsuarioGestorImpl = new UsuarioGestorImpl();
-  //variable del icono "volver"
+  /**
+   * variable del icono "volver"
+   */
   faVolver = faArrowAltCircleLeft;
-  //variable para poner la ruta de vuelta
+  /**
+   * variable para poner la ruta de vuelta
+   */
   volver: string = '';
-  //variable que recoge el host
+  /**
+   * variable que recoge el host
+   */
   host: string = environment.hostSicenad;
 
+  /**
+   * 
+   * @param usuarioGestorService Para usar los metodos propios de UsuarioGestor
+   * @param router Para redirigir
+   * @param activateRoute Para recuperar el id de la barra de navegacion
+   * @param appConfigService Para usar las variables del `properties`
+   */
   constructor(
     private usuarioGestorService: UsuarioGestorService,
     private router: Router, private activateRoute: ActivatedRoute, private appConfigService: AppConfigService) {
       this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
      }
 
+  /**
+   * resacata el id del cenad de la barra de navegacion
+   */
   ngOnInit(): void {
-    //resacata el id del cenad de la barra de navegacion
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     this.volver = `/principalCenad/${this.idCenad}/usuarios/${this.idCenad}`;
   }
 
-  //metodo para crear un usuarioGestor
+  /**
+   * metodo para crear un usuarioGestor
+   * - actualiza localStorage
+   */
   crearUsuarioGestor(): void {
     this.usuarioGestor.cenad = `${this.host}cenads/${this.idCenad}`;
     this.usuarioGestorService.create(this.usuarioGestor).subscribe((response) => {
-      //actualizo el local storage
       this.usuarioGestorService.getUsuarios().subscribe((response) => localStorage.usuariosGestor = JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));
       this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => {
         localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response)));

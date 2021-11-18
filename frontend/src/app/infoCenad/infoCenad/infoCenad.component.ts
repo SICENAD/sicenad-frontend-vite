@@ -103,8 +103,9 @@ export class InfoCenadComponent implements OnInit {
           this.isAdminCenad = this.cambioBoton = true;
         }
       });
-      this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/infoCenads/${this.idCenad}/` : `${environment.hostSicenad}files/infoCenads/${this.idCenad}/`;
     }, 1000);
+    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/infoCenads/${this.idCenad}/` : `${environment.hostSicenad}files/infoCenads/${this.idCenad}/`;
+
     this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;
   }
 

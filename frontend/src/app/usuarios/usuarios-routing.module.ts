@@ -6,23 +6,33 @@ import { UsuarioGestorFormComponent } from './usuariosGestor/usuarioGestor-form/
 import { UsuarioNormalFormComponent } from './usuariosNormal/usuarioNormal-form/usuarioNormal-form.component';
 
 const routes: Routes = [
-  {//muestra la pantalla inicial del superadministrador
+  {/**
+    * muestra la pantalla inicial del superadministrador
+    */
     path: '',
     component: UsuariosComponent
   },
-  {//para crear un administrador
+  {/**
+    * para crear un administrador
+    */
     path: 'formulario-administrador',
     component: UsuarioAdministradorFormComponent
   },
-  {//para crear un usuarioNormal
+  {/**
+    * para crear un usuarioNormal
+    */
     path: 'formulario-usuarioNormal',
     component: UsuarioNormalFormComponent
   },
-  {//para crear un usuarioNormal siendo un cenad
+  {/**
+    * para crear un usuarioNormal siendo un cenad
+    */
     path: 'formulario-usuarioNormal/:idCenad',
     component: UsuarioNormalFormComponent
   },
-  {//para crear un gestor
+  {/**
+    * para crear un gestor
+    */
     path: 'formulario-gestor/:idCenad',
     component: UsuarioGestorFormComponent
   },
