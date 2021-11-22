@@ -152,10 +152,10 @@ export class InfoCenadComponent implements OnInit {
    * @param nombreArchivo Nombre del archivo
    * @returns Devuelve la ruta del archivo
    */
-  pathArchivo(nombreArchivo: string): string {
-    const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
+   pathArchivo(nombreArchivo: string): string {
+    const pathImg: string = nombreArchivo ? `${this.pathRelativo}${nombreArchivo}` : '';
     return pathImg;
-  }
+  } 
 
   /**
    * metodo para modificar el cenad

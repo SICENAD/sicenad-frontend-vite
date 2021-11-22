@@ -9,6 +9,7 @@ export interface SolicitudCalendario {
     fechaHoraFinRecurso: string;
     unidadUsuaria: string;
     etiqueta: string;
+    observacionesCenad: string;
     idUnidad: string;
     recurso: Recurso | any;
     url: string;

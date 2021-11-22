@@ -13,7 +13,7 @@ export class SolicitudRecursoImpl implements SolicitudRecurso {
 	jefeUnidadUsuaria: string;
 	pocEjercicio: string;
 	tlfnRedactor: string;
-	estado: string; // Borrador, Pendiente, Aprobada, Denegada, Cancelada, Finalizada
+	estado: string; // Borrador, Solicitada, Validada, Cancelada, Denegada, Planificada y Aviso
 	fechaSolicitud: string;
 	fechaUltModSolicitud: string;
 	fechaHoraInicioRecurso: string;
@@ -31,7 +31,7 @@ export class SolicitudRecursoImpl implements SolicitudRecurso {
   idRecurso: string;
   // DATOS ESPECIFICOS
   //Zona Caida Proyectiles/Explosivos
-	isConMunTrazadoraIluminanteFumigena: boolean;
+	conMunTrazadoraIluminanteFumigena: boolean;
   solicitudesArmas: SolicitudArma[];
   //Campo Tiro Carros, VCI/C, Precisión
   tipoEjercicio: string;
@@ -62,7 +62,7 @@ export class SolicitudRecursoImpl implements SolicitudRecurso {
   //Acantonamiento-Vivac
   vivac: string;
   //Zona de vida Batallón
-  isConUsoCocina: boolean;
+  conUsoCocina: boolean;
   numPersonasZVB: number;
   //Zona de Espera
   numPersonasZE: number;

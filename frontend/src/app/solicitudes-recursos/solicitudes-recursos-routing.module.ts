@@ -6,15 +6,15 @@ import { SolicitudesTodasComponent } from './solicitudes-todas/solicitudes-todas
 
 
 const routes: Routes = [
-  {
+  {//componente donde aparecen las solicitudes agrupadas por estado (solo se visualizan las 5 primeras)
     path: '',
     component: SolicitudesRecursosComponent
   },
-  {
+  {//componente donde se pueden visualizar todas las solicitudes
     path: 'solicitudesTodas/:idCenad',
     component: SolicitudesTodasComponent
   },
-  {
+  {//componente formulario, donde se pueden crear, actualizar y borrar solicitudes
     path: 'formulario/:idCenad/:idSolicitud',
     component: SolicitudRecursoFormComponent
   }

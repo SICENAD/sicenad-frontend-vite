@@ -1,6 +1,7 @@
-.titulo {
+.titulo,
+.titulo-consulta {
   color: #588157;
-  font-size: 14px;
+  font-size: 13px;
   text-align: center;
 }
 
@@ -10,7 +11,8 @@
   margin: auto;
 }
 
-.row:hover {
+.titulo:hover {
+  padding: 10px;
   background-color: blanchedalmond;
 }
 
@@ -33,4 +35,14 @@ hr {
 
 .btn:hover {
   background-color: #a3b18a;
+}
+
+a.ver-grafica {
+  font-size: small;
+}
+
+a.ver-grafica:hover {
+  color: aquamarine;
+  font-weight: bold;
+  text-shadow: 10px 10px 20px yellowgreen;
 }

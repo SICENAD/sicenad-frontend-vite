@@ -23,11 +23,7 @@ export class FicheroFichaComponent implements OnInit {
   /**
    * variable para dar al gestor la opcion de elegir que categoria de fichero asignar a cada fichero
    */
-  categoriasFichero: CategoriaFichero[] = [];
-  /**
-   * variable que crea la ruta de las cartografias
-   */
-  pathRelativo: string = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
+  categoriasFichero: CategoriaFichero[] = [];  
   /**
    * variable de seleccion del archivo
    */

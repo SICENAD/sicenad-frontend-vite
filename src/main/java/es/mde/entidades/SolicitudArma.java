@@ -23,8 +23,10 @@ public class SolicitudArma {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
-	private int coordAsentamiento;
-	private int coordPuntoCaida;
+	private int coordXAsentamiento;
+	private int coordYAsentamiento;
+	private int coordXPuntoCaida;
+	private int coordYPuntoCaida;
 	private int alcanceMax;
 	private int zonaSegAngulo;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -58,35 +60,67 @@ public class SolicitudArma {
 	}
 
 	/**
-	 * Devuelve las coordenadas del asentamiento del "par" SOLICITUD-ARMA
-	 * @return Devuelve las coordenadas del asentamiento del "par" SOLICITUD-ARMA
+	 * Devuelve las coordenadas X del asentamiento del "par" SOLICITUD-ARMA
+	 * @return Devuelve las coordenadas X del asentamiento del "par" SOLICITUD-ARMA
 	 */
-	public int getCoordAsentamiento() {
-		return coordAsentamiento;
+	public int getCoordXAsentamiento() {
+		return coordXAsentamiento;
 	}
 
 	/**
-	 * Guarda las coordenadas del asentamiento del "par" SOLICITUD-ARMA
-	 * @param coordAsentamiento Coordenadas del asentamiento del "par" SOLICITUD-ARMA
+	 * Guarda las coordenadas X del asentamiento del "par" SOLICITUD-ARMA
+	 * @param coordAsentamiento Coordenadas X del asentamiento del "par" SOLICITUD-ARMA
 	 */
-	public void setCoordAsentamiento(int coordAsentamiento) {
-		this.coordAsentamiento = coordAsentamiento;
+	public void setCoordXAsentamiento(int coordXAsentamiento) {
+		this.coordXAsentamiento = coordXAsentamiento;
+	}
+	
+	/**
+	 * Devuelve las coordenadas Y del asentamiento del "par" SOLICITUD-ARMA
+	 * @return Devuelve las coordenadas Y del asentamiento del "par" SOLICITUD-ARMA
+	 */
+	public int getCoordYAsentamiento() {
+		return coordYAsentamiento;
 	}
 
 	/**
-	 * Devuelve las coordenadas del punto de caída del "par" SOLICITUD-ARMA
-	 * @return Devuelve las coordenadas del punto de caída del "par" SOLICITUD-ARMA
+	 * Guarda las coordenadas Y del asentamiento del "par" SOLICITUD-ARMA
+	 * @param coordAsentamiento Coordenadas Y del asentamiento del "par" SOLICITUD-ARMA
 	 */
-	public int getCoordPuntoCaida() {
-		return coordPuntoCaida;
+	public void setCoordYAsentamiento(int coordYAsentamiento) {
+		this.coordYAsentamiento = coordYAsentamiento;
 	}
 
 	/**
-	 * Guarda las coordenadas del punto de caída del "par" SOLICITUD-ARMA
-	 * @param coordPuntoCaida Coordenadas del punto de caída del "par" SOLICITUD-ARMA
+	 * Devuelve las coordenadas X del punto de caída del "par" SOLICITUD-ARMA
+	 * @return Devuelve las coordenadas X del punto de caída del "par" SOLICITUD-ARMA
 	 */
-	public void setCoordPuntoCaida(int coordPuntoCaida) {
-		this.coordPuntoCaida = coordPuntoCaida;
+	public int getCoordXPuntoCaida() {
+		return coordXPuntoCaida;
+	}
+
+	/**
+	 * Guarda las coordenadas X del punto de caída del "par" SOLICITUD-ARMA
+	 * @param coordPuntoCaida Coordenadas X del punto de caída del "par" SOLICITUD-ARMA
+	 */
+	public void setCoordXPuntoCaida(int coordXPuntoCaida) {
+		this.coordXPuntoCaida = coordXPuntoCaida;
+	}
+	
+	/**
+	 * Devuelve las coordenadas Y del punto de caída del "par" SOLICITUD-ARMA
+	 * @return Devuelve las coordenadas Y del punto de caída del "par" SOLICITUD-ARMA
+	 */
+	public int getCoordYPuntoCaida() {
+		return coordYPuntoCaida;
+	}
+
+	/**
+	 * Guarda las coordenadas Y del punto de caída del "par" SOLICITUD-ARMA
+	 * @param coordPuntoCaida Coordenadas Y del punto de caída del "par" SOLICITUD-ARMA
+	 */
+	public void setCoordYPuntoCaida(int coordYPuntoCaida) {
+		this.coordYPuntoCaida = coordYPuntoCaida;
 	}
 
 	/**
@@ -115,7 +149,7 @@ public class SolicitudArma {
 
 	/**
 	 * Guarda el ángulo de la zona de seguridad del "par" SOLICITUD-ARMA
-	 * @param zonaSegAngulo Ángulo de la zona de seguridad del "par" SOLICITUD-ARMA
+	 * @param zonaSegAngulo Angulo de la zona de seguridad del "par" SOLICITUD-ARMA
 	 */
 	public void setZonaSegAngulo(int zonaSegAngulo) {
 		this.zonaSegAngulo = zonaSegAngulo;

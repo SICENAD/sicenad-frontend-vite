@@ -6,7 +6,7 @@
     </a>
   </div>
   <div class="row mt-0 mb-4 justify-content-center">
-    <div class="col-6 col-md-3 por-estados">
+    <div class="col-6 col-md-2 por-estados">
       <label for="solicitudes" class="mr-2 solicitudes">Elige un Tipo de Solicitud:</label>
       <select name="solicitudesFiltradas" id="solicitudesFiltradas" [(ngModel)]="estadoSeleccionado"
         (change)="filtrar()">
@@ -36,7 +36,7 @@
       <button class="mr-1 mt-2" *ngIf='categoriaSeleccionada' (click)="borrarFiltro('categoria')">Borrar Filtro
         Categoria</button>
     </div>
-    <div class="col-6 col-md-4 por-fecha">
+    <div class="col-6 col-md-5 por-fecha">
       <label for="fechas" class="mr-2 fechas">Fecha Desde:</label>
       <input type="date" pattern="[0-9]{2}-[0-9]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}" name="inicioRecurso"
         id="inicioRecurso" [(ngModel)]="fechaInicioSeleccionada">
@@ -59,11 +59,11 @@
         <h5 class="text-center titulo-todas">TODAS LAS SOLICITUDES</h5>
         <div class="row">
           <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>UCO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>ESTADO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>
+          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
+          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>ESTADO</u></b></div>
+          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>RECURSO</u></b></div>
+          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. INICIO</u></b></div>
+          <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>F. FIN</u></b></div>
         </div>
       </div>
       <div *ngIf='solicitudesFiltradas.length != 0; else elseFiltradas'>

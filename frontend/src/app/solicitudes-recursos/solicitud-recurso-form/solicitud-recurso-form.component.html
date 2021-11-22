@@ -7,7 +7,8 @@
       </a>
     </div>
     <div class="col-lg-2 col-md-12">
-      <a class="nav-link text-center volver" [routerLink]="['/principalCenad', idCenad, 'calendarios', idCenad]" routerLinkActive="router-link-active">
+      <a class="nav-link text-center volver" [routerLink]="['/principalCenad', idCenad, 'calendarios', idCenad]"
+        routerLinkActive="router-link-active">
         <fa-icon class="fa-1x" [icon]="faVolver"></fa-icon>&nbsp;<strong>Volver Calendario</strong>
       </a>
     </div>
@@ -137,7 +138,7 @@
         <label>Redactor (Teléfono): <sup class="text-danger">*</sup></label>
         <input type="text" class="form-control" [(ngModel)]="solicitud.tlfnRedactor"
           placeholder="RCT UCO/ RCT durante EX" name="tfno" required [readonly]="!isAdministrador && !isBorrador"
-          minlength="15" maxlength="30" #tfno="ngModel" [ngClass]="{
+          minlength="7" maxlength="30" #tfno="ngModel" [ngClass]="{
           'is-invalid': tfno.invalid && (tfno.dirty || tfno.touched),
           'is-valid': !tfno.invalid
         }" />
@@ -210,7 +211,7 @@
       </div>
     </div>
 
-    
+
     <!--  -->
     <!-- DATOS ESPECIFICOS -->
     <!-- ZONA CAIDA PROYECTILES/EXPLOSIVOS -->
@@ -224,25 +225,38 @@
         <div class="col-lg-3 col-md-12 ml-2">
           <label for="conMunTraz">Con Munición Trazadora Iluminante Fumigena: <sup class="text-danger"></sup></label>
           <input class="form-check-input ml-2" type="checkbox" value="" id="conMunTraz" name="conMunTraz"
-            [readonly]="!isBorrador" [(ngModel)]="isConMunTrazIluFumig" >
+            [readonly]="!isBorrador" [(ngModel)]="isConMunTrazIluFumig">
         </div>
       </div>
       <!-- Consulta -->
       <div *ngIf="!isBorrador">
-        <div *ngIf='solicitudesArmas; else elseArmas'>
+        <div *ngIf='solicitudesArmas.length != 0; else elseArmas'>
           <div class="row mt-2 titulos">
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b></b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 text-center titulo"><b><u>ASENTAMIENTO</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 text-center titulo"><b><u>PUNTO DE CAIDA</u></b>
+            </div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b></b></div>
+          </div>
+          <div class="row mt-0 titulos">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>ARMA</b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>TIPO TIRO</b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>COORD ASENTAMIENTO</b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>COORD PUNTO CAIDA</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>TIPO TIRO</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>COORD X</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>COORD Y</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>COORD X</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>COORD Y</b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>ALCANCE MAX</b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>ZONA SEG ANGULO</b></div>
             <hr class='w-100 titulo-solicitudesZC'>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"></div>
           </div>
           <div *ngFor="let solicitudArma of solicitudesArmas">
-            <app-arma [solicitudArma]="solicitudArma" [isConsulta]="true"></app-arma>
-          </div>         
+            <app-arma [solicitudArma]="solicitudArma" (solicitudArmaSeleccionada)="verDatos($event)"
+              [isConsulta]="isConsultaArmas" (armaSeleccionada)="verDatosArma($event)" [idCenad]="idCenad"
+              *ngIf="solicitud.recurso" [nombreRecurso]="solicitud.recurso.nombre"></app-arma>
+          </div>
         </div>
         <ng-template #elseArmas>
           <div class="row justify-content-center pt-2 mb-2">
@@ -272,32 +286,61 @@
               <label class="ml-2" for="">{{ tipoTiroSeleccionado | uppercase}}</label>
             </div>
             <div class="col-lg-3 col-md-12 ml-2 mr-2">
-              <label>Coord Asentamiento: <sup class="text-danger">*</sup></label>
-              <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordAsentamiento"
-                placeholder="Coordenadas del Asentamiento" name="coordAsentamiento"
-                [readonly]="!isAdministrador && !isBorrador" required 
-                #coordAsentamiento="ngModel" [ngClass]="{
-                    'is-invalid': coordAsentamiento.invalid && (coordAsentamiento.dirty || coordAsentamiento.touched),
-                    'is-valid': !coordAsentamiento.invalid
+              <label>Coord X Asentamiento: <sup class="text-danger">*</sup></label>
+              <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordXAsentamiento"
+                placeholder="Coordenadas X del Asentamiento" name="coordAsentamientoX"
+                [readonly]="!isAdministrador && !isBorrador" required #coordAsentamientoX="ngModel" [ngClass]="{
+                    'is-invalid': coordAsentamientoX.invalid && (coordAsentamientoX.dirty || coordAsentamientoX.touched),
+                    'is-valid': !coordAsentamientoX.invalid
                   }" />
               <div class="text-danger"
-                *ngIf="coordAsentamiento.invalid && (coordAsentamiento.dirty || coordAsentamiento.touched)">
-                <div *ngIf="coordAsentamiento.errors.required">
+                *ngIf="coordAsentamientoX.invalid && (coordAsentamientoX.dirty || coordAsentamientoX.touched)">
+                <div *ngIf="coordAsentamientoX.errors.required">
                   El campo es obligatorio
                 </div>
               </div>
             </div>
             <div class="col-lg-3 col-md-12 ml-2 mr-2">
-              <label>Coord Punto Caida: <sup class="text-danger">*</sup></label>
-              <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordPuntoCaida"
-                placeholder="Coordenadas del Punto de Caida" name="coordPuntoCaida" required 
-                #coordPuntoCaida="ngModel" [readonly]="!isAdministrador && !isBorrador" [ngClass]="{
-                    'is-invalid': coordPuntoCaida.invalid && (coordPuntoCaida.dirty || coordPuntoCaida.touched),
-                    'is-valid': !coordPuntoCaida.invalid
+              <label>Coord Y Asentamiento: <sup class="text-danger">*</sup></label>
+              <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordYAsentamiento"
+                placeholder="Coordenadas Y del Asentamiento" name="coordAsentamientoY"
+                [readonly]="!isAdministrador && !isBorrador" required #coordAsentamientoY="ngModel" [ngClass]="{
+                    'is-invalid': coordAsentamientoY.invalid && (coordAsentamientoY.dirty || coordAsentamientoY.touched),
+                    'is-valid': !coordAsentamientoY.invalid
                   }" />
               <div class="text-danger"
-                *ngIf="coordPuntoCaida.invalid && (coordPuntoCaida.dirty || coordPuntoCaida.touched)">
-                <div *ngIf="coordPuntoCaida.errors.required">
+                *ngIf="coordAsentamientoY.invalid && (coordAsentamientoY.dirty || coordAsentamientoY.touched)">
+                <div *ngIf="coordAsentamientoY.errors.required">
+                  El campo es obligatorio
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-12 ml-2 mr-2">
+              <label>Coord X Punto Caida: <sup class="text-danger">*</sup></label>
+              <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordXPuntoCaida"
+                placeholder="Coordenadas del Punto de Caida" name="coordPuntoCaidaX" required
+                #coordPuntoCaidaX="ngModel" [readonly]="!isAdministrador && !isBorrador" [ngClass]="{
+                    'is-invalid': coordPuntoCaidaX.invalid && (coordPuntoCaidaX.dirty || coordPuntoCaidaX.touched),
+                    'is-valid': !coordPuntoCaidaX.invalid
+                  }" />
+              <div class="text-danger"
+                *ngIf="coordPuntoCaidaX.invalid && (coordPuntoCaidaX.dirty || coordPuntoCaidaX.touched)">
+                <div *ngIf="coordPuntoCaidaX.errors.required">
+                  El cmapo es obligatorio
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-12 ml-2 mr-2">
+              <label>Coord Y Punto Caida: <sup class="text-danger">*</sup></label>
+              <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordYPuntoCaida"
+                placeholder="Coordenadas del Punto de Caida" name="coordPuntoCaida" required #coordPuntoCaidaY="ngModel"
+                [readonly]="!isAdministrador && !isBorrador" [ngClass]="{
+                    'is-invalid': coordPuntoCaidaY.invalid && (coordPuntoCaidaY.dirty || coordPuntoCaidaY.touched),
+                    'is-valid': !coordPuntoCaidaY.invalid
+                  }" />
+              <div class="text-danger"
+                *ngIf="coordPuntoCaidaY.invalid && (coordPuntoCaidaY.dirty || coordPuntoCaidaY.touched)">
+                <div *ngIf="coordPuntoCaidaY.errors.required">
                   El cmapo es obligatorio
                 </div>
               </div>
@@ -305,9 +348,8 @@
             <div class="col-lg-3 col-md-12 ml-2 mr-2">
               <label>Alcance Max: <sup class="text-danger">*</sup></label>
               <input type="number" class="form-control" [(ngModel)]="solicitudArma.alcanceMax"
-                placeholder="Coordenadas del Punto de Caida" name="alcanceMax"
-                [readonly]="!isAdministrador && !isBorrador" required #alcanceMax="ngModel"
-                [ngClass]="{
+                placeholder="Alcance Máximo" name="alcanceMax" [readonly]="!isAdministrador && !isBorrador" required
+                #alcanceMax="ngModel" [ngClass]="{
                     'is-invalid': alcanceMax.invalid && (alcanceMax.dirty || alcanceMax.touched),
                     'is-valid': !alcanceMax.invalid
                   }" />
@@ -321,8 +363,7 @@
               <label>Zona Seguridad Angulo: <sup class="text-danger">*</sup></label>
               <input type="number" class="form-control" [(ngModel)]="solicitudArma.zonaSegAngulo"
                 placeholder="Angulo de la zona de seguridad" name="zonaSegAng"
-                [readonly]="!isAdministrador && !isBorrador" #zonaSegAng="ngModel"
-                [ngClass]="{
+                [readonly]="!isAdministrador && !isBorrador" #zonaSegAng="ngModel" [ngClass]="{
                     'is-invalid': zonaSegAng.invalid && (zonaSegAng.dirty || zonaSegAng.touched),
                     'is-valid': !zonaSegAng.invalid
                   }" />
@@ -342,19 +383,33 @@
       <div *ngIf="isBorrador">
         <div *ngIf="solicitudesArmas.length != 0; else elseArmas">
           <div class="row mt-2 titulos">
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b></b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 text-center titulo"><b><u>ASENTAMIENTO</u></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 text-center titulo"><b><u>PUNTO DE CAIDA</u></b>
+            </div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b></b></div>
+            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b></b></div>
+          </div>
+          <div class="row mt-0 titulos">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>ARMA</b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>TIPO TIRO</b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>COORD ASENTAMIENTO</b></div>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>COORD PUNTO CAIDA</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>TIPO TIRO</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>COORD X</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>COORD Y</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>COORD X</b></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>COORD Y</b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>ALCANCE MAX</b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>ZONA SEG ANGULO</b></div>
             <hr class='w-100 titulo-solicitudesZC'>
-            <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"></div>
+            <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"></div>
           </div>
           <div *ngFor="let solicitudArma of solicitudesArmas">
             <!-- (idSolicitudArmaBorrada)="onActualizarSolArmasNuevas(idArmaSeleccionada)" -->
-            <app-arma [solicitudArma]="solicitudArma" *ngIf='solicitudArma' [isConsulta]="false"></app-arma>
-          </div>          
+            <app-arma [solicitudArma]="solicitudArma" [isConsulta]="isConsultaArmas"
+              (solicitudArmaSeleccionada)="verDatos($event)" (armaSeleccionada)="verDatosArma($event)"
+              *ngIf='solicitudArma && uRlRecursoSeleccionado' [idCenad]="idCenad"
+              [uRlRecursoSeleccionado]="uRlRecursoSeleccionado"></app-arma>
+          </div>
         </div>
         <ng-template #elseArmas>
           <div class="row justify-content-center pt-2 mb-2">
@@ -446,8 +501,7 @@
           <label>Arma Secundaria num disparos previstos: <sup class="text-danger">*</sup></label>
           <input type="number" class="form-control" [(ngModel)]="solicitud.armaSecundNumDisparosPrev"
             placeholder="Numero de disparos previstos" name="armasecunddisprev"
-            [readonly]="!isAdministrador && !isBorrador" required 
-            #armasecunddisprev="ngModel" [ngClass]="{
+            [readonly]="!isAdministrador && !isBorrador" required #armasecunddisprev="ngModel" [ngClass]="{
                 'is-invalid': armasecunddisprev.invalid && (armasecunddisprev.dirty || armasecunddisprev.touched),
                 'is-valid': !armasecunddisprev.invalid
               }" />
@@ -566,8 +620,8 @@
         </div>
         <div class="col-lg-3 col-md-12 ml-2 mr-2">
           <label>Arma 1 Longitud: <sup class="text-danger">*</sup></label>
-          <input type="number" class="form-control" [(ngModel)]="solicitud.arma1CTlongitud" placeholder="Longitud Arma 1"
-            name="arma1Long" [readonly]="!isAdministrador && !isBorrador" required 
+          <input type="number" class="form-control" [(ngModel)]="solicitud.arma1CTlongitud"
+            placeholder="Longitud Arma 1" name="arma1Long" [readonly]="!isAdministrador && !isBorrador" required
             #arma1Long="ngModel" [ngClass]="{
                 'is-invalid': arma1Long.invalid && (arma1Long.dirty || arma1Long.touched),
                 'is-valid': !arma1Long.invalid
@@ -595,8 +649,8 @@
         </div>
         <div class="col-lg-3 col-md-12 ml-2 mr-2">
           <label>Arma 2 Longitud: <sup class="text-danger">*</sup></label>
-          <input type="number" class="form-control" [(ngModel)]="solicitud.arma2CTlongitud" placeholder="Longitud Arma 2"
-            name="arma2Long" [readonly]="!isAdministrador && !isBorrador"
+          <input type="number" class="form-control" [(ngModel)]="solicitud.arma2CTlongitud"
+            placeholder="Longitud Arma 2" name="arma2Long" [readonly]="!isAdministrador && !isBorrador"
             #arma2Long="ngModel" [ngClass]="{
                   'is-invalid': arma2Long.invalid && (arma2Long.dirty || arma2Long.touched),
                   'is-valid': !arma2Long.invalid
@@ -676,7 +730,7 @@
         <div class="col-lg-3 col-md-12 ml-2 mr-2">
           <label>Con uso de cocina: <sup class="text-danger">*</sup></label>
           <input class="form-check-input ml-2" name="conUsoCocina" type="checkbox" value="" id="defaultCheck1"
-            [readonly]="!isAdministrador && !isBorrador" [(ngModel)]="solicitud.isConUsoCocina">
+            [readonly]="!isAdministrador && !isBorrador" [(ngModel)]="solicitud.conUsoCocina">
         </div>
         <div class="col-lg-3 col-md-12 ml-2 mr-2">
           <label>Numero Personas: <sup class="text-danger">*</sup></label>
@@ -919,12 +973,12 @@
       </div>
       <div class="row mt-1 justify-content-between">
         <div class="col-4 text-center">
-          <label for="validationServer02">Fecha Fin Documentacion: <sup class="text-danger"></sup></label>         
+          <label for="validationServer02">Fecha Fin Documentacion: <sup class="text-danger"></sup></label>
         </div>
-        <div class="col-3 text-center">         
+        <div class="col-3 text-center">
           <input type="date" class="form-control" [(ngModel)]="fechaFinDocuParse" placeholder="dd-MM-yyyy" required
-            [readonly]="isUsuarioNormal && isValidada" minlength="10" maxlength="10" name="fechaFinDocu" #fechaFinDocu="ngModel"
-            [ngClass]="{
+            [readonly]="isUsuarioNormal && isValidada" minlength="10" maxlength="10" name="fechaFinDocu"
+            #fechaFinDocu="ngModel" [ngClass]="{
                 'is-invalid': fechaFinDocu.invalid && (fechaFinDocu.dirty || fechaFinDocu.touched),
                 'is-valid': !fechaFinDocu.invalid }" />
           <div class="text-danger" *ngIf="fechaFinDocu.invalid && (fechaFinDocu.dirty || fechaFinDocu.touched)">
@@ -937,7 +991,8 @@
           </div>
         </div>
         <div class="col-5 text-right" *ngIf="!isFechaFinDocu">
-          <button class="btn text-white" [disabled]="isUsuarioNormal" (click)='mostrarNuevoFicheroCenad()'>Nuevo Fichero Cenad</button>
+          <button class="btn text-white" [disabled]="isUsuarioNormal" (click)='mostrarNuevoFicheroCenad()'>Nuevo Fichero
+            Cenad</button>
         </div>
       </div>
       <div class="card text-left mt-2" *ngIf='nuevoFicheroCenad'>
@@ -994,14 +1049,16 @@
         <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"></div>
       </div>
       <div *ngFor="let fichero of ficherosCenad">
-        <app-fichero-solicitud [fichero]="fichero" [isUnidad]="false" *ngIf='fichero' (ficheroSeleccionado)='verDatosFichero($event)'
-          (ficheroEliminar)='onEliminarFichero($event)'></app-fichero-solicitud>
+        <app-fichero-solicitud [fichero]="fichero" [isUnidad]="false" *ngIf='fichero'
+          (ficheroSeleccionado)='verDatosFichero($event)' (ficheroEliminar)='onEliminarFichero($event)'>
+        </app-fichero-solicitud>
       </div>
     </div>
 
 
     <!-- fichero UNIDAD -->
-    <div class="col-lg-12 col-md-12 pt-3" *ngIf="(isUsuarioNormal && isValidada) || (isUsuarioNormal && isValidada) || (isGestor && isValidada)">
+    <div class="col-lg-12 col-md-12 pt-3"
+      *ngIf="(isUsuarioNormal && isValidada) || (isUsuarioNormal && isValidada) || (isGestor && isValidada)">
       <div class="row mt-1">
         <div class="col-12 text-center">
           <h3 class="bienvenido text-center titulo1"><u>FICHEROS UNIDAD</u> </h3>
@@ -1009,14 +1066,15 @@
       </div>
       <div class="row mt-1 justify-content-center">
         <div class="col-4 text-center">
-          <label for="validationServer02">Fecha Fin Documentacion: <sup class="text-danger"></sup></label>                  
+          <label for="validationServer02">Fecha Fin Documentacion: <sup class="text-danger"></sup></label>
         </div>
-        <div class="col-3 text-center">          
-          <input type="date" class="form-control" name="fechaFinDocuUnidad" [ngModel]="fechaFinDocuParse" placeholder="dd-MM-yyyy" 
-            readonly />         
+        <div class="col-3 text-center">
+          <input type="date" class="form-control" name="fechaFinDocuUnidad" [ngModel]="fechaFinDocuParse"
+            placeholder="dd-MM-yyyy" readonly />
         </div>
         <div class="col-5 text-right" *ngIf="!isFechaFinDocu">
-          <button class="btn text-white" [disabled]="isGestor" (click)='mostrarNuevoFicheroUnidad()'>Nuevo Fichero Unidad</button>
+          <button class="btn text-white" [disabled]="isGestor" (click)='mostrarNuevoFicheroUnidad()'>Nuevo Fichero
+            Unidad</button>
         </div>
       </div>
       <div class="card text-left mt-5" *ngIf='nuevoFicheroUnidad'>
@@ -1073,8 +1131,9 @@
         <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"></div>
       </div>
       <div *ngFor="let fichero of ficherosUnidad">
-        <app-fichero-solicitud *ngIf='fichero' [fichero]="fichero" [isUnidad]="true" (ficheroSeleccionado)='verDatosFichero($event)'
-          (ficheroEliminar)='onEliminarFichero($event)'></app-fichero-solicitud>
+        <app-fichero-solicitud *ngIf='fichero' [fichero]="fichero" [isUnidad]="true"
+          (ficheroSeleccionado)='verDatosFichero($event)' (ficheroEliminar)='onEliminarFichero($event)'>
+        </app-fichero-solicitud>
       </div>
     </div>
 
@@ -1179,6 +1238,33 @@
   </div>
 </div>
 
+<!-- Modal SolicitudArma-->
+<div class="modal fade" id="modalSolicitudArma" tabindex="-1" role="dialog" aria-labelledby="datosSolicitudArma"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="datosSolicitudArma">
+          <b>Datos del ARMA</b>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-arma-ficha-solicitud *ngIf='solicitudArmaVerDatos && armaVerDatos' [solicitudArma]='solicitudArmaVerDatos'
+          [arma]='armaVerDatos' [idCenad]="idCenad" [uRlRecursoSeleccionado]="uRlRecursoSeleccionado"
+          (solicitudArmaEliminar)='onSolicitudArmaEliminar($event)' (armaActualizada)='onArmaActualizada($event)'
+          (solicitudArmaActualizar)='onSolicitudArmaActualizar($event)'></app-arma-ficha-solicitud>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn text-white" data-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Modal fichero-->
 <div class="modal fade" id="modalFichero" tabindex="-1" role="dialog" aria-labelledby="datosFichero" aria-hidden="true">
@@ -1193,8 +1279,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-fichero-solicitud-ficha *ngIf="ficheroVerDatos" [fichero]="ficheroVerDatos"
-          [idSolicitud]="idSolicitud" (ficheroEditar)="onFicheroEditar($event)"></app-fichero-solicitud-ficha>
+        <app-fichero-solicitud-ficha *ngIf="ficheroVerDatos" [fichero]="ficheroVerDatos" [idSolicitud]="idSolicitud"
+          (ficheroEditar)="onFicheroEditar($event)"></app-fichero-solicitud-ficha>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">

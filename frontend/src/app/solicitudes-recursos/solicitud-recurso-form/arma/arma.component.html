@@ -1,117 +1,36 @@
 <!-- COMPONENTE QUE MUESTRA LAS SOLICITUDESARMAS DE UNA SOLICITUD -->
-<div class="row mt-2 titulos ml-1" data-toggle="modal" data-target="#modalSolicitudArma">
+<div class="row mt-2 titulos ml-1" *ngIf="!isConsulta" data-toggle="modal" data-target="#modalSolicitudArma" (click)='emitirDatos(solicitudArma, arma)'>
   <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>{{ arma.nombre }}</b></div>
-  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>{{ arma.tipoTiro }}</b></div>
-  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>{{ solicitudArma.coordAsentamiento }}</b></div>
-  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>{{ solicitudArma.coordPuntoCaida }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>{{ arma.tipoTiro }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>{{ solicitudArma.coordXAsentamiento }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>{{ solicitudArma.coordYAsentamiento }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>{{ solicitudArma.coordXPuntoCaida }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo"><b>{{ solicitudArma.coordYPuntoCaida }}</b></div>
   <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>{{ solicitudArma.alcanceMax }}</b></div>
   <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b>{{ solicitudArma.zonaSegAngulo }}</b></div>
-  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"></div>
-</div>
-
-
-<!-- Modal SolicitudArma-->
-<div class="modal fade" id="modalSolicitudArma" tabindex="-1" role="dialog" aria-labelledby="datosSolicitudArma"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="datosSolicitudArma">
-          <b>Datos del ARMA</b>
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" *ngIf="solicitudArma">
-        <div class="form-row py-2 mt-2 justify-content-center">
-          <div class="col-lg-5 col-md-12 ml-2">
-            <label for="">ARMA: <sup class="text-danger"></sup></label>
-            <input type="text" name="" id="" class="form-control" placeholder="Arma1" readonly [ngModel]="arma.nombre">
-          </div>
-          <div class="col-lg-5 col-md-12 ml-1">
-            <label for="">Tipo tiro: <sup class="text-danger"></sup></label>
-            <input type="text" name="" id="" class="form-control" placeholder="Asentamiento" readonly
-              [ngModel]="arma.tipoTiro">
-          </div>
-        </div>
-        <div class="form-row py-2 mt-2 justify-content-between">
-          <div class="col-lg-5 col-md-12 ml-1">
-            <label>Coord Asentamiento: <sup class="text-danger">*</sup></label>
-            <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordAsentamiento"
-              placeholder="Coordenadas del Asentamiento" name="coordAsentamiento" [readonly]="isConsulta" required
-              #coordAsentamiento="ngModel" [ngClass]="{
-                    'is-invalid': coordAsentamiento.invalid && (coordAsentamiento.dirty || coordAsentamiento.touched),
-                    'is-valid': !coordAsentamiento.invalid
-                  }" />
-            <div class="text-danger"
-              *ngIf="coordAsentamiento.invalid && (coordAsentamiento.dirty || coordAsentamiento.touched)">
-              <div *ngIf="coordAsentamiento.errors.required">
-                El campo es obligatorio
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-5 col-md-12 ml-1">
-            <label>Coord Punto Caida: <sup class="text-danger">*</sup></label>
-            <input type="number" class="form-control" [(ngModel)]="solicitudArma.coordPuntoCaida"
-              placeholder="Coordenadas del Punto de Caida" name="coordPuntoCaida" required
-              #coordPuntoCaida="ngModel" [readonly]="isConsulta" [ngClass]="{
-                    'is-invalid': coordPuntoCaida.invalid && (coordPuntoCaida.dirty || coordPuntoCaida.touched),
-                    'is-valid': !coordPuntoCaida.invalid
-                  }" />
-            <div class="text-danger"
-              *ngIf="coordPuntoCaida.invalid && (coordPuntoCaida.dirty || coordPuntoCaida.touched)">
-              <div *ngIf="coordPuntoCaida.errors.required">
-                El campo es obligatorio
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="form-row py-2 mt-2 justify-content-between">
-          <div class="col-lg-5 col-md-12 ml-1">
-            <label>Alcance Max: <sup class="text-danger">*</sup></label>
-            <input type="number" class="form-control" [(ngModel)]="solicitudArma.alcanceMax"
-              placeholder="Coordenadas del Punto de Caida" name="alcanceMax" [readonly]="isConsulta" required
-              #alcanceMax="ngModel" [ngClass]="{
-                    'is-invalid': alcanceMax.invalid && (alcanceMax.dirty || alcanceMax.touched),
-                    'is-valid': !alcanceMax.invalid
-                  }" />
-            <div class="text-danger" *ngIf="alcanceMax.invalid && (alcanceMax.dirty || alcanceMax.touched)">
-              <div *ngIf="alcanceMax.errors.required">
-                El campo es obligatorio
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-12 ml-1">
-            <label>Zona Seguridad Angulo: <sup class="text-danger">*</sup></label>
-            <input type="number" class="form-control" [(ngModel)]="solicitudArma.zonaSegAngulo"
-              placeholder="Angulo de la zona de seguridad" name="zonaSegAng" [readonly]="isConsulta" 
-               #zonaSegAng="ngModel" [ngClass]="{
-                    'is-invalid': zonaSegAng.invalid && (zonaSegAng.dirty || zonaSegAng.touched),
-                    'is-valid': !zonaSegAng.invalid
-                  }" />
-            <div class="text-danger" *ngIf="zonaSegAng.invalid && (zonaSegAng.dirty || zonaSegAng.touched)">
-              <div *ngIf="zonaSegAng.errors.required">
-                El campo es obligatorio
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn text-white" data-dismiss="modal" (click)="ngOnInit()">
-          Cerrar
-        </button>
-        <button type="button" class="btn text-white" *ngIf="!isConsulta" data-dismiss="modal" (click)="actualizar()">
-          Actualizar
-        </button>
-        <button type="button" class="btn text-white" data-dismiss="modal" >
-          Ver Grafica
-        </button>
-        <button type="button" class="btn text-white" *ngIf="!isConsulta" data-dismiss="modal" (click)="borrar()">
-          Borrar
-        </button>
-      </div>
-    </div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1">
+    <label class="p-1">
+      <a class="text-white ver-grafica" [href]="verGrafica()" target="_blank" *ngIf="solicitudArma">
+        <fa-icon [icon]="faVista" class="mr-2"></fa-icon>Ver Gráfica
+      </a>
+    </label>
   </div>
 </div>
+<div class="row mt-2 titulos ml-1" *ngIf="isConsulta">
+  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo-consulta"><b>{{ arma.nombre }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo-consulta"><b>{{ arma.tipoTiro }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo-consulta"><b>{{ solicitudArma.coordXAsentamiento }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo-consulta"><b>{{ solicitudArma.coordYAsentamiento }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo-consulta"><b>{{ solicitudArma.coordXPuntoCaida }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo-consulta"><b>{{ solicitudArma.coordYPuntoCaida }}</b></div>
+  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo-consulta"><b>{{ solicitudArma.alcanceMax }}</b></div>
+  <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo-consulta"><b>{{ solicitudArma.zonaSegAngulo }}</b></div>
+  <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1">
+    <label class="p-1">
+      <a class="text-white ver-grafica" [href]="verGrafica()" target="_blank" *ngIf="solicitudArma">
+        <fa-icon [icon]="faVista" class="mr-2"></fa-icon>Ver Gráfica
+      </a>
+    </label>
+  </div>
+</div>
+

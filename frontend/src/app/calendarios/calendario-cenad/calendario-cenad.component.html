@@ -6,7 +6,8 @@
         <h5 class="text-center titulo-planificadas">PLANIFICADAS</h5>
       </div>
       <div class="row justify-content-end mr-5">
-        <button class="btn nueva-solicitud p-1" [hidden]="!isSuperAdmin" [routerLink]="['formulario', idCenad, idSolicitud]">Nueva Solicitud</button>
+        <button class="btn nueva-solicitud p-1" [hidden]="!isSuperAdmin"
+          [routerLink]="['formulario', idCenad, idSolicitud]">Nueva Planificación</button>
       </div>
       <div class="row ml-4 mr-4 mb-2 mt-0 justify-content-between">
         <div class="col-lg-3 col-md-12 ml-2">
@@ -72,6 +73,10 @@
             <fa-icon [icon]="faVista" class="ml-5 pl-5 mr-2"></fa-icon>Ver Lista Todas
           </label></h5>
       </div>
+      <div class="row justify-content-end mr-5">
+        <button class="btn nueva-solicitud p-1 mb-1" [hidden]="!isAdministrador"
+          [routerLink]="['formulario', idCenad, idSolicitud]">Nuevo AVISO - Incidencia</button>
+      </div>
       <div class="row ml-4 mr-4 mb-2 mt-0 justify-content-between">
         <div class="custom-control custom-radio" *ngIf="isAutenticado && !isSuperAdmin">
           <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" [checked]="isSolicitada"
@@ -86,7 +91,7 @@
         <label [hidden]="!isAutenticado || isSuperAdmin">
           <input type='checkbox' [checked]='todasVisible' (change)='mostrarTodas()' />
           Mostrar Todas
-        </label>        
+        </label>
         <label>
           <input type='checkbox' [checked]='calendarVisible' (change)='mostrarCalendario()' />
           Mostrar calendario
@@ -124,8 +129,7 @@
     </div>
     <div class="col-12 app">
       <div class='app-main' *ngIf="isAutenticado && !isSuperAdmin && calendarVisible && isSolicitada">
-        <full-calendar
-          *ngIf="solicitudesCenadCalendarioSolicitadas.length != 0; else NoExisten"
+        <full-calendar *ngIf="solicitudesCenadCalendarioSolicitadas.length != 0; else NoExisten"
           [options]='calendarOptionsSolicitadas'>
         </full-calendar>
       </div>

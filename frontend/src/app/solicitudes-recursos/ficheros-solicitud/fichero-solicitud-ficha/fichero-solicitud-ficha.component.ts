@@ -14,40 +14,96 @@ import { SolicitudRecursoService } from '../../service/solicitud-recurso.service
   styleUrls: ['./fichero-solicitud-ficha.component.css']
 })
 export class FicheroSolicitudFichaComponent implements OnInit {
-  //variable que trae del otro componente el fichero
+  /**
+   * variable que trae del otro componente el fichero
+   */
   @Input() fichero: FicheroImpl;
-  //variable que trae del otro componente el id de la solicitud del recurso
+  /**
+   * variable que trae del otro componente el id de la solicitud del recurso
+   */
   @Input() idSolicitud: string;
-  //variable para emitir los eventos al otro componente para editar un fichero
+  /**
+   * variable para emitir los eventos al otro componente para editar un fichero
+   */
   @Output() ficheroEditar = new EventEmitter<FicheroImpl>();
-  //variables para la subida de archivos de escudos
+  /**
+   * variables para la subida de archivos de escudos
+   * lista de ficheros seleccionados
+   */
   selectedFiles: FileList;
+  /**
+   * archivo
+   */
   currentFile: File;
+  /**
+   * tamaño maximo de la documentacion de la solicitud
+   */
   sizeMaxDocSolicitud: number = environment.sizeMaxDocSolicitud;
+  /**
+   * tamaño maxido del escudo
+   */
   sizeMaxEscudo: number = environment.sizeMaxEscudo;
-  //variables para poder mostrar el valor inicial de los campos select
+  /**
+   * para el endpoint de la solicidud del cenad seleccionada
+   */
   solicitudCenadSeleccionado: string;
+  /**
+   * para el endpoint de la solicitud de la unida seleccionada
+   */
   solicitudUnidadSeleccionado: string;
+  /**
+   * para el endpoint de la categoria del fichero seleccionada
+   */
   categoriaFicheroSeleccionada: string;
-  //variable para recoger las categorias de ficheros
+  /**
+   * array de las categorias de ficheros
+   */
   categoriasFichero: CategoriaFichero[] = [];
-  //variable para recoger los recursos
+  /**
+   * array de solicitudes del Cenad
+   */
   solicitudesCenad: SolicitudRecurso[] = [];
+  /**
+   * array de solicitudes de la unidad
+   */
   solicitudesUnidad: SolicitudRecurso[] = [];
+  /**
+   * si el archivo se ha subido al repositorio
+   */
   archivoSubido: boolean = false;
-  //si un Usuario es Normal
+  /**
+   * si un Usuario es Normal
+   */
   isUsuarioNormal: boolean = false;
-  // si un usuario es Gestor
+  /**
+   * si un usuario es Gestor
+   */
   isGestor: boolean = false;
-  //id del Cenad
+  /**
+   * id del Cenad
+   */
   idCenad: string = "";
-  //si un usuario se ha loggeado
+  /**
+   * si un usuario se ha loggeado
+   */
   isAutenticado: boolean = false;
 
+  /**
+   * 
+   * @param recursoService contiene todos los metodos del objeto Recurso
+   * @param appConfigService contiene todos los metodos comunes a la aplicacion
+   * @param solicitudService contiene todos los metodos del objeto SolicitudRecurso
+   */
   constructor(private recursoService: RecursoService, private appConfigService: AppConfigService, private solicitudService: SolicitudRecursoService) { }
 
   ngOnInit(): void {
+    /**
+     * otiene del session storage el id del cenad
+     */
     this.idCenad = sessionStorage.idCenad;
+    /**
+    * método que comprueba el rol del usuario logeado en el sistema
+    */
     this.comprobarUser();
     //recupera de la BD todos las solicitudes. es para un select hidden, no es importante la velocidad.
     if (this.isGestor) {
@@ -58,7 +114,6 @@ export class FicheroSolicitudFichaComponent implements OnInit {
       this.solicitudService.getSolicitudesDeCenad(this.idCenad).subscribe((response) =>
         this.solicitudesUnidad = this.solicitudService.extraerSolicitudes(response));
     }
-
     //recupera del Local Storage todas las categorias de fichero y las guarda en la variable para poder seleccionarlas si se añade un fichero nuevo
     this.categoriasFichero = JSON.parse(localStorage.categoriasFichero);
     //asigna los valores seleccionados a los select de los campos del recurso
@@ -68,12 +123,14 @@ export class FicheroSolicitudFichaComponent implements OnInit {
     this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;
   }
 
-  //método que comprueba el rol del usuario logeado en el sistema
+  /**
+   * método que comprueba el rol del usuario logeado en el sistema
+   */
   comprobarUser(): void {
     if (sessionStorage.isLogged == undefined) {
       this.isAutenticado = false;
     } else {
-    sessionStorage.isLogged.toString() == "true" ? this.isAutenticado = true : this.isAutenticado = false;
+      sessionStorage.isLogged.toString() == "true" ? this.isAutenticado = true : this.isAutenticado = false;
     }
     if (this.isAutenticado) {
     } if (sessionStorage.isGestor == "true" && this.idCenad == sessionStorage.idCenad) {
@@ -83,7 +140,9 @@ export class FicheroSolicitudFichaComponent implements OnInit {
     }
   }
 
-  //metodo para poder mostrar en los select los valores seleccionados
+  /**
+   * metodo para poder mostrar en los select los valores seleccionados
+   */
   actualizarNgModels(): void {
     this.categoriaFicheroSeleccionada = this.fichero.categoriaFichero.url;
     if (this.isGestor) {
@@ -93,10 +152,12 @@ export class FicheroSolicitudFichaComponent implements OnInit {
     if (this.isUsuarioNormal) {
       this.solicitudUnidadSeleccionado = this.fichero.solicitudRecursoUnidad.url;
     }
-
   }
 
-  //metodo que emite el evento para editar el fichero y elimina el archivo anterior del fichero y carga el nuevo si es necesario
+  /**
+   * metodo que emite el evento para editar el fichero y elimina el archivo anterior del fichero 
+   * y carga el nuevo si es necesario
+   */
   editar(): void {
     this.fichero.categoriaFichero = this.categoriaFicheroSeleccionada;
     if (this.isGestor) {
@@ -117,12 +178,17 @@ export class FicheroSolicitudFichaComponent implements OnInit {
     }
   }
 
-  //metodo para seleccionar el archivo a subir
+  /**
+   * metodo para seleccionar el archivo a subir
+   * @param event de los ficheros seleccionados
+   */
   selectFile(event) {
     this.selectedFiles = event.target.files;
   }
 
-  //metodo para subir el archivo 
+  /**
+   * metodo para subir el archivo
+   */
   upload() {
     this.currentFile = this.selectedFiles.item(0);
     //compruebo si es imagen para aplicarle el tamaño maximo de imagen o el de docRecurso
@@ -138,7 +204,10 @@ export class FicheroSolicitudFichaComponent implements OnInit {
     this.selectedFiles = undefined;
   }
 
-  //metodo para borrar el archivo del fichero
+  /**
+   * metodo para borrar el archivo del fichero
+   * @param fichero a borrar
+   */
   delete_Archivo(fichero: FicheroImpl) {
     this.recursoService.deleteArchivoSolicitud(fichero.nombreArchivo, this.idSolicitud).subscribe(
     );

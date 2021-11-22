@@ -11,11 +11,12 @@ import { SolicitudesTodasComponent } from './solicitudes-todas/solicitudes-todas
 import { ArmaComponent } from './solicitud-recurso-form/arma/arma.component';
 import { FicheroSolicitudComponent } from './ficheros-solicitud/fichero-solicitud/fichero-solicitud.component';
 import { FicheroSolicitudFichaComponent } from './ficheros-solicitud/fichero-solicitud-ficha/fichero-solicitud-ficha.component';
+import { ArmaFichaSolicitudComponent } from './solicitud-recurso-form/arma-ficha-solicitud/arma-ficha-solicitud.component';
 
 
 @NgModule({
   declarations: [SolicitudesRecursosComponent, SolicitudRecursoComponent, SolicitudRecursoFormComponent, SolicitudesTodasComponent, 
-    ArmaComponent, FicheroSolicitudComponent, FicheroSolicitudFichaComponent ],
+    ArmaComponent, FicheroSolicitudComponent, FicheroSolicitudFichaComponent, ArmaFichaSolicitudComponent ],
   imports: [
     CommonModule,
     SolicitudesRecursosRoutingModule,

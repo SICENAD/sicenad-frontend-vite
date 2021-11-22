@@ -47,7 +47,7 @@ label.solicitudes,
 #solicitudesFiltradas,
 label.categorias,
 #categoriasFiltradas,
-label.fechas,
+label.fechas, label.unidades, 
 button {
   color: #3a5a40;
   font-weight: bold;

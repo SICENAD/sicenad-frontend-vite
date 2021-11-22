@@ -5,11 +5,15 @@ import { PlanificacionCalendarioFormComponent } from './planificacion-calendario
 
 
 const routes: Routes = [
-  {
+  {/**
+    * muestra el calendario
+    */
     path: '',
     component: CalendarioCenadComponent
   },
-  {
+  {/**
+    * para crear, actualizar, borrar solicitudes Planificadas (superAdministrador) y Avisos (administrador)
+    */
     path: 'formulario/:idCenad/:idSolicitud',
     component: PlanificacionCalendarioFormComponent
   }

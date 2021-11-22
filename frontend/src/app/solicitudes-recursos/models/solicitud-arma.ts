@@ -1,8 +1,10 @@
 export interface SolicitudArma {
   url: string;
   idSolicitudArma: string;
-  coordAsentamiento: number;
-	coordPuntoCaida: number;
+  coordXAsentamiento: number;
+  coordYAsentamiento: number;
+	coordXPuntoCaida: number;
+  coordYPuntoCaida: number;
 	alcanceMax: number;
 	zonaSegAngulo: number;
   armaUrl: string;

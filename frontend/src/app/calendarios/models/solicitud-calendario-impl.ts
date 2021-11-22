@@ -11,6 +11,7 @@ export class SolicitudCalendarioImpl implements SolicitudCalendario {
     fechaHoraFinRecurso: string;
     unidadUsuaria: string;
     etiqueta: string;
+    observacionesCenad: string;
     idUnidad: string;
     recurso: any;
     url: string;
