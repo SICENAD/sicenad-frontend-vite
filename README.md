@@ -1,6 +1,6 @@
 # Aplicación `SICENAD` 
 
-![CENAD_SG](./frontend/src/assets/ESCUDO_CENAD_pequeño.jpg)
+![MADOC](https://git.institutomilitar.com/sicenad/sicenad/-/wikis/7.-MANUAL_USUARIO/imagenes/madoc.png)
 
 ## DOCUMENTACIÓN
 
