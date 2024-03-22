@@ -2,18 +2,18 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 /**
  * Representa los recursos que ofrece cada CENAD/CMT
@@ -28,9 +28,9 @@ public class Recurso {
 	@Column(unique = true)
 	private Long id;
 	private String nombre;
-	@Lob	
+//	@Lob	
 	private String descripcion;
-	@Lob	
+//	@Lob	
 	private String otros;
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Fichero.class, mappedBy = "recurso")
 	private Collection<Fichero> ficheros = new ArrayList<>();
@@ -46,7 +46,7 @@ public class Recurso {
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = SolicitudRecurso.class, mappedBy = "recurso")
 	private Collection<SolicitudRecurso> solicitudes = new ArrayList<>();
 	private boolean conDatosEspecificosSolicitud;
-	@Lob	
+//	@Lob	
 	private String datosEspecificosSolicitud = "Ejemplo: \nHorario: 08:00h a 21:00h \nMedios CIS: medios propios de la UCO  \nSIMACET: se solicita el nodo del CENAD "
 			+ "\nPOC CIS: CAP. XXX \nObservaciones Particulares:";
 

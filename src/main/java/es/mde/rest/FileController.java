@@ -27,7 +27,7 @@ import es.mde.servicios.FileServiceAPI;
  *
  */
 @RestController
-@RequestMapping("/api/files")
+//@RequestMapping("/api/files")
 public class FileController {
 	private static long sizeLimiteEscudo = 5 * 1024 * 1024; // 5MB
 	private static long sizeLimiteDocRecurso = 6 * 1024 * 1024; // 6MB
@@ -70,7 +70,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirEscudo")
+	@PostMapping("/api/files/subirEscudo")
 	public ResponseEntity<Response> uploadFileEscudo(@RequestParam("file") MultipartFile file) throws Exception {
 		if (file.getSize() > sizeLimiteEscudo) {
 			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
@@ -90,7 +90,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarEscudo/{filename:.+}")
+	@GetMapping("/api/files/borrarEscudo/{filename:.+}")
 	public ResponseEntity<Response> borrarFileEscudo(@PathVariable String filename) throws Exception {
 		fileServiceAPI.borrarEscudo(filename);
 		return ResponseEntity.status(HttpStatus.OK)
@@ -104,7 +104,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/escudos/{filename:.+}")
+	@GetMapping("/api/files/escudos/{filename:.+}")
 	public ResponseEntity<Resource> getFileEscudo(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadEscudo(filename);
 		return ResponseEntity.ok()
@@ -118,7 +118,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/escudos/all")
+	@GetMapping("/api/files/escudos/all")
 	public ResponseEntity<List<File>> getAllFilesEscudos() throws Exception {
 		List<File> files = fileServiceAPI.loadAllEscudos().map(path -> {
 			String filename = path.getFileName().toString();
@@ -144,7 +144,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirDocRecursos/{id}")
+	@PostMapping("/api/files/subirDocRecursos/{id}")
 	public ResponseEntity<Response> uploadFileDocRecursos(@RequestParam("files") List<MultipartFile> files,
 			@PathVariable("id") String id) throws Exception {
 		long filesSize = 0;
@@ -169,7 +169,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirDocRecurso/{id}")
+	@PostMapping("/api/files/subirDocRecurso/{id}")
 	public ResponseEntity<Response> uploadFileDocRecurso(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
 		if (file.getSize() > sizeLimiteDocRecurso) {
@@ -190,7 +190,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarDocRecurso/{id}/{filename:.+}")
+	@GetMapping("/api/files/borrarDocRecurso/{id}/{filename:.+}")
 	public ResponseEntity<Response> borrarFileDocRecurso(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		fileServiceAPI.borrarDocRecurso(filename, id);
@@ -205,7 +205,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarCarpetaDocRecurso/{id}")
+	@GetMapping("/api/files/borrarCarpetaDocRecurso/{id}")
 	public ResponseEntity<Response> borrarCarpetaDocRecurso(@PathVariable("id") String id) throws Exception {
 
 		fileServiceAPI.borrarCarpetaDocRecurso(id);
@@ -221,7 +221,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/docRecursos/{id}/{filename:.+}")
+	@GetMapping("/api/files/docRecursos/{id}/{filename:.+}")
 	public ResponseEntity<Resource> getFileDocRecurso(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		Resource resource = fileServiceAPI.loadDocRecurso(filename, id);
@@ -237,7 +237,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/docRecursos/{filename:.+}")
+	@GetMapping("/api/files/docRecursos/{filename:.+}")
 	public ResponseEntity<Resource> getFileDocRecurso(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadDocRecurso(filename);
 		return ResponseEntity.ok()
@@ -252,7 +252,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/docRecursos/{id}/all")
+	@GetMapping("/api/files/docRecursos/{id}/all")
 	public ResponseEntity<List<File>> getAllFilesDocRecursos(@PathVariable("id") String id) throws Exception {
 		List<File> files = fileServiceAPI.loadAllDocRecursos(id).map(path -> {
 			String filename = path.getFileName().toString();
@@ -276,7 +276,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirDocSolicitudes/{id}")
+	@PostMapping("/api/files/subirDocSolicitudes/{id}")
 	public ResponseEntity<Response> uploadFileDocSolicitudes(@RequestParam("files") List<MultipartFile> files,
 			@PathVariable("id") String id) throws Exception {
 		long filesSize = 0;
@@ -301,7 +301,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirDocSolicitud/{id}")
+	@PostMapping("/api/files/subirDocSolicitud/{id}")
 	public ResponseEntity<Response> uploadFileDocSolicitud(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
 		if (file.getSize() > sizeLimiteDocSolicitud) {
@@ -322,7 +322,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarDocSolicitud/{id}/{filename:.+}")
+	@GetMapping("/api/files/borrarDocSolicitud/{id}/{filename:.+}")
 	public ResponseEntity<Response> borrarFileDocSolicitud(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		fileServiceAPI.borrarDocSolicitud(filename, id);
@@ -337,7 +337,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarCarpetaDocSolicitud/{id}")
+	@GetMapping("/api/files/borrarCarpetaDocSolicitud/{id}")
 	public ResponseEntity<Response> borrarCarpetaDocSolicitud(@PathVariable("id") String id) throws Exception {
 		fileServiceAPI.borrarCarpetaDocSolicitud(id);
 		return ResponseEntity.status(HttpStatus.OK)
@@ -352,7 +352,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/docSolicitudes/{id}/{filename:.+}")
+	@GetMapping("/api/files/docSolicitudes/{id}/{filename:.+}")
 	public ResponseEntity<Resource> getFileDocSolicitud(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		Resource resource = fileServiceAPI.loadDocSolicitud(filename, id);
@@ -368,7 +368,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/docSolicitudes/{filename:.+}")
+	@GetMapping("/api/files/docSolicitudes/{filename:.+}")
 	public ResponseEntity<Resource> getFileDocSolicitud(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadDocSolicitud(filename);
 		return ResponseEntity.ok()
@@ -383,7 +383,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/docSolicitudes/{id}/all")
+	@GetMapping("/api/files/docSolicitudes/{id}/all")
 	public ResponseEntity<List<File>> getAllFilesDocSolicitud(@PathVariable("id") String id) throws Exception {
 		List<File> files = fileServiceAPI.loadAllDocSolicitudes(id).map(path -> {
 			String filename = path.getFileName().toString();
@@ -407,7 +407,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirCartografias/{id}")
+	@PostMapping("/api/files/subirCartografias/{id}")
 	public ResponseEntity<Response> uploadFileCartografias(@RequestParam("files") List<MultipartFile> files,
 			@PathVariable("id") String id) throws Exception {
 		fileServiceAPI.saveCartografias(files, id);
@@ -423,7 +423,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirCartografia/{id}")
+	@PostMapping("/api/files/subirCartografia/{id}")
 	public ResponseEntity<Response> uploadFileCartografia(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
 		fileServiceAPI.saveCartografia(file, id);
@@ -439,7 +439,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarCartografia/{id}/{filename:.+}")
+	@GetMapping("/api/files/borrarCartografia/{id}/{filename:.+}")
 	public ResponseEntity<Response> borrarFileCartografia(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		fileServiceAPI.borrarCartografia(filename, id);
@@ -454,7 +454,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarCarpetaCartografia/{id}")
+	@GetMapping("/api/files/borrarCarpetaCartografia/{id}")
 	public ResponseEntity<Response> borrarCarpetaCartografia(@PathVariable("id") String id) throws Exception {
 		fileServiceAPI.borrarCarpetaCartografia(id);
 		return ResponseEntity.status(HttpStatus.OK)
@@ -469,7 +469,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/cartografias/{id}/{filename:.+}")
+	@GetMapping("/api/files/cartografias/{id}/{filename:.+}")
 	public ResponseEntity<Resource> getFileCartografia(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		Resource resource = fileServiceAPI.loadCartografia(filename, id);
@@ -485,7 +485,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/cartografias/{filename:.+}")
+	@GetMapping("/api/files/cartografias/{filename:.+}")
 	public ResponseEntity<Resource> getFileCartografia(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadCartografia(filename);
 		return ResponseEntity.ok()
@@ -500,7 +500,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/cartografias/{id}/all")
+	@GetMapping("/api/files/cartografias/{id}/all")
 	public ResponseEntity<List<File>> getAllFilesCartografia(@PathVariable("id") String id) throws Exception {
 		List<File> files = fileServiceAPI.loadAllCartografias(id).map(path -> {
 			String filename = path.getFileName().toString();
@@ -524,7 +524,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirNormativas/{id}")
+	@PostMapping("/api/files/subirNormativas/{id}")
 	public ResponseEntity<Response> uploadFileNormativas(@RequestParam("files") List<MultipartFile> files,
 			@PathVariable("id") String id) throws Exception {
 		long filesSize = 0;
@@ -549,7 +549,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirNormativa/{id}")
+	@PostMapping("/api/files/subirNormativa/{id}")
 	public ResponseEntity<Response> uploadFileNormativa(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
 		if (file.getSize() > sizeLimiteDocRecurso) {
@@ -570,7 +570,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarNormativa/{id}/{filename:.+}")
+	@GetMapping("/api/files/borrarNormativa/{id}/{filename:.+}")
 	public ResponseEntity<Response> borrarFileNormativa(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		fileServiceAPI.borrarNormativa(filename, id);
@@ -585,7 +585,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarCarpetaNormativa/{id}")
+	@GetMapping("/api/files/borrarCarpetaNormativa/{id}")
 	public ResponseEntity<Response> borrarCarpetaNormativa(@PathVariable("id") String id) throws Exception {
 		fileServiceAPI.borrarCarpetaNormativa(id);
 		return ResponseEntity.status(HttpStatus.OK)
@@ -600,7 +600,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/normativas/{id}/{filename:.+}")
+	@GetMapping("/api/files/normativas/{id}/{filename:.+}")
 	public ResponseEntity<Resource> getFileNormativa(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		Resource resource = fileServiceAPI.loadNormativa(filename, id);
@@ -616,7 +616,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/normativas/{filename:.+}")
+	@GetMapping("/api/files/normativas/{filename:.+}")
 	public ResponseEntity<Resource> getFileNormativa(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadNormativa(filename);
 		return ResponseEntity.ok()
@@ -631,7 +631,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/normativas/{id}/all")
+	@GetMapping("/api/files/normativas/{id}/all")
 	public ResponseEntity<List<File>> getAllFilesNormativa(@PathVariable("id") String id) throws Exception {
 		List<File> files = fileServiceAPI.loadAllNormativas(id).map(path -> {
 			String filename = path.getFileName().toString();
@@ -655,7 +655,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirInfoCenads/{id}")
+	@PostMapping("/api/files/subirInfoCenads/{id}")
 	public ResponseEntity<Response> uploadFileInfoCenads(@RequestParam("files") List<MultipartFile> files,
 			@PathVariable("id") String id) throws Exception {
 		long filesSize = 0;
@@ -680,7 +680,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@PostMapping("/subirInfoCenad/{id}")
+	@PostMapping("/api/files/subirInfoCenad/{id}")
 	public ResponseEntity<Response> uploadFileInfoCenad(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
 		if (file.getSize() > sizeLimiteEscudo) {
@@ -701,7 +701,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarInfoCenad/{id}/{filename:.+}")
+	@GetMapping("/api/files/borrarInfoCenad/{id}/{filename:.+}")
 	public ResponseEntity<Response> borrarFileInfoCenad(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		fileServiceAPI.borrarInfoCenad(filename, id);
@@ -716,7 +716,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/borrarCarpetaInfoCenad/{id}")
+	@GetMapping("/api/files/borrarCarpetaInfoCenad/{id}")
 	public ResponseEntity<Response> borrarCarpetaInfoCenad(@PathVariable("id") String id) throws Exception {
 		fileServiceAPI.borrarCarpetaInfoCenad(id);
 		return ResponseEntity.status(HttpStatus.OK)
@@ -731,7 +731,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/infoCenads/{id}/{filename:.+}")
+	@GetMapping("/api/files/infoCenads/{id}/{filename:.+}")
 	public ResponseEntity<Resource> getFileInfoCenad(@PathVariable String filename, @PathVariable("id") String id)
 			throws Exception {
 		Resource resource = fileServiceAPI.loadInfoCenad(filename, id);
@@ -747,7 +747,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/infoCenads/{filename:.+}")
+	@GetMapping("/api/files/infoCenads/{filename:.+}")
 	public ResponseEntity<Resource> getFileInfoCenad(@PathVariable String filename) throws Exception {
 		Resource resource = fileServiceAPI.loadInfoCenad(filename);
 		return ResponseEntity.ok()
@@ -762,7 +762,7 @@ public class FileController {
 	 * @return La respuesta de la API...
 	 * @throws Exception
 	 */
-	@GetMapping("/infoCenads/{id}/all")
+	@GetMapping("/api/files/infoCenads/{id}/all")
 	public ResponseEntity<List<File>> getAllFilesInfoCenad(@PathVariable("id") String id) throws Exception {
 		List<File> files = fileServiceAPI.loadAllInfoCenads(id).map(path -> {
 			String filename = path.getFileName().toString();

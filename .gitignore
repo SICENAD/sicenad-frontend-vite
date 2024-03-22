@@ -35,6 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Logs ###
 logs/
 
 ### Javadoc ###
@@ -48,3 +50,4 @@ logs/
 ### archivos subidos ###
 
 /archivos
+src/main/resources/config/passwordsBD.properties

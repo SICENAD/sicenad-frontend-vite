@@ -19,7 +19,7 @@ import es.mde.repositorios.CategoriaDAO;
  * Controlador que maneja los metodos personalizados de las categorias
  */
 @RepositoryRestController
-@RequestMapping(path = "/categorias")
+//@RequestMapping(path = "/categorias")
 @Configuration
 public class CategoriaController {
 	private CategoriaDAO categoriaDAO;
@@ -38,7 +38,7 @@ public class CategoriaController {
 	 * @param assembler
 	 * @return Lista de subcategorias anidadas
 	 */
-	@GetMapping("/{id}/subcategoriasAnidadas")
+	@GetMapping("/categorias/{id}/subcategoriasAnidadas")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getSubcategoriasAnidadas(@PathVariable Long id,
 			PersistentEntityResourceAssembler assembler) {
@@ -54,7 +54,7 @@ public class CategoriaController {
 	 * @param assembler
 	 * @return Lista de los recursos de las subcategorias
 	 */
-	@GetMapping("/{id}/recursosDeSubcategorias")
+	@GetMapping("/categorias/{id}/recursosDeSubcategorias")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getRecursosDeSubcategorias(@PathVariable Long id,
 			PersistentEntityResourceAssembler assembler) {
@@ -69,7 +69,7 @@ public class CategoriaController {
 	 * @param assembler
 	 * @return Lista de categorias padre de la aplicacion
 	 */
-	@GetMapping("/padre")
+	@GetMapping("/categorias/padre")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCategoriasPadre(PersistentEntityResourceAssembler assembler) {
 

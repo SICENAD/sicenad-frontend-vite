@@ -21,7 +21,7 @@ import es.mde.repositorios.CenadDAO;
  * Controlador que maneja los metodos personalizados de los CENADS
  */
 @RepositoryRestController
-@RequestMapping(path = "/cenads")
+//@RequestMapping(path = "/cenads")
 @Configuration
 public class CenadController {
 	private CenadDAO cenadDAO;
@@ -39,10 +39,9 @@ public class CenadController {
 	 * @param assembler
 	 * @return Lista de CENAD,s sin administrador
 	 */
-	@GetMapping("/sinAdmin")
+	@GetMapping("/cenads/sinAdmin")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCenadsSinAdmin(PersistentEntityResourceAssembler assembler) {
-
 		List<Cenad> cenads = cenadDAO.getCenadsSinAdmin();
 
 		return assembler.toCollectionModel(cenads);
@@ -54,7 +53,7 @@ public class CenadController {
 	 * @param assembler
 	 * @return Lista de las categorias Padre de un CENAD
 	 */
-	@GetMapping("/{id}/categoriasPadre")
+	@GetMapping("/cenads/{id}/categoriasPadre")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCategoriasPadreCenad(@PathVariable Long id,
 			PersistentEntityResourceAssembler assembler) {
@@ -70,7 +69,7 @@ public class CenadController {
 	 * @param assembler
 	 * @return Lista de los recursos de un CENAD
 	 */
-	@GetMapping("/{id}/recursos")
+	@GetMapping("/cenads/{id}/recursos")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getRecursosCenad(@PathVariable Long id,
 			PersistentEntityResourceAssembler assembler) {
@@ -86,7 +85,7 @@ public class CenadController {
 	 * @param assembler
 	 * @return Lista de las solicitudes de un CENAD
 	 */
-	@GetMapping("/{id}/solicitudes")
+	@GetMapping("/cenads/{id}/solicitudes")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getSolicitudesCenad(@PathVariable Long id,
 			PersistentEntityResourceAssembler assembler) {
@@ -102,7 +101,7 @@ public class CenadController {
 	 * @param assembler
 	 * @return Lista de las solicitudes de un CENAD
 	 */
-	@GetMapping("/{id}/solicitudesEstado/{estado}")
+	@GetMapping("/cenads/{id}/solicitudesEstado/{estado}")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getSolicitudesCenadEstado(@PathVariable Long id, @PathVariable String estado,
 			PersistentEntityResourceAssembler assembler) {

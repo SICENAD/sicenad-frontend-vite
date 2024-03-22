@@ -15,7 +15,7 @@ import es.mde.rest.ConfiguracionRest;
  *
  */
 @SpringBootApplication
-@ImportResource({ "classpath:config/jpa-config.xml" })
+//@ImportResource({ "classpath:config/jpa-config.xml" })
 @Import({ ConfiguracionPorJava.class, ConfiguracionRest.class })
 public class SicenadApplication {
 	private static final Logger log = LoggerFactory.getLogger(SicenadApplication.class);

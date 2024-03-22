@@ -2,16 +2,16 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 /**
  * Representa un Centro de Adiestramiento/Campo de Maniobras y Tiro
@@ -27,7 +27,7 @@ public class Cenad {
 	private Long id;
 	private String nombre;
 	private int provincia;
-	@Lob	
+//	@Lob	
 	private String descripcion;
 	private String direccion;
 	private String tfno;

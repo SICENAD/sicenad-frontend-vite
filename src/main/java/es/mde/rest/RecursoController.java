@@ -17,7 +17,7 @@ import es.mde.repositorios.RecursoDAO;
  * Controlador que maneja los metodos personalizados de los recursos
  */
 @RepositoryRestController
-@RequestMapping(path = "recursos/{id}")
+//@RequestMapping(path = "/recursos/{id}")
 @Configuration
 public class RecursoController {
 	private RecursoDAO recursoDAO;
@@ -36,7 +36,7 @@ public class RecursoController {
 	 * @param assembler
 	 * @return Lista de categorias de fichero de ese recurso
 	 */
-	@GetMapping("/categoriasFichero")
+	@GetMapping("/recursos/{id}/categoriasFichero")
 	@ResponseBody
 	public CollectionModel<PersistentEntityResource> getCategoriasFicheroDeRecurso(@PathVariable Long id,
 			PersistentEntityResourceAssembler assembler) {

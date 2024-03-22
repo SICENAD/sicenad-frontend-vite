@@ -15,10 +15,10 @@ import es.mde.notificaciones.SolicitudDTO;
  *
  */
 @RestController
-@RequestMapping(path = "/api/notificar")
+//@RequestMapping(path = "/api/notificar")
 public class NotificacionController {
 	
-	@GetMapping("/{id}")
+	@GetMapping("/api/notificar/{id}")
 	public SolicitudDTO enviarNotificacion(@PathVariable Long id) {
 		
 		SolicitudDTO solicitudDTO = Notificar.enviarNotificacion(id);
