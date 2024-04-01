@@ -18,7 +18,7 @@ export class CategoriaFicheroService {
   /**
    * endpoint especifico de las categorias de fichero
    */
-  private urlEndPoint: string = `${this.host}categorias_fichero/`;
+  private urlEndPoint: string = `${this.host}categorias_fichero`;
 
   /**
    * 
@@ -28,7 +28,7 @@ export class CategoriaFicheroService {
   constructor(
     private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}categorias_fichero/`;
+    this.urlEndPoint = `${this.host}categorias_fichero`;
   }
 
   /**
@@ -88,7 +88,7 @@ export class CategoriaFicheroService {
    * @param categoriaFichero Categoria de fichero a eliminar
    */  
   delete(categoriaFichero): Observable<CategoriaFichero> {
-    return this.http.delete<CategoriaFichero>(`${this.urlEndPoint}${categoriaFichero.idCategoriaFichero}`)
+    return this.http.delete<CategoriaFichero>(`${this.urlEndPoint}/${categoriaFichero.idCategoriaFichero}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -105,7 +105,7 @@ export class CategoriaFicheroService {
    */
   update(categoriaFichero: CategoriaFichero): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${categoriaFichero.idCategoriaFichero}`, categoriaFichero)
+      .patch<any>(`${this.urlEndPoint}/${categoriaFichero.idCategoriaFichero}`, categoriaFichero)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {

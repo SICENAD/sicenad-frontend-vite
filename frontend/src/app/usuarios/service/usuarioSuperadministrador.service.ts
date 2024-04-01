@@ -18,7 +18,7 @@ export class UsuarioSuperadministradorService {
   /**
    * endpoint especifico de los usuarios superadministrador
    */
-  private urlEndPoint: string = `${this.host}usuarios_superadministrador/`;
+  private urlEndPoint: string = `${this.host}usuarios_superadministrador`;
 
     /**
    * 
@@ -27,7 +27,7 @@ export class UsuarioSuperadministradorService {
    */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}usuarios_superadministrador/`;
+    this.urlEndPoint = `${this.host}usuarios_superadministrador`;
    }
 
   /**
@@ -91,7 +91,7 @@ export class UsuarioSuperadministradorService {
    * @param usuario Usuario a eliminar
    */  
   delete(usuario): Observable<UsuarioSuperadministrador> {
-    return this.http.delete<UsuarioSuperadministrador>(`${this.urlEndPoint}${usuario.idUsuario}`)
+    return this.http.delete<UsuarioSuperadministrador>(`${this.urlEndPoint}/${usuario.idUsuario}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -108,7 +108,7 @@ export class UsuarioSuperadministradorService {
    */  
   update(usuario: UsuarioSuperadministrador): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
+      .patch<any>(`${this.urlEndPoint}/${usuario.idUsuario}`, usuario)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -127,7 +127,7 @@ export class UsuarioSuperadministradorService {
    * @param id Id del usuario
    */
   getUsuario(id): Observable<any> {
-    return this.http.get<UsuarioSuperadministrador>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<UsuarioSuperadministrador>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);

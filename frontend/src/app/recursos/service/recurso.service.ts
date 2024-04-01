@@ -28,11 +28,11 @@ export class RecursoService {
   /**
    * endpoint especifico de los recursos
    */
-  private urlEndPoint: string = `${this.host}recursos/`;
+  private urlEndPoint: string = `${this.host}recursos`;
   /**
    * endpoint del almacenamiento de archivos
    */
-  private urlFiles = `${this.host}files/`;
+  private urlFiles = `${this.host}files`;
 
   /**
    *
@@ -46,8 +46,8 @@ export class RecursoService {
     this.host = appConfigService.hostSicenad
       ? appConfigService.hostSicenad
       : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}recursos/`;
-    this.urlFiles = `${this.host}files/`;
+    this.urlEndPoint = `${this.host}recursos`;
+    this.urlFiles = `${this.host}files`;
   }
 
   /**
@@ -56,7 +56,7 @@ export class RecursoService {
    */
   getFicherosSolicitudCenad(idSolicitud: string): Observable<any> {
     return this.http.get<any>(
-      `${this.host}solicitudes/${idSolicitud}/documentacionCenad/?page=0&size=1000`
+      `${this.host}solicitudes/${idSolicitud}/documentacionCenad?page=0&size=1000`
     );
   }
 
@@ -65,7 +65,7 @@ export class RecursoService {
    * @param idSolicitud Id de la solicitud
    */ getFicherosSolicitudUnidad(idSolicitud: string): Observable<any> {
     return this.http.get<any>(
-      `${this.host}solicitudes/${idSolicitud}/documentacionUnidad/?page=0&size=1000`
+      `${this.host}solicitudes/${idSolicitud}/documentacionUnidad?page=0&size=1000`
     );
   }
 
@@ -75,7 +75,7 @@ export class RecursoService {
    */
   getSolicitudDeFicheroDeCenad(idFichero: String) {
     return this.http.get<any>(
-      `${this.host}ficheros/${idFichero}/solicitudRecursoCenad/?page=0&size=1000`
+      `${this.host}ficheros/${idFichero}/solicitudRecursoCenad?page=0&size=1000`
     );
   }
 
@@ -85,7 +85,7 @@ export class RecursoService {
    */
   getSolicitudDeFicheroDeUnidad(idFichero: String) {
     return this.http.get<any>(
-      `${this.host}ficheros/${idFichero}/solicitudRecursoUnidad/?page=0&size=1000`
+      `${this.host}ficheros/${idFichero}/solicitudRecursoUnidad?page=0&size=1000`
     );
   }
 
@@ -99,7 +99,7 @@ export class RecursoService {
     formData.append("file", file);
     const req = new HttpRequest(
       "POST",
-      `${this.urlFiles}subirDocSolicitud/${idSolicitud}`,
+      `${this.urlFiles}/subirDocSolicitud/${idSolicitud}`,
       formData,
       {
         reportProgress: true,
@@ -130,7 +130,7 @@ export class RecursoService {
     formData.append("file", file);
     const req = new HttpRequest(
       "POST",
-      `${this.urlFiles}subirDocRecurso/${idRecurso}`,
+      `${this.urlFiles}/subirDocRecurso/${idRecurso}`,
       formData,
       {
         reportProgress: true,
@@ -161,7 +161,7 @@ export class RecursoService {
     idSolicitud: string
   ): Observable<any> {
     return this.http
-      .get(`${this.urlFiles}borrarDocSolicitud/${idSolicitud}/${fileName}`)
+      .get(`${this.urlFiles}/borrarDocSolicitud/${idSolicitud}/${fileName}`)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -182,7 +182,7 @@ export class RecursoService {
    */
   deleteArchivo(fileName: string, idRecurso: string): Observable<any> {
     return this.http
-      .get(`${this.urlFiles}borrarDocRecurso/${idRecurso}/${fileName}`)
+      .get(`${this.urlFiles}/borrarDocRecurso/${idRecurso}/${fileName}`)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -209,7 +209,7 @@ export class RecursoService {
    */
   getRecursosDeCenad(idCenad: string): Observable<any> {
     return this.http.get<any>(
-      `${this.host}cenads/${idCenad}/recursos/?page=0&size=1000`
+      `${this.host}cenads/${idCenad}/recursos?page=0&size=1000`
     );
   }
 
@@ -219,7 +219,7 @@ export class RecursoService {
    */
   getRecursosDeCategoria(categoria: Categoria) {
     return this.http.get<any>(
-      `${this.host}categorias/${categoria.idCategoria}/recursos/?page=0&size=1000`
+      `${this.host}categorias/${categoria.idCategoria}/recursos?page=0&size=1000`
     );
   }
 
@@ -229,7 +229,7 @@ export class RecursoService {
    */
   getRecursosDeSubcategorias(categoria: Categoria) {
     return this.http.get<any>(
-      `${this.host}categorias/${categoria.idCategoria}/recursosDeSubcategorias/?page=0&size=1000`
+      `${this.host}categorias/${categoria.idCategoria}/recursosDeSubcategorias?page=0&size=1000`
     );
   }
 
@@ -292,7 +292,7 @@ export class RecursoService {
    * @param fichero Fichero a crear
    */
   createFichero(fichero: Fichero): Observable<any> {
-    return this.http.post(`${this.host}ficheros/`, fichero).pipe(
+    return this.http.post(`${this.host}ficheros`, fichero).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);
@@ -311,7 +311,7 @@ export class RecursoService {
    */
   delete(recurso): Observable<Recurso> {
     return this.http
-      .delete<Recurso>(`${this.urlEndPoint}${recurso.idRecurso}`)
+      .delete<Recurso>(`${this.urlEndPoint}/${recurso.idRecurso}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -328,7 +328,7 @@ export class RecursoService {
    */
   update(recurso: Recurso): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${recurso.idRecurso}`, recurso)
+      .patch<any>(`${this.urlEndPoint}/${recurso.idRecurso}`, recurso)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -348,7 +348,7 @@ export class RecursoService {
    */
   getUsuarioGestor(recurso: Recurso): Observable<any> {
     return this.http
-      .get<any>(`${this.urlEndPoint}${recurso.idRecurso}/usuarioGestor`)
+      .get<any>(`${this.urlEndPoint}/${recurso.idRecurso}/usuarioGestor`)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -368,7 +368,7 @@ export class RecursoService {
    */
   getUsuarioGestorDeIdRecurso(idRecurso: string): Observable<any> {
     return this.http
-      .get<any>(`${this.urlEndPoint}${idRecurso}/usuarioGestor`)
+      .get<any>(`${this.urlEndPoint}/${idRecurso}/usuarioGestor`)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -387,7 +387,7 @@ export class RecursoService {
    * @param idRecurso Id del recurso del que sacar la categoria
    */
   getCategoria(idRecurso: string): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${idRecurso}/categoria`).pipe(
+    return this.http.get<any>(`${this.urlEndPoint}/${idRecurso}/categoria`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);
@@ -406,7 +406,7 @@ export class RecursoService {
    */
   getTipoFormulario(recurso: Recurso): Observable<any> {
     return this.http
-      .get<any>(`${this.urlEndPoint}${recurso.idRecurso}/tipoFormulario`)
+      .get<any>(`${this.urlEndPoint}/${recurso.idRecurso}/tipoFormulario`)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -424,7 +424,7 @@ export class RecursoService {
    * metodo para obetener todos los tipos de formulario
    */
   getTiposFormulario(): Observable<any> {
-    return this.http.get<any>(`${this.host}tipos_formulario/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}tipos_formulario?page=0&size=1000`);
   }
 
   /**
@@ -461,7 +461,7 @@ export class RecursoService {
    */
   getCategoriasDeCenad(idCenad: string): Observable<any> {
     return this.http.get<any>(
-      `${this.host}cenads/${idCenad}/categorias/?page=0&size=1000`
+      `${this.host}cenads/${idCenad}/categorias?page=0&size=1000`
     );
   }
 
@@ -471,7 +471,7 @@ export class RecursoService {
    */
   getCategoriasPadreDeCenad(idCenad: string): Observable<any> {
     return this.http.get<any>(
-      `${this.host}cenads/${idCenad}/categoriasPadre/?page=0&size=1000`
+      `${this.host}cenads/${idCenad}/categoriasPadre?page=0&size=1000`
     );
   }
 
@@ -491,7 +491,7 @@ export class RecursoService {
    */
   getSubcategorias(categoria: Categoria): Observable<any> {
     return this.http.get<any>(
-      `${this.host}categorias/${categoria.idCategoria}/subcategorias/`
+      `${this.host}categorias/${categoria.idCategoria}/subcategorias`
     );
   }
 
@@ -501,7 +501,7 @@ export class RecursoService {
    */
   getSubcategoriasAnidadas(categoria: Categoria): Observable<any> {
     return this.http.get<any>(
-      `${this.host}categorias/${categoria.idCategoria}/subcategoriasAnidadas/`
+      `${this.host}categorias/${categoria.idCategoria}/subcategoriasAnidadas`
     );
   }
 
@@ -538,7 +538,7 @@ export class RecursoService {
    */
   getUsuariosGestor(idCenad: string): Observable<any> {
     return this.http.get<any>(
-      `${this.host}cenads/${idCenad}/usuariosGestores/?page=0&size=1000`
+      `${this.host}cenads/${idCenad}/usuariosGestores?page=0&size=1000`
     );
   }
 
@@ -579,7 +579,7 @@ export class RecursoService {
    * @param id Id del recurso
    */
   getRecurso(id): Observable<any> {
-    return this.http.get<Recurso>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<Recurso>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -595,7 +595,7 @@ export class RecursoService {
    */
   getFicheros(idRecurso: string): Observable<any> {
     return this.http.get<any>(
-      `${this.urlEndPoint}${idRecurso}/ficheros/?page=0&size=1000`
+      `${this.urlEndPoint}/${idRecurso}/ficheros?page=0&size=1000`
     );
   }
 
@@ -674,7 +674,7 @@ export class RecursoService {
    */
   getCategoriasFichero(): Observable<any> {
     return this.http.get<any>(
-      `${this.host}categorias_fichero/?page=0&size=1000`
+      `${this.host}categorias_fichero?page=0&size=1000`
     );
   }
 
@@ -697,7 +697,7 @@ export class RecursoService {
    */
   getCategoriaFichero(idFichero: string): Observable<any> {
     return this.http.get<any>(
-      `${this.host}ficheros/${idFichero}/categoriaFichero/?page=0&size=1000`
+      `${this.host}ficheros/${idFichero}/categoriaFichero?page=0&size=1000`
     );
   }
 
@@ -724,7 +724,7 @@ export class RecursoService {
    */
   getRecursoDeFichero(idFichero: String) {
     return this.http.get<any>(
-      `${this.host}ficheros/${idFichero}/recurso/?page=0&size=1000`
+      `${this.host}ficheros/${idFichero}/recurso?page=0&size=1000`
     );
   }
 
@@ -734,7 +734,7 @@ export class RecursoService {
    */
   getCategoriasFicheroDeRecurso(idRecurso: String) {
     return this.http.get<any>(
-      `${this.urlEndPoint}${idRecurso}/categoriasFichero/?page=0&size=1000`
+      `${this.urlEndPoint}/${idRecurso}/categoriasFichero?page=0&size=1000`
     );
   }
 
@@ -744,7 +744,7 @@ export class RecursoService {
    */
   getRecursosDeGestor(idGestor: string): Observable<any> {
     return this.http.get<any>(
-      `${this.host}usuarios_gestor/${idGestor}/recursos/?page=0&size=1000`
+      `${this.host}usuarios_gestor/${idGestor}/recursos?page=0&size=1000`
     );
   }
 }

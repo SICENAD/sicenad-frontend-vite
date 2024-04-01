@@ -33,7 +33,7 @@ export class SolicitudRecursoService {
   /**
    * endpoint de las solicitudes de Recursos
    */
-  private urlEndPoint: string = `${this.host}solicitudes/`;
+  private urlEndPoint: string = `${this.host}solicitudes`;
 
   /**
    * 
@@ -42,7 +42,7 @@ export class SolicitudRecursoService {
    */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}solicitudes/`;
+    this.urlEndPoint = `${this.host}solicitudes`;
   }
 
   /**
@@ -111,7 +111,7 @@ export class SolicitudRecursoService {
    * @returns solicitud
    */
   getSolicitudCalendario(id: string): Observable<SolicitudCalendario> {
-    return this.http.get<SolicitudCalendario>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<SolicitudCalendario>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -127,7 +127,7 @@ export class SolicitudRecursoService {
    * @returns objeto solicitud
    */
   getSolicitud(id: string): Observable<SolicitudRecurso> {
-    return this.http.get<SolicitudRecurso>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<SolicitudRecurso>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -605,7 +605,7 @@ export class SolicitudRecursoService {
    */
   deleteSolicitudCalendario(solicitud: SolicitudCalendario): Observable<SolicitudCalendario> {
     return this.http
-      .delete<SolicitudCalendario>(`${this.urlEndPoint}${solicitud.id}`)
+      .delete<SolicitudCalendario>(`${this.urlEndPoint}/${solicitud.id}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -623,7 +623,7 @@ export class SolicitudRecursoService {
    */
   delete(solicitud: SolicitudRecurso): Observable<SolicitudRecurso> {
     return this.http
-      .delete<SolicitudRecurso>(`${this.urlEndPoint}${solicitud.idSolicitud}`)
+      .delete<SolicitudRecurso>(`${this.urlEndPoint}/${solicitud.idSolicitud}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -663,7 +663,7 @@ export class SolicitudRecursoService {
    */
   updateSolicitudCalendario(idSolicitud: string, solicitud: SolicitudCalendario): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${idSolicitud}`, solicitud)
+      .patch<any>(`${this.urlEndPoint}/${idSolicitud}`, solicitud)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -685,7 +685,7 @@ export class SolicitudRecursoService {
    */
   update(idSolicitud: string, solicitud: SolicitudRecurso): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${idSolicitud}`, solicitud)
+      .patch<any>(`${this.urlEndPoint}/${idSolicitud}`, solicitud)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -706,7 +706,7 @@ export class SolicitudRecursoService {
    */
   getUsuarioNormalDeSolicitud(idSolicitud: string): Observable<any> {
     return this.http
-      .get<any>(`${this.urlEndPoint}${idSolicitud}/usuarioNormal`)
+      .get<any>(`${this.urlEndPoint}/${idSolicitud}/usuarioNormal`)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -789,7 +789,7 @@ export class SolicitudRecursoService {
    * @returns un observable de la API
    */
   getRecursoDeSolicitud(idSolicitud: string): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${idSolicitud}/recurso`).pipe(
+    return this.http.get<any>(`${this.urlEndPoint}/${idSolicitud}/recurso`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);

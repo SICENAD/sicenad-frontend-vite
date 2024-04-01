@@ -69,7 +69,7 @@ export class HomePrincipalComponent implements OnInit {
   /**
    * variable para el path relativo del archivo del escudo
    */
-  pathRelativo: string = `${environment.hostSicenad}files/escudos/`;
+  pathRelativo: string = `${environment.hostSicenad}files/escudos`;
   /**
    * variable para la url del archivo del escudo
    */
@@ -82,7 +82,7 @@ export class HomePrincipalComponent implements OnInit {
    * @param appConfigService Para usar las variables del `properties`
    */
   constructor(private principalService: PrincipalService, private activateRoute: ActivatedRoute, private appConfigService: AppConfigService) {
-    this.pathRelativo = appConfigService.hostSicenad ? `${appConfigService.hostSicenad}files/escudos/` : `${environment.hostSicenad}files/escudos/`;
+    this.pathRelativo = appConfigService.hostSicenad ? `${appConfigService.hostSicenad}files/escudos` : `${environment.hostSicenad}files/escudos`;
   }
 
   /**
@@ -120,7 +120,7 @@ export class HomePrincipalComponent implements OnInit {
     this.principalService.getCenad(this.idCenad).subscribe(response => {
       this.cenad = this.principalService.mapearCenad(response);
       this.escudoCenad = this.cenad.escudo;
-      this.pathImg = `${this.pathRelativo}${this.escudoCenad}`;
+      this.pathImg = `${this.pathRelativo}/${this.escudoCenad}`;
     });
   }
 

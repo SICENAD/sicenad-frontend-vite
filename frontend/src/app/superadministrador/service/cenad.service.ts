@@ -23,11 +23,11 @@ export class CenadService {
   /**
    * endpoint especifico de los cenads
    */
-  private urlEndPoint: string = `${this.host}cenads/`;
+  private urlEndPoint: string = `${this.host}cenads`;
   /**
    * endpoint para almacenamiento de archivos
    */
-  private urlFiles = `${this.host}files/`;
+  private urlFiles = `${this.host}files`;
 
   /**
    *
@@ -37,8 +37,8 @@ export class CenadService {
   constructor(private http: HttpClient,
               private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}cenads/`;
-    this.urlFiles = `${this.host}files/`;
+    this.urlEndPoint = `${this.host}cenads`;
+    this.urlFiles = `${this.host}files`;
 
   }
 
@@ -49,7 +49,7 @@ export class CenadService {
   upload(file: File): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
     formData.append('file', file);
-    const req = new HttpRequest('POST', `${this.urlFiles}subirEscudo`, formData, {
+    const req = new HttpRequest('POST', `${this.urlFiles}/subirEscudo`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
@@ -75,7 +75,7 @@ export class CenadService {
   uploadInfo(file: File, idCenad: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
     formData.append('file', file);
-    const req = new HttpRequest('POST', `${this.urlFiles}subirInfoCenad/${idCenad}`, formData, {
+    const req = new HttpRequest('POST', `${this.urlFiles}/subirInfoCenad/${idCenad}`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
@@ -99,7 +99,7 @@ export class CenadService {
   * @param idCenad Id del Cenad
   */
  delete_Archivo(fileName: string, idCenad: string): Observable<any> {
-  return this.http.get(`${this.urlFiles}borrarInfoCenad/${idCenad}/${fileName}`).pipe(
+  return this.http.get(`${this.urlFiles}/borrarInfoCenad/${idCenad}/${fileName}`).pipe(
     catchError((e) => {
       if (e.status === 400) {
         return throwError(e);
@@ -117,7 +117,7 @@ export class CenadService {
    * @param fileName Nombre del archivo
    */
   deleteArchivo(fileName: string): Observable<any> {
-    return this.http.get(`${this.urlFiles}borrarEscudo/${fileName}`).pipe(
+    return this.http.get(`${this.urlFiles}/borrarEscudo/${fileName}`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);
@@ -135,7 +135,7 @@ export class CenadService {
    * @param idCenad Id del Cenad
    */
   deleteCartografias(idCenad: string): Observable<any> {
-    return this.http.get(`${this.urlFiles}borrarCarpetaCartografia/${idCenad}`).pipe(
+    return this.http.get(`${this.urlFiles}/borrarCarpetaCartografia/${idCenad}`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);
@@ -153,7 +153,7 @@ export class CenadService {
    * @param idCenad Id del Cenad
    */
    deleteInfoCenad(idCenad: string): Observable<any> {
-    return this.http.get(`${this.urlFiles}borrarCarpetaInfoCenad/${idCenad}`).pipe(
+    return this.http.get(`${this.urlFiles}/borrarCarpetaInfoCenad/${idCenad}`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);
@@ -171,7 +171,7 @@ export class CenadService {
    * @param idRecurso Id del recurso
    */
   deleteCarpetaRecurso(idRecurso: string): Observable<any> {
-    return this.http.get(`${this.urlFiles}borrarCarpetaDocRecurso/${idRecurso}`).pipe(
+    return this.http.get(`${this.urlFiles}/borrarCarpetaDocRecurso/${idRecurso}`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);
@@ -189,7 +189,7 @@ export class CenadService {
    * @paramidsolicitud Id de la solicitud
    */
   deleteCarpetaSolicitud(idSolicitud: string): Observable<any> {
-    return this.http.get(`${this.urlFiles}borrarCarpetaDocRecurso/${idSolicitud}`).pipe(
+    return this.http.get(`${this.urlFiles}/borrarCarpetaDocRecurso/${idSolicitud}`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);
@@ -283,7 +283,7 @@ export class CenadService {
    * @param cenad Cenad
    */
   delete(cenad): Observable<Cenad> {
-    return this.http.delete<Cenad>(`${this.urlEndPoint}${cenad.idCenad}`)
+    return this.http.delete<Cenad>(`${this.urlEndPoint}/${cenad.idCenad}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -300,7 +300,7 @@ export class CenadService {
    */  
   update(cenad: Cenad): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${cenad.idCenad}`, cenad)
+      .patch<any>(`${this.urlEndPoint}/${cenad.idCenad}`, cenad)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -319,7 +319,7 @@ export class CenadService {
    * @paramid Id del Cenad
    */
   getCenad(id): Observable<any> {
-    return this.http.get<Cenad>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<Cenad>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -334,7 +334,7 @@ export class CenadService {
    * @param cenad Cenad
    */
   getUsuarioAdministrador(cenad: Cenad): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${cenad.idCenad}/usuarioAdministrador/`)
+    return this.http.get<any>(`${this.urlEndPoint}/${cenad.idCenad}/usuarioAdministrador`)
       .pipe(
         catchError((e) => {
           if (e.status === 404) {
@@ -350,7 +350,7 @@ export class CenadService {
    * @param idCenad Id del Cenad
    */  
   getUsuarioAdministradorCenadId(idCenad: string): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${idCenad}/usuarioAdministrador/`)
+    return this.http.get<any>(`${this.urlEndPoint}/${idCenad}/usuarioAdministrador`)
       .pipe(
         catchError((e) => {
           if (e.status === 404) {
@@ -367,7 +367,7 @@ export class CenadService {
    * @param idCenad Id del Cenad
    */
   getRecursosDeCenad(idCenad: string): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/${idCenad}/recursos/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/recursos?page=0&size=1000`);
   }
 
   /**

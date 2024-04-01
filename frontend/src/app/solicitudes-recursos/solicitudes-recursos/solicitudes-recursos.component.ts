@@ -223,7 +223,7 @@ export class SolicitudesRecursosComponent implements OnInit {
           return fechaIni > fechaFin ? 1 : fechaIni < fechaFin ? -1 : 0;
           }).slice(0, 5);
       }
-    }, 1500);
+    }, 8000);
   }
 
   

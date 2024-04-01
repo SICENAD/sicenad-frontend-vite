@@ -21,11 +21,11 @@ export class NormativaService {
   /**
    * endpoint especifico de los ficheros
    */
-  private urlEndPoint: string = `${this.host}ficheros/`;
+  private urlEndPoint: string = `${this.host}ficheros`;
   /**
    * endpoint del almacenamiento de archivos
    */
-  private urlFiles = `${this.host}files/`;
+  private urlFiles = `${this.host}files`;
   /**
    * variable que recoge su categoria de fichero. como es indiferente uso la de cartografia
    */
@@ -40,8 +40,8 @@ export class NormativaService {
     private http: HttpClient,
     private appConfigService: AppConfigService) { 
       this.host = this.appConfigService.hostSicenad ? this.appConfigService.hostSicenad : environment.hostSicenad;
-      this.urlEndPoint =  `${this.host}ficheros/`;
-      this.urlFiles =  `${this.host}files/`;
+      this.urlEndPoint =  `${this.host}ficheros`;
+      this.urlFiles =  `${this.host}files`;
       this.categoriaFicheroCartografia = this.appConfigService.categoriaFicheroCartografia ? this.appConfigService.categoriaFicheroCartografia : environment.categoriaFicheroCartografia;
     }
 
@@ -50,7 +50,7 @@ export class NormativaService {
    * @param idCenad Id del Cenad
    */
   getNormativasDeCenad(idCenad:string): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/${idCenad}/normativas/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/normativas?page=0&size=1000`);
   }
 
   /**
@@ -88,7 +88,7 @@ export class NormativaService {
  * @param idFichero Id del fichero (normativa)
  */
 getCategoriaFichero(idFichero: string): Observable<any> {
-  return this.http.get<any>(`${this.host}ficheros/${idFichero}/categoriaFichero/?page=0&size=1000`);
+  return this.http.get<any>(`${this.host}ficheros/${idFichero}/categoriaFichero?page=0&size=1000`);
 }
 
 /**
@@ -129,7 +129,7 @@ mapearCategoriaFichero(categoriaFicheroApi: any): CategoriaFicheroImpl {
    * @param normativa Normativa a eliminar
    */
   delete(normativa): Observable<Fichero> {
-    return this.http.delete<Fichero>(`${this.urlEndPoint}${normativa.idFichero}`)
+    return this.http.delete<Fichero>(`${this.urlEndPoint}/${normativa.idFichero}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -146,7 +146,7 @@ mapearCategoriaFichero(categoriaFicheroApi: any): CategoriaFicheroImpl {
    */
   update(normativa: Fichero): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${normativa.idFichero}`, normativa)
+      .patch<any>(`${this.urlEndPoint}/${normativa.idFichero}`, normativa)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -164,7 +164,7 @@ mapearCategoriaFichero(categoriaFicheroApi: any): CategoriaFicheroImpl {
    * metodo que recupera de la BD todos los CENADS
    */
   getCenads(): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads?page=0&size=1000`);
   }
 
   /**
@@ -187,7 +187,7 @@ mapearCategoriaFichero(categoriaFicheroApi: any): CategoriaFicheroImpl {
    * @param normativa Normativa de la que se quiere recuperar el Cenad
    */
   getCenadDeNormativa(normativa: Fichero): Observable<any> {
-    return this.http.get<Cenad>(`${this.urlEndPoint}${normativa.idFichero}/cenad`).pipe(
+    return this.http.get<Cenad>(`${this.urlEndPoint}/${normativa.idFichero}/cenad`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -236,7 +236,7 @@ mapearCategoriaFichero(categoriaFicheroApi: any): CategoriaFicheroImpl {
   upload(file: File, idCenad: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
     formData.append('file', file);
-    const req = new HttpRequest('POST', `${this.urlFiles}subirNormativa/${idCenad}`, formData, {
+    const req = new HttpRequest('POST', `${this.urlFiles}/subirNormativa/${idCenad}`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
@@ -260,7 +260,7 @@ mapearCategoriaFichero(categoriaFicheroApi: any): CategoriaFicheroImpl {
    * @param idCenad Id del Cenad
    */
   deleteArchivo(fileName: string, idCenad: string): Observable<any> {
-    return this.http.get(`${this.urlFiles}borrarNormativa/${idCenad}/${fileName}`).pipe(
+    return this.http.get(`${this.urlFiles}/borrarNormativa/${idCenad}/${fileName}`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);

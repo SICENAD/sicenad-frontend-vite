@@ -50,7 +50,7 @@ export class InfoCenadComponent implements OnInit {
   /**
    * variable que define la ruta del archivo
    */
-  pathRelativo: string = `${environment.hostSicenad}files/infoCenads/${this.idCenad}/`;
+  pathRelativo: string = `${environment.hostSicenad}files/infoCenads/${this.idCenad}`;
   /**
    * variable para la seleccion del archivo
    */
@@ -104,7 +104,7 @@ export class InfoCenadComponent implements OnInit {
         }
       });
     }, 1000);
-    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/infoCenads/${this.idCenad}/` : `${environment.hostSicenad}files/infoCenads/${this.idCenad}/`;
+    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/infoCenads/${this.idCenad}` : `${environment.hostSicenad}files/infoCenads/${this.idCenad}`;
 
     this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;
   }
@@ -153,7 +153,7 @@ export class InfoCenadComponent implements OnInit {
    * @returns Devuelve la ruta del archivo
    */
    pathArchivo(nombreArchivo: string): string {
-    const pathImg: string = nombreArchivo ? `${this.pathRelativo}${nombreArchivo}` : '';
+    const pathImg: string = nombreArchivo ? `${this.pathRelativo}/${nombreArchivo}` : '';
     return pathImg;
   } 
 

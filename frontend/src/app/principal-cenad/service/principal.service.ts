@@ -18,7 +18,7 @@ export class PrincipalService {
   /**
    * endpoint especifico de los cenads
    */
-  private urlEndPoint: string = `${this.host}cenads/`;
+  private urlEndPoint: string = `${this.host}cenads`;
 
   /**
    *
@@ -27,7 +27,7 @@ export class PrincipalService {
    */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}cenads/`;
+    this.urlEndPoint = `${this.host}cenads`;
    }
 
   /**
@@ -54,7 +54,7 @@ export class PrincipalService {
    * @param id Id del Cenad
    */
   getCenad(id: string): Observable<Cenad> {
-    return this.http.get<Cenad>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<Cenad>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);

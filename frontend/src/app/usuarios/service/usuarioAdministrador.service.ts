@@ -20,7 +20,7 @@ export class UsuarioAdministradorService {
   /**
    * endpoint especifico de los usuarios administrador
    */
-  private urlEndPoint: string = `${this.host}usuarios_administrador/`;
+  private urlEndPoint: string = `${this.host}usuarios_administrador`;
 
   /**
    * 
@@ -29,7 +29,7 @@ export class UsuarioAdministradorService {
    */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}usuarios_administrador/`;
+    this.urlEndPoint = `${this.host}usuarios_administrador`;
    }
 
   /**
@@ -94,7 +94,7 @@ export class UsuarioAdministradorService {
    * @param usuario Usuario a eliminar
    */  
   delete(usuario): Observable<UsuarioAdministrador> {
-    return this.http.delete<UsuarioAdministrador>(`${this.urlEndPoint}${usuario.idUsuario}`)
+    return this.http.delete<UsuarioAdministrador>(`${this.urlEndPoint}/${usuario.idUsuario}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -111,7 +111,7 @@ export class UsuarioAdministradorService {
    */  
   update(usuario: UsuarioAdministrador): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
+      .patch<any>(`${this.urlEndPoint}/${usuario.idUsuario}`, usuario)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -130,7 +130,7 @@ export class UsuarioAdministradorService {
    * @param id Id del usuario
    */
   getUsuario(id): Observable<any> {
-    return this.http.get<UsuarioAdministrador>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<UsuarioAdministrador>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -145,7 +145,7 @@ export class UsuarioAdministradorService {
    * @param cenad Cenad del que se quiere el administrador
    */
   getUsuarioAdministrador(cenad: Cenad): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/${cenad.idCenad}/usuarioAdministrador/`)
+    return this.http.get<any>(`${this.host}cenads/${cenad.idCenad}/usuarioAdministrador`)
     .pipe(
       catchError((e) => {
         if (e.status === 404) {
@@ -163,7 +163,7 @@ export class UsuarioAdministradorService {
    * @param usuarioAdministrador Administrador del que se quiere el Cenad
    */
   getCenad(usuarioAdministrador: UsuarioAdministrador): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${usuarioAdministrador.idUsuario}/cenad/`)
+    return this.http.get<any>(`${this.urlEndPoint}/${usuarioAdministrador.idUsuario}/cenad`)
       .pipe(
         catchError((e) => {
           if (e.status === 404) {
@@ -178,14 +178,14 @@ export class UsuarioAdministradorService {
    * metodo que recupera de la BD todos los cenads
    */
   getCenads(): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads?page=0&size=1000`);
   }
 
   /**
    * metodo que recupera de la BD todos los cenads sin administrador
    */ 
   getCenadsSinAdmin(): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/sinAdmin/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads/sinAdmin?page=0&size=1000`);
   }
 
   /**

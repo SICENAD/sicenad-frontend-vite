@@ -255,13 +255,13 @@ export class PlanificacionCalendarioFormComponent implements OnInit {
         this.solicitudService.getRecursoDeSolicitud(this.idSolicitud).subscribe((response) => {
           this.solicitud.recurso = this.solicitudService.mapearRecurso((response));
         });
-      }, 700);
+      }, 1200);
 
       setTimeout(() => {
         this.uRlRecursoSeleccionado = this.solicitud.recurso.url;
         this.categoriaSeleccionada = this.solicitud.recurso.categoria;
         this.filtrar();
-      }, 900);
+      }, 2000);
 
     } else { //creacion
       if (this.isSuperAdmin) {

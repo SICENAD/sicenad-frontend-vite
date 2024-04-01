@@ -27,7 +27,7 @@ export class CartografiaComponent implements OnInit {
   /**
    * variable para construir la url de descarga del archivo del fichero
    */
-  pathRelativo: string = `${environment.hostSicenad}files/cartografias/${this.idCenad}/`;
+  pathRelativo: string = `${environment.hostSicenad}files/cartografias/${this.idCenad}`;
   /**
    * variable para icono "editar"
    */
@@ -72,8 +72,8 @@ export class CartografiaComponent implements OnInit {
       this.idCenad === sessionStorage.idCenad &&
       sessionStorage.isAdmin === "true";
     this.pathRelativo = this.appConfigService.hostSicenad
-      ? `${this.appConfigService.hostSicenad}files/cartografias/${this.idCenad}/`
-      : `${environment.hostSicenad}files/cartografias/${this.idCenad}/`;
+      ? `${this.appConfigService.hostSicenad}files/cartografias/${this.idCenad}`
+      : `${environment.hostSicenad}files/cartografias/${this.idCenad}`;
     this.nombreMostrado = this.recortarTexto(this.cartografia.nombre, 45);
     this.descripcionMostrada = this.recortarTexto(
       this.cartografia.descripcion,

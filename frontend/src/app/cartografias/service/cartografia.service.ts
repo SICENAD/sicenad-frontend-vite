@@ -20,11 +20,11 @@ export class CartografiaService {
   /**
    * endpoint especifico de las cartografias
    */
-  private urlEndPoint: string = `${this.host}cartografias/`;
+  private urlEndPoint: string = `${this.host}cartografias`;
   /**
    * endpoint del almacenamiento de archivos
    */
-  private urlFiles = `${this.host}files/`;
+  private urlFiles = `${this.host}files`;
   /**
    * categoria de fichero a la que pertenecen las cartografias
    */
@@ -39,8 +39,8 @@ export class CartografiaService {
     private http: HttpClient,
     private appConfigService: AppConfigService) {
       this.host = this.appConfigService.hostSicenad ? this.appConfigService.hostSicenad : environment.hostSicenad;
-      this.urlEndPoint =  `${this.host}cartografias/`;
-      this.urlFiles =  `${this.host}files/`;
+      this.urlEndPoint =  `${this.host}cartografias`;
+      this.urlFiles =  `${this.host}files`;
       this.categoriaFicheroCartografia = this.appConfigService.categoriaFicheroCartografia ? this.appConfigService.categoriaFicheroCartografia : environment.categoriaFicheroCartografia;
     }
 
@@ -50,7 +50,7 @@ export class CartografiaService {
    * @returns Devuelve las cartografias de un CENAD
    */
   getCartografiasDeCenad(idCenad:string): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/${idCenad}/cartografias/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/cartografias?page=0&size=1000`);
   }
 
   /**
@@ -106,7 +106,7 @@ export class CartografiaService {
    * @param cartografia Cartografia a borrar
    */
   delete(cartografia): Observable<Cartografia> {
-    return this.http.delete<Cartografia>(`${this.urlEndPoint}${cartografia.idCartografia}`)
+    return this.http.delete<Cartografia>(`${this.urlEndPoint}/${cartografia.idCartografia}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -122,7 +122,7 @@ export class CartografiaService {
    * @param cartografia Cartografia a editar
    */  update(cartografia: Cartografia): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${cartografia.idCartografia}`, cartografia)
+      .patch<any>(`${this.urlEndPoint}/${cartografia.idCartografia}`, cartografia)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -141,7 +141,7 @@ export class CartografiaService {
    * Devuelve todos los CENAD,s
    */
   getCenads(): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads?page=0&size=1000`);
   }
 
   /**
@@ -164,7 +164,7 @@ export class CartografiaService {
    * @param cartografia Cartografia de la que se quiere saber el CENAD
    */
   getCenadDeCartografia(cartografia: Cartografia): Observable<any> {
-    return this.http.get<Cenad>(`${this.urlEndPoint}${cartografia.idCartografia}/cenad`).pipe(
+    return this.http.get<Cenad>(`${this.urlEndPoint}/${cartografia.idCartografia}/cenad`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -213,7 +213,7 @@ export class CartografiaService {
   upload(file: File, idCenad: string): Observable<HttpEvent<any>> {
     const formData: FormData = new FormData();
     formData.append('file', file);
-    const req = new HttpRequest('POST', `${this.urlFiles}subirCartografia/${idCenad}`, formData, {
+    const req = new HttpRequest('POST', `${this.urlFiles}/subirCartografia/${idCenad}`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
@@ -236,7 +236,7 @@ export class CartografiaService {
    * @param file Archivo a borrar
    * @param idCenad Id del CENAD
    */  deleteArchivo(fileName: string, idCenad: string): Observable<any> {
-    return this.http.get(`${this.urlFiles}borrarCartografia/${idCenad}/${fileName}`).pipe(
+    return this.http.get(`${this.urlFiles}/borrarCartografia/${idCenad}/${fileName}`).pipe(
       catchError((e) => {
         if (e.status === 400) {
           return throwError(e);

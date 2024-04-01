@@ -32,7 +32,7 @@ export class NormativaFormComponent implements OnInit {
   /**
      * variable que define la ruta del archivo
      */
-  pathRelativo: string = `${environment.hostSicenad}files/normativas/${this.idCenad}/`;
+  pathRelativo: string = `${environment.hostSicenad}files/normativas/${this.idCenad}`;
   /**
    * variable para la seleccion del archivo
    */
@@ -80,7 +80,7 @@ export class NormativaFormComponent implements OnInit {
   ngOnInit() {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     this.hostSicenad = this.appConfigService.hostSicenad ? this.appConfigService.hostSicenad : environment.hostSicenad;
-    this.pathRelativo = `${this.hostSicenad}files/normativas/${this.idCenad}/`;
+    this.pathRelativo = `${this.hostSicenad}files/normativas/${this.idCenad}`;
     this.normativa.cenad = `${this.hostSicenad}cenads/${this.idCenad}`;
     this.normativa.categoriaFichero = `${this.hostSicenad}categoriasFichero/${this.categoriaFicheroCartografia}`;
   }
@@ -129,7 +129,7 @@ export class NormativaFormComponent implements OnInit {
    * @returns Devuelve la ruta del archivo
    */
   pathArchivo(nombreArchivo: string): string {
-    const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
+    const pathImg: string = `${this.pathRelativo}/${nombreArchivo}`;
     return pathImg;
   }
 }

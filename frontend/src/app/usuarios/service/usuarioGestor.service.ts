@@ -20,7 +20,7 @@ export class UsuarioGestorService {
   /**
    * endpoint especifico de los usuarios gestor
    */
-  private urlEndPoint: string = `${this.host}usuarios_gestor/`;
+  private urlEndPoint: string = `${this.host}usuarios_gestor`;
 
   /**
    * 
@@ -29,7 +29,7 @@ export class UsuarioGestorService {
    */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}usuarios_gestor/`;
+    this.urlEndPoint = `${this.host}usuarios_gestor`;
   }
   /**
    * metodo que recupera de la BD todos los usuarios gestor
@@ -93,7 +93,7 @@ export class UsuarioGestorService {
    * @param usuario Usuario a eliminar
    */      
   delete(usuario): Observable<UsuarioGestor> {
-    return this.http.delete<UsuarioGestor>(`${this.urlEndPoint}${usuario.idUsuario}`)
+    return this.http.delete<UsuarioGestor>(`${this.urlEndPoint}/${usuario.idUsuario}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -110,7 +110,7 @@ export class UsuarioGestorService {
    */    
   update(usuario: UsuarioGestor): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
+      .patch<any>(`${this.urlEndPoint}/${usuario.idUsuario}`, usuario)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -129,7 +129,7 @@ export class UsuarioGestorService {
    * @param id Id del usuario
    */  
   getUsuario(id): Observable<any> {
-    return this.http.get<UsuarioGestor>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<UsuarioGestor>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -144,7 +144,7 @@ export class UsuarioGestorService {
    * @param idCenad Id del Cenad del que se quiere el administrador
    */  
   getUsuariosGestoresDeCenad(idCenad: string): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/${idCenad}/usuariosGestores/`)
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/usuariosGestores`)
       .pipe(
         catchError((e) => {
           if (e.status === 404) {
@@ -161,7 +161,7 @@ export class UsuarioGestorService {
    * @param usuarioGestor usuarioGestor del que se quiere el Cenad
    */  
   getCenad(usuarioGestor: UsuarioGestor): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${usuarioGestor.idUsuario}/cenad/`)
+    return this.http.get<any>(`${this.urlEndPoint}/${usuarioGestor.idUsuario}/cenad`)
       .pipe(
         catchError((e) => {
           if (e.status === 404) {
@@ -176,7 +176,7 @@ export class UsuarioGestorService {
    * metodo que recupera de la BD todos los cenads
    */  
   getCenads(): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads?page=0&size=1000`);
   }
 
   /**

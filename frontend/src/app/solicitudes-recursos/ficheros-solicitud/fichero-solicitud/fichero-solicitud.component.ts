@@ -132,10 +132,10 @@ export class FicheroSolicitudComponent implements OnInit {
     setTimeout(() => {
       //construye el path relativo para la url de descarga del archivo
       if (this.fichero.solicitudRecursoCenad) {
-        this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docSolicitudes/${this.fichero.solicitudRecursoCenad.idSolicitud}/` : `${environment.hostSicenad}files/docSolicitudes/${this.fichero.solicitudRecursoCenad.idSolicitud}/`;
+        this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docSolicitudes/${this.fichero.solicitudRecursoCenad.idSolicitud}` : `${environment.hostSicenad}files/docSolicitudes/${this.fichero.solicitudRecursoCenad.idSolicitud}`;
       }
       if (this.fichero.solicitudRecursoUnidad) {
-        this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docSolicitudes/${this.fichero.solicitudRecursoUnidad.idSolicitud}/` : `${environment.hostSicenad}files/docSolicitudes/${this.fichero.solicitudRecursoUnidad.idSolicitud}/`;
+        this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docSolicitudes/${this.fichero.solicitudRecursoUnidad.idSolicitud}` : `${environment.hostSicenad}files/docSolicitudes/${this.fichero.solicitudRecursoUnidad.idSolicitud}`;
       }
     }, 3000);
     this.nombreMostrado = this.recortarTexto(this.fichero.nombre, 45);

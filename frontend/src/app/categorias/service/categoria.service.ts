@@ -22,7 +22,7 @@ export class CategoriaService {
   /**
    * endpoint especifico de las categorias
    */
-  private urlEndPoint: string = `${this.host}categorias/`;
+  private urlEndPoint: string = `${this.host}categorias`;
 
   /**
    * 
@@ -33,7 +33,7 @@ export class CategoriaService {
     private http: HttpClient,
     private appConfigService: AppConfigService) { 
       this.host = this.appConfigService.hostSicenad ? this.appConfigService.hostSicenad : environment.hostSicenad;
-      this.urlEndPoint =  `${this.host}categorias/`;
+      this.urlEndPoint =  `${this.host}categorias`;
     }
 
 
@@ -42,7 +42,7 @@ export class CategoriaService {
    * @param idCenad Id del Cenad
    */
   getCategoriasDeCenad(idCenad:string): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/${idCenad}/categorias/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/categorias?page=0&size=1000`);
   }
 
   /**
@@ -50,7 +50,7 @@ export class CategoriaService {
    * @param idCenad Id del Cenad
    */
   getCategoriasPadreDeCenad(idCenad:string): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/${idCenad}/categoriasPadre/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads/${idCenad}/categoriasPadre?page=0&size=1000`);
   }
 
   /**
@@ -104,7 +104,7 @@ export class CategoriaService {
    * @param categoria Categoria a eliminar
    */
   delete(categoria): Observable<Categoria> {
-    return this.http.delete<Categoria>(`${this.urlEndPoint}${categoria.idCategoria}`)
+    return this.http.delete<Categoria>(`${this.urlEndPoint}/${categoria.idCategoria}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -121,7 +121,7 @@ export class CategoriaService {
    */
   update(categoria: Categoria): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${categoria.idCategoria}`, categoria)
+      .patch<any>(`${this.urlEndPoint}/${categoria.idCategoria}`, categoria)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -140,7 +140,7 @@ export class CategoriaService {
    * @param categoria Categoria de la que se quiere obtener la categoria padre
    */
   getCategoriaPadre(categoria: Categoria): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${categoria.idCategoria}/categoriaPadre`)
+    return this.http.get<any>(`${this.urlEndPoint}/${categoria.idCategoria}/categoriaPadre`)
     .pipe(
       catchError((e) => {
         if (e.status === 404) {
@@ -156,14 +156,14 @@ export class CategoriaService {
    * @param categoria Categoria de la que se quieren obtener las subcategorias
    */
   getSubcategorias(categoria:Categoria): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${categoria.idCategoria}/subcategorias/`);
+    return this.http.get<any>(`${this.urlEndPoint}/${categoria.idCategoria}/subcategorias`);
   }
 
   /**
    * metodo que recupera de la BD todos los CENADS
    */
   getCenads(): Observable<any> {
-    return this.http.get<any>(`${this.host}cenads/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}cenads?page=0&size=1000`);
   }
 
   //metodo que recupera de la BD un CENAD (por su id)
@@ -183,7 +183,7 @@ export class CategoriaService {
    * @param categoria Categoria de la que se quiere obtener el Cenad
    */
   getCenadDeCategoria(categoria: Categoria): Observable<any> {
-    return this.http.get<Cenad>(`${this.urlEndPoint}${categoria.idCategoria}/cenad`).pipe(
+    return this.http.get<Cenad>(`${this.urlEndPoint}/${categoria.idCategoria}/cenad`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -229,7 +229,7 @@ export class CategoriaService {
    * @param categoria Categoria de la que se quieren obtener los recursos
    */
   getRecursosDeCategoria(categoria: Categoria): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${categoria.idCategoria}/recursos/?page=0&size=1000`);
+    return this.http.get<any>(`${this.urlEndPoint}/${categoria.idCategoria}/recursos?page=0&size=1000`);
   }
 
   /**

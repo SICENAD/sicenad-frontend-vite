@@ -84,8 +84,8 @@ export class FicheroComponent implements OnInit {
     setTimeout(() => {
       if (this.fichero.recurso) {
         this.pathRelativo = this.appConfigService.hostSicenad
-          ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.fichero.recurso.idRecurso}/`
-          : `${environment.hostSicenad}files/docRecursos/${this.fichero.recurso.idRecurso}/`;
+          ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.fichero.recurso.idRecurso}`
+          : `${environment.hostSicenad}files/docRecursos/${this.fichero.recurso.idRecurso}`;
       }
     }, 3000);
     this.nombreMostrado = this.recortarTexto(this.fichero.nombre, 45);

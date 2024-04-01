@@ -76,7 +76,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
   /**
    * variable que crea la ruta de las cartografias
    */
-   pathRelativo: string = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
+   pathRelativo: string = `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}`;
    /**
     * variable de seleccion del archivo
     */
@@ -140,7 +140,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
    * - para que use el valor del properties.json
    */
   ngOnInit() {
-    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/` : `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
+    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.recurso.idRecurso}` : `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}`;
     this.categoriasFichero = JSON.parse(localStorage.categoriasFichero);
     this.idRecurso = this.activateRoute.snapshot.params['idRecurso'];
     this.recursoService.getCategoriasFicheroDeRecurso(this.idRecurso).subscribe((response) => {
@@ -159,7 +159,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
       this.recursoService.getFicheros(this.idRecurso).subscribe((response) =>
         this.ficheros = this.recursoService.extraerFicheros(response));
       this.recursoService.getCategoria(this.idRecurso).subscribe((response) => this.recurso.categoria = this.recursoService.mapearCategoria(response));
-      this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/` : `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}/`;
+      this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docRecursos/${this.recurso.idRecurso}` : `${environment.hostSicenad}files/docRecursos/${this.recurso.idRecurso}`;
     }, 1000);
     this.sizeMaxDocRecurso = this.appConfigService.sizeMaxDocRecurso ? this.appConfigService.sizeMaxDocRecurso : environment.sizeMaxDocRecurso;
     this.sizeMaxEscudo = this.appConfigService.sizeMaxEscudo ? this.appConfigService.sizeMaxEscudo : environment.sizeMaxEscudo;
@@ -194,7 +194,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
     }
     this.nuevoFichero = false;
     this.fichero = new FicheroImpl();
-    this.fichero.recurso = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}recursos/${this.recurso.idRecurso}/` : `${environment.hostSicenad}recursos/${this.recurso.idRecurso}`;
+    this.fichero.recurso = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}recursos/${this.recurso.idRecurso}` : `${environment.hostSicenad}recursos/${this.recurso.idRecurso}`;
   }
 
   /**

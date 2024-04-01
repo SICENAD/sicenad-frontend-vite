@@ -341,7 +341,7 @@ export class CalendarioCenadComponent implements OnInit {
       }
 
       this.cargarParametrosCalendario();
-    }, 2000);
+    }, 7000);
   }
 
 
@@ -358,7 +358,7 @@ export class CalendarioCenadComponent implements OnInit {
         setTimeout(() => {//retardo para evitar el problema de la sincronia
           !this.isAutenticado ? this.bloquearUrl = true : this.isSuperAdmin ? this.bloquearUrl = true : this.bloquearUrl = false;
           this.solicitudesCenadCalendarioValidadas.length != 0 ? this.solicitudesCenadCalendarioValidadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioValidadas) : "";
-        }, 700);
+        }, 800);
       }
     });
     //obtiene de la API las solicitudes con estado Solicitada
@@ -368,7 +368,7 @@ export class CalendarioCenadComponent implements OnInit {
         setTimeout(() => {
           !this.isAutenticado ? this.bloquearUrl = true : this.isSuperAdmin ? this.bloquearUrl = true : this.bloquearUrl = false;
           this.solicitudesCenadCalendarioSolicitadas.length != 0 ? this.solicitudesCenadCalendarioSolicitadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioSolicitadas) : "";
-        }, 700);
+        }, 800);
       }
     });
     //una vez que se han  actualizado los arrays de Solicitadas y Validadas, genera el array de todas
@@ -380,7 +380,7 @@ export class CalendarioCenadComponent implements OnInit {
       } else {
         this.solicitudesCenadCalendarioTodas = this.solicitudesCenadCalendarioValidadas;
       }
-    }, 800);
+    }, 1000);
     //obtiene de la API las solicitudes con estado Planificada
     this.solicitudService.getSolicitudesDeCenadEstado(this.idCenad, "Planificada").subscribe((response) => {
       if (response) {
@@ -388,7 +388,7 @@ export class CalendarioCenadComponent implements OnInit {
         setTimeout(() => {
           this.isSuperAdmin ? this.bloquearUrl = false : this.bloquearUrl = true;
           this.solicitudesCenadCalendarioPlanificadas.length != 0 ? this.solicitudesCenadCalendarioPlanificadas = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioPlanificadas) : "";
-        }, 700);
+        }, 800);
       }
     });
     //obtiene de la API las solicitudes con estado Aviso
@@ -398,7 +398,7 @@ export class CalendarioCenadComponent implements OnInit {
         setTimeout(() => {
           this.isAdministrador ? this.bloquearUrl = false : this.bloquearUrl = true;
           this.solicitudesCenadCalendarioAvisos.length != 0 ? this.solicitudesCenadCalendarioAvisos = this.actualizarDatosSolicitudes(this.solicitudesCenadCalendarioAvisos) : "";
-        }, 700);
+        }, 800);
       }
     });
   }
@@ -531,26 +531,33 @@ export class CalendarioCenadComponent implements OnInit {
           this.solicitudService.getUsuarioNormalDeSolicitud(s.id).subscribe((response) => {
             user = this.solicitudService.mapearUsuarioNormal(response);
             s.usuario = this.solicitudService.mapearUsuarioNormal(response).nombre;
+         // setTimeout(() => {
             this.solicitudService.getUnidadDeUsuarioNormal(user.idUsuario).subscribe((response) => {
-              unidad = this.solicitudService.mapearUnidad(response);
-              s.title = "h  -  " + unidad.nombre + "  -  " + s.recurso;
-              s.idUnidad = unidad.idUnidad;
-              //para bloquear el acceso de las solicitudes validadas que no sean de la unidad del usuario
-              if (s.estado.toString() == "Validada" && s.idUnidad.toString() != this.idUnidadUserNormal && this.isUsuarioNormal) {
-                s.url = `/principalCenad/${this.idCenad}/calendarios/${this.idCenad}`;
-              }
+                unidad = this.solicitudService.mapearUnidad(response);              
+                s.title = "h  -  " + unidad.nombre + "  -  " + s.recurso;
+                s.idUnidad = unidad.idUnidad;
+                //para bloquear el acceso de las solicitudes validadas que no sean de la unidad del usuario
+                if (s.estado.toString() == "Validada" && s.idUnidad.toString() != this.idUnidadUserNormal && this.isUsuarioNormal) {
+                  s.url = `/principalCenad/${this.idCenad}/calendarios/${this.idCenad}`;
+                } 
             });
+        //  }, 200);
           });
         }
-      }, 600);
+      }, 700);
 
-      //si un usuario no tiene permisos para editar la solicitud, al hacer click sobre ella le redirecciona al mismo sitio (no hace nada)
+    //  setTimeout(() => {
+        //si un usuario no tiene permisos para editar la solicitud, al hacer click sobre ella le redirecciona al mismo sitio (no hace nada)
       //y si tiene permisos, le redirecciona al formulario de edición
       //al superAdministrador al formulario del calendario y al resto de usuarios al formulario de las solicitudes de recursos
       this.bloquearUrl ? s.url = `/principalCenad/${this.idCenad}/calendarios/${this.idCenad}` :
-        this.isSuperAdmin ? s.url = `/principalCenad/${this.idCenad}/calendarios/${this.idCenad}/formulario/${this.idCenad}/${s.id}` :
-          this.isAdministrador && s.estado.toString() == "Aviso" ? s.url = `/principalCenad/${this.idCenad}/calendarios/${this.idCenad}/formulario/${this.idCenad}/${s.id}` :
-            s.url = `/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}/formulario/${this.idCenad}/${s.id}`;
+      this.isSuperAdmin ? s.url = `/principalCenad/${this.idCenad}/calendarios/${this.idCenad}/formulario/${this.idCenad}/${s.id}` :
+        this.isAdministrador && s.estado.toString() == "Aviso" ? s.url = `/principalCenad/${this.idCenad}/calendarios/${this.idCenad}/formulario/${this.idCenad}/${s.id}` :
+          s.url = `/principalCenad/${this.idCenad}/solicitudesRecursos/${this.idCenad}/formulario/${this.idCenad}/${s.id}`;       
+        
+   //  }, 800);
+
+      
     });
     return arraySolicitudes;
   }

@@ -20,7 +20,7 @@ export class UsuarioNormalService {
   /**
    * endpoint especifico de los usuarios normal
    */
-  private urlEndPoint: string = `${this.host}usuarios_normal/`;
+  private urlEndPoint: string = `${this.host}usuarios_normal`;
 
   /**
    * 
@@ -29,7 +29,7 @@ export class UsuarioNormalService {
    */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}usuarios_normal/`;
+    this.urlEndPoint = `${this.host}usuarios_normal`;
   }
 
   /**
@@ -95,7 +95,7 @@ export class UsuarioNormalService {
    * @param usuario Usuario a eliminar
    */    
   delete(usuario): Observable<UsuarioNormal> {
-    return this.http.delete<UsuarioNormal>(`${this.urlEndPoint}${usuario.idUsuario}`)
+    return this.http.delete<UsuarioNormal>(`${this.urlEndPoint}/${usuario.idUsuario}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -112,7 +112,7 @@ export class UsuarioNormalService {
    */    
   update(usuario: UsuarioNormal): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${usuario.idUsuario}`, usuario)
+      .patch<any>(`${this.urlEndPoint}/${usuario.idUsuario}`, usuario)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -131,7 +131,7 @@ export class UsuarioNormalService {
    * @param id Id del usuario
    */
     getUsuario(id): Observable<any> {
-    return this.http.get<UsuarioNormal>(`${this.urlEndPoint}${id}`).pipe(
+    return this.http.get<UsuarioNormal>(`${this.urlEndPoint}/${id}`).pipe(
       catchError((e) => {
         if (e.status !== 401 && e.error.mensaje) {
           console.error(e.error.mensaje);
@@ -145,7 +145,7 @@ export class UsuarioNormalService {
    * metodo que recupera de la BD todas las unidades
    */
   getUnidades(): Observable<any> {
-    return this.http.get<any>(`${this.host}unidades/?page=0&size=1000`);
+    return this.http.get<any>(`${this.host}unidades?page=0&size=1000`);
   }
 
   /**
@@ -182,6 +182,6 @@ export class UsuarioNormalService {
    * @param idUsuario Id del usuario
    */
   getUnidad(idUsuario: string): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${idUsuario}/unidad/`);
+    return this.http.get<any>(`${this.urlEndPoint}/${idUsuario}/unidad`);
   }
 }

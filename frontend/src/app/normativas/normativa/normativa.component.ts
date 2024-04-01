@@ -27,7 +27,7 @@ export class NormativaComponent implements OnInit {
   /**
    * variable para construir la url de descarga del archivo del fichero
    */
-  pathRelativo: string = `${environment.hostSicenad}files/normativas/${this.idCenad}/`;
+  pathRelativo: string = `${environment.hostSicenad}files/normativas/${this.idCenad}`;
   /**
    * variable para icono "editar"
    */
@@ -66,7 +66,7 @@ export class NormativaComponent implements OnInit {
   ngOnInit() {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     this.isAdminCenad = (this.idCenad === sessionStorage.idCenad && (sessionStorage.isAdmin === 'true'));
-    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/normativas/${this.idCenad}/` : `${environment.hostSicenad}files/normativas/${this.idCenad}/`;
+    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/normativas/${this.idCenad}` : `${environment.hostSicenad}files/normativas/${this.idCenad}`;
     this.nombreMostrado = this.recortarTexto(this.normativa.nombre, 45);
     this.descripcionMostrada = this.recortarTexto(this.normativa.descripcion, 50);
   }
@@ -77,7 +77,7 @@ export class NormativaComponent implements OnInit {
    * @returns Devuelve la ruta del archivo
    */
   pathArchivo(nombreArchivo: string): string {
-    const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
+    const pathImg: string = `${this.pathRelativo}/${nombreArchivo}`;
     return pathImg;
   }
 

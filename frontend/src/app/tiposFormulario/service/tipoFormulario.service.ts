@@ -19,7 +19,7 @@ export class TipoFormularioService {
   private host: string = environment.hostSicenad;
   /**endpoint especifico de los tipos de formulario
    */
-  private urlEndPoint: string = `${this.host}tipos_formulario/`;
+  private urlEndPoint: string = `${this.host}tipos_formulario`;
 
   /**
    *
@@ -28,7 +28,7 @@ export class TipoFormularioService {
    */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}tipos_formulario/`;
+    this.urlEndPoint = `${this.host}tipos_formulario`;
    }
 
   /**
@@ -88,7 +88,7 @@ export class TipoFormularioService {
    * @param tipoFormulario Tipo de formulario a eliminar
    */
   delete(tipoFormulario): Observable<TipoFormulario> {
-    return this.http.delete<TipoFormulario>(`${this.urlEndPoint}${tipoFormulario.idTipoFormulario}`)
+    return this.http.delete<TipoFormulario>(`${this.urlEndPoint}/${tipoFormulario.idTipoFormulario}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -105,7 +105,7 @@ export class TipoFormularioService {
    */
   update(tipoFormulario: TipoFormulario): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${tipoFormulario.idTipoFormulario}`, tipoFormulario)
+      .patch<any>(`${this.urlEndPoint}/${tipoFormulario.idTipoFormulario}`, tipoFormulario)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -124,7 +124,7 @@ export class TipoFormularioService {
    * @param tipoFormulario Tipo de formulario del que queremos saber los recursos
    */
   getRecursosDeTipoFormulario(tipoFormulario: TipoFormulario): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}${tipoFormulario.idTipoFormulario}/recursos`);
+    return this.http.get<any>(`${this.urlEndPoint}/${tipoFormulario.idTipoFormulario}/recursos`);
   }
 
   /**

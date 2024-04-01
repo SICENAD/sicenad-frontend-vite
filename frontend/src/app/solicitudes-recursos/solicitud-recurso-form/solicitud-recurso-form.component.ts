@@ -380,7 +380,7 @@ export class SolicitudRecursoFormComponent implements OnInit {
   /**
    * variables para subida de archivos
    */
-  pathRelativo: string = `${environment.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}/`;
+  pathRelativo: string = `${environment.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}`;
   /**
    * lista de ficheros seleccionados
    */
@@ -553,7 +553,7 @@ export class SolicitudRecursoFormComponent implements OnInit {
     this.recursoService.getFicherosSolicitudUnidad(this.idSolicitud).subscribe((response) =>
       this.ficherosUnidad = this.recursoService.extraerFicheros(response));
     //asigna el path relativo, que junto con el nombreArchivo del fichero formara la url en la que se encuentra el archivo
-    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}/` : `${environment.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}/`;
+    this.pathRelativo = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}` : `${environment.hostSicenad}files/docSolicitudes/${this.solicitud.idSolicitud}`;
   }
 
 
@@ -595,7 +595,7 @@ export class SolicitudRecursoFormComponent implements OnInit {
         this.solicitudService.getRecursoDeSolicitud(this.idSolicitud).subscribe((response) => {
           this.solicitud.recurso = this.solicitudService.mapearRecurso((response));
         });
-      }, 700);
+      }, 1500);
 
       setTimeout(() => {
         this.uRlRecursoSeleccionado = this.solicitud.recurso.url;
@@ -618,7 +618,7 @@ export class SolicitudRecursoFormComponent implements OnInit {
         this.filtrarTipoFormulario();
         this.filtrar();
         this.solicitud.fechaFinDocumentacion ? this.comprobarFechaFinDocu() : "";
-      }, 900);
+      }, 3000);
 
     } else { //creación
       this.estado = "Borrador";
@@ -1029,26 +1029,26 @@ export class SolicitudRecursoFormComponent implements OnInit {
       //crea una solicitud
       this.actualizarDatos();
       this.solicitudService.create(this.solicitud).subscribe((response) => {
-        console.log(response);
+       // console.log(response);
         //this.isSolicitudCreada = true;
       });
       setTimeout(() => {
         this.solicitudService.getSolicitudesDeCenad(this.idCenad).subscribe((response) => {
           this.solicitudesCenadTrabajo = this.solicitudService.extraerSolicitudes(response);
-          console.log(response);
+         // console.log(response);
           setTimeout(() => {
             this.solicitudesCenadTrabajo.sort((a, b) => {
               return (Number(a.idSolicitud) > Number(b.idSolicitud) ? 1 : (Number(a.idSolicitud) < Number(b.idSolicitud) ? -1 : 0));
             });
-            console.log('this.solicitudesCenadTrabajo', this.solicitudesCenadTrabajo);
+         //   console.log('this.solicitudesCenadTrabajo', this.solicitudesCenadTrabajo);
             if (this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].estado == "Borrador"
               && this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].unidadUsuaria == this.solicitud.unidadUsuaria
               && this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].jefeUnidadUsuaria == this.solicitud.jefeUnidadUsuaria) {
-              console.log('ultima solicitud url', this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].url);
+             // console.log('ultima solicitud url', this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].url);
               this.solicitudArma.solicitud = this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].url;
               this.idSolicitud = this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1].idSolicitud;
               this.solicitud = this.solicitudesCenadTrabajo[this.solicitudesCenadTrabajo.length - 1];
-              console.log('solicitud creada', this.solicitud);
+             // console.log('solicitud creada', this.solicitud);
             }
           }, 800);
         });
@@ -1063,16 +1063,16 @@ export class SolicitudRecursoFormComponent implements OnInit {
       a.idArma.toString() == this.idArmaSeleccionada ? this.solicitudArma.arma = a.url.toString() : "";
     });
     setTimeout(() => {
-      console.log('solicitudArma.solicitud', this.solicitudArma.solicitud);
-      console.log('this.idsolicitud', this.idSolicitud);
+     // console.log('solicitudArma.solicitud', this.solicitudArma.solicitud);
+     // console.log('this.idsolicitud', this.idSolicitud);
       this.solicitudService.createSolicitudArma(this.solicitudArma).subscribe((response) => {
-        console.log(response);
+     //   console.log(response);
       });
       setTimeout(() => {
         //cierra el formulario de crear arma y resetea la variable
         SolicitudRecursoFormComponent.solicitudesArmasZCdeSolicitud.push(this.solicitudArma);
         this.solicitudesArmas = SolicitudRecursoFormComponent.solicitudesArmasZCdeSolicitud;
-        console.log('this.solicitudesArmas', this.solicitudesArmas);
+       // console.log('this.solicitudesArmas', this.solicitudesArmas);
         this.solicitudArma = new SolicitudArmaImpl();
         this.nuevaArma = false;
         //para ocultar el boton de crear solicitud
@@ -1226,10 +1226,10 @@ export class SolicitudRecursoFormComponent implements OnInit {
       this.nuevoFicheroUnidad = false;
       this.fichero = new FicheroImpl();
       if (this.isGestor) {
-        this.fichero.solicitudRecursoCenad = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}solicitudes/${this.solicitud.idSolicitud}/` : `${environment.hostSicenad}solicitudes/${this.solicitud.idSolicitud}`;
+        this.fichero.solicitudRecursoCenad = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}solicitudes/${this.solicitud.idSolicitud}` : `${environment.hostSicenad}solicitudes/${this.solicitud.idSolicitud}`;
       }
       if (this.isUsuarioNormal) {
-        this.fichero.solicitudRecursoUnidad = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}solicitudes/${this.solicitud.idSolicitud}/` : `${environment.hostSicenad}solicitudes/${this.solicitud.idSolicitud}`;
+        this.fichero.solicitudRecursoUnidad = this.appConfigService.hostSicenad ? `${this.appConfigService.hostSicenad}solicitudes/${this.solicitud.idSolicitud}` : `${environment.hostSicenad}solicitudes/${this.solicitud.idSolicitud}`;
       }
     }, 800);
   }
@@ -1282,7 +1282,7 @@ export class SolicitudRecursoFormComponent implements OnInit {
    * @returns string
    */
   pathArchivo(nombreArchivo: string): string {
-    const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
+    const pathImg: string = `${this.pathRelativo}/${nombreArchivo}`;
     return pathImg;
   }
 

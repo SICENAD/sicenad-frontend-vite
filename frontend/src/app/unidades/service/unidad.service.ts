@@ -20,7 +20,7 @@ export class UnidadService {
   /**
    * endpoint especifico de las unidades
    */
-  private urlEndPoint: string = `${this.host}unidades/`;
+  private urlEndPoint: string = `${this.host}unidades`;
 
   /**
    *
@@ -34,7 +34,7 @@ export class UnidadService {
     this.host = appConfigService.hostSicenad
       ? appConfigService.hostSicenad
       : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}unidades/`;
+    this.urlEndPoint = `${this.host}unidades`;
   }
 
   /**
@@ -98,7 +98,7 @@ export class UnidadService {
    */
   delete(unidad): Observable<Unidad> {
     return this.http
-      .delete<Unidad>(`${this.urlEndPoint}${unidad.idUnidad}`)
+      .delete<Unidad>(`${this.urlEndPoint}/${unidad.idUnidad}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -115,7 +115,7 @@ export class UnidadService {
    */
   update(unidad: Unidad): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${unidad.idUnidad}`, unidad)
+      .patch<any>(`${this.urlEndPoint}/${unidad.idUnidad}`, unidad)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {
@@ -135,7 +135,7 @@ export class UnidadService {
    */
   getUsuariosNormalDeUnidad(unidad: Unidad): Observable<any> {
     return this.http.get<any>(
-      `${this.urlEndPoint}${unidad.idUnidad}/usuariosNormal`
+      `${this.urlEndPoint}/${unidad.idUnidad}/usuariosNormal`
     );
   }
 

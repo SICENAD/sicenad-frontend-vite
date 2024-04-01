@@ -32,7 +32,7 @@ export class CartografiaFormComponent implements OnInit {
   /**
    * variable que crea la ruta de las cartografias
    */
-  pathRelativo: string = `${this.hostSicenad}files/cartografias/${this.idCenad}/`;
+  pathRelativo: string = `${this.hostSicenad}files/cartografias/${this.idCenad}`;
   /**
    * variable de seleccion del archivo
    */
@@ -80,7 +80,7 @@ export class CartografiaFormComponent implements OnInit {
   ngOnInit() {
     this.idCenad = this.activateRoute.snapshot.params['idCenad'];
     this.hostSicenad = this.appConfigService.hostSicenad ? this.appConfigService.hostSicenad : environment.hostSicenad;
-    this.pathRelativo = `${this.hostSicenad}files/cartografias/${this.idCenad}/`;
+    this.pathRelativo = `${this.hostSicenad}files/cartografias/${this.idCenad}`;
     this.cartografia.cenad = `${this.hostSicenad}cenads/${this.idCenad}`;
     this.cartografia.categoriaFichero = `${this.hostSicenad}categoriasFichero/${this.categoriaFicheroCartografia}`;
   }

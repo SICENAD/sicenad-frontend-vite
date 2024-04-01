@@ -18,7 +18,7 @@ export class ArmaService {
   /**
    * endpoint especifico de las armas
    */
-  private urlEndPoint: string = `${this.host}armas/`;
+  private urlEndPoint: string = `${this.host}armas`;
 
   /**
    *
@@ -27,7 +27,7 @@ export class ArmaService {
    */
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {
     this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-    this.urlEndPoint = `${this.host}armas/`;
+    this.urlEndPoint = `${this.host}armas`;
    }
 
   /**
@@ -87,7 +87,7 @@ export class ArmaService {
    * @param arma El arma que se va a eliminar
    */
   delete(arma): Observable<Arma> {
-    return this.http.delete<Arma>(`${this.urlEndPoint}${arma.idArma}`)
+    return this.http.delete<Arma>(`${this.urlEndPoint}/${arma.idArma}`)
       .pipe(
         catchError((e) => {
           if (e.status === 405) {
@@ -104,7 +104,7 @@ export class ArmaService {
    */
   update(arma: Arma): Observable<any> {
     return this.http
-      .patch<any>(`${this.urlEndPoint}${arma.idArma}`, arma)
+      .patch<any>(`${this.urlEndPoint}/${arma.idArma}`, arma)
       .pipe(
         catchError((e) => {
           if (e.status === 400) {

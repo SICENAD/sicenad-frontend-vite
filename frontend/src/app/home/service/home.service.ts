@@ -17,7 +17,7 @@ export class HomeService {
   /**
    * endpoint especifico de los cenads
    */
-  private urlEndPoint: string = `${this.host}cenads/`;
+  private urlEndPoint: string = `${this.host}cenads`;
 
   /**
    *
@@ -27,7 +27,7 @@ export class HomeService {
   constructor(private http: HttpClient,
               private appConfigService: AppConfigService) {
       this.host = appConfigService.hostSicenad ? appConfigService.hostSicenad : environment.hostSicenad;
-      this.urlEndPoint = `${this.host}cenads/`;
+      this.urlEndPoint = `${this.host}cenads`;
     }
 
   /**
