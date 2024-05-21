@@ -5,6 +5,6 @@
   "sizeMaxCartografia": 3,
   "tiempoMaximoLocalStorage": 48,
   "tiposTiro": ["Tiro directo", "Tiro indirecto", "Tiro antiaereo"],
-  "hostSicenad": "https://sicenad2024-b0c139737bc7.herokuapp.com/api/",
+  "hostSicenad": "http://jose-server.turkey-banana.ts.net:8080/api/",
   "categoriaFicheroCartografia": "1"
 }

@@ -25,7 +25,7 @@ export class AppConfigService {
    */
   loadAppConfig() {
     return this.http
-      .get("/assets/properties.json")
+      .get("assets/properties.json")
       .toPromise()
       .then((data) => {
         this.appConfig = data;

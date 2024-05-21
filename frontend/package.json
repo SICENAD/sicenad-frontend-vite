@@ -1,18 +1,17 @@
 {
   "name": "sicenad",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
-    "build:prod": "ng build --prod",
-    "build:prod:sicenad": "ng build --base-href '/sicenad/' --prod",
+    "add-hooks": "scripts/add-hooks.sh",
+    "preinstall": "npm install -g @angular/cli @angular/compiler-cli typescript",
+    "postinstall": "ng build --prod --aot",
     "http-server": "http-server ./dist/sicenad/ -c-1 -p4272 -a localhost -o",
-    "start:prod": "npm run build:prod",
+    "start": "node server.js",
     "ng": "ng",
-    "start": "ng serve -o --port 4270",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "compodoc": "npx compodoc -p tsconfig.doc.json"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -61,5 +60,9 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.8.3"
+  },
+  "engines": {
+    "node": "16.20.2",
+    "npm": "6.14.18"
   }
 }

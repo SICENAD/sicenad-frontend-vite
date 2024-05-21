@@ -238,7 +238,7 @@ export class ConsultaRecursoFormComponent implements OnInit {
    * @param nombreArchivo Nombre del archivo
    */
   pathArchivo(nombreArchivo: string): string {
-    const pathImg: string = `${this.pathRelativo}${nombreArchivo}`;
+    const pathImg: string = `${this.pathRelativo}/${nombreArchivo}`;
     return pathImg;
   }
 
