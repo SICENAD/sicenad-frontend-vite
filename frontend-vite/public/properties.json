@@ -1,0 +1,15 @@
+{
+    "urlApi": "https://puentes-sicenad-cda28931791a.herokuapp.com/api",
+    "urlApiLocal": "http://localhost:8080/api",
+    "passwordForRegister": "2112",
+    "sizeMaxEscudo": 2,
+    "sizeMaxDocRecurso": 30,
+    "sizeMaxDocSolicitud": 30,
+    "sizeMaxCartografia": 3,
+    "tiposTiro": [
+        "Tiro directo",
+        "Tiro indirecto",
+        "Tiro antiaereo"
+    ],
+    "categoriaFicheroCartografia": "1"
+}
