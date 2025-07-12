@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import es.mde.security.auth.AuthResponse;
+import es.mde.security.auth.ChangePasswordRequest;
 import es.mde.security.auth.LoginRequest;
 import es.mde.security.auth.RegisterRequest;
 import es.mde.security.usuarios.Rol;
@@ -89,6 +90,17 @@ public class AuthService {
 			return authResponse;
 		}
 		return null;
+	}
+
+	public AuthResponse changePassword(ChangePasswordRequest request) {
+
+		Usuario usuario = usuarioDAO.findByIdString(request.getIdUsuario());
+		usuario.setPassword(passwordEncoder.encode(request.getPassword()));
+		usuarioDAO.save(usuario);
+		
+		AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
+				usuario.getRol());
+		return authResponse;
 	}
 
 	public Usuario formarUsuario(Usuario usuario, RegisterRequest request) {

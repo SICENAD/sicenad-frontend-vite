@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.mde.security.auth.AuthResponse;
+import es.mde.security.auth.ChangePasswordRequest;
 import es.mde.security.auth.LoginRequest;
 import es.mde.security.auth.RegisterRequest;
 import es.mde.security.services.AuthService;
@@ -33,5 +34,12 @@ public class AuthController {
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request)
     {
         return ResponseEntity.ok(authService.register(request));
+    }
+    
+    @PostMapping("/api/auth/change-password")
+    @ResponseBody
+    public ResponseEntity<AuthResponse> changePassword(@RequestBody ChangePasswordRequest request)
+    {
+        return ResponseEntity.ok(authService.changePassword(request));
     }
 }
