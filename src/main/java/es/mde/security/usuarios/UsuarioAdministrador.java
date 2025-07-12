@@ -1,11 +1,14 @@
-package es.mde.entidades;
+package es.mde.security.usuarios;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import org.springframework.stereotype.Component;
+
+import es.mde.entidades.Cenad;
 
 /**
  * Representa a los administradores de cada CENAD
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Component;
 @Entity
 @DiscriminatorValue("UA")
 @Component
+@EntityListeners(UsuarioAdministradorListener.class)
 public class UsuarioAdministrador extends Usuario {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CENAD_ADMINISTRADO")
@@ -40,4 +44,6 @@ public class UsuarioAdministrador extends Usuario {
 	public void setCenad(Cenad cenad) {
 		this.cenad = cenad;
 	}
+
+
 }

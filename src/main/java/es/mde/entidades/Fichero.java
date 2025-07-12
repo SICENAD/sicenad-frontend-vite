@@ -1,7 +1,9 @@
 package es.mde.entidades;
 
+import es.mde.repositorios.FicheroListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,11 +21,13 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "FICHEROS")
+@EntityListeners(FicheroListener.class)
 public class Fichero {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
+	private String idString;
 	private String nombre;
 	private String nombreArchivo;
 //	@Lob
@@ -67,6 +71,22 @@ public class Fichero {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id de un fichero
+	 * @return Devuelve el id de un fichero
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id de un fichero
+	 * @param idString Guarda el id de un fichero
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 
 	/**

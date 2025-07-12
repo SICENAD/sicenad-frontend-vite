@@ -2,9 +2,12 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import es.mde.repositorios.CategoriaFicheroListener;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,11 +22,13 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "CATEGORIAS_FICHERO")
+@EntityListeners(CategoriaFicheroListener.class)
 public class CategoriaFichero {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
+	private String idString;
 	private String nombre; //Imagen, normativa, instrucciones, se definiran muchas en el front.
 	private String descripcion;
 	private int tipo; //0 para imagenes y 1 para otros archivos
@@ -51,6 +56,22 @@ public class CategoriaFichero {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id de una categoría de fichero
+	 * @return Devuelve el id una categoría de fichero
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id una categoría de fichero
+	 * @param idString Guarda el id una categoría de fichero
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 
 	/**

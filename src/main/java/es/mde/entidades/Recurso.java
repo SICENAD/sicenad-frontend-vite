@@ -2,9 +2,13 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import es.mde.repositorios.RecursoListener;
+import es.mde.security.usuarios.UsuarioGestor;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,11 +26,13 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "RECURSOS")
+@EntityListeners(RecursoListener.class)
 public class Recurso {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
+	private String idString;
 	private String nombre;
 //	@Lob	
 	private String descripcion;
@@ -70,6 +76,22 @@ public class Recurso {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id de un recurso
+	 * @return Devuelve el id de un recurso
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id de un recurso
+	 * @param idString Guarda el id de un recurso
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 
 	/**

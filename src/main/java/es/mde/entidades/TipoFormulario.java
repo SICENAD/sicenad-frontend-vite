@@ -2,9 +2,12 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import es.mde.repositorios.TipoFormularioListener;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,11 +21,13 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name="TIPOS_FORMULARIO")
+@EntityListeners(TipoFormularioListener.class)
 public class TipoFormulario {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true)
 	private Long id;
+	private String idString;
 	private String nombre;
 	private String descripcion;
 	private int codTipo;//no se usa
@@ -48,6 +53,22 @@ public class TipoFormulario {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id de un tipo de formulario
+	 * @return Devuelve el id de un tipo de formulario
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id de un tipo de formulario
+	 * @param idString Guarda el id de un tipo de formulario
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 
 	/**

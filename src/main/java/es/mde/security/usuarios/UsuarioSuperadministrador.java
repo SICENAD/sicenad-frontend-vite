@@ -1,7 +1,9 @@
-package es.mde.entidades;
+package es.mde.security.usuarios;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Entity
 @DiscriminatorValue("US")
 @Component
+@EntityListeners(UsuarioSuperadministradorListener.class)
 public class UsuarioSuperadministrador extends Usuario {
 	/**
 	 * Crea un usuario superadministrador

@@ -2,9 +2,12 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import es.mde.repositorios.CategoriaListener;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,11 +24,13 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name="CATEGORIAS")
+@EntityListeners(CategoriaListener.class)
 public class Categoria {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true)
 	private Long id;
+	private String idString;
 	private String nombre;
 	private String descripcion;
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = Recurso.class, mappedBy = "categoria")
@@ -58,6 +63,22 @@ public class Categoria {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id de una categoría
+	 * @return Devuelve el id de una categoría
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id de una categoría
+	 * @param idString Guarda el id de una categoría
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 	
 	/**

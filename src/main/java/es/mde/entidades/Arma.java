@@ -3,9 +3,11 @@ package es.mde.entidades;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import es.mde.repositorios.ArmaListener;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,12 +21,14 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "ARMAS")
+@EntityListeners(ArmaListener.class)
 public class Arma {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
+	private String idString;
 	private String nombre;
 	private String tipoTiro;
 	@OneToMany(cascade = CascadeType.ALL, targetEntity = SolicitudArma.class, mappedBy = "arma")
@@ -51,6 +55,22 @@ public class Arma {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id de un arma
+	 * @return Devuelve el id de un arma
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id de un arma
+	 * @param idString Guarda el id de un arma
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 
 	/**

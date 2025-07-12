@@ -3,6 +3,7 @@ package es.mde.entidades;
 import java.util.Date;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,18 +14,23 @@ import jakarta.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import es.mde.repositorios.CartografiaListener;
+
 /**
  * Representa un conjunto cartografico de un CENAD/CMT
+ * 
  * @author JOSE LUIS PUENTES ALAMOS - MIGUEL PRADA MUNOZ
  *
  */
 @Entity
 @Table(name = "CARTOGRAFIAS")
+@EntityListeners(CartografiaListener.class)
 public class Cartografia {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
+	private String idString;
 	private String nombre;
 	private String nombreArchivo;
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -42,10 +48,12 @@ public class Cartografia {
 	/**
 	 * Crea un conjunto cartografico de un CENAD/CMT
 	 */
-	public Cartografia() {}
+	public Cartografia() {
+	}
 
 	/**
 	 * Devuelve el id de un conjunto cartografico
+	 * 
 	 * @return Devuelve el id de un conjunto cartografico
 	 */
 	public Long getId() {
@@ -54,14 +62,32 @@ public class Cartografia {
 
 	/**
 	 * Guarda el id de un conjunto cartografico
+	 * 
 	 * @param id Guarda el id de un conjunto cartografico
 	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	/**
+	 * Devuelve el id de un conjunto cartografico
+	 * @return Devuelve el id de un conjunto cartografico
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id de un conjunto cartografico
+	 * @param idString Guarda el id de un conjunto cartografico
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
+	}
 
 	/**
 	 * Devuelve el nombre de un conjunto cartografico
+	 * 
 	 * @return Devuelve el nombre de un conjunto cartografico
 	 */
 	public String getNombre() {
@@ -70,6 +96,7 @@ public class Cartografia {
 
 	/**
 	 * Guarda el nombre de un conjunto cartografico
+	 * 
 	 * @param nombre Nombre de un conjunto cartografico
 	 */
 	public void setNombre(String nombre) {
@@ -77,23 +104,26 @@ public class Cartografia {
 	}
 
 	/**
-	 * Devuelve el nombre  del archivo de un conjunto cartografico
+	 * Devuelve el nombre del archivo de un conjunto cartografico
+	 * 
 	 * @return Devuelve el nombre del archivo de un conjunto cartografico
 	 */
 	public String getNombreArchivo() {
 		return nombreArchivo;
 	}
-	
+
 	/**
 	 * Guarda el nombre del archivo de un conjunto cartografico
+	 * 
 	 * @param nombre Nombre del archivo de un conjunto cartograficoa
 	 */
 	public void setNombreArchivo(String nombreArchivo) {
 		this.nombreArchivo = nombreArchivo;
 	}
-	
+
 	/**
 	 * Devuelve la categoria de fichero
+	 * 
 	 * @return Devuelve la categoria de fichero
 	 */
 	public CategoriaFichero getCategoriaFichero() {
@@ -102,14 +132,16 @@ public class Cartografia {
 
 	/**
 	 * Guarda la categoria de fichero
+	 * 
 	 * @param categoriaFichero Categoria de fichero del conjunto cartografico
 	 */
 	public void setCategoriaFichero(CategoriaFichero categoriaFichero) {
 		this.categoriaFichero = categoriaFichero;
 	}
-	
+
 	/**
 	 * Devuelve la escala de un mapa
+	 * 
 	 * @return Devuelve la escala del mapa
 	 */
 	public String getEscala() {
@@ -118,6 +150,7 @@ public class Cartografia {
 
 	/**
 	 * Guarda la escala de un mapa
+	 * 
 	 * @param escala Escala del conjunto cartografico
 	 */
 	public void setEscala(String escala) {
@@ -126,6 +159,7 @@ public class Cartografia {
 
 	/**
 	 * Devuelve el sistema de referencia
+	 * 
 	 * @return Devuelve el sistema de referencia
 	 */
 	public String getSistemaReferencia() {
@@ -134,22 +168,25 @@ public class Cartografia {
 
 	/**
 	 * Guarda el sistema de referencia
+	 * 
 	 * @param sistemaReferencia Sistema de referencia del sistema cartografico
 	 */
 	public void setSistemaReferencia(String sistemaReferencia) {
 		this.sistemaReferencia = sistemaReferencia;
 	}
-	
+
 	/**
 	 * Devuelve la descripción del conjunto cartográfico
+	 * 
 	 * @return Devuelve la descripción del conjunto cartográfico
 	 */
 	public String getDescripcion() {
 		return descripcion;
 	}
-	
+
 	/**
 	 * Guarda la descripción del conjunto cartográfico
+	 * 
 	 * @param descripcion Descripción del conjunto cartográfico
 	 */
 	public void setDescripcion(String descripcion) {
@@ -158,6 +195,7 @@ public class Cartografia {
 
 	/**
 	 * Devuelve la fecha del conjunto cartografico
+	 * 
 	 * @return Devuelve la fecha del conjunto cartografico
 	 */
 	public Date getFechaCartografia() {
@@ -166,6 +204,7 @@ public class Cartografia {
 
 	/**
 	 * Guarda la fecha de actualizacion del conjunto cartografico
+	 * 
 	 * @param fechaCartografia Fecha en la que se actualiza la cartografia
 	 */
 	public void setFechaCartografia(Date fechaCartografia) {
@@ -174,6 +213,7 @@ public class Cartografia {
 
 	/**
 	 * Devuelve el CENAD del conjunto cartografico
+	 * 
 	 * @return Devuelve el CENAD del conjunto cartografico
 	 */
 	public Cenad getCenad() {
@@ -182,9 +222,10 @@ public class Cartografia {
 
 	/**
 	 * Guarda el CENAD del conjunto cartografico
+	 * 
 	 * @param cenad CENAD del conjunto cartografico
 	 */
 	public void setCenad(Cenad cenad) {
 		this.cenad = cenad;
-	}	
+	}
 }

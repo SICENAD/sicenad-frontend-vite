@@ -1,8 +1,9 @@
-package es.mde.repositorios;
+package es.mde.security.usuarios;
+
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import es.mde.entidades.UsuarioAdministrador;
 
 /**
  * Representa la interfaz que expone para la API los administradores 
@@ -10,4 +11,7 @@ import es.mde.entidades.UsuarioAdministrador;
  *
  */
 @RepositoryRestResource(path="usuarios_administrador", collectionResourceRel="usuarios_administrador", itemResourceRel="usuarioAdministrador") 
-public interface UsuarioAdministradorDAO extends JpaRepository<UsuarioAdministrador, Long> {}
+public interface UsuarioAdministradorDAO extends JpaRepository<UsuarioAdministrador, Long> {
+	
+	Optional<UsuarioAdministrador> findByUsername(String username);
+}

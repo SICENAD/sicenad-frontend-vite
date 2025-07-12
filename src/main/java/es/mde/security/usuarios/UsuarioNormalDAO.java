@@ -1,8 +1,9 @@
-package es.mde.repositorios;
+package es.mde.security.usuarios;
+
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import es.mde.entidades.UsuarioNormal;
 
 /**
  * Representa la interfaz que expone para la API los usuarios normales 
@@ -10,4 +11,7 @@ import es.mde.entidades.UsuarioNormal;
  *
  */
 @RepositoryRestResource(path="usuarios_normal", collectionResourceRel="usuarios_normal", itemResourceRel="usuario_normal") 
-public interface UsuarioNormalDAO extends JpaRepository<UsuarioNormal, Long> {}
+public interface UsuarioNormalDAO extends JpaRepository<UsuarioNormal, Long> {
+	
+	Optional<UsuarioNormal> findByUsername(String username);
+}

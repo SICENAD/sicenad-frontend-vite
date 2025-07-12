@@ -2,9 +2,14 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import es.mde.repositorios.CenadListener;
+import es.mde.security.usuarios.UsuarioAdministrador;
+import es.mde.security.usuarios.UsuarioGestor;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,11 +25,13 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name="CENADS")
+@EntityListeners(CenadListener.class)
 public class Cenad {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique=true)
 	private Long id;
+	private String idString;
 	private String nombre;
 	private int provincia;
 //	@Lob	
@@ -66,6 +73,22 @@ public class Cenad {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id de un CENAD
+	 * @return Devuelve el id de un CENAD
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id de un CENAD
+	 * @param idString Guarda el id de un CENAD
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 
 	/**

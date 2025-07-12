@@ -1,8 +1,9 @@
-package es.mde.repositorios;
+package es.mde.security.usuarios;
+
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import es.mde.entidades.UsuarioGestor;
 
 /**
  * Representa la interfaz que expone para la API los gestores 
@@ -10,4 +11,7 @@ import es.mde.entidades.UsuarioGestor;
  *
  */
 @RepositoryRestResource(path="usuarios_gestor", collectionResourceRel="usuarios_gestor", itemResourceRel="usuario_gestor") 
-public interface UsuarioGestorDAO extends JpaRepository<UsuarioGestor, Long> {}
+public interface UsuarioGestorDAO extends JpaRepository<UsuarioGestor, Long> {
+	
+	Optional<UsuarioGestor> findByUsername(String username);
+}

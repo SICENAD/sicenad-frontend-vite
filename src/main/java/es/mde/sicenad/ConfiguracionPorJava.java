@@ -31,12 +31,12 @@ import jakarta.persistence.EntityManagerFactory;
  */
 @Configuration
 @PropertySource({ "classpath:config/rest.properties", "classpath:config/jackson.properties", "classpath:config/archivos.properties",
-"classpath:config/mail.properties"
+"classpath:config/mail.properties", "classpath:config/gestionBBDD.properties"
 //	, "classpath:config/passwordsBD.properties" 
 	})
 @ComponentScan({"es.mde"})
 @EnableTransactionManagement
-@EnableJpaRepositories("${misRepositorios}") // leer valor de propiedades? pero solo para las entidades anotadas
+@EnableJpaRepositories({"${misRepositorios}", "${entidadSecurity}"}) // leer valor de propiedades pero solo para las entidades anotadas
 public class ConfiguracionPorJava {
 	
 	/**
@@ -46,28 +46,30 @@ public class ConfiguracionPorJava {
 	String entidades;
 
 	/**
+	 * Para usar la ruta a escanear entidades de seguridad desde el application.properties
+	 */
+	@Value("${entidadSecurity}")
+	String entidadSecurity;
+
+	/**
 	 * Entity manager que sustituye al jpa-config.xml
 	 */
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, Environment env,
 			JpaVendorAdapter vendorAdapter) {
-
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource);
 //	    JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter(); // O pedirlo como parametro y que haga el Autowired
 		em.setJpaVendorAdapter(vendorAdapter);
-
-		em.setPackagesToScan(entidades); // leer valor de propiedades? pero solo para las entidades anotadas
+		em.setPackagesToScan(entidades, entidadSecurity); // leer valor de propiedades? pero solo para las entidades anotadas		
 		// em.setMappingResources("jpa/Usuario.orm.xml", "jpa/Cuaderno.orm.xml"); //para escanear archivos xml...
 		// leerValorDePropiedades?
-
 		Properties jpaProperties = new Properties();
 		Arrays.asList("dialect", "show_sql", "hbm2ddl.auto", "enable_lazy_load_no_trans") //  leer valor de	para las entidades anotadas 
 				.stream().map(s -> "hibernate." + s)
 				.map(p -> new AbstractMap.SimpleEntry<String, String>(p, env.getProperty(p)))
 				.filter(e -> e.getValue() != null).forEach(e -> jpaProperties.put(e.getKey(), e.getValue()));
 		em.setJpaProperties(jpaProperties);
-
 		return em;
 	}
 

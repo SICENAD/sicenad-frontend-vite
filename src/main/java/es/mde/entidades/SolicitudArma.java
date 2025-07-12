@@ -1,7 +1,9 @@
 package es.mde.entidades;
 
+import es.mde.repositorios.SolicitudArmaListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,12 +19,14 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "SOLICITUDES_ARMAS")
+@EntityListeners(SolicitudArmaListener.class)
 public class SolicitudArma {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
+	private String idString;
 	private int coordXAsentamiento;
 	private int coordYAsentamiento;
 	private int coordXPuntoCaida;
@@ -57,6 +61,22 @@ public class SolicitudArma {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id del "par" SOLICITUD-ARMA
+	 * @return Devuelve el id del "par" SOLICITUD-ARMA
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id del "par" SOLICITUD-ARMA
+	 * @param idString Guarda el id del "par" SOLICITUD-ARMA
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 
 	/**

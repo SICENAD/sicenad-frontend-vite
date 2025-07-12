@@ -7,6 +7,7 @@ import java.util.Date;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,9 @@ import jakarta.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import es.mde.repositorios.SolicitudRecursoListener;
+import es.mde.security.usuarios.UsuarioNormal;
+
 /**
  * Representa las solicitudes de recursos
  * 
@@ -27,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  */
 @Entity
 @Table(name = "SOLICITUDES")
+@EntityListeners(SolicitudRecursoListener.class)
 public class SolicitudRecurso {
 
 	// **************************************
@@ -37,6 +42,7 @@ public class SolicitudRecurso {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private Long id;
+	private String idString;
 //	@Lob
 	private String observaciones;
 //	@Lob
@@ -189,6 +195,22 @@ public class SolicitudRecurso {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Devuelve el id de la solicitud
+	 * @return Devuelve el id de la solicitud
+	 */
+	public String getIdString() {
+		return idString;
+	}
+	
+	/**
+	 * Guarda el id de la solicitud
+	 * @param idString Guarda el id de la solicitud
+	 */
+	public void setIdString(String idString) {
+		this.idString = idString;
 	}
 
 	/**
