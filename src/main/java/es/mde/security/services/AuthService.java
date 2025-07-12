@@ -10,17 +10,21 @@ import es.mde.security.auth.LoginRequest;
 import es.mde.security.auth.RegisterRequest;
 import es.mde.security.usuarios.Usuario;
 import es.mde.security.usuarios.UsuarioDAO;
+import es.mde.security.usuarios.UsuarioSuperadministrador;
+import es.mde.security.usuarios.UsuarioSuperadministradorDAO;
 
 @Service
 public class AuthService {
 
 	private final UsuarioDAO usuarioDAO;
+	private final UsuarioSuperadministradorDAO usuarioSuperadministradorDAO;
 	private final JwtService jwtService;
 	private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 		
-	public AuthService(UsuarioDAO usuarioDAO, JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
+	public AuthService(UsuarioDAO usuarioDAO,UsuarioSuperadministradorDAO usuarioSuperadministradorDAO, JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
 		this.usuarioDAO = usuarioDAO;
+		this.usuarioSuperadministradorDAO = usuarioSuperadministradorDAO;
 		this.jwtService = jwtService;
 		this.passwordEncoder = passwordEncoder;
 		this.authenticationManager  = authenticationManager;
@@ -38,7 +42,7 @@ public class AuthService {
 	
 	public AuthResponse register(RegisterRequest request) {
 				
-		Usuario usuario = new Usuario();
+		UsuarioSuperadministrador usuario = new UsuarioSuperadministrador();
 		usuario.setUsername(request.getUsername());
 		usuario.setPassword(passwordEncoder.encode(request.getPassword()));
 		usuario.setEmail(request.getEmail());
@@ -47,7 +51,7 @@ public class AuthService {
 		usuario.setEmailAdmitido(request.isEmailAdmitido());
 		usuario.setRol(request.getRol());
 		
-		usuarioDAO.save(usuario);
+		usuarioSuperadministradorDAO.save(usuario);
 		
 		AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(), usuario.getRol());
 		
