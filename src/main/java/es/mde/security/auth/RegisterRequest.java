@@ -15,7 +15,7 @@ public class RegisterRequest {
 	public RegisterRequest() {}
 
 	public RegisterRequest(String username, String password, String email, String tfno, String descripcion,
-			boolean emailAdmitido) {
+			boolean emailAdmitido, Rol rol) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -23,7 +23,7 @@ public class RegisterRequest {
 		this.tfno = tfno;
 		this.descripcion = descripcion;
 		this.emailAdmitido = emailAdmitido;
-		this.rol = Rol.Superadministrador;
+		this.rol = rol;
 	}
 
 	public String getUsername() {
