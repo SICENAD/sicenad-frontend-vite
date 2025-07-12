@@ -21,9 +21,9 @@ import java.util.Collections;
 @EnableWebSecurity
 public class ConfiguracionSeguridad {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authProvider;
-	
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final AuthenticationProvider authProvider;
+
 	public ConfiguracionSeguridad(JwtAuthenticationFilter jwtAuthenticationFilter,
 			AuthenticationProvider authProvider) {
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -31,41 +31,36 @@ public class ConfiguracionSeguridad {
 	}
 
 	@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
-    {
-        return http
-                .cors(c -> c.configurationSource(corsConfigurationSource()))//importante porque anula la configuracion de CORS que pusimos en el Corsfilter de ConfiguracionRest.class
-            .csrf(csrf -> 
-                csrf
-                .disable()) 
-            .authorizeHttpRequests(authRequest ->
-              authRequest
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		return http.cors(c -> c.configurationSource(corsConfigurationSource()))// importante porque anula la
+																				// configuracion de CORS que pusimos en
+																				// el Corsfilter de
+																				// ConfiguracionRest.class
+				.csrf(csrf -> csrf.disable()).authorizeHttpRequests(authRequest -> authRequest
 //              	.requestMatchers(HttpMethod.GET).permitAll()
 //              	.requestMatchers(HttpMethod.OPTIONS).permitAll()
-                .requestMatchers("/api/auth/**").permitAll()//permite registro y logging
-//                .requestMatchers("/api/auth/login").permitAll()//permite solo logging
-                .anyRequest()
-                .authenticated()
-                //.permitAll()
-                )
-            .sessionManagement(sessionManager->
-            sessionManager 
-              .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authenticationProvider(authProvider)
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .build();
+//                .requestMatchers("/api/auth/**").permitAll()//permite registro y logging
+						.requestMatchers("/api/auth/register", "/api/auth/login").permitAll()// permite solo register y logging
+						//asi no permito en abierto cambiar los password
+						.anyRequest().authenticated()
+				// .permitAll()
+				)
+				.sessionManagement(
+						sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authenticationProvider(authProvider)
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
 
-    }
-	
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowCredentials(true);
+		configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
+		configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 }
