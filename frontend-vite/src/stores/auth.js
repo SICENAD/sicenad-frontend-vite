@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import useUtilsStore from '@/stores/utils'
-import { toTitleCase } from '@/utils'
 
 const useAuthStore = defineStore('auth', {
   state: () => {

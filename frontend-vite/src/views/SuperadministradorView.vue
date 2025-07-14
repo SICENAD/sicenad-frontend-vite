@@ -12,30 +12,30 @@
                 <h2 class="text-center">SICENAD</h2>
             </div>
         </div>
-        <div class="row align-items-center">
-            <div class="col-4 pl-0">
+        <div class="row ">
+            <div class="col-4 ps-0">
                 <RouterLink class="nav-link ml-4 home" :to="{ name: 'about' }">
-                    <v-icon name="gi-dog-house" color="blue" scale="2" /><strong>Home</strong>
+                    <v-icon name="fa-home" scale="2" /><strong>Home</strong>
                 </RouterLink>
             </div>
-            <div class="col-8 text-right">
-                <button class="btn usuario text-white me-2">
-                    <RouterLink :to="{ name: 'about' }"> <b>Usuarios</b></RouterLink>
+            <div class="col-8 d-flex justify-content-end">
+                <button class="btn usuario me-2">
+                    <RouterLink :to="{ name: 'about' }" class="link"><b>Usuarios</b></RouterLink>
                 </button>
                 <button class="btn unidad text-white me-2">
-                    <RouterLink :to="{ name: 'about' }"> <b>Unidades</b></RouterLink>
+                    <RouterLink :to="{ name: 'about' }" class="link"><b>Unidades</b></RouterLink>
                 </button>
                 <button class="btn tipoFormulario text-white me-2">
-                    <RouterLink :to="{ name: 'about' }"> <b>Tipos de Formulario</b></RouterLink>
+                    <RouterLink :to="{ name: 'about' }" class="link"><b>Tipos de Formulario</b></RouterLink>
                 </button>
                 <button class="btn categoriaFichero text-white me-2">
-                    <RouterLink :to="{ name: 'about' }"> <b>Categorías de Ficheros</b></RouterLink>
+                    <RouterLink :to="{ name: 'about' }" class="link"><b>Categorías de Ficheros</b></RouterLink>
                 </button>
                 <button class="btn arma text-white me-2">
-                    <RouterLink :to="{ name: 'about' }"> <b>Armas</b></RouterLink>
+                    <RouterLink :to="{ name: 'about' }" class="link"><b>Armas</b></RouterLink>
                 </button>
             </div>
-            <hr class="w-100" />
+            <hr class="w-100 mt-3" />
         </div>
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
@@ -58,13 +58,8 @@
                         <b>ADMINISTRADOR</b>
                     </div>
                 </div>
-
-
-
-                <!-- aqui ira el componente que lista los CENAD,s
-                <CenadComponent v-for="(item, index) in props.content" :key="index" :content="item"
+                <CenadComponent v-for="(item, index) in cenads" :key="index" :content="item"
                     @emiteElemento="actualizarCenadEnLayout" />
-            -->
             </div>
         </div>
     </div>
@@ -89,8 +84,9 @@
                             <label class="titulo me-2"><b>PROVINCIA<sup class="text-danger">*</sup></b></label>
                             <select class="form-select" aria-label="provincia" v-model="provincia">
                                 <option disabled value="">Selecciona la provincia</option>
-                                <option v-for="provincia in provincias" :key="provincia.idProvincia" :value="provincia.idProvincia">
-                                    {{ provincia.nombre}}
+                                <option v-for="provincia in provincias" :key="provincia.idProvincia"
+                                    :value="provincia.idProvincia">
+                                    {{ provincia.nombre }}
                                 </option>
                             </select>
                         </div>
@@ -100,7 +96,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
-                            <input type="text" class="form-control letra" id="telefono" v-model="telefono" />
+                            <input type="text" class="form-control letra" id="tfno" v-model="tfno" />
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>EMAIL</b></label>
@@ -130,98 +126,134 @@
     </div>
 </template>
 <script setup>
-import { defineAsyncComponent, ref, onMounted } from 'vue'
-import ClienteService from '@/services/ClienteService'
-
-let provincias = ref([
-    { idProvincia: 15, nombre: "A CORUÑA" },
-    { idProvincia: 1, nombre: "ALAVA" },
-    { idProvincia: 2, nombre: "ALBACETE" },
-    { idProvincia: 3, nombre: "ALICANTE" },
-    { idProvincia: 4, nombre: "ALMERIA" },
-    { idProvincia: 33, nombre: "ASTURIAS" },
-    { idProvincia: 5, nombre: "AVILA" },
-    { idProvincia: 6, nombre: "BADAJOZ" },
-    { idProvincia: 8, nombre: "BARCELONA" },
-    { idProvincia: 9, nombre: "BURGOS" },
-    { idProvincia: 10, nombre: "CACERES" },
-    { idProvincia: 11, nombre: "CADIZ" },
-    { idProvincia: 39, nombre: "CANTABRIA" },
-    { idProvincia: 12, nombre: "CASTELLON" },
-    { idProvincia: 51, nombre: "CEUTA" },
-    { idProvincia: 13, nombre: "CIUDAD REAL" },
-    { idProvincia: 14, nombre: "CORDOBA" },
-    { idProvincia: 16, nombre: "CUENCA" },
-    { idProvincia: 17, nombre: "GERONA" },
-    { idProvincia: 18, nombre: "GRANADA" },
-    { idProvincia: 19, nombre: "GUADALAJARA" },
-    { idProvincia: 20, nombre: "GUIPUZCOA" },
-    { idProvincia: 21, nombre: "HUELVA" },
-    { idProvincia: 22, nombre: "HUESCA" },
-    { idProvincia: 7, nombre: "ISLAS BALEARES" },
-    { idProvincia: 23, nombre: "JAEN" },
-    { idProvincia: 26, nombre: "LA RIOJA" },
-    { idProvincia: 24, nombre: "LEON" },
-    { idProvincia: 25, nombre: "LERIDA" },
-    { idProvincia: 27, nombre: "LUGO" },
-    { idProvincia: 28, nombre: "MADRID" },
-    { idProvincia: 29, nombre: "MALAGA" },
-    { idProvincia: 52, nombre: "MELILLA" },
-    { idProvincia: 30, nombre: "MURCIA" },
-    { idProvincia: 31, nombre: "NAVARRA" },
-    { idProvincia: 32, nombre: "OURENSE" },
-    { idProvincia: 34, nombre: "PALENCIA" },
-    { idProvincia: 35, nombre: "LAS PALMAS" },
-    { idProvincia: 36, nombre: "PONTEVEDRA" },
-    { idProvincia: 37, nombre: "SALAMANCA" },
-    { idProvincia: 40, nombre: "SEGOVIA" },
-    { idProvincia: 41, nombre: "SEVILLA" },
-    { idProvincia: 42, nombre: "SORIA" },
-    { idProvincia: 38, nombre: "STA CRUZ TENERIFE" },
-    { idProvincia: 43, nombre: "TARRAGONA" },
-    { idProvincia: 44, nombre: "TERUEL" },
-    { idProvincia: 45, nombre: "TOLEDO" },
-    { idProvincia: 46, nombre: "VALENCIA" },
-    { idProvincia: 47, nombre: "VALLADOLID" },
-    { idProvincia: 48, nombre: "VIZCAYA" },
-    { idProvincia: 49, nombre: "ZAMORA" },
-    { idProvincia: 50, nombre: "ZARAGOZA" },
-  ])
-
+import { ref, onMounted } from 'vue'
+import CenadComponent from '@/components/CenadComponent.vue'
+import CenadService from '@/services/CenadService'
+import useUtilsStore from '@/stores/utils'
+const utils = useUtilsStore()
+let provincias = utils.provincias
 let nombre = ref('')
 let provincia = ref('')
 let direccion = ref('')
-let telefono = ref('')
+let tfno = ref('')
 let descripcion = ref('')
 let email = ref('')
 let escudo = ref('')
-const service = new ClienteService()
-const clientes = service.getClientes()
-let clientesFiltrados = ref([])
-clientesFiltrados.value = clientes.value
+const service = new CenadService()
+const cenads = service.getCenads()
+
 
 onMounted(async () => {
-    await getClientes()
+    await getCenads()
 })
 const crearCenad = async () => {
-    await service.crearCenad(dni.value, nombreCliente.value, apellido1.value, apellido2.value, tfno.value, correoCliente.value)
-    dni.value = ''
-    nombreCliente.value = ''
-    apellido1.value = ''
-    apellido2.value = ''
+    await service.crearCenad(nombre.value, provincia.value, direccion.value, tfno.value, email.value, descripcion.value, escudo.value)
+    nombre.value = ''
+    provincia.value = ''
+    direccion.value = ''
     tfno.value = ''
-    correoCliente.value = ''
-    await getClientes()
+    email.value = ''
+    descripcion.value = ''
+    escudo.value = ''
+    await getCenads()
 }
-const getClientes = async () => {
+const getCenads = async () => {
     await service.fetchAll()
-    clientesFiltrados.value = clientes.value
-
 }
 
 function actualizarCenadEnLayout() {
-    getClientes()
+    getCenads()
 }
 </script>
 <style scoped lang="scss">
+h2 {
+    color: #354f52;
+}
+
+.bienvenido {
+    color: #52796f;
+}
+
+img.madoc {
+    max-width: 200;
+    max-height: 276;
+}
+
+div.filtro {
+    border: 6px solid #588157;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-right: 0px;
+}
+
+.btn {
+    background: #A3B18A;
+    padding: 0.5;
+    font-size: 14px;
+    color: white;
+}
+
+.btn:hover,
+.tipoFormulario,
+.categoriaFichero,
+.unidad,
+.usuario,
+.arma, .link {
+    background-color: #588157;
+    color: white;
+    text-decoration: none;
+}
+
+.titulo {
+    color: #3A5A40;
+    font-weight: bold;
+}
+
+.titulo1 {
+    color: #588157;
+}
+
+h5 {
+    color: #354f52;
+    font-weight: bold;
+    background-color: lightgreen;
+}
+
+.tipoFormulario:hover,
+.categoriaFichero:hover,
+.unidad:hover,
+.usuario:hover,
+.arma:hover {
+    background-color: #A3B18A;
+}
+
+a.home {
+    color: #3A5A40;
+    font-size: 18px;
+}
+
+a.home:hover {
+    color: #A3B18A;
+}
+
+.row {
+    height: auto;
+    padding: auto;
+    margin: auto;
+}
+
+hr {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.modal {
+    max-height: 100%;
+    max-width: 100%;
+    margin: auto;
+}
+
+div.titulos {
+    background-color: #DAD7CD;
+}
 </style>
