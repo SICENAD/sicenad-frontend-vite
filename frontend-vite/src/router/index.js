@@ -17,9 +17,17 @@ const router = createRouter({
       },
     },
     {
-      path: '/superadministrador', //lo dejo porque ahi se ve claro el uso de getters y actions del store counter
-      name: 'superadministrador',
+      path: '/about', 
+      name: 'about',
       component: () => import('../views/AboutView.vue'),
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
+      path: '/superadministrador', 
+      name: 'superadministrador',
+      component: () => import('../views/SuperadministradorView.vue'),
       meta: {
         requireAuth: false,
       },
@@ -96,7 +104,7 @@ router.beforeEach((to, from, next) => {
   const isAuth = auth.token != null
   const isAdmin = auth.isAdmin
   const needAuth = to.meta.requireAuth
-  const needAdmin = to.meta.rol == 'ADMIN'
+  const needAdmin = to.meta.rol == 'Superadministrador'
 
   if (needAuth && !isAuth) {
     next({ name: 'login' })
