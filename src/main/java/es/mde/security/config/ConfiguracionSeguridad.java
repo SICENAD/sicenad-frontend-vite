@@ -42,6 +42,8 @@ public class ConfiguracionSeguridad {
 //                .requestMatchers("/api/auth/**").permitAll()//permite registro y logging
 						.requestMatchers("/api/auth/register", "/api/auth/login").permitAll()// permite solo register y logging
 						//asi no permito en abierto cambiar los password
+					    .requestMatchers("/api/files/**").permitAll() // <--- Añade esta línea
+
 						.anyRequest().authenticated()
 				// .permitAll()
 				)
@@ -56,7 +58,10 @@ public class ConfiguracionSeguridad {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+		configuration.setAllowedOriginPatterns(Arrays.asList(
+		        "http://localhost:*", // para desarrollo local
+		        "http://jose-server.turkey-banana.ts.net" // dominio real
+		    ));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
 		configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

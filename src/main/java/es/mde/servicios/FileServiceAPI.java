@@ -23,7 +23,7 @@ public interface FileServiceAPI {
 	 * @param file Archivo de imagen del escudo
 	 * @throws Exception
 	 */
-	public void saveEscudo(MultipartFile file) throws Exception;
+	public String saveEscudo(MultipartFile file) throws Exception;
 
 	/**
 	 * Metodo para borrar un escudo

@@ -109,7 +109,12 @@
                         <div class="mb-3">
                             <label class="titulo"><b>ESCUDO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo
                                 permitido: {{ sizeMaxEscudo }} MB)</label>
-                            <input type="file" class="form-control" @click="cargarArchivo" />
+                            <input type="file" accept="image/*" @change="onFileChange" />{{ escudo }}
+                        </div>
+                        <!-- Vista previa de la imagen -->
+                        <div v-if="previewEscudo" style="margin-top: 10px;">
+                            <label><b>Vista previa del escudo:</b></label><br />
+                            <img :src="previewEscudo" alt="Vista previa" style="max-width: 200px; max-height: 200px;" />
                         </div>
                     </form>
                 </div>
@@ -130,31 +135,48 @@ import { ref, onMounted } from 'vue'
 import CenadComponent from '@/components/CenadComponent.vue'
 import CenadService from '@/services/CenadService'
 import useUtilsStore from '@/stores/utils'
+
 const utils = useUtilsStore()
 let provincias = utils.provincias
+let sizeMaxEscudo = ref(utils.sizeMaxEscudo)
 let nombre = ref('')
 let provincia = ref('')
 let direccion = ref('')
 let tfno = ref('')
 let descripcion = ref('')
 let email = ref('')
-let escudo = ref('')
+let escudoFile = ref(null)
+const previewEscudo = ref(null) // <-- URL para vista previa
+
 const service = new CenadService()
 const cenads = service.getCenads()
+
+
+function onFileChange(e) {
+  const file = e.target.files[0]
+  escudoFile.value = file
+
+  if (file) {
+    previewEscudo.value = URL.createObjectURL(file)
+  } else {
+    previewEscudo.value = null
+  }
+}
 
 
 onMounted(async () => {
     await getCenads()
 })
 const crearCenad = async () => {
-    await service.crearCenad(nombre.value, provincia.value, direccion.value, tfno.value, email.value, descripcion.value, escudo.value)
+    await service.crearCenad(nombre.value, provincia.value, direccion.value, tfno.value, email.value, descripcion.value, escudoFile.value)
+
     nombre.value = ''
     provincia.value = ''
     direccion.value = ''
     tfno.value = ''
     email.value = ''
     descripcion.value = ''
-    escudo.value = ''
+    escudoFile.value = ''
     await getCenads()
 }
 const getCenads = async () => {
@@ -198,7 +220,8 @@ div.filtro {
 .categoriaFichero,
 .unidad,
 .usuario,
-.arma, .link {
+.arma,
+.link {
     background-color: #588157;
     color: white;
     text-decoration: none;

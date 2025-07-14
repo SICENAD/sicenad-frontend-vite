@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -76,11 +77,16 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para almacenar un escudo
 	 */
 	@Override
-	public void saveEscudo(MultipartFile file) throws Exception {
+	public String saveEscudo(MultipartFile file) throws Exception {
 		Files.createDirectories(escudosFolder);
-		Files.copy(file.getInputStream(), this.escudosFolder.resolve(file.getOriginalFilename()));
-	}
+		
+	    Path destino = this.escudosFolder.resolve(file.getOriginalFilename());
 
+	    // Sobrescribe si el archivo ya existe
+	    Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+
+	    return file.getOriginalFilename(); // devuelves el nombre que has decidido usar
+	}
 	/**
 	 * Metodo para borrar un escudo
 	 */

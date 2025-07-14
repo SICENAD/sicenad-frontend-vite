@@ -1,6 +1,7 @@
 package es.mde.rest;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,16 +71,14 @@ public class FileController {
 	 * @throws Exception
 	 */
 	@PostMapping("/api/files/subirEscudo")
-	public ResponseEntity<Response> uploadFileEscudo(@RequestParam("file") MultipartFile file) throws Exception {
-		if (file.getSize() > sizeLimiteEscudo) {
-			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-					.body(new Response("El archivo es demasiado pesado"));
-		} else {
-
-			fileServiceAPI.saveEscudo(file);
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new Response("El archivo fue cargado correctamente al servidor"));
-		}
+	public ResponseEntity<Map<String, String>> uploadFileEscudo(@RequestParam("file") MultipartFile file) throws Exception {
+	    if (file.getSize() > sizeLimiteEscudo) {
+	        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+	                .body(Map.of("error", "El archivo es demasiado pesado"));
+	    } else {
+	        String nombreArchivo = fileServiceAPI.saveEscudo(file);
+	        return ResponseEntity.ok(Map.of("nombreArchivo", nombreArchivo));
+	    }
 	}
 
 	/**

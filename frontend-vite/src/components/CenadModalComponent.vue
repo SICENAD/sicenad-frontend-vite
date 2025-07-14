@@ -42,17 +42,39 @@
               <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
             </div>
             <div class="mb-3">
-              <label class="titulo"><b>ESCUDO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo
-                permitido: {{ sizeMaxEscudo }} MB)</label>
-              <input type="file" class="form-control" @click="cargarArchivo" />
+              <label class="titulo"><b>ESCUDO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo permitido: {{
+                sizeMaxEscudo }} MB)</label>
+
+              <!-- Mostrar escudo actual si existe -->
+              <div v-if="escudoActual" class="mb-2">
+                <p>Archivo actual: {{ escudoActual }}</p>
+                <img :src="urlEscudoActual" alt="Escudo actual" style="max-height: 100px;" class="img-thumbnail" />
+              </div>
+              <p v-else class="text-muted">No hay ningún escudo cargado</p>
+
+              <div class="d-flex">
+                <!-- Botón personalizado para seleccionar archivo -->
+                <label class="btn">
+                  Seleccionar archivo
+                  <input type="file" accept="image/*" @change="onFileChange" ref="inputFile" hidden />
+                </label>
+                <!-- Nombre del archivo seleccionado -->
+                <div v-if="archivoEscudo" class="mt-2 ms-2">
+                  <small>Archivo seleccionado: {{ archivoEscudo.name }}</small>
+                </div>
+              </div>
+              <!-- Mostrar preview si se selecciona archivo nuevo -->
+              <div v-if="archivoEscudo" class="mb-2 mt-2">
+                <img :src="previewEscudo" alt="Preview escudo" style="max-height: 100px;" class="img-thumbnail" />
+              </div>
             </div>
           </form>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             {{ $t('comun.cerrar') }}
           </button>
-          <!-- Llamada al modal para eliminar-->
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('cenads.borrarCenad') }}
           </button>
@@ -89,35 +111,127 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import CenadService from '@/services/CenadService'
 import useUtilsStore from '@/stores/utils'
+
 const props = defineProps(['nombre', 'provincia', 'direccion', 'tfno', 'email', 'descripcion', 'escudo', 'idCenad'])
 const emits = defineEmits(['emiteModal'])
 const utils = useUtilsStore()
+
 const provincias = utils.provincias
-let provincia = ref(props.provincia)
-let nombre = ref(props.nombre)
-let direccion = ref(props.direccion)
-let tfno = ref(props.tfno)
-let email = ref(props.email)
-let descripcion = ref(props.descripcion)
-let escudo = ref(props.escudo)
-let idCenad = ref(props.idCenad)
-let idModal = 'modal-cenad-' + props.idCenad
-let idModalEliminar = 'modal-cenad-eliminar' + props.idCenad
+const provincia = ref(props.provincia)
+const nombre = ref(props.nombre)
+const direccion = ref(props.direccion)
+const tfno = ref(props.tfno)
+const email = ref(props.email)
+const descripcion = ref(props.descripcion)
+const idCenad = ref(props.idCenad)
+const idModal = 'modal-cenad-' + props.idCenad
+const idModalEliminar = 'modal-cenad-eliminar' + props.idCenad
+const inputFile = ref(null)
 const service = new CenadService()
-const editarCenad = async () => {
-  await service.editarCenad(nombre.value, provincia.value, direccion.value, tfno.value, email.value, descripcion.value, escudo.value, idCenad.value)
-  emits('emiteModal')
+
+const archivoEscudo = ref(null)
+const escudoActual = ref(props.escudo)
+
+// URL base para cargar imágenes de escudo (ajusta según tu servidor)
+//const urlBaseEscudos = `${utils.urlApi}/files/escudos/`
+
+// Computed para URL del escudo actual
+//const urlEscudoActual = computed(() => {
+//  return escudoActual.value ? urlBaseEscudos + escudoActual.value : ''
+//})
+const urlEscudoActual = ref('')
+
+onMounted(async () => {
+  if (escudoActual.value) {
+    try {
+      urlEscudoActual.value = await service.fetchEscudo(escudoActual.value)
+    } catch (error) {
+      console.error('Error cargando escudo:', error)
+      urlEscudoActual.value = '' // para evitar mostrar URL rota
+    }
+  } else {
+    urlEscudoActual.value = ''
+  }
+})
+
+
+// Para preview de archivo seleccionado nuevo
+const previewEscudo = ref('')
+
+// Cuando cambie archivoEscudo, creamos preview con FileReader
+watch(archivoEscudo, (newFile) => {
+  if (!newFile) {
+    previewEscudo.value = ''
+    return
+  }
+  const reader = new FileReader()
+  reader.onload = e => {
+    previewEscudo.value = e.target.result
+  }
+  reader.readAsDataURL(newFile)
+})
+
+// Variable para guardar la URL creada y poder revocarla
+let currentObjectURL = ''
+
+// Cuando cambie urlEscudoActual, revocamos la anterior para evitar fuga de memoria
+watch(urlEscudoActual, (newUrl, oldUrl) => {
+  if (oldUrl) URL.revokeObjectURL(oldUrl)  // revoca la URL vieja
+  currentObjectURL = newUrl                 // guardamos la nueva
+})
+
+// Liberamos la URL cuando el componente se desmonta
+onBeforeUnmount(() => {
+  if (currentObjectURL) URL.revokeObjectURL(currentObjectURL)
+})
+
+
+function onFileChange(event) {
+  archivoEscudo.value = event.target.files[0]
 }
+
+const editarCenad = async () => {
+  const success = await service.editarCenad(
+    nombre.value,
+    provincia.value,
+    direccion.value,
+    tfno.value,
+    email.value,
+    descripcion.value,
+    archivoEscudo.value,  // archivo nuevo o null
+    escudoActual.value,   // nombre actual del escudo en la base
+    idCenad.value
+  );
+
+  if (success) {
+    // Actualizar el escudoActual con el nombre real subido
+    escudoActual.value = success; // Asumiendo que editarCenad retorna el nombreArchivo
+
+    // Volver a cargar la URL del escudo actualizado para mostrar preview
+    try {
+      urlEscudoActual.value = await service.fetchEscudo(escudoActual.value)
+    } catch (e) {
+      urlEscudoActual.value = ''
+    }
+    archivoEscudo.value = null;
+    previewEscudo.value = '';
+  }
+  emits('emiteModal');
+}
+
+
+
 const borrarCenad = async () => {
   await service.deleteCenad(idCenad.value)
   emits('emiteModal')
 }
 </script>
 <style scoped lang="scss">
-div, div a {
+div,
+div a {
   color: #A3B18A;
   font-weight: bold;
 }
@@ -135,5 +249,18 @@ fa-icon:hover {
 hr {
   margin-bottom: 0;
   margin-top: 0;
+}
+
+.btn {
+  background: #A3B18A;
+  padding: 0.5;
+  font-size: 14px;
+  color: white;
+}
+
+.btn:hover {
+  background-color: #588157;
+  color: white;
+  text-decoration: none;
 }
 </style>
