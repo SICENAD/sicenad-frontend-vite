@@ -47,7 +47,7 @@ export async function subirArchivo(archivo, urlUpload) {
 
     const uploadResponse = await utils.fetchArchivoConToken(urlUpload, 'POST', formData)
 
-    if (uploadResponse.status === 413) {
+    if (uploadResponse.status == 413) {
       alert('El archivo tiene un tamaño superior al permitido')
       return false
     }
@@ -61,4 +61,24 @@ export async function subirArchivo(archivo, urlUpload) {
     }
 
     return data.nombreArchivo // o el campo que corresponda
+  }
+  export async function borrarArchivo(urlUpload) {
+    const utils = useUtilsStore()
+
+    const uploadResponse = await utils.fetchArchivoConToken(urlUpload, 'GET', null)
+
+    if (uploadResponse.status == 400) {
+      alert('El archivo no ha sido borrado')
+      return false
+    }
+
+    const data = await uploadResponse.json()
+    console.log('Respuesta de eliminación:', data)
+
+    if (!uploadResponse.ok) {
+      if (data.mensaje) console.error(data.mensaje)
+      return false
+    }
+
+    return data 
   }

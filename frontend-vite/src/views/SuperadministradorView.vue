@@ -114,7 +114,7 @@
                         <!-- Vista previa de la imagen -->
                         <div v-if="previewEscudo" style="margin-top: 10px;">
                             <label><b>Vista previa del escudo:</b></label><br />
-                            <img :src="previewEscudo" alt="Vista previa" style="max-width: 200px; max-height: 200px;" />
+                            <img :src="previewEscudo" alt="Vista previa" style="max-height: 100px;" class="img-thumbnail" />
                         </div>
                     </form>
                 </div>
@@ -177,6 +177,7 @@ const crearCenad = async () => {
     email.value = ''
     descripcion.value = ''
     escudoFile.value = ''
+    this.previewEscudo.value = null
     await getCenads()
 }
 const getCenads = async () => {

@@ -1,4 +1,4 @@
-import { baseNormalizada, toastExito, toSentenceCase, toTitleCase, formatearFecha, toInstant, toDate, subirArchivo } from '@/utils'
+import { baseNormalizada, toastExito, toSentenceCase, toTitleCase, formatearFecha, toInstant, toDate, subirArchivo, borrarArchivo } from '@/utils'
 
 export default {
   install: (app) => {
@@ -10,7 +10,8 @@ export default {
       toDate,
       toastExito,
       baseNormalizada,
-      subirArchivo
+      subirArchivo, 
+      borrarArchivo
     }
     /* por si quiero añadir propiedades concretas como $utils.base, aunque estos casos los tengo importados desde mi clase de utils
     const base = import.meta.env.VITE_PUBLIC_PATH || '/'

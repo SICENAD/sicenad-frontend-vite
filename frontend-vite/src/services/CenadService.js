@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import useAuthStore from '@/stores/auth'
 import useUtilsStore from '@/stores/utils'
 import i18n from '@/plugins/i18n'
-import { subirArchivo, toastExito, toTitleCase } from '@/utils'
+import { borrarArchivo, subirArchivo, toastExito, toTitleCase } from '@/utils'
 
 class CenadService {
   cenads
@@ -65,12 +65,25 @@ class CenadService {
       return false
     }
   }
-  async editarCenad(nombre, provincia, direccion, tfno, email, descripcion, archivoEscudo, escudoActual, idCenad) {
-    let escudo = escudoActual; // por defecto mantenemos el actual
+  async editarCenad(
+    nombre,
+    provincia,
+    direccion,
+    tfno,
+    email,
+    descripcion,
+    archivoEscudo,
+    escudoActual,
+    idCenad,
+  ) {
+    let escudo = escudoActual // por defecto mantenemos el actual
     if (archivoEscudo) {
       const urlUpload = `${this.utils.urlApi}/files/subirEscudo`
       const nuevoEscudo = await subirArchivo(archivoEscudo, urlUpload)
       if (nuevoEscudo == false) return null
+      const urlBorrarArchivo = `${this.utils.urlApi}/files/borrarEscudo/${escudo}`
+      const responseDeleteEscudo = await borrarArchivo(urlBorrarArchivo)
+      console.log(responseDeleteEscudo)
       escudo = nuevoEscudo
     }
     try {
@@ -108,7 +121,7 @@ class CenadService {
       const response = await this.utils.fetchConToken(urlCenad, 'GET', null)
       const json = await response.json()
       this.cenad.value = await json
-      return response.status == 200 ? true : false
+      return response.status == 200 ? this.cenad.value : null
     } catch (error) {
       console.log(error)
     }
@@ -116,6 +129,10 @@ class CenadService {
   async deleteCenad(idCenad) {
     try {
       const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
+      const cenad = await this.fetchCenad(idCenad)
+      const urlArchivo = `${this.utils.urlApi}/files/borrarEscudo/${cenad.escudo}`
+      const responseDeleteEscudo = await borrarArchivo(urlArchivo)
+      console.log(responseDeleteEscudo)
       const response = await this.utils.fetchConToken(urlCenad, 'DELETE', null)
       const json = await response.json()
       this.cenad.value = await json
@@ -131,58 +148,20 @@ class CenadService {
       console.log(error)
     }
   }
-  async uploadEscudo(file) {
-    const url = `${this.utils.urlApi}/files/subirEscudo`
-    const formData = new FormData()
-    formData.append('file', file)
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${this.auth.token}`,
-        },
-      })
-
-      if (response.status === 413) {
-        alert('El archivo tiene un tamaño superior al permitido')
-        throw new Error('Archivo demasiado grande')
-      }
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        if (data.mensaje) {
-          console.error(data.mensaje)
-        }
-        throw new Error('Error al subir el escudo')
-      }
-
-      return data // Ej: { nombreArchivo: 'escudo.png' }
-    } catch (error) {
-      console.error('Error en uploadEscudo:', error)
-      throw error
-    }
-  }
-
 
   async fetchEscudo(filename) {
     const response = await fetch(`${this.utils.urlApi}/files/escudos/${filename}`, {
       headers: {
-        'Authorization': `Bearer ${this.auth.token}`
-      }
-    });
+        Authorization: `Bearer ${this.auth.token}`,
+      },
+    })
 
-    if (!response.ok) throw new Error('No se pudo cargar la imagen');
+    if (!response.ok) throw new Error('No se pudo cargar la imagen')
 
-    const blob = await response.blob();
-    const imageUrl = URL.createObjectURL(blob);
-    return imageUrl;  // Lo usas como src en una <img>
+    const blob = await response.blob()
+    const imageUrl = URL.createObjectURL(blob)
+    return imageUrl // Lo usas como src en una <img>
   }
-
-
-
 }
 
 export default CenadService
