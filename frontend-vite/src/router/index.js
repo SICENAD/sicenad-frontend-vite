@@ -33,6 +33,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/armas', 
+      name: 'armas',
+      component: () => import('../views/ArmasView.vue'),
+      meta: {
+        requireAuth: false,
+      },
+    },
+    {
       path: '/clientes',
       name: 'clientes',
       component: () => import('../views/ClientesView.vue'),

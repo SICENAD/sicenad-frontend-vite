@@ -32,7 +32,7 @@
                     <RouterLink :to="{ name: 'about' }" class="link"><b>Categorías de Ficheros</b></RouterLink>
                 </button>
                 <button class="btn arma text-white me-2">
-                    <RouterLink :to="{ name: 'about' }" class="link"><b>Armas</b></RouterLink>
+                    <RouterLink :to="{ name: 'armas' }" class="link"><b>Armas</b></RouterLink>
                 </button>
             </div>
             <hr class="w-100 mt-3" />

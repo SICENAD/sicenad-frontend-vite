@@ -30,6 +30,7 @@ import {
   FaWindows,
   FaInstagram,
   FaTelegramPlane,
+  FaArrowAltCircleLeft
 } from 'oh-vue-icons/icons'
 import useUtilsStore from './stores/utils'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -62,6 +63,7 @@ addIcons(
   FaWindows,
   FaInstagram,
   FaTelegramPlane,
+  FaArrowAltCircleLeft
 )
 //para facilitar la importacion de las opciones
 const app = createApp(App)
