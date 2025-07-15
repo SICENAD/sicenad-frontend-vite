@@ -113,9 +113,11 @@ public class ConfiguracionPorJava {
 	/**
 	 * Para usar los origins permitidos desde el application.properties
 	 */
-	@Value("${misAllowedOrigins}")
-	private String[] allowedOrigins;
+	@Value("${miAllowedOriginLocal}")
+	private String allowedOriginLocal;
 
+	@Value("${miAllowedOriginProduccion}")
+	private String allowedOriginProduccion;
 	/**
 	 * Devuelve la ruta donde se guardarán los escudos
 	 * @return Devuelve la ruta donde se guardarán los escudos
@@ -210,10 +212,16 @@ public class ConfiguracionPorJava {
 	 * Devuelve los origins permitidos para el CORS
 	 * @return Devuelve los origins permitidos para el CORS
 	 */
-	@Bean("allowedOrigins")
-	public String[] getAllowedOrigins() {
+	@Bean("allowedOriginLocal")
+	public String getAllowedOriginLocal() {
 
-		return allowedOrigins;
+		return allowedOriginLocal;
+	}
+	
+	@Bean("allowedOriginProduccion")
+	public String getAllowedOriginProduccion() {
+
+		return allowedOriginLocal;
 	}
 	
 	/**

@@ -25,13 +25,16 @@ public class ConfiguracionSeguridad {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final AuthenticationProvider authProvider;
 
-	private static String[] allowedOrigins = {"uno", "dos"};
+	private static String allowedOriginLocal = "local";
+	private static String allowedOriginProduccion = "produccion";
+
 	
-	public ConfiguracionSeguridad(JwtAuthenticationFilter jwtAuthenticationFilter,@Qualifier("allowedOrigins") String[] origins,
+	public ConfiguracionSeguridad(JwtAuthenticationFilter jwtAuthenticationFilter,@Qualifier("allowedOriginLocal") String originLocal, @Qualifier("allowedOriginProduccion") String originProduccion,
 			AuthenticationProvider authProvider) {
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 		this.authProvider = authProvider;
-		ConfiguracionSeguridad.allowedOrigins = origins;
+		ConfiguracionSeguridad.allowedOriginLocal = originLocal;
+		ConfiguracionSeguridad.allowedOriginProduccion = originProduccion;
 	}
 
 	@Bean
@@ -59,7 +62,8 @@ public class ConfiguracionSeguridad {
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins));
+		configuration.setAllowedOriginPatterns(Arrays.asList(allowedOriginLocal, allowedOriginProduccion));
+		System.err.println(allowedOriginLocal + ", " + allowedOriginProduccion);
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
 		configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -67,3 +71,5 @@ public class ConfiguracionSeguridad {
 		return source;
 	}
 }
+
+		//configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:*", "http://jose-server.turkey-banana.ts.net"));
