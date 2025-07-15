@@ -1,7 +1,6 @@
 <template>
     <!-- muestra la vista de armas -->
     <div class="container-fluid">
-
         <div class="row ms-4 mb-0 ps-3">
             <RouterLink class="nav-link volver" :to="{ name: 'superadministrador' }">
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
@@ -21,7 +20,6 @@
 
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
-               
                 <div class="row mt-2 titulos">
                     <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
                         <b>NOMBRE</b>
@@ -62,8 +60,6 @@
                                 </option>
                             </select>
                         </div>
-
-
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -88,16 +84,14 @@ const utils = useUtilsStore()
 let tiposTiro = utils.tiposTiro
 let nombre = ref('')
 let tipoTiro = ref('')
-
 const service = new ArmaService()
-const armas = service.getArmas()
+let armas =  service.getArmas()
 
 onMounted(async () => {
     await getArmas()
 })
 const crearArma = async () => {
     await service.crearArma(nombre.value, tipoTiro.value)
-
     nombre.value = ''
     tipoTiro.value = ''
     await getArmas()
@@ -105,9 +99,8 @@ const crearArma = async () => {
 const getArmas = async () => {
     await service.fetchAll()
 }
-
-function actualizarArmaEnView() {
-    getArmas()
+async function actualizarArmaEnView() {
+    await getArmas()
 }
 </script>
 <style scoped lang="scss">
@@ -116,40 +109,32 @@ function actualizarArmaEnView() {
   padding: 0.5;
   font-size: 14px;
 }
-
 .btn:hover {
   background-color: #A3B18A;
 }
-
 .titulo {
   color: #3A5A40; 
   font-weight: bold;
 }
-
 .titulo1 {
   color: #588157;
 }
-
 h5 {
   color: #354f52;
   font-weight: bold;
 }
-
 a.volver {
   color: #3A5A40;
   font-size: 18px;
 }
-
 a.volver:hover {
   color: #A3B18A;
 }
-
 .row {
-  height: 1.5em;
-  padding: auto;
-  margin: auto;
+    height: auto;
+    padding: auto;
+    margin: auto;
 }
-
 hr {
   margin-bottom: 0;
   margin-top: 1;

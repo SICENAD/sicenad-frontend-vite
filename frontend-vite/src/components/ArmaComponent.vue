@@ -7,15 +7,13 @@
          :idArma="props.content.idString"
         @emiteModal="actualizarArmaEnElemento" />
     </div>
-    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6">{{ tipoTiro }}</div>
+    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6">{{ props.content.tipoTiro }}</div>
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
 import ArmaModalComponent from './ArmaModalComponent.vue'
 const props = defineProps(['content'])
 const emits = defineEmits(['emiteElemento'])
-let tipoTiro = ref(props.content.tipoTiro)
 
 function actualizarArmaEnElemento() {
   emits('emiteElemento')

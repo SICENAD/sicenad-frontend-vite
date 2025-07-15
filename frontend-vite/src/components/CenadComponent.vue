@@ -16,30 +16,25 @@
 </template>
 <script setup>
 import { toTitleCase } from '@/utils'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import CenadModalComponent from './CenadModalComponent.vue'
 import useUtilsStore from '@/stores/utils'
 const props = defineProps(['content'])
 const emits = defineEmits(['emiteElemento'])
-let provincia = ref('')
+const utils = useUtilsStore()
+const provincia = computed(() => {
+  const idProvincia = props.content.provincia
+  const provincias = utils.provincias
+  const encontrada = provincias.find(p => p.idProvincia == idProvincia)
+  return encontrada ? encontrada.nombre : ''
+})
 let usuarioAdministrador = ref(false)
 
 onMounted(async () => {
-  getProvincia(props.content)
   //tendre que recuperar, si existe, el usuario administrador del cenad
 })
 function actualizarCenadEnElemento() {
   emits('emiteElemento')
-}
-
-function getProvincia(cenad) {
-  const utils = useUtilsStore()
-  let provincias = utils.provincias
-  provincias.forEach(p => {
-    if (p.idProvincia == cenad.provincia) {
-      provincia.value = p.nombre;
-    }
-  })
 }
 </script>
 <style scoped lang="scss">

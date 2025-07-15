@@ -29,7 +29,7 @@
                     <RouterLink :to="{ name: 'about' }" class="link"><b>Tipos de Formulario</b></RouterLink>
                 </button>
                 <button class="btn categoriaFichero text-white me-2">
-                    <RouterLink :to="{ name: 'about' }" class="link"><b>Categorías de Ficheros</b></RouterLink>
+                    <RouterLink :to="{ name: 'categoriasFichero' }" class="link"><b>Categorías de Ficheros</b></RouterLink>
                 </button>
                 <button class="btn arma text-white me-2">
                     <RouterLink :to="{ name: 'armas' }" class="link"><b>Armas</b></RouterLink>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <CenadComponent v-for="(item, index) in cenads" :key="index" :content="item"
-                    @emiteElemento="actualizarCenadEnLayout" />
+                    @emiteElemento="actualizarCenadEnView" />
             </div>
         </div>
     </div>
@@ -184,7 +184,7 @@ const getCenads = async () => {
     await service.fetchAll()
 }
 
-function actualizarCenadEnLayout() {
+function actualizarCenadEnView() {
     getCenads()
 }
 </script>

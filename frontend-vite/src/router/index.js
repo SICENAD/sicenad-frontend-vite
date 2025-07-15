@@ -29,7 +29,7 @@ const router = createRouter({
       name: 'superadministrador',
       component: () => import('../views/SuperadministradorView.vue'),
       meta: {
-        requireAuth: false,
+        requireAuth: true,
       },
     },
     {
@@ -37,7 +37,15 @@ const router = createRouter({
       name: 'armas',
       component: () => import('../views/ArmasView.vue'),
       meta: {
-        requireAuth: false,
+        requireAuth: true,
+      },
+    },
+        {
+      path: '/categoriasFichero', 
+      name: 'categoriasFichero',
+      component: () => import('../views/CategoriasFicheroView.vue'),
+      meta: {
+        requireAuth: true,
       },
     },
     {
