@@ -1,5 +1,7 @@
 package es.mde.security.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -15,7 +17,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import es.mde.security.exceptionHandler_JwtAuthenticationFilter.JwtAuthenticationFilter;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -24,10 +25,13 @@ public class ConfiguracionSeguridad {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final AuthenticationProvider authProvider;
 
-	public ConfiguracionSeguridad(JwtAuthenticationFilter jwtAuthenticationFilter,
+	private static String[] allowedOrigins = {"uno", "dos"};
+	
+	public ConfiguracionSeguridad(JwtAuthenticationFilter jwtAuthenticationFilter,@Qualifier("allowedOrigins") String[] origins,
 			AuthenticationProvider authProvider) {
 		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 		this.authProvider = authProvider;
+		ConfiguracionSeguridad.allowedOrigins = origins;
 	}
 
 	@Bean
@@ -42,8 +46,6 @@ public class ConfiguracionSeguridad {
 //                .requestMatchers("/api/auth/**").permitAll()//permite registro y logging
 						.requestMatchers("/api/auth/register", "/api/auth/login").permitAll()// permite solo register y logging
 						//asi no permito en abierto cambiar los password
-					    //.requestMatchers("/api/files/**").permitAll() // <--- Añade esta línea
-
 						.anyRequest().authenticated()
 				// .permitAll()
 				)
@@ -51,17 +53,13 @@ public class ConfiguracionSeguridad {
 						sessionManager -> sessionManager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authProvider)
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
-
 	}
 
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedOriginPatterns(Arrays.asList(
-		        "http://localhost:*", // para desarrollo local
-		        "http://jose-server.turkey-banana.ts.net" // dominio real
-		    ));
+		configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
 		configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

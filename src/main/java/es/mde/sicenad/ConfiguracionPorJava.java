@@ -109,6 +109,12 @@ public class ConfiguracionPorJava {
 	
 	@Value("${size.docSolicitudes}")
 	private long sizeLimiteDocSolicitud;
+	
+	/**
+	 * Para usar los origins permitidos desde el application.properties
+	 */
+	@Value("${misAllowedOrigins}")
+	private String[] allowedOrigins;
 
 	/**
 	 * Devuelve la ruta donde se guardarán los escudos
@@ -199,6 +205,16 @@ public class ConfiguracionPorJava {
 
 		return sizeLimiteDocSolicitud;
 	}
+		
+	/**
+	 * Devuelve los origins permitidos para el CORS
+	 * @return Devuelve los origins permitidos para el CORS
+	 */
+	@Bean("allowedOrigins")
+	public String[] getAllowedOrigins() {
+
+		return allowedOrigins;
+	}
 	
 	/**
 	 * Devuelve un ObjectMapper
@@ -232,4 +248,4 @@ public class ConfiguracionPorJava {
 
 		return mailSender;
 	}
-}
+	  }
