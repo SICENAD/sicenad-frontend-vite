@@ -42,7 +42,7 @@ public class ConfiguracionSeguridad {
 //                .requestMatchers("/api/auth/**").permitAll()//permite registro y logging
 						.requestMatchers("/api/auth/register", "/api/auth/login").permitAll()// permite solo register y logging
 						//asi no permito en abierto cambiar los password
-					    .requestMatchers("/api/files/**").permitAll() // <--- Añade esta línea
+					    //.requestMatchers("/api/files/**").permitAll() // <--- Añade esta línea
 
 						.anyRequest().authenticated()
 				// .permitAll()

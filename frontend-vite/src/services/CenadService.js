@@ -3,7 +3,6 @@ import useAuthStore from '@/stores/auth'
 import useUtilsStore from '@/stores/utils'
 import i18n from '@/plugins/i18n'
 import { toastExito, toTitleCase } from '@/utils'
-import axios from 'axios'
 
 class CenadService {
   cenads
