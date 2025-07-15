@@ -109,6 +109,20 @@ const useUtilsStore = defineStore('utils', {
         console.log(error)
       }
     },
+    async fetchArchivoConToken(url, method, body) {
+      try {
+        const response =await fetch(url, {
+              method: method,
+              headers: {
+                Authorization: `Bearer ${useAuthStore().token}`,
+              },
+              body: body,
+            })
+        return response
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 })
 

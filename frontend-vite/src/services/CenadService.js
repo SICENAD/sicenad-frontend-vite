@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import useAuthStore from '@/stores/auth'
 import useUtilsStore from '@/stores/utils'
 import i18n from '@/plugins/i18n'
-import { toastExito, toTitleCase } from '@/utils'
+import { subirArchivo, toastExito, toTitleCase } from '@/utils'
 
 class CenadService {
   cenads
@@ -33,40 +33,14 @@ class CenadService {
       console.log(error)
     }
   }
-  async crearCenad(nombre, provincia, direccion, tfno, email, descripcion, escudoFile) {
+  async crearCenad(nombre, provincia, direccion, tfno, email, descripcion, archivoEscudo) {
     try {
       let escudo = null
-      // Subir archivo si se proporciona uno
-      if (escudoFile) {
-        const formData = new FormData()
-        formData.append('file', escudoFile)
-
+      if (archivoEscudo) {
         const urlUpload = `${this.utils.urlApi}/files/subirEscudo`
-        const uploadResponse = await fetch(urlUpload, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            Authorization: `Bearer ${this.auth.token}`,
-          },
-        })
-
-        if (uploadResponse.status === 413) {
-          alert('El archivo tiene un tamaño superior al permitido')
-          return false
-        }
-
-        const data = await uploadResponse.json()
-        console.log('Respuesta de subida:', data)
-        if (!uploadResponse.ok) {
-          if (data.mensaje) {
-            console.error(data.mensaje)
-          }
-          return false
-        }
-
-        escudo = data.nombreArchivo // o el campo que devuelva tu backend
+        escudo = await subirArchivo(archivoEscudo, urlUpload)
+        if (escudo == false) return false
       }
-
       const urlCenads = `${this.utils.urlApi}/cenads`
       const response = await this.utils.fetchConToken(urlCenads, 'POST', {
         nombre: nombre.toUpperCase(),
@@ -91,67 +65,43 @@ class CenadService {
       return false
     }
   }
-async editarCenad(nombre, provincia, direccion, tfno, email, descripcion, archivoEscudo, escudoActual, idCenad) {
-  let escudo = escudoActual; // por defecto mantenemos el actual
-
-  // Si hay archivo nuevo, subimos y actualizamos nombre del archivo
-  if (archivoEscudo !== null && archivoEscudo !== undefined) {
-    const formData = new FormData();
-    formData.append('file', archivoEscudo);
-
-    const response = await fetch(`${this.utils.urlApi}/files/subirEscudo`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.auth.token}`,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error('Error subiendo escudo');
+  async editarCenad(nombre, provincia, direccion, tfno, email, descripcion, archivoEscudo, escudoActual, idCenad) {
+    let escudo = escudoActual; // por defecto mantenemos el actual
+    if (archivoEscudo) {
+      const urlUpload = `${this.utils.urlApi}/files/subirEscudo`
+      const nuevoEscudo = await subirArchivo(archivoEscudo, urlUpload)
+      if (nuevoEscudo == false) return null
+      escudo = nuevoEscudo
     }
-
-    const data = await response.json();
-    escudo = data.nombreArchivo;
+    try {
+      const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
+      const body = {
+        nombre: nombre.toUpperCase(),
+        provincia: provincia,
+        direccion: toTitleCase(direccion),
+        tfno: tfno,
+        email: email,
+        descripcion: descripcion,
+      }
+      if (escudo) {
+        body.escudo = escudo
+      }
+      const response = await this.utils.fetchConToken(urlCenad, 'PATCH', body)
+      if (response.status == 200) {
+        toastExito(
+          i18n.global.t('cenads.editado', {
+            cenad: nombre,
+          }),
+        )
+        return escudo
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.error(error)
+      return null
+    }
   }
-
-  try {
-    const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`;
-
-    // Construimos el body con los campos a enviar
-    const body = {
-      nombre: nombre.toUpperCase(),
-      provincia: provincia,
-      direccion: toTitleCase(direccion),
-      tfno: tfno,
-      email: email,
-      descripcion: descripcion,
-    };
-
-    // Solo añadimos escudo si tenemos uno definido
-    if (escudo) {
-      body.escudo = escudo;
-    }
-
-    const response = await this.utils.fetchConToken(urlCenad, 'PATCH', body);
-
-    if (response.status === 200) {
-      toastExito(
-        i18n.global.t('cenads.editado', {
-          cenad: nombre,
-        }),
-      );
-      return escudo;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-
   async fetchCenad(idCenad) {
     try {
       const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
@@ -215,21 +165,21 @@ async editarCenad(nombre, provincia, direccion, tfno, email, descripcion, archiv
       throw error
     }
   }
-  
 
-async fetchEscudo(filename) {
-  const response = await fetch(`${this.utils.urlApi}/files/escudos/${filename}`, {
-    headers: {
-      'Authorization': `Bearer ${this.auth.token}`
-    }
-  });
 
-  if (!response.ok) throw new Error('No se pudo cargar la imagen');
+  async fetchEscudo(filename) {
+    const response = await fetch(`${this.utils.urlApi}/files/escudos/${filename}`, {
+      headers: {
+        'Authorization': `Bearer ${this.auth.token}`
+      }
+    });
 
-  const blob = await response.blob();
-  const imageUrl = URL.createObjectURL(blob);
-  return imageUrl;  // Lo usas como src en una <img>
-}
+    if (!response.ok) throw new Error('No se pudo cargar la imagen');
+
+    const blob = await response.blob();
+    const imageUrl = URL.createObjectURL(blob);
+    return imageUrl;  // Lo usas como src en una <img>
+  }
 
 
 

@@ -1,3 +1,4 @@
+import useUtilsStore from '@/stores/utils'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 
@@ -38,3 +39,26 @@ export function baseNormalizada() {
   const baseNormalizada = base.endsWith('/') ? base : base + '/'
   return baseNormalizada
 }
+export async function subirArchivo(archivo, urlUpload) {
+    if (!archivo) return null
+    const utils = useUtilsStore()
+    const formData = new FormData()
+    formData.append('file', archivo)
+
+    const uploadResponse = await utils.fetchArchivoConToken(urlUpload, 'POST', formData)
+
+    if (uploadResponse.status === 413) {
+      alert('El archivo tiene un tamaño superior al permitido')
+      return false
+    }
+
+    const data = await uploadResponse.json()
+    console.log('Respuesta de subida:', data)
+
+    if (!uploadResponse.ok) {
+      if (data.mensaje) console.error(data.mensaje)
+      return false
+    }
+
+    return data.nombreArchivo // o el campo que corresponda
+  }
