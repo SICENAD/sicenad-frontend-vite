@@ -23,7 +23,7 @@
                     <RouterLink :to="{ name: 'about' }" class="link"><b>Usuarios</b></RouterLink>
                 </button>
                 <button class="btn unidad text-white me-2">
-                    <RouterLink :to="{ name: 'about' }" class="link"><b>Unidades</b></RouterLink>
+                    <RouterLink :to="{ name: 'unidades' }" class="link"><b>Unidades</b></RouterLink>
                 </button>
                 <button class="btn tipoFormulario text-white me-2">
                     <RouterLink :to="{ name: 'about' }" class="link"><b>Tipos de Formulario</b></RouterLink>
