@@ -8,11 +8,11 @@
         </div>
         <div class="row mt-4">
             <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>GESTIÓN DE CATEGORÍAS DE FICHERO</u></h3>
+                <h3 class="text-center titulo1"><u>GESTIÓN DE TIPOS DE FORMULARIO</u></h3>
             </div>
             <div class="col-3 justify-content-end">
-                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-categoriaFichero">
-                    Nueva <b>Categoría de fichero</b>
+                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-tipoFormulario">
+                    Nuevo <b>Tipo de Formulario</b>
                 </button>
             </div>
         </div>
@@ -20,46 +20,42 @@
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
                 <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo">
                         <b>NOMBRE</b>
                     </div>
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
-                        <b>TIPO</b>
+                    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo">
+                        <b>CÓDIGO DE TIPO</b>
                     </div>
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <div class="col-10 col-sm-10 col-md-7 col-lg-7 col-xl-7 titulo">
                         <b>DESCRIPCIÓN</b>
                     </div>
                 </div>
-                <CategoriaFicheroComponent v-for="(item, index) in categoriasFichero" :key="index" :content="item"
-                    @emiteElemento="actualizarCategoriaFicheroEnView" />
+                <TipoFormularioComponent v-for="(item, index) in tiposFormulario" :key="index" :content="item"
+                    @emiteElemento="actualizarTipoFormularioEnView" />
             </div>
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="modal-nueva-categoriaFichero" tabindex="-1"
-        aria-labelledby="modal-nueva-categoriaFichero-Label" aria-hidden="true">
+    <div class="modal fade" id="modal-nuevo-tipoFormulario" tabindex="-1"
+        aria-labelledby="modal-nuevo-tipoFormulario-Label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modal-nueva-categoriaFichero-Label">
-                        Nueva Categoría de Fichero
+                    <h1 class="modal-title fs-5" id="modal-nuevo-tipoFormulario-Label">
+                        Nuevo Tipo de Formulario
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label class="titulo"><b>NOMBRE DE LA CATEGORÍA DE FICHERO<sup
+                            <label class="titulo"><b>NOMBRE DEL TIPO DE FORMULARIO<sup
                                         class="text-danger">*</sup></b></label>
                             <input type="text" class="form-control letra" id="nombre" v-model="nombre" />
                         </div>
                         <div class="mb-3">
-                            <label class="titulo me-2"><b>TIPO<sup class="text-danger">*</sup></b></label>
-                            <select class="form-select" aria-label="tipo" v-model="tipo">
-                                <option disabled value="">{{ $t('categoriasFichero.selectTipo') }}</option>
-                                <option value=0>Imágenes</option>
-                                <option value=1>Otros archivos</option>
-                            </select>
+                            <label class="titulo me-2"><b>CÓDIGO DEL TIPO DE FORMULARIO<sup class="text-danger">*</sup></b></label>
+                            <input type="number" class="form-control letra" id="codTipo" v-model="codTipo" />
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
@@ -71,8 +67,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearCategoriaFichero" data-bs-dismiss="modal" class="btn btn-primary">
-                        Crear Categoría de fichero
+                    <button type="button" @click="crearTipoFormulario" data-bs-dismiss="modal" class="btn btn-primary">
+                        Crear Tipo de Formulario
                     </button>
                 </div>
             </div>
@@ -80,34 +76,33 @@
     </div>
 </template>
 <script setup>
+import TipoFormularioComponent from '@/components/TipoFormularioComponent.vue'
+import TipoFormularioService from '@/services/TipoFormularioService'
 import { ref, onMounted } from 'vue'
-import CategoriaFicheroComponent from '@/components/CategoriaFicheroComponent.vue'
-import CategoriaFicheroService from '@/services/CategoriaFicheroService'
 
 let nombre = ref('')
-let tipo = ref('')
+let codTipo = ref('')
 let descripcion = ref('')
 
-const service = new CategoriaFicheroService()
-const categoriasFichero = service.getCategoriasFichero()
+const service = new TipoFormularioService()
+const tiposFormulario = service.getTiposFormulario()
 
 onMounted(async () => {
-    await getCategoriasFichero()
+    await getTiposFormulario()
 })
-const crearCategoriaFichero = async () => {
-    await service.crearCategoriaFichero(nombre.value, tipo.value, descripcion.value)
-
+const crearTipoFormulario = async () => {
+    await service.crearTipoFormulario(nombre.value, codTipo.value, descripcion.value)
     nombre.value = ''
-    tipo.value = ''
-    descripcion = ''
-    await getCategoriasFichero()
+    codTipo.value = ''
+    descripcion.value = ''
+    await getTiposFormulario()
 }
-const getCategoriasFichero = async () => {
+const getTiposFormulario = async () => {
     await service.fetchAll()
 }
 
-function actualizarCategoriaFicheroEnView() {
-   getCategoriasFichero()
+function actualizarTipoFormularioEnView() {
+   getTiposFormulario()
 }
 </script>
 <style scoped lang="scss">

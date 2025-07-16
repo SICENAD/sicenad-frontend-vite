@@ -17,7 +17,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/about', 
+      path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
       meta: {
@@ -25,7 +25,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/superadministrador', 
+      path: '/superadministrador',
       name: 'superadministrador',
       component: () => import('../views/SuperadministradorView.vue'),
       meta: {
@@ -33,7 +33,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/unidades', 
+      path: '/unidades',
       name: 'unidades',
       component: () => import('../views/UnidadesView.vue'),
       meta: {
@@ -41,17 +41,25 @@ const router = createRouter({
       },
     },
     {
-      path: '/armas', 
+      path: '/armas',
       name: 'armas',
       component: () => import('../views/ArmasView.vue'),
       meta: {
         requireAuth: true,
       },
     },
-        {
-      path: '/categoriasFichero', 
+    {
+      path: '/categoriasFichero',
       name: 'categoriasFichero',
       component: () => import('../views/CategoriasFicheroView.vue'),
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/tiposFormulario',
+      name: 'tiposFormulario',
+      component: () => import('../views/TiposFormularioView.vue'),
       meta: {
         requireAuth: true,
       },

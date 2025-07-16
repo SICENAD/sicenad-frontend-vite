@@ -26,7 +26,7 @@
                     <RouterLink :to="{ name: 'unidades' }" class="link"><b>Unidades</b></RouterLink>
                 </button>
                 <button class="btn tipoFormulario text-white me-2">
-                    <RouterLink :to="{ name: 'about' }" class="link"><b>Tipos de Formulario</b></RouterLink>
+                    <RouterLink :to="{ name: 'tiposFormulario' }" class="link"><b>Tipos de Formulario</b></RouterLink>
                 </button>
                 <button class="btn categoriaFichero text-white me-2">
                     <RouterLink :to="{ name: 'categoriasFichero' }" class="link"><b>Categorías de Ficheros</b></RouterLink>
