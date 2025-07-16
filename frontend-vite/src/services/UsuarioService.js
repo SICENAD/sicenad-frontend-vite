@@ -6,15 +6,55 @@ import { toastExito, toTitleCase } from '@/utils'
 import router from '@/router'
 
 class UsuarioService {
+  usuarios_superadministrador
+  usuarios_administrador
+  usuarios_gestor
+  usuarios_normal
+  usuario_superadministrador
+  usuario_administrador
+  usuario_gestor
+  usuario_normal
   usuarios
   usuario
   auth
   utils
 
   constructor() {
+    this.usuarios_superadministrador = ref([])
+    this.usuarios_administrador = ref([])
+    this.usuarios_gestor = ref([])
+    this.usuarios_normal = ref([])
+    this.usuario_superadministrador = ref()
+    this.usuario_administrador = ref()
+    this.usuario_gestor = ref()
+    this.usuario_normal = ref()
     this.usuarios = ref([])
     this.auth = useAuthStore()
     this.utils = useUtilsStore()
+  }
+  getUsuariosSuperadministrador() {
+    return this.usuarios_superadministrador
+  }
+  getUsuariosAdministrador() {
+    return this.usuarios_administrador
+  }
+  getUsuariosGestor() {
+    return this.usuarios_gestor
+  }
+  getUsuariosNormal() {
+    return this.usuarios_normal
+  }
+  getUsuarioSuperadministrador() {
+    return this.usuario_superadministrador
+  }
+  getUsuarioAdministrador() {
+    return this.usuario_administrador
+  }
+  getUsuarioGestor() {
+    return this.usuario_gestor
+  }
+  getUsuarioNormal() {
+    return this.usuario_normal
   }
   getUsuarios() {
     return this.usuarios
@@ -42,13 +82,12 @@ class UsuarioService {
     this.auth.logout()
   }
   solicitudRegistro(
-    username, password, tfno, email, emailAdmitido, descripcion, rol,
-    passwordForRegisterFromUser,
+    username, password, tfno, email, emailAdmitido, descripcion, passwordForRegisterFromUser,
     feedback,
   ) {
     const passwordForRegister = this.utils.passwordForRegister
     passwordForRegister == passwordForRegisterFromUser
-      ? this.crearUsuarioSuperadministrador(username, password, tfno, email, emailAdmitido, descripcion, rol, null, null, null)
+      ? this.crearUsuarioSuperadministrador(username, password, tfno, email, emailAdmitido, descripcion)
       : alert(i18n.global.t('comun.wrongPassword'))
   }
   async fetchAll() {//no lo voy a usar, pero sino tendria que ver que cada tipo de usuario tiene su []
@@ -62,54 +101,54 @@ class UsuarioService {
       console.log(error)
     }
   }
-  async getUsuariosSuperadministrador() {
+  async fetchUsuariosSuperadministrador() {
     try {
       const urlUsuarios = `${this.utils.urlApi}/usuarios_superadministrador?size=1000`
       const response = await this.utils.fetchConToken(urlUsuarios, 'GET', null)
       const json = await response.json()
-      this.usuarios.value = await json._embedded.usuarios_superadministrador
+      this.usuarios_superadministrador.value = await json._embedded.usuarios_superadministrador
       return response.status == 200 ? true : false
     } catch (error) {
       console.log(error)
     }
   }
-  async getUsuariosSAdministrador() {
+  async fetchUsuariosAdministrador() {
     try {
       const urlUsuarios = `${this.utils.urlApi}/usuarios_administrador?size=1000`
       const response = await this.utils.fetchConToken(urlUsuarios, 'GET', null)
       const json = await response.json()
-      this.usuarios.value = await json._embedded.usuarios_administrador
+      this.usuarios_administrador.value = await json._embedded.usuarios_administrador
       return response.status == 200 ? true : false
     } catch (error) {
       console.log(error)
     }
   }
-  async getUsuariosGestor() {
+  async fetchUsuariosGestor() {
     try {
       const urlUsuarios = `${this.utils.urlApi}/usuarios_gestor?size=1000`
       const response = await this.utils.fetchConToken(urlUsuarios, 'GET', null)
       const json = await response.json()
-      this.usuarios.value = await json._embedded.usuarios_gestor
+      this.usuarios_gestor.value = await json._embedded.usuarios_gestor
       return response.status == 200 ? true : false
     } catch (error) {
       console.log(error)
     }
   }
-  async getUsuariosNormal() {
+  async fetchUsuariosNormal() {
     try {
       const urlUsuarios = `${this.utils.urlApi}/usuarios_normal?size=1000`
       const response = await this.utils.fetchConToken(urlUsuarios, 'GET', null)
       const json = await response.json()
-      this.usuarios.value = await json._embedded.usuarios_normal
+      this.usuarios_normal.value = await json._embedded.usuarios_normal
       return response.status == 200 ? true : false
     } catch (error) {
       console.log(error)
     }
   }
-  async crearUsuarioSuperadministrador(username, tfno, email, emailAdmitido, descripcion) {
+  async crearUsuarioSuperadministrador(username, password, tfno, email, emailAdmitido, descripcion) {
     try {
       const rol = "Superadministrador"
-      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, null, null, null)
+      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, null, null)
       if (response == true) {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
@@ -122,10 +161,10 @@ class UsuarioService {
       console.log(feedback)
     }
   }
-  async crearUsuarioAdministrador(username, tfno, email, emailAdmitido, descripcion, cenadAdministrado) {
+  async crearUsuarioAdministrador(username, password, tfno, email, emailAdmitido, descripcion, cenad) {
     try {
       const rol = "Administrador"
-      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, null, cenadAdministrado, null)
+      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, null)
       if (response == true) {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
@@ -138,10 +177,10 @@ class UsuarioService {
       console.log(feedback)
     }
   }
-  async crearUsuarioGestor(username, tfno, email, emailAdmitido, descripcion, cenad) {
+  async crearUsuarioGestor(username, password, tfno, email, emailAdmitido, descripcion, cenad) {
     try {
       const rol = "Gestor"
-      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, null, null)
+      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, null)
       if (response == true) {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
@@ -154,10 +193,10 @@ class UsuarioService {
       console.log(feedback)
     }
   }
-  async crearUsuarioNormal(username, tfno, email, emailAdmitido, descripcion, unidad) {
+  async crearUsuarioNormal(username, password, tfno, email, emailAdmitido, descripcion, unidad) {
     try {
       const rol = "Normal"
-      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, null, null, unidad)
+      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, null, unidad)
       if (response == true) {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
@@ -189,7 +228,7 @@ class UsuarioService {
       console.log(error)
     }
   }
-  async editarUsuarioAdministrador(username, tfno, email, emailAdmitido, descripcion, rol, cenadAdministrado, idUsuario) {
+  async editarUsuarioAdministrador(username, tfno, email, emailAdmitido, descripcion, rol, cenad, idUsuario) {
     try {
       const urlUsuario = `${this.utils.urlApi}/usuarios/${idUsuario}`
       const response = await this.utils.fetchConToken(urlUsuario, 'PATCH', {
@@ -199,7 +238,7 @@ class UsuarioService {
         emailAdmitido: emailAdmitido,
         descripcion: descripcion,
         rol: rol,
-        cenadAdministrado: cenadAdministrado
+        cenad: cenad
       })
       if (response.status == 200) {
         toastExito(i18n.global.t('administracion.editado', { username: username }))

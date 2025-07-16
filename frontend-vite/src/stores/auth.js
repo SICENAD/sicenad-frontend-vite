@@ -11,7 +11,7 @@ const useAuthStore = defineStore('auth', {
   },
   getters: {},
   actions: {
-    async register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, cenadAdministrado, unidad) {
+    async register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, unidad) {
       const urlRegister = `${useUtilsStore().urlApi}/auth/register`
       const rawResponse = await fetch(urlRegister, {
         method: 'POST',
@@ -28,7 +28,6 @@ const useAuthStore = defineStore('auth', {
           emailAdmitido: emailAdmitido,
           rol: rol,//pondremos solo superadministrador para que solo se pueda registrar estos usuarios. el resto se crearan desde la aplicacion
           cenad: cenad,
-          cenadAdministrado: cenadAdministrado,
           unidad: unidad
         }),
       })

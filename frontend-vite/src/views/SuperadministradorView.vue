@@ -20,7 +20,7 @@
             </div>
             <div class="col-8 d-flex justify-content-end">
                 <button class="btn usuario me-2">
-                    <RouterLink :to="{ name: 'about' }" class="link"><b>Usuarios</b></RouterLink>
+                    <RouterLink :to="{ name: 'usuarios' }" class="link"><b>Usuarios</b></RouterLink>
                 </button>
                 <button class="btn unidad text-white me-2">
                     <RouterLink :to="{ name: 'unidades' }" class="link"><b>Unidades</b></RouterLink>

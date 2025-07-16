@@ -70,6 +70,7 @@ public class AuthService {
 		} else if (request.getRol() == Rol.Administrador) {
 			UsuarioAdministrador usuario = new UsuarioAdministrador();
 			formarUsuario(usuario, request);
+			usuario.setCenad(request.getCenad());
 			usuarioAdministradorDAO.save(usuario);
 			AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
 					usuario.getRol());
@@ -77,6 +78,7 @@ public class AuthService {
 		} else if (request.getRol() == Rol.Gestor) {
 			UsuarioGestor usuario = new UsuarioGestor();
 			formarUsuario(usuario, request);
+			usuario.setCenad(request.getCenad());
 			usuarioGestorDAO.save(usuario);
 			AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
 					usuario.getRol());
@@ -84,6 +86,7 @@ public class AuthService {
 		} else if (request.getRol() == Rol.Normal) {
 			UsuarioNormal usuario = new UsuarioNormal();
 			formarUsuario(usuario, request);
+			usuario.setUnidad(request.getUnidad());
 			usuarioNormalDAO.save(usuario);
 			AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
 					usuario.getRol());

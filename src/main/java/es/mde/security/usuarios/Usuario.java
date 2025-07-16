@@ -40,9 +40,7 @@ public class Usuario implements UserDetails {
 	private String idString;
 	@Enumerated(EnumType.STRING)
 	private Rol rol;	
-	@Column(nullable = false)
 	private String username;
-	@Column(nullable = false)
 	private String password;
 	private String email;
 	private String tfno;

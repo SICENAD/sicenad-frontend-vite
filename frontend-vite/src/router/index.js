@@ -4,6 +4,7 @@ import AdministracionView from '@/views/AdministracionView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import useAuthStore from '@/stores/auth'
 import i18n from '@/plugins/i18n'
+import AboutView from '../views/AboutView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,14 @@ const router = createRouter({
       path: '/superadministrador',
       name: 'superadministrador',
       component: () => import('../views/SuperadministradorView.vue'),
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: '/usuarios',
+      name: 'usuarios',
+      component: () => import('../views/UsuariosView.vue'),
       meta: {
         requireAuth: true,
       },
