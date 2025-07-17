@@ -90,9 +90,9 @@ public class FileController {
 	 */
 	@GetMapping("/api/files/borrarEscudo/{filename:.+}")
 	public ResponseEntity<Response> borrarFileEscudo(@PathVariable String filename) throws Exception {
-		fileServiceAPI.borrarEscudo(filename);
+		String nombreArchivo = fileServiceAPI.borrarEscudo(filename);
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(new Response("El archivo fue borrado correctamente del servidor"));
+				.body(new Response("El archivo " + nombreArchivo + " fue borrado correctamente del servidor"));
 	}
 
 	/**

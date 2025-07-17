@@ -31,7 +31,7 @@ public interface FileServiceAPI {
 	 * @param name Nombre del archivo de imagen del escudo
 	 * @throws Exception
 	 */
-	public void borrarEscudo(String name) throws Exception;
+	public String borrarEscudo(String name) throws Exception;
 
 	/**
 	 * Metodo para cargar un escudo
@@ -47,7 +47,7 @@ public interface FileServiceAPI {
 	 * @param filse Nombre de la lista de archivos de imagen de escudos
 	 * @throws Exception
 	 */
-	public void saveEscudos(List<MultipartFile> files) throws Exception;
+	public String saveEscudos(List<MultipartFile> files) throws Exception;
 
 	/**
 	 * Metodo para cargar varios escudos

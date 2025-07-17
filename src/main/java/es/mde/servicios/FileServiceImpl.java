@@ -1,10 +1,12 @@
 package es.mde.servicios;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -91,9 +93,20 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para borrar un escudo
 	 */
 	@Override
-	public void borrarEscudo(String name) throws Exception {
-		Path file = escudosFolder.resolve(name);
-		Files.deleteIfExists(file);
+	public String borrarEscudo(String name) throws Exception {
+	    if (name == null || name.trim().isEmpty()) {
+	        throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
+	    }
+
+	    Path file = escudosFolder.resolve(name);
+	    String nombreArchivo = file.getFileName().toString();
+
+	    boolean borrado = Files.deleteIfExists(file);
+	    if (!borrado) {
+	        throw new FileNotFoundException("No se encontró el archivo: " + nombreArchivo);
+	    }
+
+	    return nombreArchivo;
 	}
 
 	/**
@@ -110,11 +123,14 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para almacenar varios escudos (en la actualidad no se emplea)
 	 */
 	@Override
-	public void saveEscudos(List<MultipartFile> files) throws Exception {
+	public String saveEscudos(List<MultipartFile> files) throws Exception {
 		Files.createDirectories(escudosFolder);
-		for (MultipartFile file : files) {
-			this.saveEscudo(file);
+		String[] nombresArchivos = new String[files.size()];
+		for (int i = 0; i < files.size(); i++) {
+			this.saveEscudo(files.get(i));
+			nombresArchivos[i] = files.get(i).getOriginalFilename();
 		}
+		return Arrays.toString(nombresArchivos);
 	}
 
 	/**
