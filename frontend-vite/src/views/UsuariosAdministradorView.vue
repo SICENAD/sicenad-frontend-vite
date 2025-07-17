@@ -116,7 +116,7 @@ let emailAdmitidoUsuarioAdministrador = ref(false)
 let descripcionUsuarioAdministrador = ref('')
 let usernameUsuarioAdministrador = ref('')
 let passwordUsuarioAdministrador = ref('')
-let cenad = ref('')
+let cenad = ref({})
 
 onMounted(async () => {
     await getUsuariosAdministrador()
@@ -128,7 +128,7 @@ const crearUsuarioAdministrador = async () => {
     emailUsuarioAdministrador.value = ''
     emailAdmitidoUsuarioAdministrador.value = false
     descripcionUsuarioAdministrador.value = ''
-    cenad.value = ''
+    cenad.value = {}
     await getUsuariosAdministrador()
 }
 const getUsuariosAdministrador = async () => {

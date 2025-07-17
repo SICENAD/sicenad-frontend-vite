@@ -105,7 +105,7 @@ let emailAdmitidoUsuarioGestor = ref(false)
 let descripcionUsuarioGestor = ref('')
 let usernameUsuarioGestor = ref('')
 let passwordUsuarioGestor = ref('')
-let cenad = ref('')
+let cenad = ref({})
 
 onMounted(async () => {
     await getUsuariosGestor()
@@ -117,7 +117,7 @@ const crearUsuarioGestor = async () => {
     emailUsuarioGestor.value = ''
     emailAdmitidoUsuarioGestor.value = false
     descripcionUsuarioGestor.value = ''
-    cenad.value = ''
+    cenad.value = {}
     await getUsuariosAdministrador()
 }
 const getUsuariosGestor = async () => {

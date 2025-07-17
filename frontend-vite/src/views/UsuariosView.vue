@@ -42,7 +42,6 @@ let rol = ref(auth.rol)
 
 onMounted(async () => {
     definirBtnVolver()
-    console.log('a')
 })
 function definirBtnVolver() {
 name.value = rol.value === 'Superadministrador' ? 'superadministrador' : 'cenads'

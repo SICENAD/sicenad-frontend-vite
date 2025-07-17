@@ -106,7 +106,7 @@ let emailAdmitidoUsuarioNormal = ref(false)
 let descripcionUsuarioNormal = ref('')
 let usernameUsuarioNormal = ref('')
 let passwordUsuarioNormal = ref('')
-let unidad = ref('')
+let unidad = ref({})
 
 onMounted(async () => {
     await getUsuariosNormal()
@@ -118,7 +118,7 @@ const crearUsuarioNormal = async () => {
     emailUsuarioNormal.value = ''
     emailAdmitidoUsuarioNormal.value = false
     descripcionUsuarioNormal.value = ''
-    unidad.value = ''
+    unidad.value = {}
     await getUsuariosNormal()
 }
 const getUsuariosNormal = async () => {

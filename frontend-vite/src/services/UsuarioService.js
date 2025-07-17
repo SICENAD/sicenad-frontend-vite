@@ -16,6 +16,8 @@ class UsuarioService {
   usuario_normal
   usuarios
   usuario
+  unidad
+  cenad
   auth
   utils
 
@@ -29,6 +31,8 @@ class UsuarioService {
     this.usuario_gestor = ref()
     this.usuario_normal = ref()
     this.usuarios = ref([])
+    this.unidad = ref()
+    this.cenad = ref()
     this.auth = useAuthStore()
     this.utils = useUtilsStore()
   }
@@ -268,7 +272,7 @@ class UsuarioService {
       console.log(error)
     }
   }
-  async editarUsuarioNormal(username, tfno, email, emailAdmitido, descripcion, rol, unidad, idUsuario) {
+  async editarUsuarioNormal(username, tfno, email, emailAdmitido, descripcion, unidad, idUsuario) {
     try {
       const urlUsuario = `${this.utils.urlApi}/usuarios/${idUsuario}`
       const response = await this.utils.fetchConToken(urlUsuario, 'PATCH', {
@@ -277,7 +281,6 @@ class UsuarioService {
         email: email,
         emailAdmitido: emailAdmitido,
         descripcion: descripcion,
-        rol: rol,
         unidad: unidad
       })
       if (response.status == 200) {
@@ -313,6 +316,17 @@ class UsuarioService {
         )
         return true
       } else return false
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ async fetchUnidadDeUsuarioNormal(idUsuario) {
+    try {
+      const urlUsuario = `${this.utils.urlApi}/usuarios_normal/${idUsuario}/unidad`
+      const response = await this.utils.fetchConToken(urlUsuario, 'GET', null)
+      const json = await response.json()
+      this.unidad.value = await json
+      return response.status == 200 ? this.unidad.value : null
     } catch (error) {
       console.log(error)
     }
