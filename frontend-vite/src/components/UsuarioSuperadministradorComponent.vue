@@ -3,26 +3,18 @@
   <div class="row">
     <div class="col-10 col-sm-10 col-md-12 col-lg-12 col-xl-12">
       {{ props.content.username }}
-      <UsuarioGestorModalComponent :username="props.content.username" :tfno="props.content.tfno"
+      <UsuarioSuperadministradorModalComponent :username="props.content.username" :tfno="props.content.tfno"
         :email="props.content.email" :emailAdmitido="props.content.emailAdmitido"
-        :descripcion="props.content.descripcion" :idUsuario="props.content.idString" :cenad="cenad"
+        :descripcion="props.content.descripcion" :idUsuario="props.content.idString"
         @emiteModal="actualizarUsuarioEnElemento" />
     </div>
   </div>
 </template>
 <script setup>
-import UsuarioService from '@/services/UsuarioService'
-import UsuarioGestorModalComponent from './UsuarioGestorModalComponent.vue'
-import { onMounted, ref } from 'vue'
+import UsuarioSuperadministradorModalComponent from './UsuarioSuperadministradorModalComponent.vue'
 const props = defineProps(['content'])
 const emits = defineEmits(['emiteElemento'])
 
-const service = new UsuarioService()
-let cenad = ref()
-
-onMounted(async () => {
-  cenad.value = await service.fetchCenadDeUsuarioGestor(props.content.idString)
-})
 function actualizarUsuarioEnElemento() {
   emits('emiteElemento')
 }

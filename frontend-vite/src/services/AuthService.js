@@ -23,10 +23,10 @@ class AuthService {
     }
   }
 
-  async register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, unidad, feedback) {
+  async register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, unidad) {
     const authStore = useAuthStore()
     try {
-      feedback = i18n.global.t('comun.enviando')
+      let feedback = i18n.global.t('comun.enviando')
       const response = await authStore.register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, unidad)
       if (response == true) {
         await router.push({ name: 'home' })
@@ -46,14 +46,12 @@ class AuthService {
     authStore.logout()
   }
   solicitudRegistro(
-    username, password, tfno, email, emailAdmitido, descripcion, rol,
-    passwordForRegisterFromUser,
-    feedback,
-  ) {
+    username, password, tfno, email, emailAdmitido, descripcion,
+    passwordForRegisterFromUser) {
     const utils = useUtilsStore()
     const passwordForRegister = utils.passwordForRegister
     passwordForRegister == passwordForRegisterFromUser
-      ? this.register(username, password, tfno, email, emailAdmitido, descripcion, rol, feedback)
+      ? this.register(username, password, tfno, email, emailAdmitido, descripcion, "Superadministrador")
       : alert(i18n.global.t('comun.wrongPassword'))
   }
 }

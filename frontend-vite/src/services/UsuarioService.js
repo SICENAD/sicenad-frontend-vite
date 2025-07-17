@@ -86,9 +86,7 @@ class UsuarioService {
     this.auth.logout()
   }
   solicitudRegistro(
-    username, password, tfno, email, emailAdmitido, descripcion, passwordForRegisterFromUser,
-    feedback,
-  ) {
+    username, password, tfno, email, emailAdmitido, descripcion, passwordForRegisterFromUser) {
     const passwordForRegister = this.utils.passwordForRegister
     passwordForRegister == passwordForRegisterFromUser
       ? this.crearUsuarioSuperadministrador(username, password, tfno, email, emailAdmitido, descripcion)
@@ -152,12 +150,12 @@ class UsuarioService {
   async crearUsuarioSuperadministrador(username, password, tfno, email, emailAdmitido, descripcion) {
     try {
       const rol = "Superadministrador"
-      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, null, null)
+      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol)
       if (response == true) {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
       } else {
-        feedback = i18n.global.t('comun.registroError')
+        let feedback = i18n.global.t('comun.registroError')
         alert(feedback)
       }
       return response.status == 201 ? true : false
@@ -165,15 +163,17 @@ class UsuarioService {
       console.log(feedback)
     }
   }
-  async crearUsuarioAdministrador(username, password, tfno, email, emailAdmitido, descripcion, cenad) {
+  async crearUsuarioAdministrador(username, password, tfno, email, emailAdmitido, descripcion, idCenad) {
     try {
       const rol = "Administrador"
-      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, null)
+      const response = await this.auth.register(username, password, tfno, email, emailAdmitido, descripcion, rol)
       if (response == true) {
-        await router.push({ name: 'home' })
+        const responseUsername = await this.utils.fetchConToken(`${this.utils.urlApi}/usuarios_administrador/search/findByUsername?username=${username}`, 'GET', null)
+        let usuario = await responseUsername.json()
+        await this.editarUsuarioAdministrador(username, tfno, email, emailAdmitido, descripcion, idCenad, usuario.idString)
         toastExito(i18n.global.t('comun.registroExito'))
       } else {
-        feedback = i18n.global.t('comun.registroError')
+        let feedback = i18n.global.t('comun.registroError')
         alert(feedback)
       }
       return response.status == 201 ? true : false
@@ -189,7 +189,7 @@ class UsuarioService {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
       } else {
-        feedback = i18n.global.t('comun.registroError')
+        let feedback = i18n.global.t('comun.registroError')
         alert(feedback)
       }
       return response.status == 201 ? true : false
@@ -205,7 +205,7 @@ class UsuarioService {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
       } else {
-        feedback = i18n.global.t('comun.registroError')
+        let feedback = i18n.global.t('comun.registroError')
         alert(feedback)
       }
       return response.status == 201 ? true : false
@@ -213,7 +213,7 @@ class UsuarioService {
       console.log(feedback)
     }
   }
-  async editarUsuarioSuperadministrador(username, tfno, email, emailAdmitido, descripcion, rol, idUsuario) {
+  async editarUsuarioSuperadministrador(username, tfno, email, emailAdmitido, descripcion, idUsuario) {
     try {
       const urlUsuario = `${this.utils.urlApi}/usuarios/${idUsuario}`
       const response = await this.utils.fetchConToken(urlUsuario, 'PATCH', {
@@ -222,7 +222,6 @@ class UsuarioService {
         email: email,
         emailAdmitido: emailAdmitido,
         descripcion: descripcion,
-        rol: rol,
       })
       if (response.status == 200) {
         toastExito(i18n.global.t('administracion.editado', { username: username }))
@@ -232,7 +231,7 @@ class UsuarioService {
       console.log(error)
     }
   }
-  async editarUsuarioAdministrador(username, tfno, email, emailAdmitido, descripcion, rol, cenad, idUsuario) {
+  async editarUsuarioAdministrador(username, tfno, email, emailAdmitido, descripcion, idCenad, idUsuario) {
     try {
       const urlUsuario = `${this.utils.urlApi}/usuarios/${idUsuario}`
       const response = await this.utils.fetchConToken(urlUsuario, 'PATCH', {
@@ -241,8 +240,7 @@ class UsuarioService {
         email: email,
         emailAdmitido: emailAdmitido,
         descripcion: descripcion,
-        rol: rol,
-        cenad: cenad
+        cenad: `${this.utils.urlApi}/cenads/${idCenad}`
       })
       if (response.status == 200) {
         toastExito(i18n.global.t('administracion.editado', { username: username }))
@@ -252,7 +250,7 @@ class UsuarioService {
       console.log(error)
     }
   }
-  async editarUsuarioGestor(username, tfno, email, emailAdmitido, descripcion, rol, cenad, idUsuario) {
+  async editarUsuarioGestor(username, tfno, email, emailAdmitido, descripcion, cenad, idUsuario) {
     try {
       const urlUsuario = `${this.utils.urlApi}/usuarios/${idUsuario}`
       const response = await this.utils.fetchConToken(urlUsuario, 'PATCH', {
@@ -261,7 +259,6 @@ class UsuarioService {
         email: email,
         emailAdmitido: emailAdmitido,
         descripcion: descripcion,
-        rol: rol,
         cenad: cenad
       })
       if (response.status == 200) {
@@ -322,11 +319,33 @@ class UsuarioService {
   }
  async fetchUnidadDeUsuarioNormal(idUsuario) {
     try {
-      const urlUsuario = `${this.utils.urlApi}/usuarios_normal/${idUsuario}/unidad`
-      const response = await this.utils.fetchConToken(urlUsuario, 'GET', null)
+      const urlUnidad = `${this.utils.urlApi}/usuarios_normal/${idUsuario}/unidad`
+      const response = await this.utils.fetchConToken(urlUnidad, 'GET', null)
       const json = await response.json()
       this.unidad.value = await json
       return response.status == 200 ? this.unidad.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ async fetchCenadDeUsuarioGestor(idUsuario) {
+    try {
+      const urlCenad = `${this.utils.urlApi}/usuarios_gestor/${idUsuario}/cenad`
+      const response = await this.utils.fetchConToken(urlCenad, 'GET', null)
+      const json = await response.json()
+      this.cenad.value = await json
+      return response.status == 200 ? this.cenad.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ async fetchCenadDeUsuarioAdministrador(idUsuario) {
+    try {
+      const urlCenad = `${this.utils.urlApi}/usuarios_administrador/${idUsuario}/cenad`
+      const response = await this.utils.fetchConToken(urlCenad, 'GET', null)
+      const json = await response.json()
+      this.cenad.value = await json
+      return response.status == 200 ? this.cenad.value : null
     } catch (error) {
       console.log(error)
     }

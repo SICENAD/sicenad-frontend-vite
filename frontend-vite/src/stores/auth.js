@@ -11,7 +11,15 @@ const useAuthStore = defineStore('auth', {
   },
   getters: {},
   actions: {
-    async register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, unidad) {
+    async register(
+      username,
+      password,
+      tfno,
+      email,
+      emailAdmitido,
+      descripcion,
+      rol,
+    ) {
       const urlRegister = `${useUtilsStore().urlApi}/auth/register`
       const rawResponse = await fetch(urlRegister, {
         method: 'POST',
@@ -26,9 +34,7 @@ const useAuthStore = defineStore('auth', {
           tfno: tfno,
           descripcion: descripcion,
           emailAdmitido: emailAdmitido,
-          rol: rol,//pondremos solo superadministrador para que solo se pueda registrar estos usuarios. el resto se crearan desde la aplicacion
-          cenad: cenad,
-          unidad: unidad
+          rol: rol, //pondremos solo superadministrador para que solo se pueda registrar estos usuarios. el resto se crearan desde la aplicacion
         }),
       })
       if (rawResponse.status == 200) {
@@ -68,7 +74,7 @@ const useAuthStore = defineStore('auth', {
   },
   persist: {
     storage: sessionStorage,
-    paths: ['token', 'username', 'rol'] //si quisiera persistir todo el store simplemente cambio el objeto por true...
+    paths: ['token', 'username', 'rol'], //si quisiera persistir todo el store simplemente cambio el objeto por true...
   },
 })
 

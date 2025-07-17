@@ -32,15 +32,25 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <div class="row mb-3">
+                            <label for="username" class="form-label"><b>{{ $t('administracion.username') }}</b></label>
+                            <input type="text" class="form-control" id="usernameUsuarioNormal"
+                                aria-describedby="usernameUsuarioNormal" v-model="usernameUsuarioNormal" />
+                        </div>
+                        <div class="row mb-3">
+                            <label for="password" class="form-label"><b>{{ $t('administracion.password') }}</b></label>
+                            <input type="password" class="form-control" id="passwordUsuarioNormal"
+                                v-model="passwordUsuarioNormal" />
+                        </div>
                         <div class="mb-3">
                             <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno'))
-                            }}</b></label>
+                                    }}</b></label>
                             <input type="text" class="form-control" id="tfnoUsuarioNormal"
                                 v-model="tfnoUsuarioNormal" />
                         </div>
                         <div class="mb-3">
                             <label for="InputEmail1" class="form-label"><b>{{ toTitleCase($t('administracion.correo'))
-                            }}</b></label>
+                                    }}</b></label>
                             <input type="email" class="form-control" id="emailUsuarioNormal"
                                 aria-describedby="emailHelp" v-model="emailUsuarioNormal" />
                             <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
@@ -48,7 +58,7 @@
                         <div class="mb-3">
                             <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
                                         class="text-danger">*</sup></b></label>
-                            <input type="checkbox" class="form-control letra" id="emailAdmitidoUsuarioNormal"
+                            <input type="checkbox" class="letra" id="emailAdmitidoUsuarioNormal"
                                 v-model="emailAdmitidoUsuarioNormal" />
                         </div>
                         <div class="mb-3">
@@ -64,16 +74,6 @@
                                     {{ unidad.nombre }}
                                 </option>
                             </select>
-                        </div>
-                        <div class="row mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
-                            <label for="username" class="form-label"><b>{{ $t('administracion.username') }}</b></label>
-                            <input type="text" class="form-control" id="usernameUsuarioNormal"
-                                aria-describedby="usernameUsuarioNormal" v-model="usernameUsuarioNormal" />
-                        </div>
-                        <div class="row mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
-                            <label for="password" class="form-label"><b>{{ $t('administracion.password') }}</b></label>
-                            <input type="password" class="form-control" id="passwordUsuarioNormal"
-                                v-model="passwordUsuarioNormal" />
                         </div>
                     </form>
                 </div>

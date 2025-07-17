@@ -1,10 +1,10 @@
 <template>
     <!-- vista de administrador->ve gestores de su cenad -->
     <div>
-        <h5 class="text-center titulo"><b>USUARIOS GESTORES</b></h5>
+        <h5 class="text-center titulo"><b>GESTORES</b></h5>
         <hr class="w-100" />
         <div class="d-flex justify-content-end mb-2">
-            <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-usuarioGestor">
+            <button class="btn text-white mt-2" data-bs-toggle="modal" data-bs-target="#modal-nuevo-usuarioGestor">
                 Nuevo <b>Usuario Gestor</b>
             </button>
         </div>
@@ -30,15 +30,25 @@
                 </div>
                 <div class="modal-body">
                     <form>
+                        <div class="row mb-3">
+                            <label for="username" class="form-label"><b>{{ $t('administracion.username') }}</b></label>
+                            <input type="text" class="form-control" id="usernameUsuarioGestor"
+                                aria-describedby="usernameUsuarioGestor" v-model="usernameUsuarioGestor" />
+                        </div>
+                        <div class="row mb-3">
+                            <label for="password" class="form-label"><b>{{ $t('administracion.password') }}</b></label>
+                            <input type="password" class="form-control" id="passwordUsuarioGestor"
+                                v-model="passwordUsuarioGestor" />
+                        </div>
                         <div class="mb-3">
                             <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno'))
-                                    }}</b></label>
+                            }}</b></label>
                             <input type="text" class="form-control" id="tfnoUsuarioGestor"
                                 v-model="tfnoUsuarioGestor" />
                         </div>
                         <div class="mb-3">
                             <label for="InputEmail1" class="form-label"><b>{{ toTitleCase($t('administracion.correo'))
-                                    }}</b></label>
+                            }}</b></label>
                             <input type="email" class="form-control" id="emailUsuarioGestor"
                                 aria-describedby="emailHelp" v-model="emailUsuarioGestor" />
                             <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
@@ -46,7 +56,7 @@
                         <div class="mb-3">
                             <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
                                         class="text-danger">*</sup></b></label>
-                            <input type="checkbox" class="form-control letra" id="emailAdmitidoUsuarioGestor"
+                            <input type="checkbox" class="letra" id="emailAdmitidoUsuarioGestor"
                                 v-model="emailAdmitidoUsuarioGestor" />
                         </div>
                         <div class="mb-3">
@@ -56,22 +66,12 @@
                         </div>
                         <div class="mb-3">
                             <label class="titulo me-2"><b>CENAD<sup class="text-danger">*</sup></b></label>
-                            <select class="form-select" aria-label="cenadUsuarioGestor" v-model="cenadUsuarioGestor">
+                            <select class="form-select" aria-label="cenadUsuarioGestor" v-model="cenad">
                                 <option disabled value="">Selecciona el CENAD/CMT</option>
                                 <option v-for="cenad in cenadsUsuarioGestor" :key="cenad.idString" :value="cenad">
                                     {{ cenad.nombre }}
                                 </option>
                             </select>
-                        </div>
-                        <div class="row mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
-                            <label for="username" class="form-label"><b>{{ $t('administracion.username') }}</b></label>
-                            <input type="text" class="form-control" id="usernameUsuarioGestor"
-                                aria-describedby="usernameUsuarioGestor" v-model="usernameUsuarioGestor" />
-                        </div>
-                        <div class="row mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
-                            <label for="password" class="form-label"><b>{{ $t('administracion.password') }}</b></label>
-                            <input type="password" class="form-control" id="passwordUsuarioGestor"
-                                v-model="passwordUsuarioGestor" />
                         </div>
                     </form>
                 </div>
@@ -118,7 +118,7 @@ const crearUsuarioGestor = async () => {
     emailAdmitidoUsuarioGestor.value = false
     descripcionUsuarioGestor.value = ''
     cenad.value = {}
-    await getUsuariosAdministrador()
+    await getUsuariosGestor()
 }
 const getUsuariosGestor = async () => {
     await service.fetchUsuariosGestor()

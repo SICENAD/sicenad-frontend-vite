@@ -13,7 +13,7 @@
       </div>
       <div class="mb-3">
         <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
-        <input type="checkbox" class="form-control letra" id="emailAdmitido" v-model="emailAdmitido" />
+        <input type="checkbox" class="letra" id="emailAdmitido" v-model="emailAdmitido" />
       </div>
       <div class="mb-3">
         <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>

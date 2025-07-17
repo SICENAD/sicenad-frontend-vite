@@ -15,36 +15,33 @@
           <form>
             <div class="mb-3">
               <label for="username" class="form-label"><b>{{ $t('administracion.username') }}</b></label>
-              <input type="text" class="form-control" id="usernameUsuarioNormal"
-                aria-describedby="usernameUsuarioNormal" v-model="username" />
+              <input type="text" class="form-control" id="usernameUsuarioAdministrador" aria-describedby="username" v-model="username" />
             </div>
             <div class="mb-3">
               <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno'))
                   }}</b></label>
-              <input type="text" class="form-control" id="tfnoUsuarioNormal" v-model="tfno" />
+              <input type="text" class="form-control" id="tfnoUsuarioAdministrador" v-model="tfno" />
             </div>
             <div class="mb-3">
               <label for="InputEmail1" class="form-label"><b>{{ toTitleCase($t('administracion.correo'))
                   }}</b></label>
-              <input type="email" class="form-control" id="emailUsuarioNormal" aria-describedby="emailHelp"
-                v-model="email" />
+              <input type="email" class="form-control" id="emailUsuarioAdministrador" aria-describedby="emailHelp" v-model="email" />
               <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
-              <input type="checkbox" class="letra" id="emailAdmitidoUsuarioNormal"
-                v-model="emailAdmitido" />
+              <input type="checkbox" class="letra" id="emailAdmitidoUsuarioAdministrador" v-model="emailAdmitido" />
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="descripcionUsuarioNormal" v-model="descripcion" />
+              <input type="textarea" class="form-control letra" id="descripcionUsuarioAdministrador" v-model="descripcion" />
             </div>
             <div class="mb-3">
-              <label class="titulo me-2"><b>UNIDAD<sup class="text-danger">*</sup></b></label>
-              <select class="form-select" aria-label="unidad" v-model="idUnidad">
-                <option disabled value="">Selecciona la unidad</option>
-                <option v-for="unidad in unidades" :key="unidad.idString" :value="unidad.idString">
-                  {{ unidad.nombre }}
+              <label class="titulo me-2"><b>CENAD<sup class="text-danger">*</sup></b></label>
+              <select class="form-select" aria-label="cenad" v-model="idCenad">
+                <option disabled value="">Selecciona el Cenad</option>
+                <option v-for="cenad in cenads" :key="cenad.idString" :value="cenad.idString">
+                  {{ cenad.nombre }}
                 </option>
               </select>
             </div>
@@ -92,9 +89,9 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
-import UnidadService from '@/services/UnidadService'
 import { toTitleCase } from '@/utils'
-const props = defineProps(['username', 'tfno', 'email', 'emailAdmitido', 'descripcion', 'unidad', 'idUsuario'])
+import CenadService from '@/services/CenadService'
+const props = defineProps(['username', 'tfno', 'email', 'emailAdmitido', 'descripcion', 'cenad', 'idUsuario'])
 const emits = defineEmits(['emiteModal'])
 
 let username = ref(props.username)
@@ -102,28 +99,30 @@ let tfno = ref(props.tfno)
 let email = ref(props.email)
 let emailAdmitido = ref(props.emailAdmitido)
 let descripcion = ref(props.descripcion)
-let idUnidad = ref(props.unidad?.idString || '')
+let idCenad = ref(props.cenad?.idString || '')
 let idUsuario = ref(props.idUsuario)
 let idModal = 'modal-usuario-' + props.idUsuario
 let idModalEliminar = 'modal-usuario-eliminar' + props.idUsuario
 const service = new UsuarioService()
-const unidadService = new UnidadService()
-let unidades = unidadService.getUnidades()
+const cenadService = new CenadService()
+let cenads = cenadService.getCenads()
 
 onMounted(async () => {
-  getUnidades()
+  getCenads()
 })
-const getUnidades = async () => {
-  await unidadService.fetchAll()
+const getCenads = async () => {
+  await cenadService.fetchAll()
 }
 const editarUsuario = async () => {
-  let unidad = null
-  unidades.value.forEach(u => {
-    if (u.idString == idUnidad.value) {
-      unidad = u
+  let cenad = null
+  cenads.value.forEach(c => {
+    if (c.idString == idCenad.value) {
+      cenad = c
     }
   })
-  await service.editarUsuarioNormal(username.value, tfno.value, email.value, emailAdmitido.value, descripcion.value, unidad, idUsuario.value)
+  console.log(cenad.idString)
+  console.log(idUsuario.value)
+  await service.editarUsuarioAdministrador(username.value, tfno.value, email.value, emailAdmitido.value, descripcion.value, cenad.idString, idUsuario.value)
   emits('emiteModal')
 }
 const borrarUsuario = async () => {

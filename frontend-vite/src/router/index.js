@@ -4,7 +4,6 @@ import AdministracionView from '@/views/AdministracionView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import useAuthStore from '@/stores/auth'
 import i18n from '@/plugins/i18n'
-import AboutView from '../views/AboutView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

@@ -177,7 +177,7 @@
     "rol": "Rol",
     "username": "Usuario",
     "password": "Contraseña",
-    "passwordRequired": "Se requiere la contraseña de administrador para registrar usuarios",
+    "passwordRequired": "Se requiere la contraseña de Superadministrador para registrar usuarios Superadministrador",
     "ofertaRegistro": "Si no dispone de una cuenta, haga click en ",
     "crearCuenta": "Crear cuenta",
     "filtrar": "Filtrar usuario",
