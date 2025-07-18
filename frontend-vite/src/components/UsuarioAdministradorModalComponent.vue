@@ -120,8 +120,6 @@ const editarUsuario = async () => {
       cenad = c
     }
   })
-  console.log(cenad.idString)
-  console.log(idUsuario.value)
   await service.editarUsuarioAdministrador(username.value, tfno.value, email.value, emailAdmitido.value, descripcion.value, cenad.idString, idUsuario.value)
   emits('emiteModal')
 }

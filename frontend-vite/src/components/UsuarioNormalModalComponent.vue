@@ -123,7 +123,7 @@ const editarUsuario = async () => {
       unidad = u
     }
   })
-  await service.editarUsuarioNormal(username.value, tfno.value, email.value, emailAdmitido.value, descripcion.value, unidad, idUsuario.value)
+  await service.editarUsuarioNormal(username.value, tfno.value, email.value, emailAdmitido.value, descripcion.value, unidad.idString, idUsuario.value)
   emits('emiteModal')
 }
 const borrarUsuario = async () => {

@@ -106,14 +106,16 @@ let emailAdmitidoUsuarioNormal = ref(false)
 let descripcionUsuarioNormal = ref('')
 let usernameUsuarioNormal = ref('')
 let passwordUsuarioNormal = ref('')
-let unidad = ref({})
+let unidad = ref()
 
 onMounted(async () => {
     await getUsuariosNormal()
+    await unidadService.fetchAll()
 })
 const crearUsuarioNormal = async () => {
-    await service.crearUsuarioNormal(usernameUsuarioNormal.value, tfnoUsuarioNormal.value, emailUsuarioNormal.value, emailAdmitidoUsuarioNormal.value, descripcionUsuarioNormal.value, unidad.value)
+    await service.crearUsuarioNormal(usernameUsuarioNormal.value, passwordUsuarioNormal.value, tfnoUsuarioNormal.value, emailUsuarioNormal.value, emailAdmitidoUsuarioNormal.value, descripcionUsuarioNormal.value, unidad.value.idString)
     usernameUsuarioNormal.value = ''
+    passwordUsuarioNormal.value = ''
     tfnoUsuarioNormal.value = ''
     emailUsuarioNormal.value = ''
     emailAdmitidoUsuarioNormal.value = false

@@ -105,14 +105,16 @@ let emailAdmitidoUsuarioGestor = ref(false)
 let descripcionUsuarioGestor = ref('')
 let usernameUsuarioGestor = ref('')
 let passwordUsuarioGestor = ref('')
-let cenad = ref({})
+let cenad = ref()
 
 onMounted(async () => {
     await getUsuariosGestor()
+    await cenadService.fetchAll()
 })
 const crearUsuarioGestor = async () => {
-    await service.crearUsuarioGestor(usernameUsuarioGestor.value, tfnoUsuarioGestor.value, emailUsuarioGestor.value, emailAdmitidoUsuarioGestor.value, descripcionUsuarioGestor.value, cenad.value)
+    await service.crearUsuarioGestor(usernameUsuarioGestor.value, passwordUsuarioGestor.value, tfnoUsuarioGestor.value, emailUsuarioGestor.value, emailAdmitidoUsuarioGestor.value, descripcionUsuarioGestor.value, cenad.value.idString)
     usernameUsuarioGestor.value = ''
+    passwordUsuarioGestor.value = ''
     tfnoUsuarioGestor.value = ''
     emailUsuarioGestor.value = ''
     emailAdmitidoUsuarioGestor.value = false

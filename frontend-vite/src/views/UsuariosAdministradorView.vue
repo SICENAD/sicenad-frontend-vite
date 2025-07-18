@@ -125,6 +125,7 @@ onMounted(async () => {
 const crearUsuarioAdministrador = async () => {
     await service.crearUsuarioAdministrador(usernameUsuarioAdministrador.value, passwordUsuarioAdministrador.value, tfnoUsuarioAdministrador.value, emailUsuarioAdministrador.value, emailAdmitidoUsuarioAdministrador.value, descripcionUsuarioAdministrador.value, cenad.value.idString)
     usernameUsuarioAdministrador.value = ''
+    passwordUsuarioAdministrador.value = ''
     tfnoUsuarioAdministrador.value = ''
     emailUsuarioAdministrador.value = ''
     emailAdmitidoUsuarioAdministrador.value = false

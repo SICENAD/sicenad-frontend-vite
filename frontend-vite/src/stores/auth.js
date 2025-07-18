@@ -30,11 +30,11 @@ const useAuthStore = defineStore('auth', {
         body: JSON.stringify({
           username: username,
           password: password,
-          email: email,
           tfno: tfno,
-          descripcion: descripcion,
+          email: email,
           emailAdmitido: emailAdmitido,
-          rol: rol, //pondremos solo superadministrador para que solo se pueda registrar estos usuarios. el resto se crearan desde la aplicacion
+          descripcion: descripcion,
+          rol: rol
         }),
       })
       if (rawResponse.status == 200) {

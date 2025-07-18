@@ -23,11 +23,11 @@ class AuthService {
     }
   }
 
-  async register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, unidad) {
+  async register(username, password, tfno, email, emailAdmitido, descripcion, rol) {
     const authStore = useAuthStore()
     try {
       let feedback = i18n.global.t('comun.enviando')
-      const response = await authStore.register(username, password, tfno, email, emailAdmitido, descripcion, rol, cenad, unidad)
+      const response = await authStore.register(username, password, tfno, email, emailAdmitido, descripcion, rol)
       if (response == true) {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
