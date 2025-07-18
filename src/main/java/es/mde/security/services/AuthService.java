@@ -5,7 +5,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import es.mde.security.auth.AuthResponse;
+import es.mde.security.auth.AuthResponseChangePassword;
+import es.mde.security.auth.AuthResponseLogin;
+import es.mde.security.auth.AuthResponseRegister;
 import es.mde.security.auth.ChangePasswordRequest;
 import es.mde.security.auth.LoginRequest;
 import es.mde.security.auth.RegisterRequest;
@@ -47,62 +49,54 @@ public class AuthService {
 		this.authenticationManager = authenticationManager;
 	}
 
-	public AuthResponse login(LoginRequest request) {
+	public AuthResponseLogin login(LoginRequest request) {
 		authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 		Usuario user = usuarioDAO.findByUsername(request.getUsername()).orElseThrow();
 		String token = jwtService.getToken(user);
 
-		AuthResponse authResponse = new AuthResponse(token, request.getUsername(), user.getRol());
+		AuthResponseLogin authResponse = new AuthResponseLogin(token, request.getUsername(), user.getRol());
 
 		return authResponse;
 	}
 
-	public AuthResponse register(RegisterRequest request) {
+	public AuthResponseRegister register(RegisterRequest request) {
 
 		if (request.getRol() == Rol.Superadministrador) {
 			UsuarioSuperadministrador usuario = new UsuarioSuperadministrador();
 			formarUsuario(usuario, request);
 			usuarioSuperadministradorDAO.save(usuario);
-			AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
-					usuario.getRol());
+			AuthResponseRegister authResponse = new AuthResponseRegister("Se ha registrado a " + usuario.getUsername(),usuario.getRol().toString());
 			return authResponse;
 		} else if (request.getRol() == Rol.Administrador) {
 			UsuarioAdministrador usuario = new UsuarioAdministrador();
 			formarUsuario(usuario, request);
-			usuario.setCenad(request.getCenad());
 			usuarioAdministradorDAO.save(usuario);
-			AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
-					usuario.getRol());
+			AuthResponseRegister authResponse = new AuthResponseRegister("Se ha registrado a " + usuario.getUsername(),usuario.getRol().toString());
 			return authResponse;
 		} else if (request.getRol() == Rol.Gestor) {
 			UsuarioGestor usuario = new UsuarioGestor();
 			formarUsuario(usuario, request);
-			usuario.setCenad(request.getCenad());
 			usuarioGestorDAO.save(usuario);
-			AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
-					usuario.getRol());
+			AuthResponseRegister authResponse = new AuthResponseRegister("Se ha registrado a " + usuario.getUsername(),usuario.getRol().toString());
 			return authResponse;
 		} else if (request.getRol() == Rol.Normal) {
 			UsuarioNormal usuario = new UsuarioNormal();
 			formarUsuario(usuario, request);
-			usuario.setUnidad(request.getUnidad());
 			usuarioNormalDAO.save(usuario);
-			AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
-					usuario.getRol());
+			AuthResponseRegister authResponse = new AuthResponseRegister("Se ha registrado a " + usuario.getUsername(),usuario.getRol().toString());
 			return authResponse;
 		}
 		return null;
 	}
 
-	public AuthResponse changePassword(ChangePasswordRequest request) {
+	public AuthResponseChangePassword changePassword(ChangePasswordRequest request) {
 
 		Usuario usuario = usuarioDAO.findByIdString(request.getIdUsuario());
 		usuario.setPassword(passwordEncoder.encode(request.getPassword()));
 		usuarioDAO.save(usuario);
 		
-		AuthResponse authResponse = new AuthResponse(jwtService.getToken(usuario), usuario.getUsername(),
-				usuario.getRol());
+		AuthResponseChangePassword authResponse = new AuthResponseChangePassword("Se ha cambiado el password a " + usuario.getUsername(),usuario.getRol().toString());
 		return authResponse;
 	}
 

@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import es.mde.security.auth.AuthResponse;
+import es.mde.security.auth.AuthResponseChangePassword;
+import es.mde.security.auth.AuthResponseLogin;
+import es.mde.security.auth.AuthResponseRegister;
 import es.mde.security.auth.ChangePasswordRequest;
 import es.mde.security.auth.LoginRequest;
 import es.mde.security.auth.RegisterRequest;
@@ -24,21 +26,21 @@ public class AuthController {
 
 	@PostMapping("/api/auth/login")
     @ResponseBody
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request)
+    public ResponseEntity<AuthResponseLogin> login(@RequestBody LoginRequest request)
     {
         return ResponseEntity.ok(authService.login(request));
     }
 
     @PostMapping("/api/auth/register")
     @ResponseBody
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request)
+    public ResponseEntity<AuthResponseRegister> register(@RequestBody RegisterRequest request)
     {
         return ResponseEntity.ok(authService.register(request));
     }
     
     @PostMapping("/api/auth/change-password")
     @ResponseBody
-    public ResponseEntity<AuthResponse> changePassword(@RequestBody ChangePasswordRequest request)
+    public ResponseEntity<AuthResponseChangePassword> changePassword(@RequestBody ChangePasswordRequest request)
     {
         return ResponseEntity.ok(authService.changePassword(request));
     }

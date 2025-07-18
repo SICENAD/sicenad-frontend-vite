@@ -2,16 +2,16 @@ package es.mde.security.auth;
 
 import es.mde.security.usuarios.Rol;
 
-public class AuthResponse {
+public class AuthResponseLogin {
 
 	private String token;
 	private String username;
 	private Rol rol;
 
-	public AuthResponse() {
+	public AuthResponseLogin() {
 	}
 
-	public AuthResponse(String token, String username, Rol rol) {
+	public AuthResponseLogin(String token, String username, Rol rol) {
 		this.token = token;
 		this.username = username;
 		this.rol = rol;
