@@ -36,20 +36,20 @@
                     <form>
                         <div class="mb-3">
                             <label for="username" class="form-label"><b>{{ $t('administracion.username')
-                                    }}</b></label>
+                            }}</b></label>
                             <input type="text" class="form-control" id="usernameUsuarioAdministrador"
                                 aria-describedby="usernameUsuarioAdministrador"
                                 v-model="usernameUsuarioAdministrador" />
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label"><b>{{ $t('administracion.password')
-                                    }}</b></label>
+                            }}</b></label>
                             <input type="password" class="form-control" id="passwordUsuarioAdministrador"
                                 v-model="passwordUsuarioAdministrador" />
                         </div>
                         <div class="mb-3">
                             <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno'))
-                                    }}</b></label>
+                            }}</b></label>
                             <input type="text" class="form-control" id="tfnoUsuarioAdministrador"
                                 v-model="tfnoUsuarioAdministrador" />
                         </div>
@@ -74,8 +74,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="titulo me-2"><b>CENAD<sup class="text-danger">*</sup></b></label>
-                            <select class="form-select" aria-label="cenadUsuarioAdministrador"
-                                v-model="cenad">
+                            <select class="form-select" aria-label="cenadUsuarioAdministrador" v-model="cenad">
                                 <option disabled value="">Selecciona el CENAD/CMT</option>
                                 <option v-for="cenad in cenadsUsuarioAdministrador" :key="cenad.idString"
                                     :value="cenad">
@@ -108,7 +107,7 @@ import CenadService from '@/services/CenadService'
 const cenadService = new CenadService()
 const service = new UsuarioService()
 let usuariosAdministrador = service.getUsuariosAdministrador()
-let cenadsUsuarioAdministrador = cenadService.getCenads()
+let cenadsUsuarioAdministrador = ref([])
 
 let tfnoUsuarioAdministrador = ref('')
 let emailUsuarioAdministrador = ref('')
@@ -120,7 +119,7 @@ let cenad = ref()
 
 onMounted(async () => {
     await getUsuariosAdministrador()
-    await cenadService.fetchAll()
+    cenadsUsuarioAdministrador.value = await cenadService.getCenadsSinAdmin()
 })
 const crearUsuarioAdministrador = async () => {
     await service.crearUsuarioAdministrador(usernameUsuarioAdministrador.value, passwordUsuarioAdministrador.value, tfnoUsuarioAdministrador.value, emailUsuarioAdministrador.value, emailAdmitidoUsuarioAdministrador.value, descripcionUsuarioAdministrador.value, cenad.value.idString)
@@ -138,6 +137,7 @@ const getUsuariosAdministrador = async () => {
 }
 async function actualizarUsuarioAdministradorEnView() {
     await getUsuariosAdministrador()
+    cenadsUsuarioAdministrador.value = await cenadService.getCenadsSinAdmin()
 }
 </script>
 <style scoped lang="scss">

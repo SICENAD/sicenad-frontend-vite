@@ -29,7 +29,8 @@
                     <RouterLink :to="{ name: 'tiposFormulario' }" class="link"><b>Tipos de Formulario</b></RouterLink>
                 </button>
                 <button class="btn categoriaFichero text-white me-2">
-                    <RouterLink :to="{ name: 'categoriasFichero' }" class="link"><b>Categorías de Ficheros</b></RouterLink>
+                    <RouterLink :to="{ name: 'categoriasFichero' }" class="link"><b>Categorías de Ficheros</b>
+                    </RouterLink>
                 </button>
                 <button class="btn arma text-white me-2">
                     <RouterLink :to="{ name: 'armas' }" class="link"><b>Armas</b></RouterLink>
@@ -114,7 +115,8 @@
                         <!-- Vista previa de la imagen -->
                         <div v-if="previewEscudo" style="margin-top: 10px;">
                             <label><b>Vista previa del escudo:</b></label><br />
-                            <img :src="previewEscudo" alt="Vista previa" style="max-height: 100px;" class="img-thumbnail" />
+                            <img :src="previewEscudo" alt="Vista previa" style="max-height: 100px;"
+                                class="img-thumbnail" />
                         </div>
                     </form>
                 </div>
@@ -153,14 +155,14 @@ const cenads = service.getCenads()
 
 
 function onFileChange(e) {
-  const file = e.target.files[0]
-  escudoFile.value = file
+    const file = e.target.files[0]
+    escudoFile.value = file
 
-  if (file) {
-    previewEscudo.value = URL.createObjectURL(file)
-  } else {
-    previewEscudo.value = null
-  }
+    if (file) {
+        previewEscudo.value = URL.createObjectURL(file)
+    } else {
+        previewEscudo.value = null
+    }
 }
 
 
@@ -177,8 +179,8 @@ const crearCenad = async () => {
     email.value = ''
     descripcion.value = ''
     escudoFile.value = ''
-    this.previewEscudo.value = null
     await getCenads()
+    this.previewEscudo.value = null
 }
 const getCenads = async () => {
     await service.fetchAll()

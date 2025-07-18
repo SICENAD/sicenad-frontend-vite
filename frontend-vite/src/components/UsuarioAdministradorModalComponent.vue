@@ -110,14 +110,21 @@ let idModal = 'modal-usuario-' + props.idUsuario
 let idModalEliminar = 'modal-usuario-eliminar' + props.idUsuario
 const service = new UsuarioService()
 const cenadService = new CenadService()
-let cenads = cenadService.getCenads()
-
-onMounted(async () => {
-  getCenads()
-})
-const getCenads = async () => {
-  await cenadService.fetchAll()
+const cenads = ref([])
+let getCenadsSinAdmin = async () => {
+  const cenadsSinAdmin = await cenadService.getCenadsSinAdmin()
+  // Incluye el CENAD actual solo si no está en la lista (por ID)
+  if (props.cenad && props.cenad.idString) {
+    const yaIncluido = cenadsSinAdmin.some(c => c.idString == props.cenad.idString)
+    if (!yaIncluido) {
+      cenadsSinAdmin.push(props.cenad)
+    }
+  }
+  cenads.value = cenadsSinAdmin
 }
+onMounted(async () => {
+  await getCenadsSinAdmin()
+})
 const editarUsuario = async () => {
   let cenad = null
   cenads.value.forEach(c => {

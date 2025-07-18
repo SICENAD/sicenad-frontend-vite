@@ -7,12 +7,14 @@ import { borrarArchivo, subirArchivo, toastExito, toTitleCase } from '@/utils'
 class CenadService {
   cenads
   cenad
+  administrador
   auth
   utils
 
   constructor() {
     this.cenads = ref([])
     this.cenad = ref()
+    this.administrador = ref()
     this.auth = useAuthStore()
     this.utils = useUtilsStore()
   }
@@ -161,6 +163,28 @@ class CenadService {
     const blob = await response.blob()
     const imageUrl = URL.createObjectURL(blob)
     return imageUrl // Lo usas como src en una <img>
+  }
+ async getCenadsSinAdmin() {
+    try {
+      const urlCenads = `${this.utils.urlApi}/cenads/sinAdmin?size=1000`
+      const response = await this.utils.fetchConToken(urlCenads, 'GET', null)
+      const json = await response.json()
+      this.cenads.value = await json._embedded.cenads
+      return response.status == 200 ? this.cenads.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ async getUsuarioAdministrador(idCenad) {
+    try {
+      const urlAdministrador = `${this.utils.urlApi}/cenads/${idCenad}/usuarioAdministrador`
+      const response = await this.utils.fetchConToken(urlAdministrador, 'GET', null)
+      const json = await response.json()
+      this.administrador.value = await json
+      return response.status == 200 ? this.administrador.value : null
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
