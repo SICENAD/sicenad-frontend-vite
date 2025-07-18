@@ -31,6 +31,7 @@ class UsuarioService {
     this.usuario_gestor = ref()
     this.usuario_normal = ref()
     this.usuarios = ref([])
+    this.usuario = ref()
     this.unidad = ref()
     this.cenad = ref()
     this.auth = useAuthStore()
@@ -312,7 +313,7 @@ class UsuarioService {
       if (response.status == 200) {
         toastExito(
           i18n.global.t('administracion.usuarioBorrado', {
-            usuario: `${toTitleCase(this.usuario.value.username)}`,
+            username: `${toTitleCase(this.usuario.value.username)}`,
           }),
         )
         return true

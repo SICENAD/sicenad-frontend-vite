@@ -90,7 +90,7 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref } from 'vue'
+import { watch, onMounted, ref } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UnidadService from '@/services/UnidadService'
 import { toTitleCase } from '@/utils'
@@ -102,7 +102,12 @@ let tfno = ref(props.tfno)
 let email = ref(props.email)
 let emailAdmitido = ref(props.emailAdmitido)
 let descripcion = ref(props.descripcion)
-let idUnidad = ref(props.unidad?.idString || '')
+const idUnidad = ref('')
+watch(() => props.unidad, (nuevaUnidad) => {
+  if (nuevaUnidad?.idString) {
+    idUnidad.value = nuevaUnidad.idString
+  }
+}, { immediate: true })
 let idUsuario = ref(props.idUsuario)
 let idModal = 'modal-usuario-' + props.idUsuario
 let idModalEliminar = 'modal-usuario-eliminar' + props.idUsuario

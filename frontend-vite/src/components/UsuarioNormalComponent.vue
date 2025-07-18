@@ -25,7 +25,8 @@ let unidad = ref()
 onMounted(async () => {
   unidad.value = await service.fetchUnidadDeUsuarioNormal(props.content.idString)
 })
-function actualizarUsuarioEnElemento() {
+async function actualizarUsuarioEnElemento() {
+  unidad.value = await service.fetchUnidadDeUsuarioNormal(props.content.idString)
   emits('emiteElemento')
 }
 </script>

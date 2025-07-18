@@ -23,7 +23,8 @@ let cenad = ref()
 onMounted(async () => {
   cenad.value = await service.fetchCenadDeUsuarioGestor(props.content.idString)
 })
-function actualizarUsuarioEnElemento() {
+async function actualizarUsuarioEnElemento() {
+  cenad.value = await service.fetchCenadDeUsuarioGestor(props.content.idString)
   emits('emiteElemento')
 }
 </script>
