@@ -73,11 +73,13 @@ const useAuthStore = defineStore('auth', {
       this.token = null
       this.username = null
       this.rol = null
-      this.cenads = null
-      this.categoriasFichero = null
-      this.tiposFormulario = null
-      this.unidades = null
-      this.armas = null
+      this.cenads = []
+      this.categoriasFichero = []
+      this.tiposFormulario = []
+      this.unidades = []
+      this.armas = []
+      this.cenad = null
+      this.unidad = null
     },
     async getDatosIniciales() {
       const utils = useUtilsStore()
@@ -118,8 +120,20 @@ const useAuthStore = defineStore('auth', {
           const idUsusario = respJson.idString
           const respCenad = await utils.fetchConToken(`${utils.urlApi}/usuarios_administrador/${idUsusario}/cenad`, 'GET', null)
           this.cenad = await respCenad.json()
-          console.log(this.cenad)
-
+        }
+        if (this.rol == 'Gestor') {
+          const respUsuario = await utils.fetchConToken(`${utils.urlApi}/usuarios_gestor/search/findByUsername?username=${this.username}`, 'GET', null)
+          const respJson = await respUsuario.json()
+          const idUsusario = respJson.idString
+          const respCenad = await utils.fetchConToken(`${utils.urlApi}/usuarios_gestor/${idUsusario}/cenad`, 'GET', null)
+          this.cenad = await respCenad.json()
+        }
+        if (this.rol == 'Normal') {
+          const respUsuario = await utils.fetchConToken(`${utils.urlApi}/usuarios_normal/search/findByUsername?username=${this.username}`, 'GET', null)
+          const respJson = await respUsuario.json()
+          const idUsusario = respJson.idString
+          const respUnidad = await utils.fetchConToken(`${utils.urlApi}/usuarios_normal/${idUsusario}/cenad`, 'GET', null)
+          this.unidad = await respUnidad.json()
         }
       } catch (err) {
         console.error('Error cargando datos estáticos:', err)

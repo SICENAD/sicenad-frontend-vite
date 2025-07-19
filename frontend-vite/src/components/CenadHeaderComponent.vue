@@ -154,13 +154,16 @@ const idCenad = computed(() => route.params.id)
 const cenad = computed(() =>
     auth.cenads.find(c => c.idString == idCenad.value) || { nombre: 'CENAD' }
 )
+const cenads = ref([]);
+const idCenadZaragoza = ref(null);
+
 const isSuperAdmin = ref(auth.rol == 'Superadministrador')
-const isCenadZaragoza = ref(true)
+let isCenadZaragoza = ref(false)
 const isAdminEsteCenad = ref(
     idCenad.value == auth.cenad.idString && auth.rol == 'Administrador'
 )
 const isGestorNormal = ref(
-    sessionStorage.isGestor === 'true' || sessionStorage.isNormal === 'true'
+    auth.rol == 'Gestor' || auth.rol == 'Normal'
 )
 
 const menuVisible = ref(false)
@@ -171,10 +174,75 @@ onMounted(async () => {
     console.log(idCenad.value)
     console.log(auth.cenad.idString)
     console.log(isAdminEsteCenad.value)
-
+    cargarCenads()
+    console.log(isCenadZaragoza.value)
+/*
+  if (!localStorage.getItem(`categorias_${this.idCenad}`)) {
+      this.categoriaService
+        .getCategoriasDeCenad(this.idCenad)
+        .subscribe((response) =>
+          localStorage.setItem(
+            `categorias_${this.idCenad}`,
+            JSON.stringify(this.categoriaService.extraerCategorias(response))
+          )
+        );
+    }
+    if (!localStorage.getItem(`categoriasPadre_${this.idCenad}`)) {
+      this.categoriaService
+        .getCategoriasPadreDeCenad(this.idCenad)
+        .subscribe((response) =>
+          localStorage.setItem(
+            `categoriasPadre_${this.idCenad}`,
+            JSON.stringify(this.categoriaService.extraerCategorias(response))
+          )
+        );
+    }
+    if (!localStorage.getItem(`recursos_${this.idCenad}`)) {
+      this.recursoService
+        .getRecursosDeCenad(this.idCenad)
+        .subscribe((response) =>
+          localStorage.setItem(
+            `recursos_${this.idCenad}`,
+            JSON.stringify(this.recursoService.extraerRecursos(response))
+          )
+        );
+    }
+    if(!localStorage.getItem(`usuariosGestor_${this.idCenad}`)) {
+      this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
+    }
+    if(!localStorage.getItem(`cartografias_${this.idCenad}`)) {
+      this.cartografiaService.getCartografiasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`cartografias_${this.idCenad}`, JSON.stringify(this.cartografiaService.extraerCartografias(response))));
+    }
+    if(!localStorage.getItem(`normativas_${this.idCenad}`)) {
+      this.normativaService.getNormativasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`normativas_${this.idCenad}`, JSON.stringify(this.normativaService.extraerNormativas(response))));
+    }
+  }
+*/
     // Aquí irían las llamadas a los servicios usando fetch o al store
     // Por ejemplo: fetchCenad(idCenad.value).then(...)
 })
+ // Función corregida
+function cargarCenads() {
+  cenads.value = auth.cenads;
+  buscarIdCenadZaragoza();
+  comprobarCenadZaragoza();
+}
+
+// Buscar CENAD Zaragoza
+function buscarIdCenadZaragoza() {
+  cenads.value.forEach(c => {
+    if (c.provincia == 50) {
+      idCenadZaragoza.value = c.idString;
+    }
+  });
+}
+
+// Comprobar si es Zaragoza
+function comprobarCenadZaragoza() {
+  if (idCenadZaragoza.value == idCenad.value) {
+    isCenadZaragoza.value = true;
+  }
+}
 </script>
 
 <style scoped>
