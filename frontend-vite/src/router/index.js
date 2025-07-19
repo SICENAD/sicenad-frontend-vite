@@ -4,7 +4,6 @@ import AdministracionView from '@/views/AdministracionView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import useAuthStore from '@/stores/auth'
 import i18n from '@/plugins/i18n'
-import HomeView2 from '@/views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +23,38 @@ const router = createRouter({
       meta: {
         requireAuth: false,
       },
+    },
+    {
+      path: '/cenad/:id',
+      name: 'cenad',
+      component: () => import('../views/CenadView.vue'),
+      meta: {
+        requireAuth: true,
+      },
+
+      children: [
+        {
+          path: '',
+          redirect: (to) => {
+            return {
+              name: 'cenad-home',
+              params: { id: to.params.id },
+            }
+          },
+        },
+        {
+          path: 'home',
+          name: 'cenad-home',
+          component: () => import('../components/CenadHomeComponent.vue'),
+        },
+        /*
+      ,
+      {
+        path: 'categorias',
+      component: () => import('../views/CategoriasComponent.vue'),
+      }
+      */
+      ],
     },
     {
       path: '/superadministrador',
