@@ -12,6 +12,8 @@ const useAuthStore = defineStore('auth', {
       tiposFormulario: [],
       unidades: [],
       armas: [],
+      cenad: null,
+      unidad: null
     }
   },
   getters: {},
@@ -109,6 +111,15 @@ const useAuthStore = defineStore('auth', {
         if (armasRes.ok) {
           jsonTemporal = await armasRes.json()
           this.armas = jsonTemporal._embedded.armas
+        }
+        if (this.rol == 'Administrador') {
+          const respUsuario = await utils.fetchConToken(`${utils.urlApi}/usuarios_administrador/search/findByUsername?username=${this.username}`, 'GET', null)
+          const respJson = await respUsuario.json()
+          const idUsusario = respJson.idString
+          const respCenad = await utils.fetchConToken(`${utils.urlApi}/usuarios_administrador/${idUsusario}/cenad`, 'GET', null)
+          this.cenad = await respCenad.json()
+          console.log(this.cenad)
+
         }
       } catch (err) {
         console.error('Error cargando datos estáticos:', err)

@@ -30,7 +30,25 @@ import {
   FaWindows,
   FaInstagram,
   FaTelegramPlane,
-  FaArrowAltCircleLeft
+  FaArrowAltCircleLeft,
+  FaBars,
+  FaBomb,
+  FaBusinessTime,
+  FaCalendarAlt,
+  FaCloudSun,
+  FaFire,
+  FaFolderOpen,
+  FaFolderPlus,
+  FaGlobe,
+  FaLink,
+  FaSearchLocation,
+  FaSitemap,
+  FaTree,
+  FaUsers,
+  FaEdge,
+  FaQuestionCircle,
+  FaMap,
+  FaSnowflake
 } from 'oh-vue-icons/icons'
 import useUtilsStore from './stores/utils'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -55,6 +73,7 @@ addIcons(
   GiDogHouse,
   GiPassport,
   FaUser,
+  FaUsers,
   FaUserCog,
   FaFacebook,
   FaGithub,
@@ -63,7 +82,25 @@ addIcons(
   FaWindows,
   FaInstagram,
   FaTelegramPlane,
-  FaArrowAltCircleLeft
+  FaArrowAltCircleLeft, 
+  FaBars,
+  FaBomb,
+  FaBusinessTime,
+  FaCalendarAlt,
+  FaCloudSun,
+  FaFire,
+  FaFolderOpen,
+  FaFolderPlus,
+  FaGlobe,
+  FaLink,
+  FaSearchLocation, 
+  FaSitemap,
+  FaTree,
+  FaEdge,
+  FaQuestionCircle,
+  FaMap,
+  FaSnowflake,
+  FaSitemap
 )
 //para facilitar la importacion de las opciones
 const app = createApp(App)
