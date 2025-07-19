@@ -62,6 +62,7 @@ const router = createRouter({
       component: () => import('../views/SuperadministradorView.vue'),
       meta: {
         requireAuth: true,
+        roles: ['Superadministrador']
       },
     },
     {
@@ -171,17 +172,26 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
   const isAuth = auth.token != null
-  const isAdmin = auth.isAdmin
   const needAuth = to.meta.requireAuth
-  const needAdmin = to.meta.rol == 'Superadministrador'
+
+    // Inicializar si aún no lo hiciste
+  if (auth.token && !auth.username) {
+    const res =await auth.init()  // Validar token y obtener datos si falta
+    if (!res.ok || !res) {
+      auth.logout()
+      next({name: 'login'})
+      alert('Tu sesión ha caducado y debes volver a iniciar sesión')
+    }
+  }
+
 
   if (needAuth && !isAuth) {
     next({ name: 'login' })
     alert(i18n.global.t('comun.debeLog'))
-  } else if (!isAdmin && needAdmin) {
+  } else if (to.meta.roles && !to.meta.roles.includes(auth.rol)) {
     next(from)
     alert(i18n.global.t('comun.debeAdmin'))
   } else {

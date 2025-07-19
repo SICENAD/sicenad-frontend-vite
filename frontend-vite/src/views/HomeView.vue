@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row m-2">
             <div class="col col-md-2 p-4">
-                <a @click="actualizarLocalStorage">
+                <a @click="actualizarSessionStorage">
                     <img class="madoc" width="80" height="110" alt="MADOC" src="/img/madoc.png" />
                 </a>
             </div>
@@ -65,13 +65,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import ResultadoCenadsProvinciaComponent from '@/components/ResultadoCenadsProvinciaComponent.vue'
 import useUtilsStore from '@/stores/utils'
-import CenadService from '@/services/CenadService'
+import useAuthStore from '@/stores/auth'
 
 const utils = useUtilsStore()
-const cenadService = new CenadService()
 const provinciasMap = ref([
     {
         id: 15,
@@ -546,7 +545,7 @@ const provinciasMap = ref([
 // Estado
 const provincias = ref([])
 provincias.value = utils.provincias
-let cenads = cenadService.getCenads()
+const cenads = ref(useAuthStore().cenads)
 const cenadsFiltro = ref([])
 const idProvinciaSeleccionada = ref(null)
 const provinciaSeleccionada = ref('')
@@ -554,8 +553,8 @@ const inicio = ref(true)
 const mapaSrc = ref('/img/transparente.png')
 
 // Métodos
-function actualizarLocalStorage() {
-    localStorage.clear()
+function actualizarSessionStorage() {
+    sessionStorage.clear()
 }
 
 function respuesta(id) {
@@ -565,13 +564,6 @@ function respuesta(id) {
   cenadsFiltro.value = cenads.value.filter(c => c.provincia === +id)
   inicio.value = false
 }
-const getCenads = async () => {
-    await cenadService.fetchAll()
-}
-// Cargar datos con fetch
-onMounted(async () => {
-    await getCenads()
-})
 </script>
 
 <style scoped>

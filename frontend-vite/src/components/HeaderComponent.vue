@@ -18,16 +18,16 @@
         </ul>
       </span>
     </span>
-    <p v-if="authStore.token == null" class="alert alert-danger">
+    <p v-if="authStore.token" class="alert alert-success">
+      {{ authStore.username }}
+      {{ $t('comun.usuarioIdentificado') }} {{ authStore.rol }}
+      <button class="btn btn-success ml-3" @click="logout">{{ $t('comun.cerrarSesion') }}</button>
+    </p>
+    <p v-else class="alert alert-danger">
       {{ $t('comun.usuarioNoIdentificado') }}
       <RouterLink :to="{ name: 'login' }">
         <button class="btn btn-danger ml-2">{{ $t('comun.iniciarSesion') }}</button>
       </RouterLink>
-    </p>
-    <p v-if="authStore.token != null" class="alert alert-success">
-      {{ authStore.username }}
-      {{ $t('comun.usuarioIdentificado') }} {{ authStore.rol }}
-      <button class="btn btn-success ml-3" @click="logout">{{ $t('comun.cerrarSesion') }}</button>
     </p>
   </header>
 </template>
@@ -184,7 +184,7 @@ header {
 }
 
 .logueado {
-  color:darkgrey;
+  color: darkgrey;
 }
 
 .btn {
