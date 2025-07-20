@@ -147,7 +147,7 @@ const urlEscudoActual = ref('')
 onMounted(async () => {
   if (escudoActual.value) {
     try {
-      urlEscudoActual.value = await service.fetchEscudo(escudoActual.value)
+      urlEscudoActual.value = await service.fetchEscudo(escudoActual.value, idCenad.value)
     } catch (error) {
       console.error('Error cargando escudo:', error)
       urlEscudoActual.value = '' // para evitar mostrar URL rota
@@ -212,7 +212,7 @@ const editarCenad = async () => {
 
     // Volver a cargar la URL del escudo actualizado para mostrar preview
     try {
-      urlEscudoActual.value = await service.fetchEscudo(escudoActual.value)
+      urlEscudoActual.value = await service.fetchEscudo(escudoActual.value, idCenad.value)
     } catch (e) {
       urlEscudoActual.value = ''
     }

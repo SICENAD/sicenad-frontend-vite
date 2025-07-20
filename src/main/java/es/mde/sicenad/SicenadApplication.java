@@ -6,7 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import es.mde.rest.ConfiguracionRest;
 
 /**
@@ -29,5 +28,6 @@ public class SicenadApplication {
 		
 		System.err.println("Está funcionando la aplicación SICENAD");
 		log.debug("Está funcionando la aplicación SICENAD");
-	}
+
+		}
 }

@@ -81,7 +81,7 @@ async function cargarCenad() {
   const response = await service.fetchCenad(idCenad.value)
   cenad.value = response
   escudoCenad.value = cenad.value.escudo
-  pathImg.value = await service.fetchEscudo(escudoCenad.value)
+  pathImg.value = await service.fetchEscudo(escudoCenad.value, idCenad.value)
 }
 
 onMounted(async () => {

@@ -23,38 +23,34 @@ public interface FileServiceAPI {
 	 * @param file Archivo de imagen del escudo
 	 * @throws Exception
 	 */
-	public String saveEscudo(MultipartFile file) throws Exception;
+	public String saveEscudo(MultipartFile file, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar un escudo
 	 * 
 	 * @param name Nombre del archivo de imagen del escudo
+	 * @param id   Id del cenad
 	 * @throws Exception
 	 */
-	public String borrarEscudo(String name) throws Exception;
+	public String borrarEscudo(String name, String id) throws Exception;
+
+	/**
+	 * Metodo para borrar la carpeta de escudos de un CENAD
+	 * 
+	 * @param id   Id del cenad
+	 * @throws Exception
+	 */
+	public String borrarCarpetaEscudo(String id) throws Exception;
+
 
 	/**
 	 * Metodo para cargar un escudo
 	 * 
 	 * @param name Nombre del archivo de imagen del escudo
+	 * @param id   Id del cenad
 	 * @throws Exception
 	 */
-	public Resource loadEscudo(String name) throws Exception;
-
-	/**
-	 * Metodo para guardar varios escudos
-	 * 
-	 * @param filse Nombre de la lista de archivos de imagen de escudos
-	 * @throws Exception
-	 */
-	public String saveEscudos(List<MultipartFile> files) throws Exception;
-
-	/**
-	 * Metodo para cargar varios escudos
-	 * 
-	 * @throws Exception
-	 */
-	public Stream<Path> loadAllEscudos() throws Exception;
+	public Resource loadEscudo(String name, String id) throws Exception;
 
 	// *********************************************************
 	// Métodos para tratar los ficheros asociados a los recursos
@@ -64,61 +60,60 @@ public interface FileServiceAPI {
 	 * Metodo para guardar un archivo de un recurso
 	 * 
 	 * @param file Archivo a subir
+	 * @param idCenad   Id del cenad
 	 * @param id   Id del recurso
 	 * @throws Exception
 	 */
-	public String saveDocRecurso(MultipartFile file, String id) throws Exception;
+	public String saveDocRecurso(MultipartFile file, String idCenad, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar un archivo de un recurso
 	 * 
 	 * @param name Nombre del archivo
+	 * @param idCenad   Id del cenad
 	 * @param id   Id del recurso
 	 * @throws Exception
 	 */
-	public String borrarDocRecurso(String name, String id) throws Exception;
+	public String borrarDocRecurso(String name, String idCenad, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar la carpeta de un recurso
 	 * 
-	 * @param id Id del recurso
-	 * @throws Exception
-	 */
-	public String borrarCarpetaDocRecurso(String id) throws Exception;
-
-	/**
-	 * Metodo para cargar un archivo de un recurso
-	 * 
-	 * @param name Nombre del archivo
+	 * @param idCenad   Id del cenad
 	 * @param id   Id del recurso
 	 * @throws Exception
 	 */
-	public Resource loadDocRecurso(String name, String id) throws Exception;
+	public String borrarCarpetaDocRecurso(String idCenad, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar un archivo de un recurso
 	 * 
 	 * @param name Nombre del archivo
+	 * @param idCenad   Id del cenad
+	 * @param id   Id del recurso
 	 * @throws Exception
 	 */
-	public Resource loadDocRecurso(String name) throws Exception;
+	public Resource loadDocRecurso(String name, String idCenad, String id) throws Exception;
+
 
 	/**
 	 * Metodo para guardar varios archivos de un recurso
 	 * 
 	 * @param files Lista de archivos a subir
-	 * @param id    Id del recurso
+	 * @param idCenad   Id del cenad
+	 * @param id   Id del recurso	 
 	 * @throws Exception
 	 */
-	public String saveDocRecursos(List<MultipartFile> files, String id) throws Exception;
+	public String saveDocRecursos(List<MultipartFile> files, String idCenad, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar varios archivos de un recurso
 	 * 
-	 * @param id Id del recurso
+	 * @param idCenad   Id del cenad
+	 * @param id   Id del recurso
 	 * @throws Exception
 	 */
-	public Stream<Path> loadAllDocRecursos(String id) throws Exception;
+	public Stream<Path> loadAllDocRecursos(String idCenad, String id) throws Exception;
 
 	// ************************************************************
 	// Métodos para tratar los ficheros asociados a las solicitudes
@@ -131,58 +126,56 @@ public interface FileServiceAPI {
 	 * @param id   Id de la solicitud
 	 * @throws Exception
 	 */
-	public String saveDocSolicitud(MultipartFile file, String id) throws Exception;
+	public String saveDocSolicitud(MultipartFile file, String idCenad, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar un archivo de una solicitud
 	 * 
 	 * @param name Nombre del archivo
+	 * @param idCenad   Id del cenad
 	 * @param id   Id de la solicitud
 	 * @throws Exception
 	 */
-	public String borrarDocSolicitud(String name, String id) throws Exception;
+	public String borrarDocSolicitud(String name, String idCenad, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar la carpeta de una solicitud
 	 * 
-	 * @param id Id de la solicitud
-	 * @throws Exception
-	 */
-	public String borrarCarpetaDocSolicitud(String id) throws Exception;
-
-	/**
-	 * Metodo para cargar un archivo de una solicitud
-	 * 
-	 * @param name Nombre del archivo
+	 * @param idCenad   Id del cenad
 	 * @param id   Id de la solicitud
 	 * @throws Exception
 	 */
-	public Resource loadDocSolicitud(String name, String id) throws Exception;
+	public String borrarCarpetaDocSolicitud(String idCenad, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar un archivo de una solicitud
 	 * 
 	 * @param name Nombre del archivo
+	 * @param idCenad   Id del cenad
+	 * @param id   Id de la solicitud
 	 * @throws Exception
 	 */
-	public Resource loadDocSolicitud(String name) throws Exception;
+	public Resource loadDocSolicitud(String name, String idCenad, String id) throws Exception;
+
 
 	/**
 	 * Metodo para guardar varios archivos de una solicitud
 	 * 
 	 * @param files Lista de archivos a subir
-	 * @param id    Id de la solicitud
+	 * @param idCenad   Id del cenad
+	 * @param id   Id de la solicitud
 	 * @throws Exception
 	 */
-	public String saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception;
+	public String saveDocSolicitudes(List<MultipartFile> files, String idCenad, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar varios archivos de una solicitud
 	 * 
-	 * @param id Id de la solicitud
+	 * @param idCenad   Id del cenad
+	 * @param id   Id de la solicitud
 	 * @throws Exception
 	 */
-	public Stream<Path> loadAllDocSolicitudes(String id) throws Exception;
+	public Stream<Path> loadAllDocSolicitudes(String idCenad, String id) throws Exception;
 
 	// *******************************
 	// Métodos para tratar las cartografías
@@ -222,14 +215,6 @@ public interface FileServiceAPI {
 	 * @throws Exception
 	 */
 	public Resource loadCartografia(String name, String id) throws Exception;
-
-	/**
-	 * Metodo para cargar un archivo de un conjunto cartografico
-	 * 
-	 * @param name Nombre del archivo
-	 * @throws Exception
-	 */
-	public Resource loadCartografia(String name) throws Exception;
 
 	/**
 	 * Metodo para guardar varios archivos de un conjunto cartografico
@@ -288,14 +273,6 @@ public interface FileServiceAPI {
 	public Resource loadNormativa(String name, String id) throws Exception;
 
 	/**
-	 * Metodo para cargar un archivo de normativa
-	 * 
-	 * @param name Nombre del archivo
-	 * @throws Exception
-	 */
-	public Resource loadNormativa(String name) throws Exception;
-
-	/**
 	 * Metodo para guardar varios archivos de normativa
 	 * 
 	 * @param files Lista de archivos a subir
@@ -350,14 +327,6 @@ public interface FileServiceAPI {
 	 * @throws Exception
 	 */
 	public Resource loadInfoCenad(String name, String id) throws Exception;
-
-	/**
-	 * Metodo para cargar un archivo de información del CENAD
-	 * 
-	 * @param name Nombre del archivo
-	 * @throws Exception
-	 */
-	public Resource loadInfoCenad(String name) throws Exception;
 
 	/**
 	 * Metodo para guardar varios archivos de información del CENAD

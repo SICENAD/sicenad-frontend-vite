@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import useAuthStore from '@/stores/auth'
 import useUtilsStore from '@/stores/utils'
 import i18n from '@/plugins/i18n'
-import { borrarArchivo, subirArchivo, toastExito, toTitleCase } from '@/utils'
+import { borrarArchivo, borrarCarpeta, subirArchivo, toastExito, toTitleCase } from '@/utils'
 
 class CenadService {
   cenads
@@ -37,21 +37,26 @@ class CenadService {
   }
   async crearCenad(nombre, provincia, direccion, tfno, email, descripcion, archivoEscudo) {
     try {
-      let escudo = null
-      if (archivoEscudo) {
-        const urlUpload = `${this.utils.urlApi}/files/subirEscudo`
-        escudo = await subirArchivo(archivoEscudo, urlUpload)
-        if (escudo == false) return false
-      }
+
       const urlCenads = `${this.utils.urlApi}/cenads`
-      const response = await this.utils.fetchConToken(urlCenads, 'POST', {
+      const responseCrearCenadSinEscudo = await this.utils.fetchConToken(urlCenads, 'POST', {
         nombre: nombre.toUpperCase(),
         provincia: provincia,
         direccion: toTitleCase(direccion),
         tfno: tfno,
         email: email,
-        descripcion: descripcion,
-        escudo: escudo,
+        descripcion: descripcion
+      })
+      let responseSinEscudoJson = await responseCrearCenadSinEscudo.json()
+      let idCenad = responseSinEscudoJson.idString
+      let escudo = null
+      if (archivoEscudo) {
+        const urlUpload = `${this.utils.urlApi}/files/${idCenad}/subirEscudo`
+        escudo = await subirArchivo(archivoEscudo, urlUpload)
+        if (escudo == false) return false
+      }
+        const response = await this.utils.fetchConToken(urlCenads, 'PATCH', {
+        escudo: escudo
       })
       if (response.status == 201) {
         i18n.global.t('comun.enviando')
@@ -80,10 +85,10 @@ class CenadService {
   ) {
     let escudo = escudoActual // por defecto mantenemos el actual
     if (archivoEscudo) {
-      const urlUpload = `${this.utils.urlApi}/files/subirEscudo`
+      const urlUpload = `${this.utils.urlApi}/files/${idCenad}/subirEscudo`
       const nuevoEscudo = await subirArchivo(archivoEscudo, urlUpload)
       if (nuevoEscudo == false) return null
-      const urlBorrarArchivo = `${this.utils.urlApi}/files/borrarEscudo/${escudo}`
+      const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarEscudo/${escudo}`
       const responseDeleteEscudo = await borrarArchivo(urlBorrarArchivo)
       console.log(responseDeleteEscudo)
       escudo = nuevoEscudo
@@ -128,10 +133,10 @@ class CenadService {
   ) {
     let infocenad = infoCenadActual // por defecto mantenemos el actual
     if (archivoInfoCenad) {
-      const urlUpload = `${this.utils.urlApi}/files/subirInfoCenad/${idCenad}`
+      const urlUpload = `${this.utils.urlApi}/files/${idCenad}/subirInfoCenad`
       const nuevaInfoCenad = await subirArchivo(archivoInfoCenad, urlUpload)
       if (nuevaInfoCenad == false) return null
-      const urlBorrarArchivo = `${this.utils.urlApi}/files/borrarInfoCenad/${idCenad}/${infocenad}`
+      const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarInfoCenad/${infocenad}`
       infocenad != null && infocenad != '' && (await borrarArchivo(urlBorrarArchivo))
       infocenad = nuevaInfoCenad
       console.log(nuevaInfoCenad)
@@ -180,11 +185,10 @@ class CenadService {
   async deleteCenad(idCenad) {
     try {
       const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
-      const cenad = await this.fetchCenad(idCenad)
-      const urlArchivo = `${this.utils.urlApi}/files/borrarEscudo/${cenad.escudo}`
-      const responseDeleteEscudo = await borrarArchivo(urlArchivo)
-      const urlCarpeta = `${this.utils.urlApi}/files/borrarCarpetaInfoCenad/${idCenad}`
-      const responseDeleteInfoCenad = await borrarArchivo(urlCarpeta)
+      const urlCarpetaEscudo = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaEscudo`
+      const responseDeleteEscudo = await borrarCarpeta(urlCarpetaEscudo)
+      const urlCarpetaInfo = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaInfoCenad`
+      const responseDeleteInfoCenad = await borrarCarpeta(urlCarpetaInfo)
       console.log(responseDeleteEscudo)
       console.log(responseDeleteInfoCenad)
       const response = await this.utils.fetchConToken(urlCenad, 'DELETE', null)
@@ -203,8 +207,8 @@ class CenadService {
     }
   }
 
-  async fetchEscudo(filename) {
-    const response = await fetch(`${this.utils.urlApi}/files/escudos/${filename}`, {
+  async fetchEscudo(filename, idCenad) {
+    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/escudo/${filename}`, {
       headers: {
         Authorization: `Bearer ${this.auth.token}`,
       },
@@ -217,7 +221,7 @@ class CenadService {
     return imageUrl // Lo usas como src en una <img>
   }
   async fetchInfoCenad(filename, idCenad) {
-    const response = await fetch(`${this.utils.urlApi}/files/infoCenads/${idCenad}/${filename}`, {
+    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/infoCenads/${filename}`, {
       headers: {
         Authorization: `Bearer ${this.auth.token}`,
       },

@@ -82,6 +82,11 @@ public class ConfiguracionPorJava {
 		return emf.createEntityManager();
 	}
 	
+	@Value("${ruta.comun}")
+	private String rutaComun;
+	
+	@Value("${ruta.cenad}")
+	private String rutaCenad;
 	
 	@Value("${ruta.escudos}")
 	private String rutaEscudos;
@@ -118,6 +123,25 @@ public class ConfiguracionPorJava {
 
 	@Value("${miAllowedOriginProduccion}")
 	private String allowedOriginProduccion;
+	
+	/**
+	 * Devuelve la ruta común donde se guardarán los archivos
+	 * @return Devuelve la ruta común donde se guardarán los archivos
+	 */
+	@Bean("rutaComun")
+	public String getRutaComun() {
+
+		return rutaComun;
+	}
+	
+	/**
+	 * Devuelve la parte de la ruta por cenad
+	 * @return Devuelve la parte de la ruta por cenad
+	 */
+	@Bean("rutaCenad")
+	public String getRutaCenad() {
+		return rutaCenad;
+	}
 	/**
 	 * Devuelve la ruta donde se guardarán los escudos
 	 * @return Devuelve la ruta donde se guardarán los escudos

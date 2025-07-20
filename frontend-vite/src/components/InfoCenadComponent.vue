@@ -134,7 +134,7 @@ let direccion = ref('')
 let tfno = ref('')
 let email = ref('')
 let descripcion = ref('')
-
+let sizeMaxEscudo = ref(utils.sizeMaxEscudo)
 const inputFile = ref(null)
 
 const archivoInfoCenad = ref(null)
@@ -142,15 +142,19 @@ const infoCenadActual = ref(auth.cenad.infoCenad)
 const urlInfoCenadActual = ref('')
 const pathRelativo = ref('')
 const pathImg = ref('')
-pathRelativo.value = `${utils.urlApi}/files/infoCenads/${idCenad.value}`
+pathRelativo.value = `${utils.urlApi}/files/${idCenad.value}/infoCenads`
 
 
 const isAdminEsteCenad = ref(false)
 const cambioBoton = ref(false)
-const rol = ref('Previa')
+const rol = ref('Administrador')
 onMounted(async () => {
     await cargarCenad()
-    isAdminEsteCenad.value = idCenad.value == auth.cenad.idString && auth.rol == 'Administrador'
+    if (idCenad.value == auth.cenad.idString && auth.rol == 'Administrador') {
+        isAdminEsteCenad.value = true
+    } else {
+        isAdminEsteCenad.value = false
+    }
     if (infoCenadActual.value) {
         try {
             urlInfoCenadActual.value = await service.fetchInfoCenad(infoCenadActual.value, idCenad.value)
@@ -172,7 +176,11 @@ async function cargarCenad() {
     cenad.value.infoCenad != null && cenad.value.infoCenad != '' && (pathImg.value = await service.fetchInfoCenad(cenad.value.infoCenad, cenad.value.idString))
 }
 function cambiaRol() {
-    cambioBoton.value = cambioBoton.value ? false : true
+    if (cambioBoton.value) {
+        cambioBoton.value = false
+    } else {
+        cambioBoton.value = true
+    }
     rol.value = cambioBoton.value ? 'Previa' : 'Administrador'
 }
 // Para preview de archivo seleccionado nuevo

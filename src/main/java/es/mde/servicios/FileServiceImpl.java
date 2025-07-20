@@ -25,16 +25,24 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class FileServiceImpl implements FileServiceAPI {
-	private static String rutaEscudos = "archivos/escudos";
-	private static String rutaDocRecursos = "archivos/docRecursos";
-	private static String rutaDocSolicitudes = "archivos/docSolicitudes";
-	private static String rutaCartografias = "archivos/cartografias";
-	private static String rutaNormativas = "archivos/normativas";
-	private static String rutaInfoCenads = "archivos/infoCenads";
+
+	private final Path comunFolder;
+	private final Path cenadFolder;
+	private final Path escudosFolder;
+	private final Path docSolicitudesFolder;
+	private final Path docRecursosFolder;
+	private final Path cartografiasFolder;
+	private final Path normativasFolder;
+	private final Path infoCenadsFolder;
 
 	/**
 	 * Me permite inyectar valores desde el archivo properties para poder modificar
 	 * estos valores sin necesidad de tocar codigo
+	 * 
+	 * @param rutaComun          Define la ruta común donde se guardarán los
+	 *                           archivos
+	 * 
+	 * @param rutaCenad          Define la ruta común por CENAD
 	 * 
 	 * @param rutaEscudos        Define la ruta donde se guardaran los escudos de
 	 *                           los CENAD,s/CMT,s
@@ -50,25 +58,20 @@ public class FileServiceImpl implements FileServiceAPI {
 	 *                           infoCenads
 	 */
 	@Autowired
-	public FileServiceImpl(@Qualifier("rutaEscudos") String rutaEscudos,
-			@Qualifier("rutaDocRecursos") String rutaDocRecursos,
+	public FileServiceImpl(@Qualifier("rutaComun") String rutaComun, @Qualifier("rutaCenad") String rutaCenad,
+			@Qualifier("rutaEscudos") String rutaEscudos, @Qualifier("rutaDocRecursos") String rutaDocRecursos,
 			@Qualifier("rutaDocSolicitudes") String rutaDocSolicitudes,
 			@Qualifier("rutaCartografias") String rutaCartografias, @Qualifier("rutaInfoCenads") String rutaInfoCenads,
 			@Qualifier("rutaNormativas") String rutaNormativas) {
-		FileServiceImpl.rutaEscudos = rutaEscudos;
-		FileServiceImpl.rutaDocRecursos = rutaDocRecursos;
-		FileServiceImpl.rutaDocSolicitudes = rutaDocSolicitudes;
-		FileServiceImpl.rutaCartografias = rutaCartografias;
-		FileServiceImpl.rutaNormativas = rutaNormativas;
-		FileServiceImpl.rutaInfoCenads = rutaInfoCenads;
+		this.comunFolder = Paths.get(rutaComun);
+		this.cenadFolder = Paths.get(rutaCenad);
+		this.escudosFolder = Paths.get(rutaEscudos);
+		this.docRecursosFolder = Paths.get(rutaDocRecursos);
+		this.docSolicitudesFolder = Paths.get(rutaDocSolicitudes);
+		this.cartografiasFolder = Paths.get(rutaCartografias);
+		this.normativasFolder = Paths.get(rutaNormativas);
+		this.infoCenadsFolder = Paths.get(rutaInfoCenads);
 	}
-
-	private final Path escudosFolder = Paths.get(rutaEscudos);
-	private final Path docSolicitudesFolder = Paths.get(rutaDocSolicitudes);
-	private final Path docRecursosFolder = Paths.get(rutaDocRecursos);
-	private final Path cartografiasFolder = Paths.get(rutaCartografias);
-	private final Path normativasFolder = Paths.get(rutaNormativas);
-	private final Path infoCenadsFolder = Paths.get(rutaInfoCenads);
 
 	// *******************************
 	// Métodos para tratar los escudos
@@ -78,10 +81,12 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para almacenar un escudo
 	 */
 	@Override
-	public String saveEscudo(MultipartFile file) throws Exception {
-		Files.createDirectories(escudosFolder);
+	public String saveEscudo(MultipartFile file, String id) throws Exception {
+		Path escudosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				escudosFolder.toString());
+		Files.createDirectories(escudosFolder2);
 
-		Path destino = this.escudosFolder.resolve(file.getOriginalFilename());
+		Path destino = escudosFolder2.resolve(file.getOriginalFilename());
 
 		// Sobrescribe si el archivo ya existe
 		Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
@@ -93,12 +98,13 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para borrar un escudo
 	 */
 	@Override
-	public String borrarEscudo(String name) throws Exception {
+	public String borrarEscudo(String name, String id) throws Exception {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
 		}
-
-		Path file = escudosFolder.resolve(name);
+		Path escudosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				escudosFolder.toString());
+		Path file = escudosFolder2.resolve(name);
 		String nombreArchivo = file.getFileName().toString();
 
 		boolean borrado = Files.deleteIfExists(file);
@@ -110,35 +116,27 @@ public class FileServiceImpl implements FileServiceAPI {
 	}
 
 	/**
+	 * Metodo para borrar la carpeta de escudo de un CENAD
+	 */
+	@Override
+	public String borrarCarpetaEscudo(String id) throws Exception {
+		String carpetaBorrada = "Se ha borrado la carpeta de Escudo del CENAD " + id;
+		Path escudosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id);
+		Path carpeta = escudosFolder2.resolve(escudosFolder);
+		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		return carpetaBorrada;
+	}
+		
+	/**
 	 * Metodo para cargar un escudo
 	 */
 	@Override
-	public Resource loadEscudo(String name) throws Exception {
-		Path file = escudosFolder.resolve(name);
+	public Resource loadEscudo(String name, String id) throws Exception {
+		Path escudosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				escudosFolder.toString());
+		Path file = escudosFolder2.resolve(name);
 		Resource resource = new UrlResource(file.toUri());
 		return resource;
-	}
-
-	/**
-	 * Metodo para almacenar varios escudos (en la actualidad no se emplea)
-	 */
-	@Override
-	public String saveEscudos(List<MultipartFile> files) throws Exception {
-		Files.createDirectories(escudosFolder);
-		String[] nombresArchivos = new String[files.size()];
-		for (int i = 0; i < files.size(); i++) {
-			this.saveEscudo(files.get(i));
-			nombresArchivos[i] = files.get(i).getOriginalFilename();
-		}
-		return Arrays.toString(nombresArchivos);
-	}
-
-	/**
-	 * Metodo para cargar todos los escudos
-	 */
-	@Override
-	public Stream<Path> loadAllEscudos() throws Exception {
-		return Files.walk(escudosFolder, 1).filter(path -> !path.equals(escudosFolder)).map(escudosFolder::relativize);
 	}
 
 	// *********************************************************
@@ -149,8 +147,9 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para guardar el archivo de un recurso
 	 */
 	@Override
-	public String saveDocRecurso(MultipartFile file, String id) throws Exception {
-		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+	public String saveDocRecurso(MultipartFile file, String idCenad, String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docRecursosFolder.toString(), id);
 		Files.createDirectories(docRecursosFolder2);
 		Path destino = docRecursosFolder2.resolve(file.getOriginalFilename());
 		// Sobrescribe si el archivo ya existe
@@ -162,11 +161,12 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para borrar el archivo de un recurso
 	 */
 	@Override
-	public String borrarDocRecurso(String name, String id) throws Exception {
+	public String borrarDocRecurso(String name, String idCenad, String id) throws Exception {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
 		}
-		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+		Path docRecursosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docRecursosFolder.toString(), id);
 		Path file = docRecursosFolder2.resolve(name);
 		String nombreArchivo = file.getFileName().toString();
 
@@ -181,9 +181,11 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para borrar la carpeta de un recurso
 	 */
 	@Override
-	public String borrarCarpetaDocRecurso(String id) throws Exception {
+	public String borrarCarpetaDocRecurso(String idCenad, String id) throws Exception {
 		String carpetaBorrada = "Se ha borrado la carpeta de Documentos de Recursos " + id;
-		Path carpeta = docRecursosFolder.resolve(id);
+		Path docRecursosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docRecursosFolder.toString());
+		Path carpeta = docRecursosFolder2.resolve(id);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
 		return carpetaBorrada;
 	}
@@ -192,19 +194,10 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para cargar el archivo de un recurso
 	 */
 	@Override
-	public Resource loadDocRecurso(String name, String id) throws Exception {
-		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+	public Resource loadDocRecurso(String name, String idCenad, String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docRecursosFolder.toString(), id);
 		Path file = docRecursosFolder2.resolve(name);
-		Resource resource = new UrlResource(file.toUri());
-		return resource;
-	}
-
-	/**
-	 * Metodo para cargar el archivo de un recurso
-	 */
-	@Override
-	public Resource loadDocRecurso(String name) throws Exception {
-		Path file = docRecursosFolder.resolve(name);
 		Resource resource = new UrlResource(file.toUri());
 		return resource;
 	}
@@ -214,12 +207,13 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * añadir observaciones individuales a cada fichero)
 	 */
 	@Override
-	public String saveDocRecursos(List<MultipartFile> files, String id) throws Exception {
-		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+	public String saveDocRecursos(List<MultipartFile> files, String idCenad, String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docRecursosFolder.toString(), id);
 		Files.createDirectories(docRecursosFolder2);
 		String[] nombresArchivos = new String[files.size()];
 		for (int i = 0; i < files.size(); i++) {
-			this.saveDocRecurso(files.get(i), id);
+			this.saveDocRecurso(files.get(i), idCenad, id);
 			nombresArchivos[i] = files.get(i).getOriginalFilename();
 		}
 		return Arrays.toString(nombresArchivos);
@@ -229,8 +223,9 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para cargar los archivos de un recurso
 	 */
 	@Override
-	public Stream<Path> loadAllDocRecursos(String id) throws Exception {
-		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+	public Stream<Path> loadAllDocRecursos(String idCenad, String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docRecursosFolder.toString(), id);
 		return Files.walk(docRecursosFolder2, 1).filter(path -> !path.equals(docRecursosFolder2))
 				.map(docRecursosFolder2::relativize);
 	}
@@ -243,8 +238,9 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para guardar el archivo de una solicitud
 	 */
 	@Override
-	public String saveDocSolicitud(MultipartFile file, String id) throws Exception {
-		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
+	public String saveDocSolicitud(MultipartFile file, String idCenad, String id) throws Exception {
+		Path docSolicitudesFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docSolicitudesFolder.toString(), id);
 		Files.createDirectories(docSolicitudesFolder2);
 		Path destino = docSolicitudesFolder2.resolve(file.getOriginalFilename());
 		// Sobrescribe si el archivo ya existe
@@ -256,11 +252,12 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para borrar el archivo de una solicitud
 	 */
 	@Override
-	public String borrarDocSolicitud(String name, String id) throws Exception {
+	public String borrarDocSolicitud(String name, String idCenad, String id) throws Exception {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
 		}
-		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
+		Path docSolicitudesFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docSolicitudesFolder.toString(), id);
 		Path file = docSolicitudesFolder2.resolve(name);
 		String nombreArchivo = file.getFileName().toString();
 		boolean borrado = Files.deleteIfExists(file);
@@ -274,9 +271,11 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para borrar la carpeta de una solicitud
 	 */
 	@Override
-	public String borrarCarpetaDocSolicitud(String id) throws Exception {
+	public String borrarCarpetaDocSolicitud(String idCenad, String id) throws Exception {
 		String carpetaBorrada = "Se ha borrado la carpeta de Documentos de Solicitudes " + id;
-		Path carpeta = docSolicitudesFolder.resolve(id);
+		Path docSolicitudesFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docSolicitudesFolder.toString());
+		Path carpeta = docSolicitudesFolder2.resolve(id);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
 		return carpetaBorrada;
 	}
@@ -285,19 +284,10 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para cargar el archivo de una solicitud
 	 */
 	@Override
-	public Resource loadDocSolicitud(String name, String id) throws Exception {
-		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
+	public Resource loadDocSolicitud(String name, String idCenad, String id) throws Exception {
+		Path docSolicitudesFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docSolicitudesFolder.toString(), id);
 		Path file = docSolicitudesFolder2.resolve(name);
-		Resource resource = new UrlResource(file.toUri());
-		return resource;
-	}
-
-	/**
-	 * Metodo para cargar el archivo de una solicitud
-	 */
-	@Override
-	public Resource loadDocSolicitud(String name) throws Exception {
-		Path file = docSolicitudesFolder.resolve(name);
 		Resource resource = new UrlResource(file.toUri());
 		return resource;
 	}
@@ -307,12 +297,13 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * usa por requerir informacion individual de cada fichero)
 	 */
 	@Override
-	public String saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception {
-		Path docSolicitudes2 = Paths.get(docSolicitudesFolder.toString(), id);
-		Files.createDirectories(docSolicitudes2);
+	public String saveDocSolicitudes(List<MultipartFile> files, String idCenad, String id) throws Exception {
+		Path docSolicitudesFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docSolicitudesFolder.toString(), id);
+		Files.createDirectories(docSolicitudesFolder2);
 		String[] nombresArchivos = new String[files.size()];
 		for (int i = 0; i < files.size(); i++) {
-			this.saveDocSolicitud(files.get(i), id);
+			this.saveDocSolicitud(files.get(i),idCenad, id);
 			nombresArchivos[i] = files.get(i).getOriginalFilename();
 		}
 		return Arrays.toString(nombresArchivos);
@@ -322,8 +313,9 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para cargar los archivos de una solicitud
 	 */
 	@Override
-	public Stream<Path> loadAllDocSolicitudes(String id) throws Exception {
-		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
+	public Stream<Path> loadAllDocSolicitudes(String idCenad, String id) throws Exception {
+		Path docSolicitudesFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + idCenad,
+				docSolicitudesFolder.toString(), id);
 		return Files.walk(docSolicitudesFolder2, 1).filter(path -> !path.equals(docSolicitudesFolder2))
 				.map(docSolicitudesFolder2::relativize);
 	}
@@ -337,7 +329,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public String saveCartografia(MultipartFile file, String id) throws Exception {
-		Path cartografiasFolder2 = Paths.get(cartografiasFolder.toString(), id);
+		Path cartografiasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				cartografiasFolder.toString());
 		Files.createDirectories(cartografiasFolder2);
 		Path destino = cartografiasFolder2.resolve(file.getOriginalFilename());
 		// Sobrescribe si el archivo ya existe
@@ -353,7 +346,8 @@ public class FileServiceImpl implements FileServiceAPI {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
 		}
-		Path cartografiasFolder2 = Paths.get(cartografiasFolder.toString(), id);
+		Path cartografiasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				cartografiasFolder.toString());
 		Path file = cartografiasFolder2.resolve(name);
 		String nombreArchivo = file.getFileName().toString();
 		boolean borrado = Files.deleteIfExists(file);
@@ -369,7 +363,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	@Override
 	public String borrarCarpetaCartografia(String id) throws Exception {
 		String carpetaBorrada = "Se ha borrado la carpeta de Cartografías " + id;
-		Path carpeta = cartografiasFolder.resolve(id);
+		Path cartografiasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id);
+		Path carpeta = cartografiasFolder2.resolve(cartografiasFolder);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
 		return carpetaBorrada;
 	}
@@ -379,18 +374,9 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public Resource loadCartografia(String name, String id) throws Exception {
-		Path cartografiasFolder2 = Paths.get(cartografiasFolder.toString(), id);
+		Path cartografiasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				cartografiasFolder.toString());
 		Path file = cartografiasFolder2.resolve(name);
-		Resource resource = new UrlResource(file.toUri());
-		return resource;
-	}
-
-	/**
-	 * Metodo para cargar el archivo de un conjunto cartografico
-	 */
-	@Override
-	public Resource loadCartografia(String name) throws Exception {
-		Path file = cartografiasFolder.resolve(name);
 		Resource resource = new UrlResource(file.toUri());
 		return resource;
 	}
@@ -401,7 +387,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public String saveCartografias(List<MultipartFile> files, String id) throws Exception {
-		Path cartografiasFolder2 = Paths.get(cartografiasFolder.toString(), id);
+		Path cartografiasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				cartografiasFolder.toString());
 		Files.createDirectories(cartografiasFolder2);
 		String[] nombresArchivos = new String[files.size()];
 		for (int i = 0; i < files.size(); i++) {
@@ -416,7 +403,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public Stream<Path> loadAllCartografias(String id) throws Exception {
-		Path cartografiasFolder2 = Paths.get(cartografiasFolder.toString(), id);
+		Path cartografiasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				cartografiasFolder.toString());
 		return Files.walk(cartografiasFolder2, 1).filter(path -> !path.equals(cartografiasFolder2))
 				.map(cartografiasFolder2::relativize);
 	}
@@ -430,7 +418,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public String saveNormativa(MultipartFile file, String id) throws Exception {
-		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
+		Path normativasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				normativasFolder.toString());
 		Files.createDirectories(normativasFolder2);
 		Path destino = normativasFolder2.resolve(file.getOriginalFilename());
 		// Sobrescribe si el archivo ya existe
@@ -446,7 +435,8 @@ public class FileServiceImpl implements FileServiceAPI {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
 		}
-		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
+		Path normativasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				normativasFolder.toString());
 		Path file = normativasFolder2.resolve(name);
 		String nombreArchivo = file.getFileName().toString();
 		boolean borrado = Files.deleteIfExists(file);
@@ -462,7 +452,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	@Override
 	public String borrarCarpetaNormativa(String id) throws Exception {
 		String carpetaBorrada = "Se ha borrado la carpeta de Normativa " + id;
-		Path carpeta = normativasFolder.resolve(id);
+		Path normativasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id);
+		Path carpeta = normativasFolder2.resolve(normativasFolder);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
 		return carpetaBorrada;
 	}
@@ -472,18 +463,9 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public Resource loadNormativa(String name, String id) throws Exception {
-		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
+		Path normativasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				normativasFolder.toString());
 		Path file = normativasFolder2.resolve(name);
-		Resource resource = new UrlResource(file.toUri());
-		return resource;
-	}
-
-	/**
-	 * Metodo para cargar el archivo de una normativa
-	 */
-	@Override
-	public Resource loadNormativa(String name) throws Exception {
-		Path file = normativasFolder.resolve(name);
 		Resource resource = new UrlResource(file.toUri());
 		return resource;
 	}
@@ -494,7 +476,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public String saveNormativas(List<MultipartFile> files, String id) throws Exception {
-		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
+		Path normativasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				normativasFolder.toString());
 		Files.createDirectories(normativasFolder2);
 		String[] nombresArchivos = new String[files.size()];
 		for (int i = 0; i < files.size(); i++) {
@@ -509,7 +492,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public Stream<Path> loadAllNormativas(String id) throws Exception {
-		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
+		Path normativasFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				normativasFolder.toString());
 		return Files.walk(normativasFolder2, 1).filter(path -> !path.equals(normativasFolder2))
 				.map(normativasFolder2::relativize);
 	}
@@ -523,7 +507,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public String saveInfoCenad(MultipartFile file, String id) throws Exception {
-		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Path infoCenadsFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				infoCenadsFolder.toString());
 		Files.createDirectories(infoCenadsFolder2);
 		Path destino = infoCenadsFolder2.resolve(file.getOriginalFilename());
 		// Sobrescribe si el archivo ya existe
@@ -539,7 +524,8 @@ public class FileServiceImpl implements FileServiceAPI {
 		if (name == null || name.trim().isEmpty()) {
 			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
 		}
-		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Path infoCenadsFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				infoCenadsFolder.toString());
 		Path file = infoCenadsFolder2.resolve(name);
 		String nombreArchivo = file.getFileName().toString();
 		boolean borrado = Files.deleteIfExists(file);
@@ -555,7 +541,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	@Override
 	public String borrarCarpetaInfoCenad(String id) throws Exception {
 		String carpetaBorrada = "Se ha borrado la carpeta de InfoCenad " + id;
-		Path carpeta = infoCenadsFolder.resolve(id);
+		Path infoCenadsFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id);
+		Path carpeta = infoCenadsFolder2.resolve(infoCenadsFolder);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
 		return carpetaBorrada;
 	}
@@ -565,18 +552,9 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public Resource loadInfoCenad(String name, String id) throws Exception {
-		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Path infoCenadsFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				infoCenadsFolder.toString());
 		Path file = infoCenadsFolder2.resolve(name);
-		Resource resource = new UrlResource(file.toUri());
-		return resource;
-	}
-
-	/**
-	 * Metodo para cargar el archivo de infoCenad
-	 */
-	@Override
-	public Resource loadInfoCenad(String name) throws Exception {
-		Path file = infoCenadsFolder.resolve(name);
 		Resource resource = new UrlResource(file.toUri());
 		return resource;
 	}
@@ -587,7 +565,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public String saveInfoCenads(List<MultipartFile> files, String id) throws Exception {
-		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Path infoCenadsFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				infoCenadsFolder.toString());
 		Files.createDirectories(infoCenadsFolder2);
 		String[] nombresArchivos = new String[files.size()];
 		for (int i = 0; i < files.size(); i++) {
@@ -602,7 +581,8 @@ public class FileServiceImpl implements FileServiceAPI {
 	 */
 	@Override
 	public Stream<Path> loadAllInfoCenads(String id) throws Exception {
-		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Path infoCenadsFolder2 = Paths.get(comunFolder.toString(), cenadFolder.toString() + " " + id,
+				infoCenadsFolder.toString());
 		return Files.walk(infoCenadsFolder2, 1).filter(path -> !path.equals(infoCenadsFolder2))
 				.map(infoCenadsFolder2::relativize);
 	}
