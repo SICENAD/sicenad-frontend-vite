@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import AdministracionView from '@/views/AdministracionView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import useAuthStore from '@/stores/auth'
 import i18n from '@/plugins/i18n'
@@ -12,14 +11,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      meta: {
-        requireAuth: false,
-      },
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue'),
       meta: {
         requireAuth: false,
       },
@@ -103,39 +94,6 @@ const router = createRouter({
       component: () => import('../views/TiposFormularioView.vue'),
       meta: {
         requireAuth: true,
-      },
-    },
-    {
-      path: '/clientes',
-      name: 'clientes',
-      component: () => import('../views/ClientesView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/mascotas',
-      name: 'mascotas',
-      component: () => import('../views/MascotasView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/prestaciones',
-      name: 'prestaciones',
-      component: () => import('../views/PrestacionesView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/administracion',
-      name: 'administracion',
-      component: AdministracionView,
-      meta: {
-        requireAuth: true,
-        rol: 'ADMIN',
       },
     },
     {

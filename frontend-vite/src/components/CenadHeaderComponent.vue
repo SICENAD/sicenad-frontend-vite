@@ -171,11 +171,7 @@ const toggleMenu = () => {
     menuVisible.value = !menuVisible.value
 }
 onMounted(async () => {
-    console.log(idCenad.value)
-    console.log(auth.cenad.idString)
-    console.log(isAdminEsteCenad.value)
     cargarCenads()
-    console.log(isCenadZaragoza.value)
 /*
   if (!localStorage.getItem(`categorias_${this.idCenad}`)) {
       this.categoriaService

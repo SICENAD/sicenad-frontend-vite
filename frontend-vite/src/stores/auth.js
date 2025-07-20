@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import useUtilsStore from '@/stores/utils'
+import router from '@/router'
 
 const useAuthStore = defineStore('auth', {
   state: () => {
@@ -13,7 +14,7 @@ const useAuthStore = defineStore('auth', {
       unidades: [],
       armas: [],
       cenad: null,
-      unidad: null
+      unidad: null,
     }
   },
   getters: {},
@@ -69,7 +70,7 @@ const useAuthStore = defineStore('auth', {
         return true
       } else return false
     },
-    logout() {
+    async logout() {
       this.token = null
       this.username = null
       this.rol = null
@@ -80,6 +81,7 @@ const useAuthStore = defineStore('auth', {
       this.armas = []
       this.cenad = null
       this.unidad = null
+      await router.push({ name: 'home' })
     },
     async getDatosIniciales() {
       const utils = useUtilsStore()
@@ -115,24 +117,48 @@ const useAuthStore = defineStore('auth', {
           this.armas = jsonTemporal._embedded.armas
         }
         if (this.rol == 'Administrador') {
-          const respUsuario = await utils.fetchConToken(`${utils.urlApi}/usuarios_administrador/search/findByUsername?username=${this.username}`, 'GET', null)
+          const respUsuario = await utils.fetchConToken(
+            `${utils.urlApi}/usuarios_administrador/search/findByUsername?username=${this.username}`,
+            'GET',
+            null,
+          )
           const respJson = await respUsuario.json()
           const idUsusario = respJson.idString
-          const respCenad = await utils.fetchConToken(`${utils.urlApi}/usuarios_administrador/${idUsusario}/cenad`, 'GET', null)
+          const respCenad = await utils.fetchConToken(
+            `${utils.urlApi}/usuarios_administrador/${idUsusario}/cenad`,
+            'GET',
+            null,
+          )
           this.cenad = await respCenad.json()
         }
         if (this.rol == 'Gestor') {
-          const respUsuario = await utils.fetchConToken(`${utils.urlApi}/usuarios_gestor/search/findByUsername?username=${this.username}`, 'GET', null)
+          const respUsuario = await utils.fetchConToken(
+            `${utils.urlApi}/usuarios_gestor/search/findByUsername?username=${this.username}`,
+            'GET',
+            null,
+          )
           const respJson = await respUsuario.json()
           const idUsusario = respJson.idString
-          const respCenad = await utils.fetchConToken(`${utils.urlApi}/usuarios_gestor/${idUsusario}/cenad`, 'GET', null)
+          const respCenad = await utils.fetchConToken(
+            `${utils.urlApi}/usuarios_gestor/${idUsusario}/cenad`,
+            'GET',
+            null,
+          )
           this.cenad = await respCenad.json()
         }
         if (this.rol == 'Normal') {
-          const respUsuario = await utils.fetchConToken(`${utils.urlApi}/usuarios_normal/search/findByUsername?username=${this.username}`, 'GET', null)
+          const respUsuario = await utils.fetchConToken(
+            `${utils.urlApi}/usuarios_normal/search/findByUsername?username=${this.username}`,
+            'GET',
+            null,
+          )
           const respJson = await respUsuario.json()
           const idUsusario = respJson.idString
-          const respUnidad = await utils.fetchConToken(`${utils.urlApi}/usuarios_normal/${idUsusario}/cenad`, 'GET', null)
+          const respUnidad = await utils.fetchConToken(
+            `${utils.urlApi}/usuarios_normal/${idUsusario}/cenad`,
+            'GET',
+            null,
+          )
           this.unidad = await respUnidad.json()
         }
       } catch (err) {

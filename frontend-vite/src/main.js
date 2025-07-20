@@ -6,7 +6,6 @@ import 'bootstrap'
 import { createPinia } from 'pinia'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
 import {
-  FaWhatsapp,
   FaHome,
   FaTimes,
   FaRegularDotCircle,
@@ -17,19 +16,10 @@ import {
   GiRotaryPhone,
   RiAdminLine,
   FaBook,
-  FaDog,
-  GiDogBowl,
-  GiDogHouse,
   GiPassport,
   FaUser,
   FaUserCog,
-  FaFacebook,
-  FaGithub,
-  FaGitlab,
-  FaTwitter,
   FaWindows,
-  FaInstagram,
-  FaTelegramPlane,
   FaArrowAltCircleLeft,
   FaBars,
   FaBomb,
@@ -57,7 +47,6 @@ import utilsPlugin from '@/plugins/utilsPlugin'
 
 //los iconos que voy a usar
 addIcons(
-  FaWhatsapp,
   FaHome,
   FaTimes,
   FaRegularDotCircle,
@@ -68,20 +57,11 @@ addIcons(
   GiRotaryPhone,
   RiAdminLine,
   FaBook,
-  FaDog,
-  GiDogBowl,
-  GiDogHouse,
   GiPassport,
   FaUser,
   FaUsers,
   FaUserCog,
-  FaFacebook,
-  FaGithub,
-  FaGitlab,
-  FaTwitter,
   FaWindows,
-  FaInstagram,
-  FaTelegramPlane,
   FaArrowAltCircleLeft, 
   FaBars,
   FaBomb,
@@ -100,7 +80,6 @@ addIcons(
   FaQuestionCircle,
   FaMap,
   FaSnowflake,
-  FaSitemap
 )
 //para facilitar la importacion de las opciones
 const app = createApp(App)

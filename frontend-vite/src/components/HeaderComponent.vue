@@ -20,25 +20,26 @@
     </span>
     <p v-if="authStore.token" class="alert alert-success">
       {{ authStore.username }}
-      {{ $t('comun.usuarioIdentificado') }} {{ authStore.rol }}
-      <button class="btn btn-success ml-3" @click="logout">{{ $t('comun.cerrarSesion') }}</button>
+      {{ $t('comun.usuarioIdentificado') }} {{ identificacion }}
+      <button class="btn btn-success ms-3" @click="logout">{{ $t('comun.cerrarSesion') }}</button>
     </p>
     <p v-else class="alert alert-danger">
       {{ $t('comun.usuarioNoIdentificado') }}
       <RouterLink :to="{ name: 'login' }">
-        <button class="btn btn-danger ml-2">{{ $t('comun.iniciarSesion') }}</button>
+        <button class="btn btn-danger ms-2 me-3 ">{{ $t('comun.iniciarSesion') }}</button>
       </RouterLink>
+      Necesitas iniciar sesión para poder acceder a los distintos CENAD,s/CMT,s
     </p>
   </header>
 </template>
 <script setup>
-import router from '@/router'
 import { RouterLink } from 'vue-router'
 import useAuthStore from '@/stores/auth'
 import { baseNormalizada } from '@/utils'
+import { onMounted, ref } from 'vue'
 
 const authStore = useAuthStore()
-
+let identificacion = ref('')
 const getLanguageLabel = (locale) => {
   const labels = {
     es: 'Español',
@@ -59,8 +60,14 @@ const getFlag = (locale) => {
 
 const logout = () => {
   authStore.logout()
-  router.push({ name: 'home' })
 }
+onMounted(async () => {
+  (authStore.rol == 'Administrador' || authStore.rol == 'Gestor')
+    ? identificacion.value = `${authStore.rol} del ${authStore.cenad.nombre}`
+    : authStore.rol == 'Normal'
+      ? identificacion.value = `${authStore.rol} de ${authStore.unidad.nombre}`
+      : identificacion.value = authStore.rol
+})
 </script>
 <style lang="scss">
 header {

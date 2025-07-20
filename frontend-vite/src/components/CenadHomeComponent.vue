@@ -53,14 +53,12 @@
 </template>
 
 <script setup>
-import useAuthStore from '@/stores/auth'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import useUtilsStore from '@/stores/utils'
 import CenadService from '@/services/CenadService'
 
 const route = useRoute()
-const auth = useAuthStore()
 const utils = useUtilsStore()
 const idCenad = computed(() => route.params.id)
 const idSolicitud = ref('') // poner valor si aplica

@@ -85,50 +85,40 @@ const useUtilsStore = defineStore('utils', {
     },
     async fetchConToken(url, method, bodyinJson) {
       try {
-        const response =
-          bodyinJson == null
-            ? await fetch(url, {
-                method: method,
-                headers: {
-                  'Content-Type': 'application/json; charset=utf-8',
-                  Accept: 'application/json',
-                  Authorization: `Bearer ${useAuthStore().token}`,
-                },
-              })
-            : await fetch(url, {
-                method: method,
-                headers: {
-                  'Content-Type': 'application/json; charset=utf-8',
-                  Accept: 'application/json',
-                  Authorization: `Bearer ${useAuthStore().token}`,
-                },
-                body: JSON.stringify(bodyinJson),
-              })
+        const auth = useAuthStore()
+        const headers = {
+          'Content-Type': 'application/json; charset=utf-8',
+          Accept: 'application/json',
+          Authorization: `Bearer ${auth.token}`,
+        }
+        const options = { method, headers }
+        bodyinJson != null && (options.body = JSON.stringify(bodyinJson))
+        const response = await fetch(url, options)
+        if (response.status === 401 || response.status === 403) {
+          // Token inválido o expirado
+          auth.logout()
+          // O simplemente lanza un error
+          alert('Token expirado o no autorizado')
+        }
         return response
       } catch (error) {
         console.log(error)
+        return null
       }
     },
     async fetchArchivoConToken(url, method, body) {
       try {
-        const response =
-          body == null
-            ? await fetch(url, {
-                method: method,
-                headers: {
-                  Authorization: `Bearer ${useAuthStore().token}`,
-                },
-              })
-            : await fetch(url, {
-                method: method,
-                headers: {
-                  Authorization: `Bearer ${useAuthStore().token}`,
-                },
-                body: body,
-              })
+        const auth = useAuthStore()
+        const headers = {
+          Authorization: `Bearer ${auth.token}`,
+        }
+        const options = { method, headers }
+        body != null && (options.body = body)
+        const response = await fetch(url, options)
         return response
       } catch (error) {
         console.log(error)
+        return null
       }
     },
   },
