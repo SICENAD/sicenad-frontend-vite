@@ -44,17 +44,16 @@ public class FileServiceImpl implements FileServiceAPI {
 	 *                           asociados a solicitudes
 	 * @param rutaCartografias   Define la ruta donde se guardaran los distintos
 	 *                           conjuntos cartograficos
-	 * @param rutaNormativas   	 Define la ruta donde se guardaran los distintos
+	 * @param rutaNormativas     Define la ruta donde se guardaran los distintos
 	 *                           conjuntos de normativas
 	 * @param rutaInfoCenads     Define la ruta donde se guardaran los distintos
-	 *                           infoCenads	 
+	 *                           infoCenads
 	 */
 	@Autowired
 	public FileServiceImpl(@Qualifier("rutaEscudos") String rutaEscudos,
 			@Qualifier("rutaDocRecursos") String rutaDocRecursos,
 			@Qualifier("rutaDocSolicitudes") String rutaDocSolicitudes,
-			@Qualifier("rutaCartografias") String rutaCartografias,
-			@Qualifier("rutaInfoCenads") String rutaInfoCenads,
+			@Qualifier("rutaCartografias") String rutaCartografias, @Qualifier("rutaInfoCenads") String rutaInfoCenads,
 			@Qualifier("rutaNormativas") String rutaNormativas) {
 		FileServiceImpl.rutaEscudos = rutaEscudos;
 		FileServiceImpl.rutaDocRecursos = rutaDocRecursos;
@@ -81,32 +80,33 @@ public class FileServiceImpl implements FileServiceAPI {
 	@Override
 	public String saveEscudo(MultipartFile file) throws Exception {
 		Files.createDirectories(escudosFolder);
-		
-	    Path destino = this.escudosFolder.resolve(file.getOriginalFilename());
 
-	    // Sobrescribe si el archivo ya existe
-	    Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+		Path destino = this.escudosFolder.resolve(file.getOriginalFilename());
 
-	    return file.getOriginalFilename(); // devuelves el nombre que has decidido usar
+		// Sobrescribe si el archivo ya existe
+		Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+
+		return file.getOriginalFilename(); // devuelves el nombre que has decidido usar
 	}
+
 	/**
 	 * Metodo para borrar un escudo
 	 */
 	@Override
 	public String borrarEscudo(String name) throws Exception {
-	    if (name == null || name.trim().isEmpty()) {
-	        throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
-	    }
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
+		}
 
-	    Path file = escudosFolder.resolve(name);
-	    String nombreArchivo = file.getFileName().toString();
+		Path file = escudosFolder.resolve(name);
+		String nombreArchivo = file.getFileName().toString();
 
-	    boolean borrado = Files.deleteIfExists(file);
-	    if (!borrado) {
-	        throw new FileNotFoundException("No se encontró el archivo: " + nombreArchivo);
-	    }
+		boolean borrado = Files.deleteIfExists(file);
+		if (!borrado) {
+			throw new FileNotFoundException("No se encontró el archivo: " + nombreArchivo);
+		}
 
-	    return nombreArchivo;
+		return nombreArchivo;
 	}
 
 	/**
@@ -149,30 +149,43 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para guardar el archivo de un recurso
 	 */
 	@Override
-	public void saveDocRecurso(MultipartFile file, String id) throws Exception {
+	public String saveDocRecurso(MultipartFile file, String id) throws Exception {
 		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
 		Files.createDirectories(docRecursosFolder2);
-
-		Files.copy(file.getInputStream(), docRecursosFolder2.resolve(file.getOriginalFilename()));
+		Path destino = docRecursosFolder2.resolve(file.getOriginalFilename());
+		// Sobrescribe si el archivo ya existe
+		Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+		return file.getOriginalFilename(); // devuelves el nombre que has decidido usar
 	}
 
 	/**
 	 * Metodo para borrar el archivo de un recurso
 	 */
 	@Override
-	public void borrarDocRecurso(String name, String id) throws Exception {
+	public String borrarDocRecurso(String name, String id) throws Exception {
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
+		}
 		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
 		Path file = docRecursosFolder2.resolve(name);
-		Files.deleteIfExists(file);
+		String nombreArchivo = file.getFileName().toString();
+
+		boolean borrado = Files.deleteIfExists(file);
+		if (!borrado) {
+			throw new FileNotFoundException("No se encontró el archivo: " + nombreArchivo);
+		}
+		return nombreArchivo;
 	}
 
 	/**
 	 * Metodo para borrar la carpeta de un recurso
 	 */
 	@Override
-	public void borrarCarpetaDocRecurso(String id) throws Exception {
+	public String borrarCarpetaDocRecurso(String id) throws Exception {
+		String carpetaBorrada = "Se ha borrado la carpeta de Documentos de Recursos " + id;
 		Path carpeta = docRecursosFolder.resolve(id);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		return carpetaBorrada;
 	}
 
 	/**
@@ -201,10 +214,15 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * añadir observaciones individuales a cada fichero)
 	 */
 	@Override
-	public void saveDocRecursos(List<MultipartFile> files, String id) throws Exception {
-		for (MultipartFile file : files) {
-			this.saveDocRecurso(file, id);
+	public String saveDocRecursos(List<MultipartFile> files, String id) throws Exception {
+		Path docRecursosFolder2 = Paths.get(docRecursosFolder.toString(), id);
+		Files.createDirectories(docRecursosFolder2);
+		String[] nombresArchivos = new String[files.size()];
+		for (int i = 0; i < files.size(); i++) {
+			this.saveDocRecurso(files.get(i), id);
+			nombresArchivos[i] = files.get(i).getOriginalFilename();
 		}
+		return Arrays.toString(nombresArchivos);
 	}
 
 	/**
@@ -225,29 +243,42 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para guardar el archivo de una solicitud
 	 */
 	@Override
-	public void saveDocSolicitud(MultipartFile file, String id) throws Exception {
+	public String saveDocSolicitud(MultipartFile file, String id) throws Exception {
 		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
 		Files.createDirectories(docSolicitudesFolder2);
-		Files.copy(file.getInputStream(), docSolicitudesFolder2.resolve(file.getOriginalFilename()));
+		Path destino = docSolicitudesFolder2.resolve(file.getOriginalFilename());
+		// Sobrescribe si el archivo ya existe
+		Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+		return file.getOriginalFilename(); // devuelves el nombre que has decidido usar
 	}
 
 	/**
 	 * Metodo para borrar el archivo de una solicitud
 	 */
 	@Override
-	public void borrarDocSolicitud(String name, String id) throws Exception {
+	public String borrarDocSolicitud(String name, String id) throws Exception {
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
+		}
 		Path docSolicitudesFolder2 = Paths.get(docSolicitudesFolder.toString(), id);
 		Path file = docSolicitudesFolder2.resolve(name);
-		Files.deleteIfExists(file);
+		String nombreArchivo = file.getFileName().toString();
+		boolean borrado = Files.deleteIfExists(file);
+		if (!borrado) {
+			throw new FileNotFoundException("No se encontró el archivo: " + nombreArchivo);
+		}
+		return nombreArchivo;
 	}
 
 	/**
 	 * Metodo para borrar la carpeta de una solicitud
 	 */
 	@Override
-	public void borrarCarpetaDocSolicitud(String id) throws Exception {
+	public String borrarCarpetaDocSolicitud(String id) throws Exception {
+		String carpetaBorrada = "Se ha borrado la carpeta de Documentos de Solicitudes " + id;
 		Path carpeta = docSolicitudesFolder.resolve(id);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		return carpetaBorrada;
 	}
 
 	/**
@@ -276,10 +307,15 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * usa por requerir informacion individual de cada fichero)
 	 */
 	@Override
-	public void saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception {
-		for (MultipartFile file : files) {
-			this.saveDocSolicitud(file, id);
+	public String saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception {
+		Path docSolicitudes2 = Paths.get(docSolicitudesFolder.toString(), id);
+		Files.createDirectories(docSolicitudes2);
+		String[] nombresArchivos = new String[files.size()];
+		for (int i = 0; i < files.size(); i++) {
+			this.saveDocSolicitud(files.get(i), id);
+			nombresArchivos[i] = files.get(i).getOriginalFilename();
 		}
+		return Arrays.toString(nombresArchivos);
 	}
 
 	/**
@@ -300,29 +336,42 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para guardar el archivo de un conjunto cartografico
 	 */
 	@Override
-	public void saveCartografia(MultipartFile file, String id) throws Exception {
+	public String saveCartografia(MultipartFile file, String id) throws Exception {
 		Path cartografiasFolder2 = Paths.get(cartografiasFolder.toString(), id);
 		Files.createDirectories(cartografiasFolder2);
-		Files.copy(file.getInputStream(), cartografiasFolder2.resolve(file.getOriginalFilename()));
+		Path destino = cartografiasFolder2.resolve(file.getOriginalFilename());
+		// Sobrescribe si el archivo ya existe
+		Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+		return file.getOriginalFilename(); // devuelves el nombre que has decidido usar
 	}
 
 	/**
 	 * Metodo para borrar el archivo de un conjunto cartografico
 	 */
 	@Override
-	public void borrarCartografia(String name, String id) throws Exception {
+	public String borrarCartografia(String name, String id) throws Exception {
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
+		}
 		Path cartografiasFolder2 = Paths.get(cartografiasFolder.toString(), id);
 		Path file = cartografiasFolder2.resolve(name);
-		Files.deleteIfExists(file);
+		String nombreArchivo = file.getFileName().toString();
+		boolean borrado = Files.deleteIfExists(file);
+		if (!borrado) {
+			throw new FileNotFoundException("No se encontró el archivo: " + nombreArchivo);
+		}
+		return nombreArchivo;
 	}
 
 	/**
 	 * Metodo para borrar la carpeta de un conjunto cartografico
 	 */
 	@Override
-	public void borrarCarpetaCartografia(String id) throws Exception {
+	public String borrarCarpetaCartografia(String id) throws Exception {
+		String carpetaBorrada = "Se ha borrado la carpeta de Cartografías " + id;
 		Path carpeta = cartografiasFolder.resolve(id);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		return carpetaBorrada;
 	}
 
 	/**
@@ -351,10 +400,15 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * actualidad no se usa por querer añadir informacion individual a cada fichero)
 	 */
 	@Override
-	public void saveCartografias(List<MultipartFile> files, String id) throws Exception {
-		for (MultipartFile file : files) {
-			this.saveCartografia(file, id);
+	public String saveCartografias(List<MultipartFile> files, String id) throws Exception {
+		Path cartografiasFolder2 = Paths.get(cartografiasFolder.toString(), id);
+		Files.createDirectories(cartografiasFolder2);
+		String[] nombresArchivos = new String[files.size()];
+		for (int i = 0; i < files.size(); i++) {
+			this.saveCartografia(files.get(i), id);
+			nombresArchivos[i] = files.get(i).getOriginalFilename();
 		}
+		return Arrays.toString(nombresArchivos);
 	}
 
 	/**
@@ -375,29 +429,42 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para guardar el archivo de una normativa
 	 */
 	@Override
-	public void saveNormativa(MultipartFile file, String id) throws Exception {
+	public String saveNormativa(MultipartFile file, String id) throws Exception {
 		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
 		Files.createDirectories(normativasFolder2);
-		Files.copy(file.getInputStream(), normativasFolder2.resolve(file.getOriginalFilename()));
+		Path destino = normativasFolder2.resolve(file.getOriginalFilename());
+		// Sobrescribe si el archivo ya existe
+		Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+		return file.getOriginalFilename(); // devuelves el nombre que has decidido usar
 	}
 
 	/**
 	 * Metodo para borrar el archivo de una normativa
 	 */
 	@Override
-	public void borrarNormativa(String name, String id) throws Exception {
+	public String borrarNormativa(String name, String id) throws Exception {
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
+		}
 		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
 		Path file = normativasFolder2.resolve(name);
-		Files.deleteIfExists(file);
+		String nombreArchivo = file.getFileName().toString();
+		boolean borrado = Files.deleteIfExists(file);
+		if (!borrado) {
+			throw new FileNotFoundException("No se encontró el archivo: " + nombreArchivo);
+		}
+		return nombreArchivo;
 	}
 
 	/**
 	 * Metodo para borrar la carpeta de una normativa
 	 */
 	@Override
-	public void borrarCarpetaNormativa(String id) throws Exception {
+	public String borrarCarpetaNormativa(String id) throws Exception {
+		String carpetaBorrada = "Se ha borrado la carpeta de Normativa " + id;
 		Path carpeta = normativasFolder.resolve(id);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		return carpetaBorrada;
 	}
 
 	/**
@@ -426,10 +493,15 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * usa por querer añadir informacion individual a cada fichero)
 	 */
 	@Override
-	public void saveNormativas(List<MultipartFile> files, String id) throws Exception {
-		for (MultipartFile file : files) {
-			this.saveNormativa(file, id);
+	public String saveNormativas(List<MultipartFile> files, String id) throws Exception {
+		Path normativasFolder2 = Paths.get(normativasFolder.toString(), id);
+		Files.createDirectories(normativasFolder2);
+		String[] nombresArchivos = new String[files.size()];
+		for (int i = 0; i < files.size(); i++) {
+			this.saveNormativa(files.get(i), id);
+			nombresArchivos[i] = files.get(i).getOriginalFilename();
 		}
+		return Arrays.toString(nombresArchivos);
 	}
 
 	/**
@@ -450,29 +522,42 @@ public class FileServiceImpl implements FileServiceAPI {
 	 * Metodo para guardar el archivo de infoCenad
 	 */
 	@Override
-	public void saveInfoCenad(MultipartFile file, String id) throws Exception {
+	public String saveInfoCenad(MultipartFile file, String id) throws Exception {
 		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
 		Files.createDirectories(infoCenadsFolder2);
-		Files.copy(file.getInputStream(), infoCenadsFolder2.resolve(file.getOriginalFilename()));
+		Path destino = infoCenadsFolder2.resolve(file.getOriginalFilename());
+		// Sobrescribe si el archivo ya existe
+		Files.copy(file.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+		return file.getOriginalFilename(); // devuelves el nombre que has decidido usar
 	}
 
 	/**
 	 * Metodo para borrar el archivo de infoCenad
 	 */
 	@Override
-	public void borrarInfoCenad(String name, String id) throws Exception {
+	public String borrarInfoCenad(String name, String id) throws Exception {
+		if (name == null || name.trim().isEmpty()) {
+			throw new IllegalArgumentException("El nombre del archivo no puede ser nulo o vacío");
+		}
 		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
 		Path file = infoCenadsFolder2.resolve(name);
-		Files.deleteIfExists(file);
+		String nombreArchivo = file.getFileName().toString();
+		boolean borrado = Files.deleteIfExists(file);
+		if (!borrado) {
+			throw new FileNotFoundException("No se encontró el archivo: " + nombreArchivo);
+		}
+		return nombreArchivo;
 	}
 
 	/**
 	 * Metodo para borrar la carpeta de infoCenad
 	 */
 	@Override
-	public void borrarCarpetaInfoCenad(String id) throws Exception {
+	public String borrarCarpetaInfoCenad(String id) throws Exception {
+		String carpetaBorrada = "Se ha borrado la carpeta de InfoCenad " + id;
 		Path carpeta = infoCenadsFolder.resolve(id);
 		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		return carpetaBorrada;
 	}
 
 	/**
@@ -497,14 +582,19 @@ public class FileServiceImpl implements FileServiceAPI {
 	}
 
 	/**
-	 * Metodo para guardar varios archivos de infoCenad (en la actualidad no se
-	 * usa por querer añadir informacion individual a cada fichero)
+	 * Metodo para guardar varios archivos de infoCenad (en la actualidad no se usa
+	 * por querer añadir informacion individual a cada fichero)
 	 */
 	@Override
-	public void saveInfoCenads(List<MultipartFile> files, String id) throws Exception {
-		for (MultipartFile file : files) {
-			this.saveInfoCenad(file, id);
+	public String saveInfoCenads(List<MultipartFile> files, String id) throws Exception {
+		Path infoCenadsFolder2 = Paths.get(infoCenadsFolder.toString(), id);
+		Files.createDirectories(infoCenadsFolder2);
+		String[] nombresArchivos = new String[files.size()];
+		for (int i = 0; i < files.size(); i++) {
+			this.saveInfoCenad(files.get(i), id);
+			nombresArchivos[i] = files.get(i).getOriginalFilename();
 		}
+		return Arrays.toString(nombresArchivos);
 	}
 
 	/**

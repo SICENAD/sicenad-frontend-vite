@@ -63,7 +63,6 @@ public class ConfiguracionSeguridad {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedOriginPatterns(Arrays.asList(allowedOriginLocal, allowedOriginProduccion));
-		System.err.println(allowedOriginLocal + ", " + allowedOriginProduccion);
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
 		configuration.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -113,7 +113,22 @@ const useUtilsStore = defineStore('utils', {
           Authorization: `Bearer ${auth.token}`,
         }
         const options = { method, headers }
-        body != null && (options.body = body)
+        body != null && body != '' && (options.body = body)
+        const response = await fetch(url, options)
+        return response
+      } catch (error) {
+        console.log(error)
+        return null
+      }
+    },
+async fetchCarpetaConToken(url, method, body) {
+      try {
+        const auth = useAuthStore()
+        const headers = {
+          Authorization: `Bearer ${auth.token}`,
+        }
+        const options = { method, headers }
+        body != null && body != '' && (options.body = body)
         const response = await fetch(url, options)
         return response
       } catch (error) {

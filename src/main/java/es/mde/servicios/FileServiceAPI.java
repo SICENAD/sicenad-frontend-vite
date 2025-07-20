@@ -67,7 +67,7 @@ public interface FileServiceAPI {
 	 * @param id   Id del recurso
 	 * @throws Exception
 	 */
-	public void saveDocRecurso(MultipartFile file, String id) throws Exception;
+	public String saveDocRecurso(MultipartFile file, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar un archivo de un recurso
@@ -76,7 +76,7 @@ public interface FileServiceAPI {
 	 * @param id   Id del recurso
 	 * @throws Exception
 	 */
-	public void borrarDocRecurso(String name, String id) throws Exception;
+	public String borrarDocRecurso(String name, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar la carpeta de un recurso
@@ -84,7 +84,7 @@ public interface FileServiceAPI {
 	 * @param id Id del recurso
 	 * @throws Exception
 	 */
-	public void borrarCarpetaDocRecurso(String id) throws Exception;
+	public String borrarCarpetaDocRecurso(String id) throws Exception;
 
 	/**
 	 * Metodo para cargar un archivo de un recurso
@@ -110,7 +110,7 @@ public interface FileServiceAPI {
 	 * @param id    Id del recurso
 	 * @throws Exception
 	 */
-	public void saveDocRecursos(List<MultipartFile> files, String id) throws Exception;
+	public String saveDocRecursos(List<MultipartFile> files, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar varios archivos de un recurso
@@ -131,7 +131,7 @@ public interface FileServiceAPI {
 	 * @param id   Id de la solicitud
 	 * @throws Exception
 	 */
-	public void saveDocSolicitud(MultipartFile file, String id) throws Exception;
+	public String saveDocSolicitud(MultipartFile file, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar un archivo de una solicitud
@@ -140,7 +140,7 @@ public interface FileServiceAPI {
 	 * @param id   Id de la solicitud
 	 * @throws Exception
 	 */
-	public void borrarDocSolicitud(String name, String id) throws Exception;
+	public String borrarDocSolicitud(String name, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar la carpeta de una solicitud
@@ -148,7 +148,7 @@ public interface FileServiceAPI {
 	 * @param id Id de la solicitud
 	 * @throws Exception
 	 */
-	public void borrarCarpetaDocSolicitud(String id) throws Exception;
+	public String borrarCarpetaDocSolicitud(String id) throws Exception;
 
 	/**
 	 * Metodo para cargar un archivo de una solicitud
@@ -174,7 +174,7 @@ public interface FileServiceAPI {
 	 * @param id    Id de la solicitud
 	 * @throws Exception
 	 */
-	public void saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception;
+	public String saveDocSolicitudes(List<MultipartFile> files, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar varios archivos de una solicitud
@@ -195,7 +195,7 @@ public interface FileServiceAPI {
 	 * @param id   Id del CENAD
 	 * @throws Exception
 	 */
-	public void saveCartografia(MultipartFile file, String id) throws Exception;
+	public String saveCartografia(MultipartFile file, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar un archivo de un conjunto cartografico
@@ -204,7 +204,7 @@ public interface FileServiceAPI {
 	 * @param id   Id del CENAD
 	 * @throws Exception
 	 */
-	public void borrarCartografia(String name, String id) throws Exception;
+	public String borrarCartografia(String name, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar la carpeta de un conjunto cartografico
@@ -212,7 +212,7 @@ public interface FileServiceAPI {
 	 * @param id Id del CENAD
 	 * @throws Exception
 	 */
-	public void borrarCarpetaCartografia(String id) throws Exception;
+	public String borrarCarpetaCartografia(String id) throws Exception;
 
 	/**
 	 * Metodo para cargar un archivo de un conjunto cartografico
@@ -238,7 +238,7 @@ public interface FileServiceAPI {
 	 * @param id    Id del CENAD
 	 * @throws Exception
 	 */
-	public void saveCartografias(List<MultipartFile> files, String id) throws Exception;
+	public String saveCartografias(List<MultipartFile> files, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar varios archivos de un conjunto cartografico
@@ -259,7 +259,7 @@ public interface FileServiceAPI {
 	 * @param id   Id del CENAD
 	 * @throws Exception
 	 */
-	public void saveNormativa(MultipartFile file, String id) throws Exception;
+	public String saveNormativa(MultipartFile file, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar un archivo de normativa
@@ -268,7 +268,7 @@ public interface FileServiceAPI {
 	 * @param id   Id del CENAD
 	 * @throws Exception
 	 */
-	public void borrarNormativa(String name, String id) throws Exception;
+	public String borrarNormativa(String name, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar la carpeta de normativa de un CENAD
@@ -276,7 +276,7 @@ public interface FileServiceAPI {
 	 * @param id Id del CENAD
 	 * @throws Exception
 	 */
-	public void borrarCarpetaNormativa(String id) throws Exception;
+	public String borrarCarpetaNormativa(String id) throws Exception;
 
 	/**
 	 * Metodo para cargar un archivo de normativa
@@ -302,7 +302,7 @@ public interface FileServiceAPI {
 	 * @param id    Id del CENAD
 	 * @throws Exception
 	 */
-	public void saveNormativas(List<MultipartFile> files, String id) throws Exception;
+	public String saveNormativas(List<MultipartFile> files, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar varios archivos de normativa
@@ -323,7 +323,7 @@ public interface FileServiceAPI {
 	 * @param id Id del CENAD
 	 * @throws Exception
 	 */
-	public void saveInfoCenad(MultipartFile file, String id) throws Exception;
+	public String saveInfoCenad(MultipartFile file, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar un archivo de información del CENAD
@@ -332,7 +332,7 @@ public interface FileServiceAPI {
 	 * @param id   Id del CENAD
 	 * @throws Exception
 	 */
-	public void borrarInfoCenad(String name, String id) throws Exception;
+	public String borrarInfoCenad(String name, String id) throws Exception;
 
 	/**
 	 * Metodo para borrar la carpeta de información del CENAD
@@ -340,7 +340,7 @@ public interface FileServiceAPI {
 	 * @param id Id del CENAD
 	 * @throws Exception
 	 */
-	public void borrarCarpetaInfoCenad(String id) throws Exception;
+	public String borrarCarpetaInfoCenad(String id) throws Exception;
 
 	/**
 	 * Metodo para cargar un archivo de información del CENAD
@@ -366,7 +366,7 @@ public interface FileServiceAPI {
 	 * @param id    Id del CENAD
 	 * @throws Exception
 	 */
-	public void saveInfoCenads(List<MultipartFile> files, String id) throws Exception;
+	public String saveInfoCenads(List<MultipartFile> files, String id) throws Exception;
 
 	/**
 	 * Metodo para cargar varios archivos de información del CENAD

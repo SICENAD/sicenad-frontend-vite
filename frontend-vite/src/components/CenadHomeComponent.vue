@@ -10,13 +10,13 @@
           <u><strong>Enlaces más importantes</strong></u>
         </h3>
         <ul>
-          <li class="pt-4" v-if="isSuperAdmin">
+          <li class="pt-4" v-if="auth.rol == 'Superadministrador'">
             <router-link :to="`/calendarios/${idCenad}`">
           <v-icon scale="2" class="me-2" name="fa-calendar-alt" />
               Planificar Recursos
             </router-link>
           </li>
-          <li class="pt-4" v-if="!isSuperAdmin">
+          <li class="pt-4" v-if="auth.rol != 'Superadministrador'">
             <router-link :to="`/calendarios/${idCenad}`">
           <v-icon scale="2" class="me-2" name="fa-calendar-alt" />
               Calendario
@@ -34,13 +34,13 @@
               Cartografía
             </router-link>
           </li>
-          <li class="pt-4" v-if="isUserNormal">
+          <li class="pt-4" v-if="auth.rol == 'Normal'">
             <router-link :to="`/solicitudesRecursos/${idCenad}/formulario/${idCenad}/${idSolicitud}`">
           <v-icon scale="2" class="me-2" name="fa-business-time" />
               Solicitar Recurso
             </router-link>
           </li>
-          <li class="pt-4" v-if="!isUserNormal">
+          <li class="pt-4" v-if="auth.rol != 'Normal'">
             <a href="#" @click.prevent="mensaje">
           <v-icon scale="2" class="me-2" name="fa-business-time" />
               Solicitar Recurso
@@ -57,7 +57,9 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import useUtilsStore from '@/stores/utils'
 import CenadService from '@/services/CenadService'
+import useAuthStore from '@/stores/auth'
 
+const auth = useAuthStore()
 const route = useRoute()
 const utils = useUtilsStore()
 const idCenad = computed(() => route.params.id)

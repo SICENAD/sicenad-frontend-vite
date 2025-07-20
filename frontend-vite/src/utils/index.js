@@ -82,3 +82,23 @@ export async function subirArchivo(archivo, urlUpload) {
 
     return data 
   }
+export async function borrarCarpeta(urlUpload) {
+    const utils = useUtilsStore()
+
+    const uploadResponse = await utils.fetchCarpetaConToken(urlUpload, 'GET', null)
+
+    if (uploadResponse.status == 400) {
+      alert('La carpeta no ha sido borrada')
+      return false
+    }
+
+    const data = await uploadResponse.json()
+    console.log('Respuesta de eliminación:', data)
+
+    if (!uploadResponse.ok) {
+      if (data.mensaje) console.error(data.mensaje)
+      return false
+    }
+
+    return data 
+  }

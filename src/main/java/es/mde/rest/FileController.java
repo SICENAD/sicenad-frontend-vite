@@ -71,14 +71,15 @@ public class FileController {
 	 * @throws Exception
 	 */
 	@PostMapping("/api/files/subirEscudo")
-	public ResponseEntity<Map<String, String>> uploadFileEscudo(@RequestParam("file") MultipartFile file) throws Exception {
-	    if (file.getSize() > sizeLimiteEscudo) {
-	        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-	                .body(Map.of("error", "El archivo es demasiado pesado"));
-	    } else {
-	        String nombreArchivo = fileServiceAPI.saveEscudo(file);
-	        return ResponseEntity.ok(Map.of("nombreArchivo", nombreArchivo));
-	    }
+	public ResponseEntity<Map<String, String>> uploadFileEscudo(@RequestParam("file") MultipartFile file)
+			throws Exception {
+		if (file.getSize() > sizeLimiteEscudo) {
+			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+					.body(Map.of("error", "El archivo es demasiado pesado"));
+		} else {
+			String nombreArchivo = fileServiceAPI.saveEscudo(file);
+			return ResponseEntity.ok(Map.of("nombreArchivo", nombreArchivo));
+		}
 	}
 
 	/**
@@ -168,15 +169,14 @@ public class FileController {
 	 * @throws Exception
 	 */
 	@PostMapping("/api/files/subirDocRecurso/{id}")
-	public ResponseEntity<Response> uploadFileDocRecurso(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<Map<String, String>> uploadFileDocRecurso(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
 		if (file.getSize() > sizeLimiteDocRecurso) {
 			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-					.body(new Response("El archivo es demasiado pesado"));
+					.body(Map.of("error", "El archivo es demasiado pesado"));
 		} else {
-			fileServiceAPI.saveDocRecurso(file, id);
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new Response("El archivo fue cargado correctamente al servidor"));
+			String nombreArchivo = fileServiceAPI.saveDocRecurso(file, id);
+			return ResponseEntity.ok(Map.of("nombreArchivo", nombreArchivo));
 		}
 	}
 
@@ -300,15 +300,14 @@ public class FileController {
 	 * @throws Exception
 	 */
 	@PostMapping("/api/files/subirDocSolicitud/{id}")
-	public ResponseEntity<Response> uploadFileDocSolicitud(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<Map<String, String>> uploadFileDocSolicitud(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
 		if (file.getSize() > sizeLimiteDocSolicitud) {
 			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-					.body(new Response("El archivo es demasiado pesado"));
+					.body(Map.of("error", "El archivo es demasiado pesado"));
 		} else {
-			fileServiceAPI.saveDocSolicitud(file, id);
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new Response("El archivo fue cargado correctamente al servidor"));
+			String nombreArchivo = fileServiceAPI.saveDocSolicitud(file, id);
+			return ResponseEntity.ok(Map.of("nombreArchivo", nombreArchivo));
 		}
 	}
 
@@ -422,11 +421,10 @@ public class FileController {
 	 * @throws Exception
 	 */
 	@PostMapping("/api/files/subirCartografia/{id}")
-	public ResponseEntity<Response> uploadFileCartografia(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<Map<String, String>> uploadFileCartografia(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
-		fileServiceAPI.saveCartografia(file, id);
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(new Response("El archivo fue cargado correctamente al servidor"));
+		String nombreArchivo = fileServiceAPI.saveCartografia(file, id);
+		return ResponseEntity.ok(Map.of("nombreArchivo", nombreArchivo));
 	}
 
 	/**
@@ -548,16 +546,15 @@ public class FileController {
 	 * @throws Exception
 	 */
 	@PostMapping("/api/files/subirNormativa/{id}")
-	public ResponseEntity<Response> uploadFileNormativa(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<Map<String, String>> uploadFileNormativa(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
-		if (file.getSize() > sizeLimiteDocRecurso) {
-			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-					.body(new Response("El archivo es demasiado pesado"));
-		} else {
-			fileServiceAPI.saveNormativa(file, id);
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new Response("El archivo fue cargado correctamente al servidor"));
-		}
+	    if (file.getSize() > sizeLimiteDocRecurso) {
+	        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+	                .body(Map.of("error", "El archivo es demasiado pesado"));
+	    } else {
+	        String nombreArchivo = fileServiceAPI.saveNormativa(file, id);
+	        return ResponseEntity.ok(Map.of("nombreArchivo", nombreArchivo));
+	    }
 	}
 
 	/**
@@ -679,16 +676,15 @@ public class FileController {
 	 * @throws Exception
 	 */
 	@PostMapping("/api/files/subirInfoCenad/{id}")
-	public ResponseEntity<Response> uploadFileInfoCenad(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<Map<String, String>> uploadFileInfoCenad(@RequestParam("file") MultipartFile file,
 			@PathVariable("id") String id) throws Exception {
-		if (file.getSize() > sizeLimiteEscudo) {
-			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-					.body(new Response("La imagen es demasiado pesada"));
-		} else {
-			fileServiceAPI.saveInfoCenad(file, id);
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new Response("La imagen fue cargada correctamente al servidor"));
-		}
+	    if (file.getSize() > sizeLimiteEscudo) {
+	        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+	                .body(Map.of("error", "El archivo es demasiado pesado"));
+	    } else {
+	        String nombreArchivo = fileServiceAPI.saveInfoCenad(file, id);
+	        return ResponseEntity.ok(Map.of("nombreArchivo", nombreArchivo));
+	    }
 	}
 
 	/**

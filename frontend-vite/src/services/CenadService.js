@@ -117,6 +117,55 @@ class CenadService {
       return null
     }
   }
+  async editarInfoCenad(
+    direccion,
+    tfno,
+    email,
+    descripcion,
+    archivoInfoCenad,
+    infoCenadActual,
+    idCenad,
+  ) {
+    let infocenad = infoCenadActual // por defecto mantenemos el actual
+    if (archivoInfoCenad) {
+      const urlUpload = `${this.utils.urlApi}/files/subirInfoCenad/${idCenad}`
+      const nuevaInfoCenad = await subirArchivo(archivoInfoCenad, urlUpload)
+      if (nuevaInfoCenad == false) return null
+      const urlBorrarArchivo = `${this.utils.urlApi}/files/borrarInfoCenad/${idCenad}/${infocenad}`
+      infocenad != null && infocenad != '' && (await borrarArchivo(urlBorrarArchivo))
+      infocenad = nuevaInfoCenad
+      console.log(nuevaInfoCenad)
+    }
+    try {
+      const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
+      const body = {
+        direccion: toTitleCase(direccion),
+        tfno: tfno,
+        email: email,
+        descripcion: descripcion,
+      }
+      if (infocenad != null && infocenad != '') {
+        body.infoCenad = infocenad
+        console.log(body)
+      }
+      console.log('pre editar')
+      const response = await this.utils.fetchConToken(urlCenad, 'PATCH', body)
+      console.log(response.json())
+      if (response.status == 200) {
+        toastExito(
+          i18n.global.t('cenads.editado', {
+            cenad: idCenad,
+          }),
+        )
+        return infocenad
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.error(error)
+      return null
+    }
+  }
   async fetchCenad(idCenad) {
     try {
       const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
@@ -134,7 +183,10 @@ class CenadService {
       const cenad = await this.fetchCenad(idCenad)
       const urlArchivo = `${this.utils.urlApi}/files/borrarEscudo/${cenad.escudo}`
       const responseDeleteEscudo = await borrarArchivo(urlArchivo)
+      const urlCarpeta = `${this.utils.urlApi}/files/borrarCarpetaInfoCenad/${idCenad}`
+      const responseDeleteInfoCenad = await borrarArchivo(urlCarpeta)
       console.log(responseDeleteEscudo)
+      console.log(responseDeleteInfoCenad)
       const response = await this.utils.fetchConToken(urlCenad, 'DELETE', null)
       const json = await response.json()
       this.cenad.value = await json
@@ -164,7 +216,20 @@ class CenadService {
     const imageUrl = URL.createObjectURL(blob)
     return imageUrl // Lo usas como src en una <img>
   }
- async getCenadsSinAdmin() {
+  async fetchInfoCenad(filename, idCenad) {
+    const response = await fetch(`${this.utils.urlApi}/files/infoCenads/${idCenad}/${filename}`, {
+      headers: {
+        Authorization: `Bearer ${this.auth.token}`,
+      },
+    })
+
+    if (!response.ok) throw new Error('No se pudo cargar la imagen')
+
+    const blob = await response.blob()
+    const imageUrl = URL.createObjectURL(blob)
+    return imageUrl // Lo usas como src en una <img>
+  }
+  async getCenadsSinAdmin() {
     try {
       const urlCenads = `${this.utils.urlApi}/cenads/sinAdmin?size=1000`
       const response = await this.utils.fetchConToken(urlCenads, 'GET', null)
@@ -175,7 +240,7 @@ class CenadService {
       console.log(error)
     }
   }
- async getUsuarioAdministrador(idCenad) {
+  async getUsuarioAdministrador(idCenad) {
     try {
       const urlAdministrador = `${this.utils.urlApi}/cenads/${idCenad}/usuarioAdministrador`
       const response = await this.utils.fetchConToken(urlAdministrador, 'GET', null)

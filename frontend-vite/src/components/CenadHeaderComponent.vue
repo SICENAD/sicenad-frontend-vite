@@ -86,7 +86,7 @@
                     <v-icon scale="2" name="fa-folder-plus" />Otros
                 </button>
                 <div class="dropdown-menu otros">
-                    <router-link class="nav-link" :to="`/infoCenad/${idCenad}`">
+                    <router-link class="nav-link"  :to="{ name: 'infocenad', params: { idCenad } }">
                         <v-icon scale="2" name="fa-question-circle" />Información
                     </router-link>
                     <router-link class="nav-link" :to="`/normativas/${idCenad}`">
@@ -131,7 +131,7 @@
                     <router-link class="dropdown-item" :to="`/normativas/${idCenad}`">
                         <v-icon scale="2" name="fa-book" />Normativa
                     </router-link>
-                    <router-link class="dropdown-item" :to="`/infoCenad/${idCenad}`">
+                    <router-link class="dropdown-item" :to="{ name: 'infocenad', params: { idCenad } }">
                         <v-icon scale="2" name="fa-question-circle" />Información
                     </router-link>
                 </div>
@@ -159,9 +159,7 @@ const idCenadZaragoza = ref(null);
 
 const isSuperAdmin = ref(auth.rol == 'Superadministrador')
 let isCenadZaragoza = ref(false)
-const isAdminEsteCenad = ref(
-    idCenad.value == auth.cenad.idString && auth.rol == 'Administrador'
-)
+const isAdminEsteCenad = ref(false)
 const isGestorNormal = ref(
     auth.rol == 'Gestor' || auth.rol == 'Normal'
 )
@@ -171,6 +169,7 @@ const toggleMenu = () => {
     menuVisible.value = !menuVisible.value
 }
 onMounted(async () => {
+    isAdminEsteCenad.value = idCenad.value == auth.cenad.idString && auth.rol == 'Administrador'
     cargarCenads()
 /*
   if (!localStorage.getItem(`categorias_${this.idCenad}`)) {

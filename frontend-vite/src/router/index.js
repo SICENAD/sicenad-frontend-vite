@@ -22,21 +22,16 @@ const router = createRouter({
       meta: {
         requireAuth: true,
       },
-
       children: [
         {
           path: '',
-          redirect: (to) => {
-            return {
-              name: 'cenad-home',
-              params: { id: to.params.id },
-            }
-          },
-        },
-        {
-          path: 'home',
           name: 'cenad-home',
           component: () => import('../components/CenadHomeComponent.vue'),
+        },
+        {
+          path: 'infocenad',
+          name: 'infocenad',
+          component: () => import('../components/InfoCenadComponent.vue'),
         },
         /*
       ,
