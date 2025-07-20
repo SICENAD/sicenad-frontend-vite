@@ -49,7 +49,7 @@ import UsuariosSuperadministradorView from './UsuariosSuperadministradorView.vue
 const auth = useAuthStore()
 let name = ref('superadministrador')
 let params = ref({})
-let idCenad = 1 //tendre que captar el idCenad del administrador, ya que es para el caso en el que el usuario sea el Administrador de un CENAD
+let idCenad = auth.cenad.idString //tendre que captar el idCenad del administrador, ya que es para el caso en el que el usuario sea el Administrador de un CENAD
 //let volver = ref('{ name: superadministrador }')//tengo que hacer condicion para que si es superadmistrador valga eso y si es administradot vaya a la pagina del cenad concreto 
 let isMiCenad = ref(true)//se modificara si estoy en un CENAD perteneciente al usuario gestor o administrador
 let rol = ref(auth.rol)
@@ -59,7 +59,7 @@ onMounted(async () => {
     definirBtnVolver()
 })
 function definirBtnVolver() {
-    name.value = rol.value === 'Superadministrador' ? 'superadministrador' : 'cenads'
+    name.value = rol.value === 'Superadministrador' ? 'superadministrador' : 'cenad-home'
     params.value = rol.value === 'Superadministrador' ? {} : { id: idCenad }
 }
 </script>

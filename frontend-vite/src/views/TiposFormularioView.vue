@@ -20,13 +20,13 @@
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
                 <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo">
+                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
                         <b>NOMBRE</b>
                     </div>
-                    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo">
+                    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo text-center">
                         <b>CÓDIGO DE TIPO</b>
                     </div>
-                    <div class="col-10 col-sm-10 col-md-7 col-lg-7 col-xl-7 titulo">
+                    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
                         <b>DESCRIPCIÓN</b>
                     </div>
                 </div>

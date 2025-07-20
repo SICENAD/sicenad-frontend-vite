@@ -122,7 +122,7 @@
                     <router-link class="dropdown-item" :to="`/categorias/${idCenad}`">
                         <v-icon scale="2" name="fa-tree" />Categorías
                     </router-link>
-                    <router-link class="dropdown-item" :to="`/usuarios/${idCenad}`">
+                    <router-link class="dropdown-item" :to="`/usuarios`">
                         <v-icon scale="2" name="fa-users" />Usuarios
                     </router-link>
                     <router-link class="dropdown-item" :to="`/unidades/${idCenad}`">

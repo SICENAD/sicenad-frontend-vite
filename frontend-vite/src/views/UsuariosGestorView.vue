@@ -54,7 +54,7 @@
                             <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
                         </div>
                         <div class="mb-3">
-                            <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
+                            <label class="titulo me-2"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
                                         class="text-danger">*</sup></b></label>
                             <input type="checkbox" class="letra" id="emailAdmitidoUsuarioGestor"
                                 v-model="emailAdmitidoUsuarioGestor" />
@@ -64,15 +64,7 @@
                             <input type="textarea" class="form-control letra" id="descripcionUsuarioGestor"
                                 v-model="descripcionUsuarioGestor" />
                         </div>
-                        <div class="mb-3">
-                            <label class="titulo me-2"><b>CENAD<sup class="text-danger">*</sup></b></label>
-                            <select class="form-select" aria-label="cenadUsuarioGestor" v-model="cenad">
-                                <option disabled value="">Selecciona el CENAD/CMT</option>
-                                <option v-for="cenad in cenadsUsuarioGestor" :key="cenad.idString" :value="cenad">
-                                    {{ cenad.nombre }}
-                                </option>
-                            </select>
-                        </div>
+                       
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -92,12 +84,13 @@ import { ref, onMounted } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UsuarioGestorComponent from '@/components/UsuarioGestorComponent.vue'
 import { toTitleCase } from '@/utils'
-import CenadService from '@/services/CenadService'
+import useAuthStore from '@/stores/auth'
 
-const cenadService = new CenadService()
+const auth = useAuthStore()
+const idCenad = auth.cenad.idString
+
 const service = new UsuarioService()
 let usuariosGestor = service.getUsuariosGestor()
-let cenadsUsuarioGestor = cenadService.getCenads()
 
 let tfnoUsuarioGestor = ref('')
 let emailUsuarioGestor = ref('')
@@ -105,25 +98,22 @@ let emailAdmitidoUsuarioGestor = ref(false)
 let descripcionUsuarioGestor = ref('')
 let usernameUsuarioGestor = ref('')
 let passwordUsuarioGestor = ref('')
-let cenad = ref()
 
 onMounted(async () => {
     await getUsuariosGestor()
-    await cenadService.fetchAll()
 })
 const crearUsuarioGestor = async () => {
-    await service.crearUsuarioGestor(usernameUsuarioGestor.value, passwordUsuarioGestor.value, tfnoUsuarioGestor.value, emailUsuarioGestor.value, emailAdmitidoUsuarioGestor.value, descripcionUsuarioGestor.value, cenad.value.idString)
+    await service.crearUsuarioGestor(usernameUsuarioGestor.value, passwordUsuarioGestor.value, tfnoUsuarioGestor.value, emailUsuarioGestor.value, emailAdmitidoUsuarioGestor.value, descripcionUsuarioGestor.value, idCenad)
     usernameUsuarioGestor.value = ''
     passwordUsuarioGestor.value = ''
     tfnoUsuarioGestor.value = ''
     emailUsuarioGestor.value = ''
     emailAdmitidoUsuarioGestor.value = false
     descripcionUsuarioGestor.value = ''
-    cenad.value = {}
     await getUsuariosGestor()
 }
 const getUsuariosGestor = async () => {
-    await service.fetchUsuariosGestor()
+    await service.fetchUsuariosGestorDeCenad(idCenad)
 }
 async function actualizarUsuarioGestorEnView() {
     await getUsuariosGestor()

@@ -137,6 +137,17 @@ class UsuarioService {
       console.log(error)
     }
   }
+  async fetchUsuariosGestorDeCenad(idCenad) {
+    try {
+      const urlUsuarios = `${this.utils.urlApi}/cenads/${idCenad}/usuariosGestores?size=1000`
+      const response = await this.utils.fetchConToken(urlUsuarios, 'GET', null)
+      const json = await response.json()
+      this.usuarios_gestor.value = await json._embedded.usuarios_gestor
+      return response.status == 200 ? true : false
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async fetchUsuariosNormal() {
     try {
       const urlUsuarios = `${this.utils.urlApi}/usuarios_normal?size=1000`
