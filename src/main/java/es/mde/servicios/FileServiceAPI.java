@@ -344,4 +344,12 @@ public interface FileServiceAPI {
 	 * @throws Exception
 	 */
 	public Stream<Path> loadAllInfoCenads(String id) throws Exception;
+	
+	/**
+	 * Metodo para borrar la carpeta entera del CENAD
+	 * 
+	 * @param id Id del CENAD
+	 * @throws Exception
+	 */
+	public String borrarCarpetaCenad(String id) throws Exception;
 }

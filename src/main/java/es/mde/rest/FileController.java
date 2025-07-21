@@ -688,4 +688,18 @@ public class FileController {
 		}).collect(Collectors.toList());
 		return ResponseEntity.status(HttpStatus.OK).body(files);
 	}
+	
+	/**
+	 * Genera el endpoint para borrar la carpeta entera de un CENAD/CMT
+	 * 
+	 * @param id Id del CENAD
+	 * @return La respuesta de la API...
+	 * @throws Exception
+	 */
+	@GetMapping("/api/files/{idCenad}/borrarCarpetaCenad")
+	public ResponseEntity<Response> borrarCarpetaCenad(@PathVariable("idCenad") String id) throws Exception {
+		fileServiceAPI.borrarCarpetaCenad(id);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(new Response("La carpeta entera del CENAD/CMT " + id + " fue borrada correctamente del servidor"));
+	}
 }

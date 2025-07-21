@@ -586,4 +586,16 @@ public class FileServiceImpl implements FileServiceAPI {
 		return Files.walk(infoCenadsFolder2, 1).filter(path -> !path.equals(infoCenadsFolder2))
 				.map(infoCenadsFolder2::relativize);
 	}
+
+	/**
+	 * Metodo para borrar la carpeta entera de un Cenad
+	 */
+	@Override
+	public String borrarCarpetaCenad(String id) throws Exception {
+		String carpetaBorrada = "Se ha borrado la carpeta entera del CENAD/CMT " + id;
+		Path cenadFolder2 = Paths.get(cenadFolder.toString() + " " + id);
+		Path carpeta = comunFolder.resolve(cenadFolder2);
+		Files.walk(carpeta).sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
+		return carpetaBorrada;
+	}
 }

@@ -37,7 +37,6 @@ class CenadService {
   }
   async crearCenad(nombre, provincia, direccion, tfno, email, descripcion, archivoEscudo) {
     try {
-
       const urlCenads = `${this.utils.urlApi}/cenads`
       const responseCrearCenadSinEscudo = await this.utils.fetchConToken(urlCenads, 'POST', {
         nombre: nombre.toUpperCase(),
@@ -45,7 +44,7 @@ class CenadService {
         direccion: toTitleCase(direccion),
         tfno: tfno,
         email: email,
-        descripcion: descripcion
+        descripcion: descripcion,
       })
       let responseSinEscudoJson = await responseCrearCenadSinEscudo.json()
       let idCenad = responseSinEscudoJson.idString
@@ -55,8 +54,8 @@ class CenadService {
         escudo = await subirArchivo(archivoEscudo, urlUpload)
         if (escudo == false) return false
       }
-        const response = await this.utils.fetchConToken(urlCenads, 'PATCH', {
-        escudo: escudo
+      const response = await this.utils.fetchConToken(urlCenads, 'PATCH', {
+        escudo: escudo,
       })
       if (response.status == 201) {
         i18n.global.t('comun.enviando')
@@ -185,13 +184,9 @@ class CenadService {
   async deleteCenad(idCenad) {
     try {
       const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
-      //tengo que hacer en la api una ruta en el controller para que borre la carpeta del cenad directamente
-      const urlCarpetaEscudo = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaEscudo`
-      const responseDeleteEscudo = await borrarCarpeta(urlCarpetaEscudo)
-      const urlCarpetaInfo = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaInfoCenad`
-      const responseDeleteInfoCenad = await borrarCarpeta(urlCarpetaInfo)
-      console.log(responseDeleteEscudo)
-      console.log(responseDeleteInfoCenad)
+      const urlCarpetaCenad = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaCenad`
+      const responseDeleteCarpeta = await borrarCarpeta(urlCarpetaCenad)
+      console.log(responseDeleteCarpeta)
       const response = await this.utils.fetchConToken(urlCenad, 'DELETE', null)
       const json = await response.json()
       this.cenad.value = await json

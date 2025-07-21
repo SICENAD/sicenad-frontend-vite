@@ -14,7 +14,7 @@
         </div>
         <div class="row ">
             <div class="col-4 ps-0">
-                <RouterLink class="nav-link ml-4 home" :to="{ name: 'about' }">
+                <RouterLink class="nav-link ml-4 home" :to="{ name: 'home' }">
                     <v-icon name="fa-home" scale="2" /><strong>Home</strong>
                 </RouterLink>
             </div>
