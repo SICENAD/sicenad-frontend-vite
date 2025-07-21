@@ -2,7 +2,7 @@
     <!-- muestra la vista de armas -->
     <div class="container-fluid">
         <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: 'superadministrador' }">
+            <RouterLink class="nav-link volver" :to="{ name: name, params: params }">
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
             </RouterLink>
         </div>
@@ -93,7 +93,8 @@
 import { ref, onMounted } from 'vue'
 import UnidadComponent from '@/components/UnidadComponent.vue'
 import UnidadService from '@/services/UnidadService'
-
+import useAuthStore from '@/stores/auth'
+const auth = useAuthStore()
 let nombre = ref('')
 let descripcion = ref('')
 let email = ref('')
@@ -104,9 +105,19 @@ let poc = ref('')
 const service = new UnidadService()
 let unidades = service.getUnidades()
 
+let rol = ref(auth.rol)
+let idCenad = auth.cenad.idString
+let name = ref('superadministrador')
+let params = ref({})
+
 onMounted(async () => {
     await getUnidades()
+    definirBtnVolver()
 })
+function definirBtnVolver() {
+    name.value = rol.value === 'Superadministrador' ? 'superadministrador' : 'cenad-home'
+    params.value = rol.value === 'Superadministrador' ? {} : { id: idCenad }
+}
 const crearUnidad = async () => {
     await service.crearUnidad(nombre.value, descripcion.value, email.value, tfno.value, direccion.value, poc.value)
     nombre = ''

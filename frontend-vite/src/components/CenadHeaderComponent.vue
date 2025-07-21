@@ -125,7 +125,7 @@
                     <router-link class="dropdown-item" :to="`/usuarios`">
                         <v-icon scale="2" name="fa-users" />Usuarios
                     </router-link>
-                    <router-link class="dropdown-item" :to="`/unidades/${idCenad}`">
+                    <router-link class="dropdown-item" :to="{ name: 'unidades'}">
                         <v-icon scale="2" name="fa-sitemap" />Unidades
                     </router-link>
                     <router-link class="dropdown-item" :to="`/normativas/${idCenad}`">
