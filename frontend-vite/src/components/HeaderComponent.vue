@@ -36,10 +36,19 @@
 import { RouterLink } from 'vue-router'
 import useAuthStore from '@/stores/auth'
 import { baseNormalizada } from '@/utils'
-import { onMounted, ref } from 'vue'
+import { computed } from 'vue'
 
 const authStore = useAuthStore()
-let identificacion = ref('')
+const identificacion = computed(() => {
+  if (authStore.rol === 'Administrador' || authStore.rol === 'Gestor') {
+    return `${authStore.rol} del ${authStore.cenad.nombre}`
+  } else if (authStore.rol === 'Normal') {
+    return `${authStore.rol} de ${authStore.unidad.nombre}`
+  } else {
+    return authStore.rol
+  }
+})
+
 const getLanguageLabel = (locale) => {
   const labels = {
     es: 'Español',
@@ -61,13 +70,6 @@ const getFlag = (locale) => {
 const logout = () => {
   authStore.logout()
 }
-onMounted(async () => {
-  (authStore.rol == 'Administrador' || authStore.rol == 'Gestor')
-    ? identificacion.value = `${authStore.rol} del ${authStore.cenad.nombre}`
-    : authStore.rol == 'Normal'
-      ? identificacion.value = `${authStore.rol} de ${authStore.unidad.nombre}`
-      : identificacion.value = authStore.rol
-})
 </script>
 <style lang="scss">
 header {

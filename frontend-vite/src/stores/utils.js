@@ -68,8 +68,9 @@ const useUtilsStore = defineStore('utils', {
     sizeMaxDocRecurso: (state) => state.properties?.sizeMaxDocRecurso || 0,
     sizeMaxDocSolicitud: (state) => state.properties?.sizeMaxDocSolicitud || 0,
     sizeMaxCartografia: (state) => state.properties?.sizeMaxCartografia || 0,
-    categoriaFicheroCartografia: (state) => state.properties?.sizeMaxDocRecurso || '1',
+    categoriaFicheroCartografia: (state) => state.properties?.categoriaFicheroCartografia || '1',
     tiposTiro: (state) => state.properties?.tiposTiro || [],
+    escalasCartografia: (state) => state.properties?.escalasCartografia || [],
   },
   actions: {
     async cargarPropiedadesIniciales() {
@@ -121,7 +122,7 @@ const useUtilsStore = defineStore('utils', {
         return null
       }
     },
-async fetchCarpetaConToken(url, method, body) {
+    async fetchCarpetaConToken(url, method, body) {
       try {
         const auth = useAuthStore()
         const headers = {

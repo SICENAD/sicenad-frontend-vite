@@ -38,6 +38,11 @@ const router = createRouter({
           name: 'normativas',
           component: () => import('../views/NormativasView.vue'),
         },
+        {
+          path: 'cartografias',
+          name: 'cartografias',
+          component: () => import('../views/CartografiasView.vue'),
+        },
         /*
       ,
       {

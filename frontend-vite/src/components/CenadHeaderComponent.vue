@@ -43,7 +43,7 @@
                                     <v-icon scale="2" name="fa-calendar-alt" />Calendario
                                 </router-link>
 
-                                <router-link class="nav-link" :to="`/cartografias/${idCenad}`">
+                                <router-link class="nav-link" :to="{ name: 'cartografias'}">
                                     <v-icon scale="2" name="fa-map" />Cartografía
                                 </router-link>
 
@@ -113,7 +113,7 @@
                     <v-icon scale="2" name="fa-user" />Gestionar
                 </button>
                 <div class="dropdown-menu gestionar">
-                    <router-link class="dropdown-item" :to="`/cartografias/${idCenad}`">
+                    <router-link class="dropdown-item" :to="{ name: 'cartografias'}">
                         <v-icon scale="2" name="fa-map" />Cartografía
                     </router-link>
                     <router-link class="dropdown-item" :to="`/recursos/${idCenad}`">

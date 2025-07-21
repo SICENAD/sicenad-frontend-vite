@@ -42,14 +42,15 @@ class NormativaService {
         console.log('el nombre del archivo es ' + nombreArchivo)
         if (nombreArchivo == false) return false
       }
-      const urlNormativa = `${this.utils.urlApi}/ficheros`
-      const response = await this.utils.fetchConToken(urlNormativa, 'POST', {
+      const urlNormativas = `${this.utils.urlApi}/ficheros`
+      const body = {
         nombre: nombre.toUpperCase(),
         descripcion: descripcion,
         cenad: `${this.utils.urlApi}/cenads/${idCenad}`,
-        categoriaFichero: `${this.utils.urlApi}/categorias_ficheros/1`, //por poner una, aqui no se utiliza....
-        nombreArchivo: nombreArchivo
-      })
+        categoriaFichero: `${this.utils.urlApi}/categorias_fichero/${this.utils.categoriaFicheroCartografia}`,
+        nombreArchivo: nombreArchivo,
+      }
+      const response = await this.utils.fetchConToken(urlNormativas, 'POST', body)
       if (response.status == 201) {
         i18n.global.t('comun.enviando')
         toastExito(
@@ -65,41 +66,41 @@ class NormativaService {
     }
   }
   async editarNormativa(nombre, descripcion, archivo, nombreArchivoActual, idCenad, idNormativa) {
-       let nombreArchivo = nombreArchivoActual // por defecto mantenemos el actual
-       if (archivo) {
-         const urlUpload = `${this.utils.urlApi}/files/${idCenad}/subirNormativa`
-         const nuevaNormativa = await subirArchivo(archivo, urlUpload)
-         if (nuevaNormativa == false) return null
-         const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarNormativa/${nombreArchivo}`
-         const responseDeleteArchivo = await borrarArchivo(urlBorrarArchivo)
-         console.log(responseDeleteArchivo)
-         nombreArchivo = nuevaNormativa
-    try {
-      const urlNormativa = `${this.utils.urlApi}/ficheros/${idNormativa}`
-      const body = {
-        nombre: nombre.toUpperCase(),
-        descripcion: descripcion,
-      }
-      if (nombreArchivo) {
-        body.nombreArchivo = nombreArchivo
-      }
-      const response = await this.utils.fetchConToken(urlNormativa, 'PATCH', body)
-      if (response.status == 200) {
-        toastExito(
-          i18n.global.t('normativas.editada', {
-            normativa: nombre,
-          }),
-        )
-        return nombreArchivo
-      } else {
+    let nombreArchivo = nombreArchivoActual // por defecto mantenemos el actual
+    if (archivo) {
+      const urlUpload = `${this.utils.urlApi}/files/${idCenad}/subirNormativa`
+      const nuevaNormativa = await subirArchivo(archivo, urlUpload)
+      if (nuevaNormativa == false) return null
+      const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarNormativa/${nombreArchivo}`
+      const responseDeleteArchivo = await borrarArchivo(urlBorrarArchivo)
+      console.log(responseDeleteArchivo)
+      nombreArchivo = nuevaNormativa
+      try {
+        const urlNormativa = `${this.utils.urlApi}/ficheros/${idNormativa}`
+        const body = {
+          nombre: nombre.toUpperCase(),
+          descripcion: descripcion,
+        }
+        if (nombreArchivo) {
+          body.nombreArchivo = nombreArchivo
+        }
+        const response = await this.utils.fetchConToken(urlNormativa, 'PATCH', body)
+        if (response.status == 200) {
+          toastExito(
+            i18n.global.t('normativas.editada', {
+              normativa: nombre,
+            }),
+          )
+          return nombreArchivo
+        } else {
+          return null
+        }
+      } catch (error) {
+        console.error(error)
         return null
       }
-    } catch (error) {
-      console.error(error)
-      return null
     }
   }
-}
   async fetchNormativa(idNormativa) {
     try {
       const urlNormativa = `${this.utils.urlApi}/ficheros/${idNormativa}`
@@ -111,8 +112,10 @@ class NormativaService {
       console.log(error)
     }
   }
-  async deleteNormativa(idNormativa) {
+  async deleteNormativa(nombreArchivo, idNormativa, idCenad) {
     try {
+      const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarNormativa/${nombreArchivo}`
+      await borrarArchivo(urlBorrarArchivo)
       const urlNormativa = `${this.utils.urlApi}/ficheros/${idNormativa}`
       const response = await this.utils.fetchConToken(urlNormativa, 'DELETE', null)
       const json = await response.json()
@@ -140,7 +143,7 @@ class NormativaService {
 
     const blob = await response.blob()
     const archivoUrl = URL.createObjectURL(blob)
-    return archivoUrl 
+    return archivoUrl
   }
 }
 

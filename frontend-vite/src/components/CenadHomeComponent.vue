@@ -29,7 +29,7 @@
             </router-link>
           </li>
           <li class="pt-4">
-            <router-link :to="`/cartografias/${idCenad}`">
+            <router-link :to="{ name: 'cartografias'}">
           <v-icon scale="2" class="me-2" name="fa-map" />
               Cartografía
             </router-link>

@@ -1,18 +1,18 @@
 <template>
-    <!-- muestra la vista de normativas -->
+    <!-- muestra la vista de cartografías -->
     <div class="container-fluid">
         <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad} }">
+            <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad } }">
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
             </RouterLink>
         </div>
         <div class="row mt-1">
             <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>NORMATIVA DEL {{ auth.cenad.nombre }}</u></h3>
+                <h3 class="text-center titulo1"><u>CARTOGRAFÍA DEL {{ auth.cenad.nombre }}</u></h3>
             </div>
             <div class="col-3 justify-content-end">
-                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-normativa">
-                    Nueva <b>Normativa</b>
+                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-cartografia">
+                    Nueva <b>Cartografía</b>
                 </button>
             </div>
         </div>
@@ -20,37 +20,51 @@
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
                 <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-5 col-lg-5 col-xl-5 titulo">
+                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
                         <b>NOMBRE</b>
                     </div>
-                    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo ">
+                    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo">
+                        <b>ESCALA</b>
+                    </div>
+                    <div class="col-10 col-sm-10 col-md-5 col-lg-5 col-xl-5 titulo ">
                         <b>DESCRIPCIÓN</b>
                     </div>
                     <div class="col-10 col-sm-10 col-md-1 col-lg-1 col-xl-1 titulo text-center">
                         <b>DESCARGA</b>
                     </div>
                 </div>
-                <NormativaComponent v-for="(item, index) in normativas" :key="index" :content="item" :idCenad="idCenad"
-                    @emiteElemento="actualizarNormativaEnView" />
+                <CartografiaComponent v-for="(item, index) in cartografias" :key="index" :content="item"
+                    :idCenad="idCenad" @emiteElemento="actualizarCartografiaEnView" />
             </div>
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="modal-nueva-normativa" tabindex="-1" aria-labelledby="modal-nueva-normativa-Label"
+    <div class="modal fade" id="modal-nueva-cartografia" tabindex="-1" aria-labelledby="modal-nueva-cartografia-Label"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modal-nueva-normativa-Label">
-                        Nueva Normativa
+                    <h1 class="modal-title fs-5" id="modal-nueva-cartografia-Label">
+                        Nueva Cartografía
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label class="titulo"><b>NOMBRE DE LA NORMATIVA<sup class="text-danger">*</sup></b></label>
+                            <label class="titulo"><b>NOMBRE DE LA CARTOGRAFÍA<sup
+                                        class="text-danger">*</sup></b></label>
                             <input type="text" class="form-control letra" id="nombre" v-model="nombre" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="titulo"><b>ESCALA<sup class="text-danger">*</sup></b></label>
+                            <select class="form-select" aria-label="escala" v-model="escala">
+                                <option disabled value="">Selecciona la escala</option>
+                                <option v-for="(escala, index) in escalas" :key="index"
+                                    :value="escala">
+                                    {{ escala }}
+                                </option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
@@ -58,7 +72,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo
-                                permitido: {{ sizeMaxDocRecurso }} MB)</label>
+                                permitido: {{ sizeMaxCartografia }} GB)</label>
                             <input type="file" accept="*" @change="onFileChange" />{{ nombreArchivo }}
                         </div>
                     </form>
@@ -67,8 +81,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearNormativa" data-bs-dismiss="modal" class="btn btn-primary">
-                        Crear Normativa
+                    <button type="button" @click="crearCartografia" data-bs-dismiss="modal" class="btn btn-primary">
+                        Crear Cartografía
                     </button>
                 </div>
             </div>
@@ -76,48 +90,50 @@
     </div>
 </template>
 <script setup>
-import NormativaComponent from '@/components/NormativaComponent.vue'
 import useAuthStore from '@/stores/auth'
 import { ref, onMounted, computed } from 'vue'
 import useUtilsStore from '@/stores/utils'
-import NormativaService from '@/services/NormativaService'
 import { useRoute } from 'vue-router'
+import CartografiaComponent from '@/components/CartografiaComponent.vue'
+import CartografiaService from '@/services/CartografiaService'
 
 const utils = useUtilsStore()
 const auth = useAuthStore()
 const route = useRoute()
 const idCenad = computed(() => route.params.id)
-
-let sizeMaxDocRecurso = ref(utils.sizeMaxDocRecurso)
+let escalas = utils.escalasCartografia
+let sizeMaxCartografia = ref(utils.sizeMaxCartografia)
 let nombre = ref('')
 let nombreArchivo = ref('')
 let descripcion = ref('')
-let normativaFile = ref(null)
+let escala = ref('')
+let cartografiaFile = ref(null)
 
 
-const service = new NormativaService()
-const normativas = service.getNormativas()
+const service = new CartografiaService()
+const cartografias = service.getCartografias()
 
 function onFileChange(e) {
     const file = e.target.files[0]
-    normativaFile.value = file
+    cartografiaFile.value = file
 }
 onMounted(async () => {
-    await getNormativas()
+    await getCartografias()
 })
-const crearNormativa = async () => {
-    await service.crearNormativa(nombre.value, descripcion.value, normativaFile.value, idCenad.value)
-     nombre.value = ''
-    normativaFile.value = ''
-    descripcion.value = ''
-    await getNormativas()
+const crearCartografia = async () => {
+    await service.crearCartografia(nombre.value, descripcion.value, escala.value, cartografiaFile.value, idCenad.value)
+    nombre.value = ''
+    cartografiaFile.value = ''
+    descripcion.value = '',
+    escala.value = ''
+    await getCartografias()
 }
-const getNormativas = async () => {
+const getCartografias = async () => {
     await service.fetchAll(idCenad.value)
 }
 
-function actualizarNormativaEnView() {
-    getNormativas()
+function actualizarCartografiaEnView() {
+    getCartografias()
 }
 </script>
 <style scoped lang="scss">
