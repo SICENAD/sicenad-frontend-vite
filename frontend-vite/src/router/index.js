@@ -33,6 +33,11 @@ const router = createRouter({
           name: 'infocenad',
           component: () => import('../components/InfoCenadComponent.vue'),
         },
+        {
+          path: 'normativas',
+          name: 'normativas',
+          component: () => import('../views/NormativasView.vue'),
+        },
         /*
       ,
       {
@@ -48,7 +53,7 @@ const router = createRouter({
       component: () => import('../views/SuperadministradorView.vue'),
       meta: {
         requireAuth: true,
-        roles: ['Superadministrador']
+        roles: ['Superadministrador'],
       },
     },
     {
@@ -130,16 +135,15 @@ router.beforeEach(async (to, from, next) => {
   const isAuth = auth.token != null
   const needAuth = to.meta.requireAuth
 
-    // Inicializar si aún no lo hiciste
+  // Inicializar si aún no lo hiciste
   if (auth.token && !auth.username) {
-    const res =await auth.init()  // Validar token y obtener datos si falta
+    const res = await auth.init() // Validar token y obtener datos si falta
     if (!res.ok || !res) {
       auth.logout()
-      next({name: 'login'})
+      next({ name: 'login' })
       alert('Tu sesión ha caducado y debes volver a iniciar sesión')
     }
   }
-
 
   if (needAuth && !isAuth) {
     next({ name: 'login' })

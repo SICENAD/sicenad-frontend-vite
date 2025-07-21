@@ -185,6 +185,7 @@ class CenadService {
   async deleteCenad(idCenad) {
     try {
       const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
+      //tengo que hacer en la api una ruta en el controller para que borre la carpeta del cenad directamente
       const urlCarpetaEscudo = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaEscudo`
       const responseDeleteEscudo = await borrarCarpeta(urlCarpetaEscudo)
       const urlCarpetaInfo = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaInfoCenad`

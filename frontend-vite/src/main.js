@@ -38,7 +38,8 @@ import {
   FaEdge,
   FaQuestionCircle,
   FaMap,
-  FaSnowflake
+  FaSnowflake,
+  FaDownload
 } from 'oh-vue-icons/icons'
 import useUtilsStore from './stores/utils'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
@@ -80,6 +81,7 @@ addIcons(
   FaQuestionCircle,
   FaMap,
   FaSnowflake,
+  FaDownload
 )
 //para facilitar la importacion de las opciones
 const app = createApp(App)
