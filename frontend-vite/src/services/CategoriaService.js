@@ -33,7 +33,7 @@ class CategoriaService {
       console.log(error)
     }
   }
- async fetchCategoriasPadre(idCenad) {
+  async fetchCategoriasPadre(idCenad) {
     try {
       const urlCategorias = `${this.utils.urlApi}/cenads/${idCenad}/categoriasPadre?size=1000`
       const response = await this.utils.fetchConToken(urlCategorias, 'GET', null)
@@ -44,7 +44,7 @@ class CategoriaService {
       console.log(error)
     }
   }
- async fetchCategoriaPadreDeSubcategoria(idCategoria) {
+  async fetchCategoriaPadreDeSubcategoria(idCategoria) {
     try {
       const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}/categoriaPadre`
       const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
@@ -55,9 +55,20 @@ class CategoriaService {
       console.log(error)
     }
   }
- async fetchSubcategorias(idCategoria) {
+  async fetchSubcategorias(idCategoria) {
     try {
       const urlCategorias = `${this.utils.urlApi}/categorias/${idCategoria}/subcategorias?size=1000`
+      const response = await this.utils.fetchConToken(urlCategorias, 'GET', null)
+      const json = await response.json()
+      this.categorias.value = await json._embedded.categorias
+      return response.status == 200 ? this.categorias.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async fetchSubcategoriasAnidadas(idCategoria) {
+    try {
+      const urlCategorias = `${this.utils.urlApi}/categorias/${idCategoria}/subcategoriasAnidadas?size=1000`
       const response = await this.utils.fetchConToken(urlCategorias, 'GET', null)
       const json = await response.json()
       this.categorias.value = await json._embedded.categorias

@@ -5,83 +5,100 @@ import i18n from '@/plugins/i18n'
 import { toastExito } from '@/utils'
 
 class RecursoService {
-  categorias
+  recursos
+  recurso
+  usuarioGestor
   categoria
+  tipoFormulario
   auth
   utils
 
   constructor() {
-    this.categorias = ref([])
+    this.recursos = ref([])
+    this.recurso = ref()
+    this.usuarioGestor = ref()
     this.categoria = ref()
+    this.tipoFormulario = ref()
     this.auth = useAuthStore()
     this.utils = useUtilsStore()
   }
-  getCategorias() {
-    return this.categorias
+  getRecursos() {
+    return this.recursos
+  }
+  getRecurso() {
+    return this.recurso
+  }
+  getUsuarioGestor() {
+    return this.usuarioGestor
   }
   getCategoria() {
     return this.categoria
   }
+  getTipoFormulario() {
+    return this.tipoFormulario
+  }
   async fetchAll(idCenad) {
     try {
-      const urlCategorias = `${this.utils.urlApi}/cenads/${idCenad}/categorias?size=1000`
-      const response = await this.utils.fetchConToken(urlCategorias, 'GET', null)
+      const urlRecursos = `${this.utils.urlApi}/cenads/${idCenad}/recursos?size=1000`
+      const response = await this.utils.fetchConToken(urlRecursos, 'GET', null)
       const json = await response.json()
-      this.categorias.value = await json._embedded.categorias
-      return response.status == 200 ? this.categorias.value : null
+      this.recursos.value = await json._embedded.recursos
+      return response.status == 200 ? this.recursos.value : null
     } catch (error) {
       console.log(error)
     }
   }
- async fetchCategoriasPadre(idCenad) {
+  async fetchRecursosDeCategoria(idCategoria) {
     try {
-      const urlCategorias = `${this.utils.urlApi}/cenads/${idCenad}/categoriasPadre?size=1000`
-      const response = await this.utils.fetchConToken(urlCategorias, 'GET', null)
+      const urlRecursos = `${this.utils.urlApi}/categorias/${idCategoria}/recursos?size=1000`
+      const response = await this.utils.fetchConToken(urlRecursos, 'GET', null)
       const json = await response.json()
-      this.categorias.value = await json._embedded.categorias
-      return response.status == 200 ? this.categorias.value : null
+      this.recursos.value = await json._embedded.recursos
+      return response.status == 200 ? this.recursos.value : null
     } catch (error) {
       console.log(error)
     }
   }
- async fetchCategoriaPadreDeSubcategoria(idCategoria) {
+  async fetchRecursosDeSubcategorias(idCategoria) {
     try {
-      const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}/categoriaPadre`
-      const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
+      const urlRecursos = `${this.utils.urlApi}/categorias/${idCategoria}/recursosDeSubcategorias?size=1000`
+      const response = await this.utils.fetchConToken(urlRecursos, 'GET', null)
       const json = await response.json()
-      this.categoria.value = await json
-      return response.status == 200 ? this.categoria.value : null
+      this.recursos.value = await json._embedded.recursos
+      return response.status == 200 ? this.recursos.value : null
     } catch (error) {
       console.log(error)
     }
   }
- async fetchSubcategorias(idCategoria) {
+    async fetchRecursosDeGestor(idGestor) {
     try {
-      const urlCategorias = `${this.utils.urlApi}/categorias/${idCategoria}/subcategorias?size=1000`
-      const response = await this.utils.fetchConToken(urlCategorias, 'GET', null)
+      const urlRecursos = `${this.utils.urlApi}/usuarios_gestor/${idGestor}/recursos?size=1000`
+      const response = await this.utils.fetchConToken(urlRecursos, 'GET', null)
       const json = await response.json()
-      this.categorias.value = await json._embedded.categorias
-      return response.status == 200 ? this.categorias.value : null
+      this.recursos.value = await json._embedded.recursos
+      return response.status == 200 ? this.recursos.value : null
     } catch (error) {
       console.log(error)
     }
   }
-  async crearCategoria(nombre, descripcion, idCenad, idCategoriaPadre) {
+  async crearRecurso(nombre, descripcion, otros, idTipoFormulario, idCategoria, idGestor, idCenad) {
     try {
-      const urlCategorias = `${this.utils.urlApi}/categorias`
+      const urlRecursos = `${this.utils.urlApi}/recursos`
       const body = {
         nombre: nombre.toUpperCase(),
         descripcion: descripcion,
+        otros: otros,
+        tipoFormulario: `${this.utils.urlApi}/tipos_formulario/${idTipoFormulario}`,
+        categoria: `${this.utils.urlApi}/categorias/${idCategoria}`,
+        usuarioGestor: `${this.utils.urlApi}/usuarios_gestor/${idGestor}`,
         cenad: `${this.utils.urlApi}/cenads/${idCenad}`,
       }
-      idCategoriaPadre != null && (body.categoriaPadre = `${this.utils.urlApi}/categorias/${idCategoriaPadre}`)
-
-      const response = await this.utils.fetchConToken(urlCategorias, 'POST', body)
+      const response = await this.utils.fetchConToken(urlRecursos, 'POST', body)
       if (response.status == 201) {
         i18n.global.t('comun.enviando')
         toastExito(
-          i18n.global.t('categorias.creada', {
-            categoria: nombre,
+          i18n.global.t('recursos.creado', {
+            recurso: nombre,
           }),
         )
         return true
@@ -91,22 +108,25 @@ class RecursoService {
       return false
     }
   }
-  async editarCategoria(nombre, descripcion, idCategoriaPadre, idCategoria) {
+  async editarRecurso(nombre, descripcion, otros, idTipoFormulario, idCategoria, idGestor, idRecurso) {
     try {
-      const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
+      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
       const body = {
         nombre: nombre.toUpperCase(),
         descripcion: descripcion,
+        otros: otros,
+        tipoFormulario: `${this.utils.urlApi}/tipos_formulario/${idTipoFormulario}`,
+        categoria: `${this.utils.urlApi}/categorias/${idCategoria}`,
+        usuarioGestor: `${this.utils.urlApi}/usuarios_gestor/${idGestor}`
       }
-      idCategoriaPadre != null && (body.categoriaPadre = `${this.utils.urlApi}/categorias/${idCategoriaPadre}`)
-      const response = await this.utils.fetchConToken(urlCategoria, 'PATCH', body)
+      const response = await this.utils.fetchConToken(urlRecurso, 'PATCH', body)
       if (response.status == 200) {
         toastExito(
-          i18n.global.t('categorias.editada', {
-            categoria: nombre,
+          i18n.global.t('recursos.editado', {
+            recurso: nombre,
           }),
         )
-        return this.categoria
+        return this.recurso
       } else {
         return null
       }
@@ -116,27 +136,81 @@ class RecursoService {
     }
   }
 
-  async fetchCategoria(idCategoria) {
+  async fetchRecurso(idRecurso) {
     try {
-      const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
-      const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
+      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
+      const response = await this.utils.fetchConToken(urlRecurso, 'GET', null)
       const json = await response.json()
-      this.categoria.value = await json
-      return response.status == 200 ? this.categoria.value : null
+      this.recurso.value = await json
+      return response.status == 200 ? this.recurso.value : null
     } catch (error) {
       console.log(error)
     }
   }
-  async deleteCategoria(idCategoria) {
+  async deleteRecurso(idRecurso) {
     try {
-      const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
-      const response = await this.utils.fetchConToken(urlCategoria, 'DELETE', null)
+      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
+      const response = await this.utils.fetchConToken(urlRecurso, 'DELETE', null)
+      const json = await response.json()
+      this.recurso.value = await json
+      if (response.status == 200) {
+        toastExito(
+          i18n.global.t('recursos.recursoBorrado', {
+            recurso: this.recurso.value.nombre,
+          }),
+        )
+        return true
+      } else return false
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async getUsuarioGestor(idRecurso) {
+    try {
+      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}/usuarioGestor`
+      const response = await this.utils.fetchConToken(urlRecurso, 'GET', null)
+      const json = await response.json()
+      this.usuarioGestor.value = await json
+      if (response.status == 200) {
+        toastExito(
+          i18n.global.t('recursos.usuarioGestor', {
+            usuarioGestor: this.usuarioGestor.value.nombre,
+          }),
+        )
+        return true
+      } else return false
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async getCategoria(idRecurso) {
+    try {
+      const urlCategoria = `${this.utils.urlApi}/recursos/${idRecurso}/categoria`
+      const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
       const json = await response.json()
       this.categoria.value = await json
       if (response.status == 200) {
         toastExito(
-          i18n.global.t('categorias.categoriaBorrada', {
+          i18n.global.t('recursos.categoria', {
             categoria: this.categoria.value.nombre,
+          }),
+        )
+        return true
+      } else return false
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ async getTipoFormulario(idRecurso) {
+    try {
+      const urlTipoFormulario = `${this.utils.urlApi}/recursos/${idRecurso}/tipoFormulario`
+      const response = await this.utils.fetchConToken(urlTipoFormulario, 'GET', null)
+      const json = await response.json()
+      this.tipoFormulario.value = await json
+      if (response.status == 200) {
+        toastExito(
+          i18n.global.t('recursos.tipoFormulario', {
+            tipoFormulario: this.tipoFormulario.value.nombre,
           }),
         )
         return true
