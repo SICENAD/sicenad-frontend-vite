@@ -119,7 +119,7 @@
                     <router-link class="dropdown-item" :to="`/recursos/${idCenad}`">
                         <v-icon scale="2" name="fa-folder-open" />Recursos
                     </router-link>
-                    <router-link class="dropdown-item" :to="`/categorias/${idCenad}`">
+                    <router-link class="dropdown-item" :to="{ name: 'categorias'}">
                         <v-icon scale="2" name="fa-tree" />Categorías
                     </router-link>
                     <router-link class="dropdown-item" :to="{ name: 'usuarios'}">
@@ -131,7 +131,7 @@
                     <router-link class="dropdown-item" :to="{ name: 'normativas'}">
                         <v-icon scale="2" name="fa-book" />Normativa
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'infocenad', params: { idCenad } }">
+                    <router-link class="dropdown-item" :to="{ name: 'infocenad'}">
                         <v-icon scale="2" name="fa-question-circle" />Información
                     </router-link>
                 </div>

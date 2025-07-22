@@ -43,13 +43,10 @@ const router = createRouter({
           name: 'cartografias',
           component: () => import('../views/CartografiasView.vue'),
         },
-        /*
-      ,
-      {
-        path: 'categorias',
-      component: () => import('../views/CategoriasComponent.vue'),
-      }
-      */
+        {
+          path: 'categorias',
+          component: () => import('../views/CategoriasView.vue'),
+        }
       ],
     },
     {
