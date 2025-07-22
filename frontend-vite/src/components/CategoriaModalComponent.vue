@@ -17,14 +17,15 @@
               <label class="titulo"><b>NOMBRE DE LA CATEGORÍA<sup class="text-danger">*</sup></b></label>
               <input type="text" class="form-control letra" id="nombre" v-model="nombre" />
             </div>
-
-
             <div class="mb-3">
               <label class="titulo"><b>CATEGORÍA PADRE<sup class="text-danger">*</sup></b></label>
-              <input type="text" class="form-control letra" id="nombre" v-model="categoriaPadre" />
+              <select class="form-select" aria-label="categoriaPadre" v-model="idCategoriaPadre">
+                <option disabled value="">Selecciona la Categoría Padre</option>
+                <option v-for="categoria in categoriasSeleccionables" :key="categoria.idString" :value="categoria.idString">
+                  {{ categoria.nombre }}
+                </option>
+              </select>
             </div>
-
-
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
               <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
@@ -71,35 +72,43 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
-import useUtilsStore from '@/stores/utils'
+import { computed, onMounted, ref } from 'vue'
 import CategoriaService from '@/services/CategoriaService'
+import { useRoute } from 'vue-router'
 
-const props = defineProps(['nombre', 'categoriaPadre', 'descripcion', 'idCategoria', 'idCenad'])
+const props = defineProps(['nombre', 'categoriaPadre', 'descripcion', 'idCategoria'])
 const emits = defineEmits(['emiteModal'])
-const utils = useUtilsStore()
+const route = useRoute()
+const idCenad = computed(() => route.params.id)
 
 const descripcion = ref(props.descripcion)
 const nombre = ref(props.nombre)
 const idCategoria = ref(props.idCategoria)
-categoriaPadre = ref(props.categoriaPadre)
-const idCenad = ref(props.idCenad)
+const idCategoriaPadre = computed(() =>props.categoriaPadre?.idString)
 const idModal = 'modal-categoria-' + props.idCategoria
 const idModalEliminar = 'modal-categoria-eliminar' + props.idCategoria
 const service = new CategoriaService()
-
+const categorias = service.getCategorias()
+const categoriasSeleccionables = ref([])
 const editarCategoria = async () => {
-  const success = await service.editarCategoria(
+  await service.editarCategoria(
     nombre.value,
     descripcion.value,
-    categoriaPadre.value,
+    idCategoriaPadre,
     idCategoria.value
   );
   emits('emiteModal');
 }
 const borrarCategoria = async () => {
-  await service.deleteCategoria(idCategoria.value, idCenad.value)
+  await service.deleteCategoria(idCategoria.value)
   emits('emiteModal')
+}
+onMounted(async () => {
+    await getCategorias()
+    categoriasSeleccionables.value = categorias.value.filter(cat => cat.idString !== idCategoria.value)
+})
+const getCategorias = async () => {
+    await service.fetchAll(idCenad.value)
 }
 </script>
 <style scoped lang="scss">

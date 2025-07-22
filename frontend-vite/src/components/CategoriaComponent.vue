@@ -4,20 +4,28 @@
     <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
       {{ props.content.nombre }}
       <CategoriaModalComponent :nombre="props.content.nombre" :idCategoria="props.content.idString"
-        :descripcion="props.content.descripcion" :idCenad="props.idCenad" :categoriaPadre="props.categoriaPadre"
+        :descripcion="props.content.descripcion" :categoriaPadre="categoriaPadre" :idCenad="props.idCenad"
         @emiteModal="actualizarCategoriaEnElemento" />
     </div>
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">{{ props.categoriaPadre }}</div>
+    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">{{ textoCategoriaPadre }}</div>
     <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6">{{ props.content.descripcion }}</div>
   </div>
 </template>
 <script setup>
-import CategoriaModalComponent from './CategoriaModalComponent.vue'
 import CategoriaService from '@/services/CategoriaService'
-const props = defineProps(['content', 'idCenad', 'categoriaPadre'])
+import CategoriaModalComponent from './CategoriaModalComponent.vue'
+import { onMounted, ref } from 'vue'
+const props = defineProps(['content', 'idCenad'])
 const emits = defineEmits(['emiteElemento'])
 const service = new CategoriaService()
+let categoriaPadre = ref()
+let textoCategoriaPadre = ref('')
 
+onMounted(async () => {
+   const response = await service.fetchCategoriaPadreDeSubcategoria(props.content.idString)
+   response!= null ? ((categoriaPadre.value = response) && (textoCategoriaPadre.value = categoriaPadre.value.nombre)) : (textoCategoriaPadre.value = 'NO TIENE')
+
+})
 function actualizarCategoriaEnElemento() {
   emits('emiteElemento')
 }

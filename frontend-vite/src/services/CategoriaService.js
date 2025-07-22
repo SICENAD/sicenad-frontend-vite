@@ -33,6 +33,39 @@ class CategoriaService {
       console.log(error)
     }
   }
+ async fetchCategoriasPadre(idCenad) {
+    try {
+      const urlCategorias = `${this.utils.urlApi}/cenads/${idCenad}/categoriasPadre?size=1000`
+      const response = await this.utils.fetchConToken(urlCategorias, 'GET', null)
+      const json = await response.json()
+      this.categorias.value = await json._embedded.categorias
+      return response.status == 200 ? this.categorias.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ async fetchCategoriaPadreDeSubcategoria(idCategoria) {
+    try {
+      const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}/categoriaPadre`
+      const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
+      const json = await response.json()
+      this.categoria.value = await json
+      return response.status == 200 ? this.categoria.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ async fetchSubcategorias(idCategoria) {
+    try {
+      const urlCategorias = `${this.utils.urlApi}/categorias/${idCategoria}/subcategorias?size=1000`
+      const response = await this.utils.fetchConToken(urlCategorias, 'GET', null)
+      const json = await response.json()
+      this.categorias.value = await json._embedded.categorias
+      return response.status == 200 ? this.categorias.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearCategoria(nombre, descripcion, idCenad, idCategoriaPadre) {
     try {
       const urlCategorias = `${this.utils.urlApi}/categorias`
@@ -94,7 +127,7 @@ class CategoriaService {
       console.log(error)
     }
   }
-  async deleteCategoria(idCategoria, idCenad) {
+  async deleteCategoria(idCategoria) {
     try {
       const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
       const response = await this.utils.fetchConToken(urlCategoria, 'DELETE', null)

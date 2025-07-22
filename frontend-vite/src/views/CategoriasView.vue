@@ -30,7 +30,7 @@
                         <b>DESCRIPCIÓN</b>
                     </div>
                 </div>
-                <CategoriaComponent v-for="(item, index) in categorias" :key="index" :content="item" :idCenad="idCenad" :categoriaPadre="categoriaPadre"
+                <CategoriaComponent v-for="(item, index) in categorias" :key="index" :content="item" :idCenad="idCenad"
                     @emiteElemento="actualizarCategoriaEnView" />
             </div>
         </div>
@@ -42,7 +42,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="modal-nueva-categoria-Label">
-                        Nueva Normativa
+                        Nueva Categoría
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -52,16 +52,16 @@
                             <label class="titulo"><b>NOMBRE DE LA CATEGORÍA<sup class="text-danger">*</sup></b></label>
                             <input type="text" class="form-control letra" id="nombre" v-model="nombre" />
                         </div>
-
-
-                        <div class="mb-3"><!--aquí un select con las categorias-->
+                        <div class="mb-3">
                             <label class="titulo"><b>CATEGORÍA PADRE<sup class="text-danger">*</sup></b></label>
-                            <input type="textarea" class="form-control letra" id="descripcion" v-model="categoriaPadre" />
+                            <select class="form-select" aria-label="categoriaPadre" v-model="idCategoriaPadre">
+                                <option disabled value="">Selecciona la Categoría Padre</option>
+                                <option v-for="categoria in categorias" :key="categoria.idString"
+                                    :value="categoria.idString">
+                                    {{ categoria.nombre }}
+                                </option>
+                            </select>
                         </div>
-
-
-
-
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
                             <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
@@ -83,19 +83,17 @@
 <script setup>
 import useAuthStore from '@/stores/auth'
 import { ref, onMounted, computed } from 'vue'
-import useUtilsStore from '@/stores/utils'
 import { useRoute } from 'vue-router'
 import CategoriaComponent from '@/components/CategoriaComponent.vue'
 import CategoriaService from '@/services/CategoriaService'
 
-const utils = useUtilsStore()
 const auth = useAuthStore()
 const route = useRoute()
 const idCenad = computed(() => route.params.id)
 
 let nombre = ref('')
 let descripcion = ref('')
-let categoriaPadre = ref('')
+let idCategoriaPadre = ref('')
 
 
 const service = new CategoriaService()
@@ -105,9 +103,9 @@ onMounted(async () => {
     await getCategorias()
 })
 const crearCategoria = async () => {
-    await service.crearCategoria(nombre.value, descripcion.value, idCenad.value, categoriaPadre.value)
+    await service.crearCategoria(nombre.value, descripcion.value, idCenad.value, idCategoriaPadre.value)
     nombre.value = ''
-    categoriaPadre.value = ''
+    idCategoriaPadre.value = ''
     descripcion.value = ''
     await getCategorias()
 }
