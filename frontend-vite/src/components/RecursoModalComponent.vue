@@ -100,7 +100,7 @@ import CategoriaService from '@/services/CategoriaService'
 import RecursoService from '@/services/RecursoService'
 import TipoFormularioService from '@/services/TipoFormularioService'
 import UsuarioService from '@/services/UsuarioService'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const props = defineProps(['nombre', 'categoria', 'tipoFormulario', 'usuarioGestor', 'descripcion', 'otros', 'idRecurso'])
@@ -112,9 +112,9 @@ const descripcion = ref(props.descripcion)
 const nombre = ref(props.nombre)
 const otros = ref(props.otros)
 const idRecurso = ref(props.idRecurso)
-const idCategoria = ref(props.categoria?.idString || '')
-const idTipoFormulario = ref(props.tipoFormulario?.idString || '')
-const idUsuarioGestor = ref(props.usuarioGestor?.idString || '')
+const idCategoria = ref('')
+const idTipoFormulario = ref('')
+const idUsuarioGestor = ref('')
 const idModal = 'modal-categoria-' + props.idRecurso
 const idModalEliminar = 'modal-categoria-eliminar' + props.idRecurso
 const service = new RecursoService()
@@ -141,13 +141,28 @@ const borrarRecurso = async () => {
   await service.deleteRecurso(idRecurso.value)
   emits('emiteModal')
 }
+watch(
+  () => props.usuarioGestor,
+  (nuevo) => { if (nuevo) idUsuarioGestor.value = nuevo.idString },
+  { immediate: true }
+)
+
+watch(
+  () => props.tipoFormulario,
+  (nuevo) => { if (nuevo) idTipoFormulario.value = nuevo.idString },
+  { immediate: true }
+)
+
+watch(
+  () => props.categoria,
+  (nuevo) => { if (nuevo) idCategoria.value = nuevo.idString },
+  { immediate: true }
+)
 onMounted(async () => {
   await getCategorias()
   await getTiposFormulario()
   await getUsuariosGestor()
-  idCategoria.value = props.categoria.idString
-  idTipoFormulario.value = props.tipoFormulario.idString
-  idUsuarioGestor.value = props.usuarioGestor.idString
+
 })
 const getCategorias = async () => {
   await categoriaService.fetchAll(idCenad.value)

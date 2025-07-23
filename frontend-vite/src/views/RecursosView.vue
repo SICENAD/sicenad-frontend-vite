@@ -8,27 +8,33 @@
         </div>
 
         <div class="row mt-1">
-            <!-- Filtro por categoría -->
-            <label v-if="idCategoriaSeleccionada" class="mr-2 mt-2">
-                Categoría Seleccionada:
-                <span>{{ getNombreCategoriaSeleccionada }}</span>
-            </label>
-            <div class="mt-0">
-                <label class="mr-2">Elige una categoría:</label>
-                <select class="form-select" v-model="idCategoriaSeleccionada">
-                    <option disabled value="">Selecciona la Categoría</option>
-                    <option v-for="categoria in categorias" :key="categoria.idString" :value="categoria.idString">
-                        {{ categoria.nombre }}
+            <div class="d-flex flex-column align-items-start col-3">
+                <label v-if="historialCategorias.length > 0" class="me-2 mt-2">
+                    Categoría Seleccionada:
+                    <strong>{{ historialCategorias[historialCategorias.length - 1].nombre.toUpperCase() }}</strong>
+                </label>
+
+                <select v-if="(categoriasFiltradas || []).length > 0" v-model="categoriaSeleccionada" @change="filtrar"
+                    class="form-select mb-3">
+                    <option value="" disabled selected>Selecciona una categoría</option>
+                    <option v-for="categoria in categoriasFiltradas" :key="categoria.idString" :value="categoria">
+                        {{ categoria.nombre.toUpperCase() }}
                     </option>
                 </select>
 
-                <button class="mr-2 ml-3" v-if="idCategoriaSeleccionada" @click="borrarFiltros">
-                    Borrar filtros
-                </button>
+                <div class="d-flex gap-2 mb-2">
+                    <button v-if="historialCategorias.length > 0" @click="retroceder" class="btn btn-secondary">
+                        Atrás
+                    </button>
+                    <button v-if="historialCategorias.length > 0" @click="borrarFiltros" class="btn btn-danger">
+                        Borrar filtros
+                    </button>
+                </div>
             </div>
-            <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>RECURSOS DEL {{ auth.cenad.nombre }}</u></h3>
-            </div>
+<div class="col-6 text-center d-flex justify-content-center align-items-center">
+    <h3 class="titulo1 me-2"><u>RECURSOS DEL {{ auth.cenad.nombre }}</u></h3>
+    <div v-if="loading" class="spinner-border spinner-border-sm titulo" role="status"></div>
+</div>
             <div class="col-3 justify-content-end">
                 <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-recurso">
                     Nuevo <b>Recurso</b>
@@ -49,11 +55,8 @@
                         <b>DESCRIPCIÓN</b>
                     </div>
                 </div>
-                <RecursoComponent v-for="(item, index) in recursosFiltrados" :key="index" :content="item"
-                    :idCenad="idCenad" @emiteElemento="actualizarRecursoEnView" />
-                <div v-if="recursosFiltrados.length == 0" class="text-center my-4">
-                    <p>No hay recursos para esta categoría.</p>
-                </div>
+                <RecursoComponent v-for="(item, index) in recursos" :key="index" :content="item" :idCenad="idCenad"
+                    @emiteElemento="actualizarRecursoEnView" />
             </div>
         </div>
     </div>
@@ -127,7 +130,6 @@
     </div>
 </template>
 <script setup>
-import useAuthStore from '@/stores/auth'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import RecursoComponent from '@/components/RecursoComponent.vue'
@@ -136,6 +138,7 @@ import UsuarioService from '@/services/UsuarioService'
 import TipoFormularioService from '@/services/TipoFormularioService'
 import CategoriaService from '@/services/CategoriaService'
 import useUtilsStore from '@/stores/utils'
+import useAuthStore from '@/stores/auth'
 
 const auth = useAuthStore()
 const utils = useUtilsStore()
@@ -148,22 +151,94 @@ let otros = ref('')
 let idCategoria = ref('')
 let idTipoFormulario = ref('')
 let idUsuarioGestor = ref('')
-let idCategoriaSeleccionada = ref('')
+const categoriasFiltradas = ref([])
+const recursos = ref([])
+const categoriaSeleccionada = ref(null)       // categoría elegida en el select
+const historialCategorias = ref([])           // pila con el camino de categorías elegidas
+const loading = ref(false)
+
 const usuarioService = new UsuarioService()
 const tipoFormularioService = new TipoFormularioService()
 const categoriaService = new CategoriaService()
 const service = new RecursoService()
-const categorias = categoriaService.getCategorias()
-const recursos = service.getRecursos()
+
 const tiposFormulario = tipoFormularioService.getTiposFormulario()
 const usuariosGestor = usuarioService.getUsuariosGestor()
 
 onMounted(async () => {
-    await getCategorias()
+    loading.value = true
+    await cargarCategoriasPadre()
     await getTiposFormulario()
     await getUsuariosGestor()
-    await getRecursos()
+    recursos.value = await service.fetchAll(idCenad.value)
+    loading.value = false
 })
+
+// Carga inicial de categorías padre
+const cargarCategoriasPadre = async () => {
+    loading.value = true
+    categoriasFiltradas.value = await categoriaService.fetchCategoriasPadre(idCenad.value)
+    categoriaSeleccionada.value = null
+    historialCategorias.value = []
+    recursos.value = []
+    loading.value = false
+}
+// Función que se ejecuta cuando seleccionas categoría en el select
+const filtrar = async () => {
+    if (!categoriaSeleccionada.value) return
+
+    loading.value = true
+    // Guardamos la categoría en el historial (camino)
+    historialCategorias.value.push(categoriaSeleccionada.value)
+
+    // Consultamos subcategorías de la categoría seleccionada
+    const subcategorias = await categoriaService.fetchSubcategorias(categoriaSeleccionada.value.idString)
+
+    if (subcategorias.length === 0) {
+        // Sin subcategorías: mostramos recursos de esta categoría
+        recursos.value = await service.fetchRecursosDeCategoria(categoriaSeleccionada.value.idString)
+        categoriasFiltradas.value = []       // no hay categorías para mostrar
+        categoriaSeleccionada.value = null   // reseteamos selección para evitar confusión
+    } else {
+        // Hay subcategorías: actualizamos select con ellas
+        categoriasFiltradas.value = subcategorias
+        categoriaSeleccionada.value = null
+        // Cargar recursos de la categoría padre también
+        recursos.value = await service.fetchRecursosDeSubcategorias(historialCategorias.value[historialCategorias.value.length - 1].idString)
+    }
+
+    loading.value = false
+}
+
+// Botón para borrar filtros (volver a estado inicial)
+const borrarFiltros = async () => {
+    await cargarCategoriasPadre()
+}
+// Botón para retroceder en el árbol de categorías
+const retroceder = async () => {
+    if (historialCategorias.value.length === 0) return
+
+    loading.value = true
+
+    // Quitamos la última categoría seleccionada (nivel actual)
+    historialCategorias.value.pop()
+
+    if (historialCategorias.value.length === 0) {
+        // Si no hay historial, volvemos a las categorías padre y limpiamos recursos
+        await cargarCategoriasPadre()
+    } else {
+        // Cargamos las subcategorías del nivel anterior
+        const ultimaCategoria = historialCategorias.value[historialCategorias.value.length - 1]
+        const subcategorias = await categoriaService.fetchSubcategorias(ultimaCategoria.idString)
+        categoriasFiltradas.value = subcategorias
+        categoriaSeleccionada.value = null
+        // También puedes cargar recursos de la categoría anterior si quieres:
+        recursos.value = await service.fetchRecursosDeCategoria(ultimaCategoria.idString)
+    }
+
+    loading.value = false
+}
+
 const crearRecurso = async () => {
     await service.crearRecurso(nombre.value, descripcion.value, otros.value, idTipoFormulario.value, idCategoria.value, idUsuarioGestor.value)
     nombre.value = ''
@@ -175,7 +250,7 @@ const crearRecurso = async () => {
     await getRecursos()
 }
 const getRecursos = async () => {
-    await service.fetchAll(idCenad.value)
+    recursos.value = await service.fetchAll(idCenad.value)
 
     const promises = recursos.value.map(async (recurso) => {
         if (recurso._links && recurso._links.categoria) {
@@ -191,10 +266,7 @@ const getRecursos = async () => {
         }
     })
 
-    await Promise.all(promises) // ✅ Espera a que todas las categorías se obtengan
-}
-const getCategorias = async () => {
-    await categoriaService.fetchAll(idCenad.value)
+    await Promise.all(promises) // Espera a que todas las categorías se obtengan
 }
 const getTiposFormulario = async () => {
     await tipoFormularioService.fetchAll()
@@ -204,19 +276,6 @@ const getUsuariosGestor = async () => {
 }
 function actualizarRecursoEnView() {
     getRecursos()
-}
-const recursosFiltrados = computed(() => {
-    if (!idCategoriaSeleccionada.value) return recursos.value
-    console.log(recursos.value)
-    return recursos.value.filter(r => r.idCategoria && r.idCategoria === idCategoriaSeleccionada.value)
-
-})
-const getNombreCategoriaSeleccionada = computed(() => {
-    const cat = categorias.value.find(c => c.idString === idCategoriaSeleccionada.value)
-    return cat ? cat.nombre : ''
-})
-function borrarFiltros() {
-    idCategoriaSeleccionada.value = ''
 }
 </script>
 <style scoped lang="scss">
