@@ -13,6 +13,14 @@ const useAuthStore = defineStore('auth', {
       tiposFormulario: [],
       unidades: [],
       armas: [],
+      categorias: [],
+      categoriasPadre: [],
+      recursos: [],
+      cartografias: [],
+      normativas: [],
+      usuariosGestor: [],
+      usuarioAdministrador: null,
+      cenadVisitado: null,
       cenad: null,
       unidad: null,
     }
@@ -164,6 +172,79 @@ const useAuthStore = defineStore('auth', {
       } catch (err) {
         console.error('Error cargando datos estáticos:', err)
       }
+    },
+    async getDatosInicialesDeCenad(idCenad) {
+      const utils = useUtilsStore()
+      try {
+        let jsonTemporal
+        const [
+          categoriasRes,
+          categoriasPadreRes,
+          recursosRes,
+          cartografiasRes,
+          normativasRes,
+          usuariosGestoresRes,
+          usuarioAdministradorRes,
+          cenadRes,
+        ] = await Promise.all([
+          utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/categorias`, 'GET', null),
+          utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/categoriasPadre`, 'GET', null),
+          utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/recursos`, 'GET', null),
+          utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/cartografias`, 'GET', null),
+          utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/normativas`, 'GET', null),
+          utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/usuariosGestores`, 'GET', null),
+          utils.fetchConToken(
+            `${utils.urlApi}/cenads/${idCenad}/usuarioAdministrador`,
+            'GET',
+            null,
+          ),
+          utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}`, 'GET', null),
+        ])
+        if (categoriasRes.ok) {
+          jsonTemporal = await categoriasRes.json()
+          this.categorias = jsonTemporal._embedded.categorias
+        }
+        if (categoriasPadreRes.ok) {
+          jsonTemporal = await categoriasPadreRes.json()
+          this.categoriasPadre = jsonTemporal._embedded.categorias
+        }
+        if (recursosRes.ok) {
+          jsonTemporal = await recursosRes.json()
+          this.recursos = jsonTemporal._embedded.recursos
+        }
+        if (cartografiasRes.ok) {
+          jsonTemporal = await cartografiasRes.json()
+          this.cartografias = jsonTemporal._embedded.cartografias
+        }
+        if (normativasRes.ok) {
+          jsonTemporal = await normativasRes.json()
+          this.normativas = jsonTemporal._embedded.normativas
+        }
+        if (usuariosGestoresRes.ok) {
+          jsonTemporal = await usuariosGestoresRes.json()
+          this.usuariosGestor = jsonTemporal._embedded.usuarios_gestor
+        }
+        if (usuarioAdministradorRes.ok) {
+          jsonTemporal = await usuarioAdministradorRes.json()
+          this.usuarioAdministrador = jsonTemporal
+        }
+        if (cenadRes.ok) {
+          jsonTemporal = await cenadRes.json()
+          this.cenadVisitado = jsonTemporal
+        }
+      } catch (err) {
+        console.error('Error cargando datos estáticos:', err)
+      }
+    },
+    resetearDatosCenad() {
+      this.categorias = []
+      this.categoriasPadre = []
+      this.recursos = []
+      this.cartografias = []
+      this.normativas = []
+      this.usuariosGestor = []
+      this.usuarioAdministrador = null
+      this.cenadVisitado = null
     },
     async init() {
       const utils = useUtilsStore()

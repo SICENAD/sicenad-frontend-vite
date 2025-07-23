@@ -33,6 +33,17 @@ class ArmaService {
       console.log(error)
     }
   }
+  async fetchArma(idArma) {
+    try {
+      const urlArma = `${this.utils.urlApi}/armas/${idArma}`
+      const response = await this.utils.fetchConToken(urlArma, 'GET', null)
+      const json = await response.json()
+      this.arma.value = await json
+      return response.status == 200 ? this.arma.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearArma(nombre, tipoTiro) {
     try {
       const urlArmas = `${this.utils.urlApi}/armas`
@@ -80,17 +91,6 @@ class ArmaService {
     } catch (error) {
       console.error(error)
       return null
-    }
-  }
-  async fetchArma(idArma) {
-    try {
-      const urlArma = `${this.utils.urlApi}/armas/${idArma}`
-      const response = await this.utils.fetchConToken(urlArma, 'GET', null)
-      const json = await response.json()
-      this.arma.value = await json
-      return response.status == 200 ? this.arma.value : null
-    } catch (error) {
-      console.log(error)
     }
   }
   async deleteArma(idArma) {

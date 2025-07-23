@@ -99,7 +99,7 @@ const crearCategoriaFichero = async () => {
 
     nombre.value = ''
     tipo.value = ''
-    descripcion = ''
+    descripcion.value = ''
     await getCategoriasFichero()
 }
 const getCategoriasFichero = async () => {

@@ -7,14 +7,12 @@ import { borrarArchivo, borrarCarpeta, subirArchivo, toastExito, toTitleCase } f
 class CenadService {
   cenads
   cenad
-  administrador
   auth
   utils
 
   constructor() {
     this.cenads = ref([])
     this.cenad = ref()
-    this.administrador = ref()
     this.auth = useAuthStore()
     this.utils = useUtilsStore()
   }
@@ -31,6 +29,50 @@ class CenadService {
       const json = await response.json()
       this.cenads.value = await json._embedded.cenads
       return response.status == 200 ? true : false
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async getCenadsSinAdmin() {
+    try {
+      const urlCenads = `${this.utils.urlApi}/cenads/sinAdmin?size=1000`
+      const response = await this.utils.fetchConToken(urlCenads, 'GET', null)
+      const json = await response.json()
+      this.cenads.value = await json._embedded.cenads
+      return response.status == 200 ? this.cenads.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async fetchCenad(idCenad) {
+    try {
+      const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
+      const response = await this.utils.fetchConToken(urlCenad, 'GET', null)
+      const json = await response.json()
+      this.cenad.value = await json
+      return response.status == 200 ? this.cenad.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async fetchCenadDeUsuarioGestor(idUsuario) {
+    try {
+      const urlCenad = `${this.utils.urlApi}/usuarios_gestor/${idUsuario}/cenad`
+      const response = await this.utils.fetchConToken(urlCenad, 'GET', null)
+      const json = await response.json()
+      this.cenad.value = await json
+      return response.status == 200 ? this.cenad.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async fetchCenadDeUsuarioAdministrador(idUsuario) {
+    try {
+      const urlCenad = `${this.utils.urlApi}/usuarios_administrador/${idUsuario}/cenad`
+      const response = await this.utils.fetchConToken(urlCenad, 'GET', null)
+      const json = await response.json()
+      this.cenad.value = await json
+      return response.status == 200 ? this.cenad.value : null
     } catch (error) {
       console.log(error)
     }
@@ -88,8 +130,7 @@ class CenadService {
       const nuevoEscudo = await subirArchivo(archivoEscudo, urlUpload)
       if (nuevoEscudo == false) return null
       const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarEscudo/${escudo}`
-      const responseDeleteEscudo = await borrarArchivo(urlBorrarArchivo)
-      console.log(responseDeleteEscudo)
+      await borrarArchivo(urlBorrarArchivo)
       escudo = nuevoEscudo
     }
     try {
@@ -120,6 +161,38 @@ class CenadService {
       console.error(error)
       return null
     }
+  }
+  async deleteCenad(idCenad) {
+    try {
+      const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
+      const urlCarpetaCenad = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaCenad`
+      const responseDeleteCarpeta = await borrarCarpeta(urlCarpetaCenad)
+      console.log(responseDeleteCarpeta)
+      const response = await this.utils.fetchConToken(urlCenad, 'DELETE', null)
+      const json = await response.json()
+      this.cenad.value = await json
+      if (response.status == 200) {
+        toastExito(
+          i18n.global.t('cenads.cenadBorrado', {
+            cenad: this.cenad.value.nombre,
+          }),
+        )
+        return true
+      } else return false
+    } catch (error) {
+      console.log(error)
+    }
+  }
+async fetchEscudo(filename, idCenad) {
+    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/escudo/${filename}`, {
+      headers: {
+        Authorization: `Bearer ${this.auth.token}`,
+      },
+    })
+    if (!response.ok) throw new Error('No se pudo cargar la imagen')
+    const blob = await response.blob()
+    const imageUrl = URL.createObjectURL(blob)
+    return imageUrl // Lo usas como src en una <img>
   }
   async editarInfoCenad(
     direccion,
@@ -170,87 +243,16 @@ class CenadService {
       return null
     }
   }
-  async fetchCenad(idCenad) {
-    try {
-      const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
-      const response = await this.utils.fetchConToken(urlCenad, 'GET', null)
-      const json = await response.json()
-      this.cenad.value = await json
-      return response.status == 200 ? this.cenad.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  async deleteCenad(idCenad) {
-    try {
-      const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
-      const urlCarpetaCenad = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaCenad`
-      const responseDeleteCarpeta = await borrarCarpeta(urlCarpetaCenad)
-      console.log(responseDeleteCarpeta)
-      const response = await this.utils.fetchConToken(urlCenad, 'DELETE', null)
-      const json = await response.json()
-      this.cenad.value = await json
-      if (response.status == 200) {
-        toastExito(
-          i18n.global.t('cenads.cenadBorrado', {
-            cenad: this.cenad.value.nombre,
-          }),
-        )
-        return true
-      } else return false
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async fetchEscudo(filename, idCenad) {
-    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/escudo/${filename}`, {
-      headers: {
-        Authorization: `Bearer ${this.auth.token}`,
-      },
-    })
-
-    if (!response.ok) throw new Error('No se pudo cargar la imagen')
-
-    const blob = await response.blob()
-    const imageUrl = URL.createObjectURL(blob)
-    return imageUrl // Lo usas como src en una <img>
-  }
   async fetchInfoCenad(filename, idCenad) {
     const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/infoCenads/${filename}`, {
       headers: {
         Authorization: `Bearer ${this.auth.token}`,
       },
     })
-
     if (!response.ok) throw new Error('No se pudo cargar la imagen')
-
     const blob = await response.blob()
     const imageUrl = URL.createObjectURL(blob)
     return imageUrl // Lo usas como src en una <img>
   }
-  async getCenadsSinAdmin() {
-    try {
-      const urlCenads = `${this.utils.urlApi}/cenads/sinAdmin?size=1000`
-      const response = await this.utils.fetchConToken(urlCenads, 'GET', null)
-      const json = await response.json()
-      this.cenads.value = await json._embedded.cenads
-      return response.status == 200 ? this.cenads.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  async getUsuarioAdministrador(idCenad) {
-    try {
-      const urlAdministrador = `${this.utils.urlApi}/cenads/${idCenad}/usuarioAdministrador`
-      const response = await this.utils.fetchConToken(urlAdministrador, 'GET', null)
-      const json = await response.json()
-      this.administrador.value = await json
-      return response.status == 200 ? this.administrador.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
 }
-
 export default CenadService

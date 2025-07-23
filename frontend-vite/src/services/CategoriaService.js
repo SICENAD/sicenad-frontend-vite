@@ -77,6 +77,30 @@ class CategoriaService {
       console.log(error)
     }
   }
+  async fetchCategoria(idCategoria) {
+    try {
+      const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
+      const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
+      const json = await response.json()
+      this.categoria.value = await json
+      return response.status == 200 ? this.categoria.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async fetchCategoriaDeRecurso(idRecurso) {
+    try {
+      const urlCategoria = `${this.utils.urlApi}/recursos/${idRecurso}/categoria`
+      const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
+      const json = await response.json()
+      this.categoria.value = await json
+      if (response.status == 200) {
+        return this.categoria.value
+      } else return null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearCategoria(nombre, descripcion, idCenad, idCategoriaPadre) {
     try {
       const urlCategorias = `${this.utils.urlApi}/categorias`
@@ -85,8 +109,8 @@ class CategoriaService {
         descripcion: descripcion,
         cenad: `${this.utils.urlApi}/cenads/${idCenad}`,
       }
-      idCategoriaPadre != null && (body.categoriaPadre = `${this.utils.urlApi}/categorias/${idCategoriaPadre}`)
-
+      idCategoriaPadre != null &&
+        (body.categoriaPadre = `${this.utils.urlApi}/categorias/${idCategoriaPadre}`)
       const response = await this.utils.fetchConToken(urlCategorias, 'POST', body)
       if (response.status == 201) {
         i18n.global.t('comun.enviando')
@@ -109,7 +133,8 @@ class CategoriaService {
         nombre: nombre.toUpperCase(),
         descripcion: descripcion,
       }
-      idCategoriaPadre != null && (body.categoriaPadre = `${this.utils.urlApi}/categorias/${idCategoriaPadre}`)
+      idCategoriaPadre != null &&
+        (body.categoriaPadre = `${this.utils.urlApi}/categorias/${idCategoriaPadre}`)
       const response = await this.utils.fetchConToken(urlCategoria, 'PATCH', body)
       if (response.status == 200) {
         toastExito(
@@ -124,18 +149,6 @@ class CategoriaService {
     } catch (error) {
       console.error(error)
       return null
-    }
-  }
-
-  async fetchCategoria(idCategoria) {
-    try {
-      const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
-      const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
-      const json = await response.json()
-      this.categoria.value = await json
-      return response.status == 200 ? this.categoria.value : null
-    } catch (error) {
-      console.log(error)
     }
   }
   async deleteCategoria(idCategoria) {
@@ -157,5 +170,4 @@ class CategoriaService {
     }
   }
 }
-
 export default CategoriaService

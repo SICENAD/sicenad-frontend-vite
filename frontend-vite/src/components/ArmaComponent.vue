@@ -24,7 +24,7 @@ div, div a {
   color: #A3B18A; font-weight: bold
 }
 
-fa-icon:hover {
+v-icon:hover {
   color: #588157;
 }
 

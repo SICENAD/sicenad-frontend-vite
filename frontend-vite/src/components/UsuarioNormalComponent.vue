@@ -12,21 +12,21 @@
   </div>
 </template>
 <script setup>
-import UsuarioService from '@/services/UsuarioService';
 import UsuarioNormalModalComponent from './UsuarioNormalModalComponent.vue';
 import { onMounted, ref } from 'vue';
+import UnidadService from '@/services/UnidadService';
 
 const props = defineProps(['content'])
 const emits = defineEmits(['emiteElemento'])
 
-const service = new UsuarioService()
+const unidadService = new UnidadService()
 let unidad = ref()
 
 onMounted(async () => {
-  unidad.value = await service.fetchUnidadDeUsuarioNormal(props.content.idString)
+  unidad.value = await unidadService.fetchUnidadDeUsuarioNormal(props.content.idString)
 })
 async function actualizarUsuarioEnElemento() {
-  unidad.value = await service.fetchUnidadDeUsuarioNormal(props.content.idString)
+  unidad.value = await unidadService.fetchUnidadDeUsuarioNormal(props.content.idString)
   emits('emiteElemento')
 }
 </script>
@@ -37,7 +37,7 @@ div a {
   font-weight: bold
 }
 
-fa-icon:hover {
+v-icon:hover {
   color: #588157;
 }
 

@@ -33,6 +33,17 @@ class CartografiaService {
       console.log(error)
     }
   }
+  async fetchCartografia(idCartografia) {
+    try {
+      const urlCartografia = `${this.utils.urlApi}/cartografias/${idCartografia}`
+      const response = await this.utils.fetchConToken(urlCartografia, 'GET', null)
+      const json = await response.json()
+      this.cartografia.value = await json
+      return response.status == 200 ? this.cartografia.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearCartografia(nombre, descripcion, escala, archivo, idCenad) {
     try {
       let nombreArchivo = null
@@ -111,17 +122,6 @@ class CartografiaService {
       }
     }
   }
-  async fetchCartografia(idCartografia) {
-    try {
-      const urlCartografia = `${this.utils.urlApi}/cartografias/${idCartografia}`
-      const response = await this.utils.fetchConToken(urlCartografia, 'GET', null)
-      const json = await response.json()
-      this.cartografia.value = await json
-      return response.status == 200 ? this.cartografia.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
   async deleteCartografia(nombreArchivo, idCartografia, idCenad) {
     try {
       const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarCartografia/${nombreArchivo}`
@@ -148,13 +148,10 @@ class CartografiaService {
         Authorization: `Bearer ${this.auth.token}`,
       },
     })
-
     if (!response.ok) throw new Error('No se pudo descargar el archivo')
-
     const blob = await response.blob()
     const archivoUrl = URL.createObjectURL(blob)
     return archivoUrl
   }
 }
-
 export default CartografiaService

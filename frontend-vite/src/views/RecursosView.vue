@@ -6,7 +6,6 @@
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
             </RouterLink>
         </div>
-
         <div class="row mt-1">
             <div class="d-flex flex-column align-items-start col-3">
                 <label v-if="historialCategorias.length > 0" class="me-2 mt-2">
@@ -31,10 +30,10 @@
                     </button>
                 </div>
             </div>
-<div class="col-6 text-center d-flex justify-content-center align-items-center">
-    <h3 class="titulo1 me-2"><u>RECURSOS DEL {{ auth.cenad.nombre }}</u></h3>
-    <div v-if="loading" class="spinner-border spinner-border-sm titulo" role="status"></div>
-</div>
+            <div class="col-6 text-center d-flex justify-content-center align-items-center">
+                <h3 class="titulo1 me-2"><u>RECURSOS DEL {{ auth.cenad.nombre }}</u></h3>
+                <div v-if="loading" class="spinner-border spinner-border-sm titulo" role="status"></div>
+            </div>
             <div class="col-3 justify-content-end">
                 <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-recurso">
                     Nuevo <b>Recurso</b>
@@ -121,7 +120,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearRecurso" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearRecurso" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!isFormValid">
                         Crear Recurso
                     </button>
                 </div>
@@ -164,91 +163,17 @@ const service = new RecursoService()
 
 const tiposFormulario = tipoFormularioService.getTiposFormulario()
 const usuariosGestor = usuarioService.getUsuariosGestor()
+const categorias = categoriaService.getCategorias()
 
 onMounted(async () => {
     loading.value = true
     await cargarCategoriasPadre()
+    await getCategorias()
     await getTiposFormulario()
     await getUsuariosGestor()
     recursos.value = await service.fetchAll(idCenad.value)
     loading.value = false
 })
-
-// Carga inicial de categorías padre
-const cargarCategoriasPadre = async () => {
-    loading.value = true
-    categoriasFiltradas.value = await categoriaService.fetchCategoriasPadre(idCenad.value)
-    categoriaSeleccionada.value = null
-    historialCategorias.value = []
-    recursos.value = []
-    loading.value = false
-}
-// Función que se ejecuta cuando seleccionas categoría en el select
-const filtrar = async () => {
-    if (!categoriaSeleccionada.value) return
-
-    loading.value = true
-    // Guardamos la categoría en el historial (camino)
-    historialCategorias.value.push(categoriaSeleccionada.value)
-
-    // Consultamos subcategorías de la categoría seleccionada
-    const subcategorias = await categoriaService.fetchSubcategorias(categoriaSeleccionada.value.idString)
-
-    if (subcategorias.length === 0) {
-        // Sin subcategorías: mostramos recursos de esta categoría
-        recursos.value = await service.fetchRecursosDeCategoria(categoriaSeleccionada.value.idString)
-        categoriasFiltradas.value = []       // no hay categorías para mostrar
-        categoriaSeleccionada.value = null   // reseteamos selección para evitar confusión
-    } else {
-        // Hay subcategorías: actualizamos select con ellas
-        categoriasFiltradas.value = subcategorias
-        categoriaSeleccionada.value = null
-        // Cargar recursos de la categoría padre también
-        recursos.value = await service.fetchRecursosDeSubcategorias(historialCategorias.value[historialCategorias.value.length - 1].idString)
-    }
-
-    loading.value = false
-}
-
-// Botón para borrar filtros (volver a estado inicial)
-const borrarFiltros = async () => {
-    await cargarCategoriasPadre()
-}
-// Botón para retroceder en el árbol de categorías
-const retroceder = async () => {
-    if (historialCategorias.value.length === 0) return
-
-    loading.value = true
-
-    // Quitamos la última categoría seleccionada (nivel actual)
-    historialCategorias.value.pop()
-
-    if (historialCategorias.value.length === 0) {
-        // Si no hay historial, volvemos a las categorías padre y limpiamos recursos
-        await cargarCategoriasPadre()
-    } else {
-        // Cargamos las subcategorías del nivel anterior
-        const ultimaCategoria = historialCategorias.value[historialCategorias.value.length - 1]
-        const subcategorias = await categoriaService.fetchSubcategorias(ultimaCategoria.idString)
-        categoriasFiltradas.value = subcategorias
-        categoriaSeleccionada.value = null
-        // También puedes cargar recursos de la categoría anterior si quieres:
-        recursos.value = await service.fetchRecursosDeCategoria(ultimaCategoria.idString)
-    }
-
-    loading.value = false
-}
-
-const crearRecurso = async () => {
-    await service.crearRecurso(nombre.value, descripcion.value, otros.value, idTipoFormulario.value, idCategoria.value, idUsuarioGestor.value)
-    nombre.value = ''
-    idCategoria.value = ''
-    descripcion.value = ''
-    otros.value = ''
-    idTipoFormulario.value = ''
-    idUsuarioGestor.value = ''
-    await getRecursos()
-}
 const getRecursos = async () => {
     recursos.value = await service.fetchAll(idCenad.value)
 
@@ -265,8 +190,10 @@ const getRecursos = async () => {
             }
         }
     })
-
     await Promise.all(promises) // Espera a que todas las categorías se obtengan
+}
+const getCategorias = async () => {
+    await categoriaService.fetchAll(idCenad.value)
 }
 const getTiposFormulario = async () => {
     await tipoFormularioService.fetchAll()
@@ -277,6 +204,82 @@ const getUsuariosGestor = async () => {
 function actualizarRecursoEnView() {
     getRecursos()
 }
+// Carga inicial de categorías padre
+const cargarCategoriasPadre = async () => {
+    loading.value = true
+    categoriasFiltradas.value = await categoriaService.fetchCategoriasPadre(idCenad.value)
+    categoriaSeleccionada.value = null
+    historialCategorias.value = []
+    recursos.value = []
+    loading.value = false
+}
+// Función que se ejecuta cuando seleccionas categoría en el select
+const filtrar = async () => {
+    if (!categoriaSeleccionada.value) return
+    loading.value = true
+    // Guardamos la categoría en el historial (camino)
+    historialCategorias.value.push(categoriaSeleccionada.value)
+    // Consultamos subcategorías de la categoría seleccionada
+    const subcategorias = await categoriaService.fetchSubcategorias(categoriaSeleccionada.value.idString)
+    if (subcategorias.length === 0) {
+        // Sin subcategorías: mostramos recursos de esta categoría
+        recursos.value = await service.fetchRecursosDeCategoria(categoriaSeleccionada.value.idString)
+        categoriasFiltradas.value = []       // no hay categorías para mostrar
+        categoriaSeleccionada.value = null   // reseteamos selección para evitar confusión
+    } else {
+        // Hay subcategorías: actualizamos select con ellas
+        categoriasFiltradas.value = subcategorias
+        categoriaSeleccionada.value = null
+        // Cargar recursos de la categoría padre también
+        recursos.value = await service.fetchRecursosDeSubcategorias(historialCategorias.value[historialCategorias.value.length - 1].idString)
+    }
+    loading.value = false
+}
+// Botón para borrar filtros (volver a estado inicial)
+const borrarFiltros = async () => {
+    await cargarCategoriasPadre()
+}
+// Botón para retroceder en el árbol de categorías
+const retroceder = async () => {
+    if (historialCategorias.value.length === 0) return
+    loading.value = true
+    // Quitamos la última categoría seleccionada (nivel actual)
+    historialCategorias.value.pop()
+    if (historialCategorias.value.length === 0) {
+        // Si no hay historial, volvemos a las categorías padre y limpiamos recursos
+        await cargarCategoriasPadre()
+    } else {
+        // Cargamos las subcategorías del nivel anterior
+        const ultimaCategoria = historialCategorias.value[historialCategorias.value.length - 1]
+        const subcategorias = await categoriaService.fetchSubcategorias(ultimaCategoria.idString)
+        categoriasFiltradas.value = subcategorias
+        categoriaSeleccionada.value = null
+        // También puedes cargar recursos de la categoría anterior si quieres:
+        recursos.value = await service.fetchRecursosDeCategoria(ultimaCategoria.idString)
+    }
+    loading.value = false
+}
+const crearRecurso = async () => {
+    await service.crearRecurso(nombre.value, descripcion.value, otros.value, idTipoFormulario.value, idCategoria.value, idUsuarioGestor.value)
+    nombre.value = ''
+    idCategoria.value = ''
+    descripcion.value = ''
+    otros.value = ''
+    idTipoFormulario.value = ''
+    idUsuarioGestor.value = ''
+    await getRecursos()
+}
+// Validación: todos los campos deben estar llenos
+const isFormValid = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != '' &&
+    otros.value.trim() != '' &&
+    idCategoria.value != '' &&
+    idTipoFormulario.value != '' &&
+    idUsuarioGestor.value != ''
+  );
+});
 </script>
 <style scoped lang="scss">
 .btn {
@@ -284,45 +287,36 @@ function actualizarRecursoEnView() {
     padding: 0.5;
     font-size: 14px;
 }
-
 .btn:hover {
     background-color: #A3B18A;
 }
-
 .titulo {
     color: #3A5A40;
     font-weight: bold;
 }
-
 .titulo1 {
     color: #588157;
 }
-
 h5 {
     color: #354f52;
     font-weight: bold;
 }
-
 a.volver {
     color: #3A5A40;
     font-size: 18px;
 }
-
 a.volver:hover {
     color: #A3B18A;
 }
-
 .row {
     height: auto;
     padding: auto;
     margin: auto;
 }
-
 hr {
     margin-bottom: 0;
     margin-top: 1;
 }
-
 .modal {
     max-height: 100%;
     max-width: 100%;

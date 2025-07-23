@@ -19,7 +19,7 @@ import { toTitleCase } from '@/utils'
 import { onMounted, ref, computed } from 'vue'
 import CenadModalComponent from './CenadModalComponent.vue'
 import useUtilsStore from '@/stores/utils'
-import CenadService from '@/services/CenadService'
+import UsuarioService from '@/services/UsuarioService'
 const props = defineProps(['content'])
 const emits = defineEmits(['emiteElemento'])
 const utils = useUtilsStore()
@@ -30,11 +30,11 @@ const provincia = computed(() => {
   return encontrada ? encontrada.nombre : ''
 })
 let usuarioAdministrador = ref()
-let service = new CenadService()
+const usuarioService = new UsuarioService()
 
 onMounted(async () => {
   //tendre que recuperar, si existe, el usuario administrador del cenad
-  usuarioAdministrador.value = await service.getUsuarioAdministrador(props.content.idString)
+  usuarioAdministrador.value = await usuarioService.fetchUsuarioAdministradorDeCenad(props.content.idString)
 })
 function actualizarCenadEnElemento() {
   emits('emiteElemento')
@@ -47,7 +47,7 @@ div a {
   font-weight: bold;
 }
 
-fa-icon:hover {
+v-icon:hover {
   color: #588157;
 }
 

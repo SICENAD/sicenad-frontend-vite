@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import useAuthStore from '@/stores/auth'
 import useUtilsStore from '@/stores/utils'
 import i18n from '@/plugins/i18n'
-import { toastExito, toTitleCase } from '@/utils'
+import { toastExito } from '@/utils'
 
 class UnidadService {
   unidades
@@ -33,6 +33,28 @@ class UnidadService {
       console.log(error)
     }
   }
+  async fetchUnidad(idUnidad) {
+    try {
+      const urlUnidad = `${this.utils.urlApi}/unidades/${idUnidad}`
+      const response = await this.utils.fetchConToken(urlUnidad, 'GET', null)
+      const json = await response.json()
+      this.unidad.value = await json
+      return response.status == 200 ? this.unidad.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  async fetchUnidadDeUsuarioNormal(idUsuario) {
+    try {
+      const urlUnidad = `${this.utils.urlApi}/usuarios_normal/${idUsuario}/unidad`
+      const response = await this.utils.fetchConToken(urlUnidad, 'GET', null)
+      const json = await response.json()
+      this.unidad.value = await json
+      return response.status == 200 ? this.unidad.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearUnidad(nombre, descripcion, email, tfno, direccion, poc) {
     try {
       const urlUnidades = `${this.utils.urlApi}/unidades`
@@ -42,7 +64,7 @@ class UnidadService {
         email: email.toLowerCase(),
         tfno: tfno,
         direccion: direccion,
-        poc: poc.toUpperCase()
+        poc: poc.toUpperCase(),
       })
       if (response.status == 201) {
         i18n.global.t('comun.enviando')
@@ -59,7 +81,6 @@ class UnidadService {
     }
   }
   async editarUnidad(nombre, descripcion, email, tfno, direccion, poc, idUnidad) {
-
     try {
       const urlUnidad = `${this.utils.urlApi}/unidades/${idUnidad}`
       const body = {
@@ -68,7 +89,7 @@ class UnidadService {
         email: email.toLowerCase(),
         tfno: tfno,
         direccion: direccion,
-        poc: poc.toUpperCase()
+        poc: poc.toUpperCase(),
       }
       const response = await this.utils.fetchConToken(urlUnidad, 'PATCH', body)
       if (response.status == 200) {
@@ -84,17 +105,6 @@ class UnidadService {
     } catch (error) {
       console.error(error)
       return null
-    }
-  }
-  async fetchArma(idUnidad) {
-    try {
-      const urlUnidad = `${this.utils.urlApi}/unidades/${idUnidad}`
-      const response = await this.utils.fetchConToken(urlUnidad, 'GET', null)
-      const json = await response.json()
-      this.unidad.value = await json
-      return response.status == 200 ? this.unidad.value : null
-    } catch (error) {
-      console.log(error)
     }
   }
   async deleteUnidad(idUnidad) {
@@ -116,5 +126,4 @@ class UnidadService {
     }
   }
 }
-
 export default UnidadService

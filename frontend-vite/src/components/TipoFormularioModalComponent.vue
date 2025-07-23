@@ -69,12 +69,10 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-import useUtilsStore from '@/stores/utils'
 import TipoFormularioService from '@/services/TipoFormularioService'
 
 const props = defineProps(['nombre', 'codTipo', 'descripcion', 'idTipoFormulario'])
 const emits = defineEmits(['emiteModal'])
-const utils = useUtilsStore()
 const codTipo = ref(props.codTipo)
 const descripcion = ref(props.descripcion)
 const nombre = ref(props.nombre)
@@ -104,7 +102,7 @@ div a {
   font-weight: bold;
 }
 
-fa-icon:hover {
+v-icon:hover {
   color: #588157;
 }
 

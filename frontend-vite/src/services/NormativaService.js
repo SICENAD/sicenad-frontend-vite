@@ -33,6 +33,17 @@ class NormativaService {
       console.log(error)
     }
   }
+  async fetchNormativa(idNormativa) {
+    try {
+      const urlNormativa = `${this.utils.urlApi}/ficheros/${idNormativa}`
+      const response = await this.utils.fetchConToken(urlNormativa, 'GET', null)
+      const json = await response.json()
+      this.normativa.value = await json
+      return response.status == 200 ? this.normativa.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearNormativa(nombre, descripcion, archivo, idCenad) {
     try {
       let nombreArchivo = null
@@ -101,17 +112,6 @@ class NormativaService {
       }
     }
   }
-  async fetchNormativa(idNormativa) {
-    try {
-      const urlNormativa = `${this.utils.urlApi}/ficheros/${idNormativa}`
-      const response = await this.utils.fetchConToken(urlNormativa, 'GET', null)
-      const json = await response.json()
-      this.normativa.value = await json
-      return response.status == 200 ? this.normativa.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
   async deleteNormativa(nombreArchivo, idNormativa, idCenad) {
     try {
       const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarNormativa/${nombreArchivo}`
@@ -138,7 +138,6 @@ class NormativaService {
         Authorization: `Bearer ${this.auth.token}`,
       },
     })
-
     if (!response.ok) throw new Error('No se pudo descargar el archivo')
 
     const blob = await response.blob()
@@ -146,5 +145,4 @@ class NormativaService {
     return archivoUrl
   }
 }
-
 export default NormativaService

@@ -7,18 +7,12 @@ import { toastExito } from '@/utils'
 class RecursoService {
   recursos
   recurso
-  usuarioGestor
-  categoria
-  tipoFormulario
   auth
   utils
 
   constructor() {
     this.recursos = ref([])
     this.recurso = ref()
-    this.usuarioGestor = ref()
-    this.categoria = ref()
-    this.tipoFormulario = ref()
     this.auth = useAuthStore()
     this.utils = useUtilsStore()
   }
@@ -27,15 +21,6 @@ class RecursoService {
   }
   getRecurso() {
     return this.recurso
-  }
-  getUsuarioGestor() {
-    return this.usuarioGestor
-  }
-  getCategoria() {
-    return this.categoria
-  }
-  getTipoFormulario() {
-    return this.tipoFormulario
   }
   async fetchAll(idCenad) {
     try {
@@ -77,6 +62,17 @@ class RecursoService {
       const json = await response.json()
       this.recursos.value = await json._embedded.recursos
       return response.status == 200 ? this.recursos.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+async fetchRecurso(idRecurso) {
+    try {
+      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
+      const response = await this.utils.fetchConToken(urlRecurso, 'GET', null)
+      const json = await response.json()
+      this.recurso.value = await json
+      return response.status == 200 ? this.recurso.value : null
     } catch (error) {
       console.log(error)
     }
@@ -134,18 +130,6 @@ class RecursoService {
       return null
     }
   }
-
-  async fetchRecurso(idRecurso) {
-    try {
-      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
-      const response = await this.utils.fetchConToken(urlRecurso, 'GET', null)
-      const json = await response.json()
-      this.recurso.value = await json
-      return response.status == 200 ? this.recurso.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
   async deleteRecurso(idRecurso) {
     try {
       const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
@@ -164,60 +148,5 @@ class RecursoService {
       console.log(error)
     }
   }
-  async getUsuarioGestor(idRecurso) {
-    try {
-      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}/usuarioGestor`
-      const response = await this.utils.fetchConToken(urlRecurso, 'GET', null)
-      const json = await response.json()
-      this.usuarioGestor.value = await json
-      if (response.status == 200) {
-        toastExito(
-          i18n.global.t('recursos.usuarioGestor', {
-            usuarioGestor: this.usuarioGestor.value.nombre,
-          }),
-        )
-        return this.usuarioGestor.value
-      } else return null
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  async getCategoria(idRecurso) {
-    try {
-      const urlCategoria = `${this.utils.urlApi}/recursos/${idRecurso}/categoria`
-      const response = await this.utils.fetchConToken(urlCategoria, 'GET', null)
-      const json = await response.json()
-      this.categoria.value = await json
-      if (response.status == 200) {
-        toastExito(
-          i18n.global.t('recursos.categoria', {
-            categoria: this.categoria.value.nombre,
-          }),
-        )
-        return this.categoria.value
-      } else return null
-    } catch (error) {
-      console.log(error)
-    }
-  }
- async getTipoFormulario(idRecurso) {
-    try {
-      const urlTipoFormulario = `${this.utils.urlApi}/recursos/${idRecurso}/tipoFormulario`
-      const response = await this.utils.fetchConToken(urlTipoFormulario, 'GET', null)
-      const json = await response.json()
-      this.tipoFormulario.value = await json
-      if (response.status == 200) {
-        toastExito(
-          i18n.global.t('recursos.tipoFormulario', {
-            tipoFormulario: this.tipoFormulario.value.nombre,
-          }),
-        )
-        return this.tipoFormulario.value
-      } else return null
-    } catch (error) {
-      console.log(error)
-    }
-  }
 }
-
 export default RecursoService

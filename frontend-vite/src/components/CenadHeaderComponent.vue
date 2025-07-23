@@ -142,7 +142,6 @@
     </div>
     </div>
 </template>
-
 <script setup>
 import useAuthStore from '@/stores/auth'
 import { ref, onMounted, computed } from 'vue'
@@ -156,14 +155,12 @@ const cenad = computed(() =>
 )
 const cenads = ref([]);
 const idCenadZaragoza = ref(null);
-
 const isSuperAdmin = ref(auth.rol == 'Superadministrador')
 let isCenadZaragoza = ref(false)
 const isAdminEsteCenad = ref(false)
 const isGestorNormal = ref(
     auth.rol == 'Gestor' || auth.rol == 'Normal'
 )
-
 const menuVisible = ref(false)
 const toggleMenu = () => {
     menuVisible.value = !menuVisible.value
@@ -171,50 +168,6 @@ const toggleMenu = () => {
 onMounted(async () => {
     isAdminEsteCenad.value = idCenad.value == auth.cenad.idString && auth.rol == 'Administrador'
     cargarCenads()
-/*
-  if (!localStorage.getItem(`categorias_${this.idCenad}`)) {
-      this.categoriaService
-        .getCategoriasDeCenad(this.idCenad)
-        .subscribe((response) =>
-          localStorage.setItem(
-            `categorias_${this.idCenad}`,
-            JSON.stringify(this.categoriaService.extraerCategorias(response))
-          )
-        );
-    }
-    if (!localStorage.getItem(`categoriasPadre_${this.idCenad}`)) {
-      this.categoriaService
-        .getCategoriasPadreDeCenad(this.idCenad)
-        .subscribe((response) =>
-          localStorage.setItem(
-            `categoriasPadre_${this.idCenad}`,
-            JSON.stringify(this.categoriaService.extraerCategorias(response))
-          )
-        );
-    }
-    if (!localStorage.getItem(`recursos_${this.idCenad}`)) {
-      this.recursoService
-        .getRecursosDeCenad(this.idCenad)
-        .subscribe((response) =>
-          localStorage.setItem(
-            `recursos_${this.idCenad}`,
-            JSON.stringify(this.recursoService.extraerRecursos(response))
-          )
-        );
-    }
-    if(!localStorage.getItem(`usuariosGestor_${this.idCenad}`)) {
-      this.usuarioGestorService.getUsuariosGestoresDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`usuariosGestor_${this.idCenad}`, JSON.stringify(this.usuarioGestorService.extraerUsuarios(response))));
-    }
-    if(!localStorage.getItem(`cartografias_${this.idCenad}`)) {
-      this.cartografiaService.getCartografiasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`cartografias_${this.idCenad}`, JSON.stringify(this.cartografiaService.extraerCartografias(response))));
-    }
-    if(!localStorage.getItem(`normativas_${this.idCenad}`)) {
-      this.normativaService.getNormativasDeCenad(this.idCenad).subscribe((response) => localStorage.setItem(`normativas_${this.idCenad}`, JSON.stringify(this.normativaService.extraerNormativas(response))));
-    }
-  }
-*/
-    // Aquí irían las llamadas a los servicios usando fetch o al store
-    // Por ejemplo: fetchCenad(idCenad.value).then(...)
 })
  // Función corregida
 function cargarCenads() {
@@ -222,7 +175,6 @@ function cargarCenads() {
   buscarIdCenadZaragoza();
   comprobarCenadZaragoza();
 }
-
 // Buscar CENAD Zaragoza
 function buscarIdCenadZaragoza() {
   cenads.value.forEach(c => {
@@ -231,7 +183,6 @@ function buscarIdCenadZaragoza() {
     }
   });
 }
-
 // Comprobar si es Zaragoza
 function comprobarCenadZaragoza() {
   if (idCenadZaragoza.value == idCenad.value) {
@@ -239,7 +190,6 @@ function comprobarCenadZaragoza() {
   }
 }
 </script>
-
 <style scoped>
 h1 {
     color: #344e41;

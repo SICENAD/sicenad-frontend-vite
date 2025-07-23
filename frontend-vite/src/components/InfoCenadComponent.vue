@@ -112,12 +112,8 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </template>
-
-
 <script setup>
 import { ref, onMounted, computed, watch, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
@@ -143,7 +139,6 @@ const urlInfoCenadActual = ref('')
 const pathRelativo = ref('')
 const pathImg = ref('')
 pathRelativo.value = `${utils.urlApi}/files/${idCenad.value}/infoCenads`
-
 
 const isAdminEsteCenad = ref(false)
 const cambioBoton = ref(false)
@@ -185,7 +180,6 @@ function cambiaRol() {
 }
 // Para preview de archivo seleccionado nuevo
 const previewInfoCenad = ref('')
-
 // Cuando cambie archivoInfoCenad, creamos preview con FileReader
 watch(archivoInfoCenad, (newFile) => {
     if (!newFile) {
@@ -198,7 +192,6 @@ watch(archivoInfoCenad, (newFile) => {
     }
     reader.readAsDataURL(newFile)
 })
-
 // Variable para guardar la URL creada y poder revocarla
 let currentObjectURL = ''
 
@@ -207,7 +200,6 @@ watch(urlInfoCenadActual, (newUrl, oldUrl) => {
     if (oldUrl) URL.revokeObjectURL(oldUrl)  // revoca la URL vieja
     currentObjectURL = newUrl                 // guardamos la nueva
 })
-
 // Liberamos la URL cuando el componente se desmonta
 onBeforeUnmount(() => {
     if (currentObjectURL) URL.revokeObjectURL(currentObjectURL)
@@ -225,11 +217,9 @@ const actualizar = async () => {
         infoCenadActual.value,   // nombre actual de infoCenad en la base
         idCenad.value
     );
-
     if (success) {
         // Actualizar el escudoActual con el nombre real subido
         infoCenadActual.value = success; // Asumiendo que editarInfoCenad retorna el nombreArchivo
-
         // Volver a cargar la URL de la infoCenad actualizada para mostrar preview
         try {
             urlInfoCenadActual.value = await service.fetchInfoCenad(infoCenadActual.value, idCenad.value)
@@ -242,7 +232,6 @@ const actualizar = async () => {
     }
 }
 </script>
-
 <style scoped>
 .btn {
     background: #3A5A40;

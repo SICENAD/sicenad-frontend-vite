@@ -153,7 +153,6 @@ const previewEscudo = ref(null) // <-- URL para vista previa
 const service = new CenadService()
 const cenads = service.getCenads()
 
-
 function onFileChange(e) {
     const file = e.target.files[0]
     escudoFile.value = file
@@ -164,14 +163,11 @@ function onFileChange(e) {
         previewEscudo.value = null
     }
 }
-
-
 onMounted(async () => {
     await getCenads()
 })
 const crearCenad = async () => {
     await service.crearCenad(nombre.value, provincia.value, direccion.value, tfno.value, email.value, descripcion.value, escudoFile.value)
-
     nombre.value = ''
     provincia.value = ''
     direccion.value = ''
@@ -185,7 +181,6 @@ const crearCenad = async () => {
 const getCenads = async () => {
     await service.fetchAll()
 }
-
 function actualizarCenadEnView() {
     getCenads()
 }

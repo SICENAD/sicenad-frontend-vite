@@ -173,7 +173,7 @@ div a {
   font-weight: bold;
 }
 
-fa-icon:hover {
+v-icon:hover {
   color: #588157;
 }
 

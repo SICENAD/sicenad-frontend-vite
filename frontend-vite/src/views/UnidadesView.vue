@@ -120,12 +120,12 @@ function definirBtnVolver() {
 }
 const crearUnidad = async () => {
     await service.crearUnidad(nombre.value, descripcion.value, email.value, tfno.value, direccion.value, poc.value)
-    nombre = ''
-    descripcion = ''
-    email = ''
-    tfno = ''
-    direccion = ''
-    poc = ''
+    nombre.value = ''
+    descripcion.value = ''
+    email.value = ''
+    tfno.value = ''
+    direccion.value = ''
+    poc.value = ''
     await getUnidades()
 }
 const getUnidades = async () => {
@@ -141,45 +141,36 @@ async function actualizarUnidadEnView() {
     padding: 0.5;
     font-size: 14px;
 }
-
 .btn:hover {
     background-color: #A3B18A;
 }
-
 .titulo {
     color: #3A5A40;
     font-weight: bold;
 }
-
 .titulo1 {
     color: #588157;
 }
-
 h5 {
     color: #354f52;
     font-weight: bold;
 }
-
 a.volver {
     color: #3A5A40;
     font-size: 18px;
 }
-
 a.volver:hover {
     color: #A3B18A;
 }
-
 .row {
     height: auto;
     padding: auto;
     margin: auto;
 }
-
 hr {
     margin-bottom: 0;
     margin-top: 1;
 }
-
 .modal {
     max-height: 100%;
     max-width: 100%;

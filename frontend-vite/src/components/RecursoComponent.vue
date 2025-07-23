@@ -14,20 +14,24 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import RecursoModalComponent from './RecursoModalComponent.vue'
-import RecursoService from '@/services/RecursoService'
+import TipoFormularioService from '@/services/TipoFormularioService'
+import CategoriaService from '@/services/CategoriaService'
+import UsuarioService from '@/services/UsuarioService'
 const props = defineProps(['content', 'idCenad'])
 const emits = defineEmits(['emiteElemento'])
-const service = new RecursoService()
+const tipoFormularioService = new TipoFormularioService()
+const categoriaService = new CategoriaService()
+const usuarioService = new UsuarioService()
 let categoria = ref()
 let tipoFormulario = ref()
 let usuarioGestor = ref()
 
 onMounted(async () => {
-   const responseCategoria = await service.getCategoria(props.content.idString)
+   const responseCategoria = await categoriaService.fetchCategoriaDeRecurso(props.content.idString)
    categoria.value = responseCategoria
-   const responseTipoFormulario = await service.getTipoFormulario(props.content.idString)
+   const responseTipoFormulario = await tipoFormularioService.fetchTipoFormularioDeRecurso(props.content.idString)
    tipoFormulario.value = responseTipoFormulario
-      const responseUsuarioGestor = await service.getUsuarioGestor(props.content.idString)
+      const responseUsuarioGestor = await usuarioService.fetchUsuarioGestorDeRecurso(props.content.idString)
    usuarioGestor.value = responseUsuarioGestor
 })
 function actualizarCategoriaEnElemento() {
@@ -41,7 +45,7 @@ div a {
   font-weight: bold
 }
 
-fa-icon:hover {
+v-icon:hover {
   color: #588157;
 }
 

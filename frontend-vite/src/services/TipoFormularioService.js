@@ -33,13 +33,37 @@ class TipoFormularioService {
       console.log(error)
     }
   }
+  async fetchTipoFormulario(idTipoFormulario) {
+    try {
+      const urlTipoFormulario = `${this.utils.urlApi}/tipos_formulario/${idTipoFormulario}`
+      const response = await this.utils.fetchConToken(urlTipoFormulario, 'GET', null)
+      const json = await response.json()
+      this.tipoFormulario.value = await json
+      return response.status == 200 ? this.tipoFormulario.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
+async fetchTipoFormularioDeRecurso(idRecurso) {
+    try {
+      const urlTipoFormulario = `${this.utils.urlApi}/recursos/${idRecurso}/tipoFormulario`
+      const response = await this.utils.fetchConToken(urlTipoFormulario, 'GET', null)
+      const json = await response.json()
+      this.tipoFormulario.value = await json
+      if (response.status == 200) {
+        return this.tipoFormulario.value
+      } else return null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearTipoFormulario(nombre, codTipo, descripcion) {
     try {
       const urlTipoFormulario = `${this.utils.urlApi}/tipos_formulario`
       const response = await this.utils.fetchConToken(urlTipoFormulario, 'POST', {
         nombre: nombre.toUpperCase(),
         codTipo: codTipo,
-        descripcion: descripcion
+        descripcion: descripcion,
       })
       if (response.status == 201) {
         i18n.global.t('comun.enviando')
@@ -56,13 +80,12 @@ class TipoFormularioService {
     }
   }
   async editarTipoFormulario(nombre, codTipo, descripcion, idTipoFormulario) {
-
     try {
       const urlTipoFormulario = `${this.utils.urlApi}/tipos_formulario/${idTipoFormulario}`
       const body = {
         nombre: nombre.toUpperCase(),
         codTipo: codTipo,
-        descripcion: descripcion
+        descripcion: descripcion,
       }
       const response = await this.utils.fetchConToken(urlTipoFormulario, 'PATCH', body)
       if (response.status == 200) {
@@ -78,17 +101,6 @@ class TipoFormularioService {
     } catch (error) {
       console.error(error)
       return null
-    }
-  }
-  async fetchTipoFormulario(idTipoFormulario) {
-    try {
-      const urlTipoFormulario = `${this.utils.urlApi}/tipos_formulario/${idTipoFormulario}`
-      const response = await this.utils.fetchConToken(urlTipoFormulario, 'GET', null)
-      const json = await response.json()
-      this.tipoFormulario.value = await json
-      return response.status == 200 ? this.tipoFormulario.value : null
-    } catch (error) {
-      console.log(error)
     }
   }
   async deleteTipoFormulario(idTipoFormulario) {
@@ -110,5 +122,4 @@ class TipoFormularioService {
     }
   }
 }
-
 export default TipoFormularioService
