@@ -25,7 +25,6 @@ let usuarioGestor = ref()
 onMounted(async () => {
    const responseCategoria = await service.getCategoria(props.content.idString)
    categoria.value = responseCategoria
-   console.log(categoria.value.idString)
    const responseTipoFormulario = await service.getTipoFormulario(props.content.idString)
    tipoFormulario.value = responseTipoFormulario
       const responseUsuarioGestor = await service.getUsuarioGestor(props.content.idString)

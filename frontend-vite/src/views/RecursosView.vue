@@ -6,7 +6,26 @@
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
             </RouterLink>
         </div>
+
         <div class="row mt-1">
+            <!-- Filtro por categoría -->
+            <label v-if="idCategoriaSeleccionada" class="mr-2 mt-2">
+                Categoría Seleccionada:
+                <span>{{ getNombreCategoriaSeleccionada }}</span>
+            </label>
+            <div class="mt-0">
+                <label class="mr-2">Elige una categoría:</label>
+                <select class="form-select" v-model="idCategoriaSeleccionada">
+                    <option disabled value="">Selecciona la Categoría</option>
+                    <option v-for="categoria in categorias" :key="categoria.idString" :value="categoria.idString">
+                        {{ categoria.nombre }}
+                    </option>
+                </select>
+
+                <button class="mr-2 ml-3" v-if="idCategoriaSeleccionada" @click="borrarFiltros">
+                    Borrar filtros
+                </button>
+            </div>
             <div class="col-9 text-center">
                 <h3 class="text-center titulo1"><u>RECURSOS DEL {{ auth.cenad.nombre }}</u></h3>
             </div>
@@ -30,8 +49,11 @@
                         <b>DESCRIPCIÓN</b>
                     </div>
                 </div>
-                <RecursoComponent v-for="(item, index) in recursos" :key="index" :content="item" :idCenad="idCenad"
-                    @emiteElemento="actualizarRecursoEnView" />
+                <RecursoComponent v-for="(item, index) in recursosFiltrados" :key="index" :content="item"
+                    :idCenad="idCenad" @emiteElemento="actualizarRecursoEnView" />
+                <div v-if="recursosFiltrados.length == 0" class="text-center my-4">
+                    <p>No hay recursos para esta categoría.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -113,8 +135,10 @@ import RecursoService from '@/services/RecursoService'
 import UsuarioService from '@/services/UsuarioService'
 import TipoFormularioService from '@/services/TipoFormularioService'
 import CategoriaService from '@/services/CategoriaService'
+import useUtilsStore from '@/stores/utils'
 
 const auth = useAuthStore()
+const utils = useUtilsStore()
 const route = useRoute()
 const idCenad = computed(() => route.params.id)
 
@@ -124,6 +148,7 @@ let otros = ref('')
 let idCategoria = ref('')
 let idTipoFormulario = ref('')
 let idUsuarioGestor = ref('')
+let idCategoriaSeleccionada = ref('')
 const usuarioService = new UsuarioService()
 const tipoFormularioService = new TipoFormularioService()
 const categoriaService = new CategoriaService()
@@ -134,10 +159,10 @@ const tiposFormulario = tipoFormularioService.getTiposFormulario()
 const usuariosGestor = usuarioService.getUsuariosGestor()
 
 onMounted(async () => {
-    await getRecursos()
     await getCategorias()
     await getTiposFormulario()
     await getUsuariosGestor()
+    await getRecursos()
 })
 const crearRecurso = async () => {
     await service.crearRecurso(nombre.value, descripcion.value, otros.value, idTipoFormulario.value, idCategoria.value, idUsuarioGestor.value)
@@ -151,6 +176,22 @@ const crearRecurso = async () => {
 }
 const getRecursos = async () => {
     await service.fetchAll(idCenad.value)
+
+    const promises = recursos.value.map(async (recurso) => {
+        if (recurso._links && recurso._links.categoria) {
+            try {
+                const response = await utils.fetchConToken(recurso._links.categoria.href, 'GET', null)
+                const categoriaData = await response.json()
+                recurso.idCategoria = categoriaData.idString
+                recurso.categoriaNombre = categoriaData.nombre
+            } catch (error) {
+                recurso.idCategoria = ''
+                recurso.categoriaNombre = 'Desconocida'
+            }
+        }
+    })
+
+    await Promise.all(promises) // ✅ Espera a que todas las categorías se obtengan
 }
 const getCategorias = async () => {
     await categoriaService.fetchAll(idCenad.value)
@@ -163,6 +204,19 @@ const getUsuariosGestor = async () => {
 }
 function actualizarRecursoEnView() {
     getRecursos()
+}
+const recursosFiltrados = computed(() => {
+    if (!idCategoriaSeleccionada.value) return recursos.value
+    console.log(recursos.value)
+    return recursos.value.filter(r => r.idCategoria && r.idCategoria === idCategoriaSeleccionada.value)
+
+})
+const getNombreCategoriaSeleccionada = computed(() => {
+    const cat = categorias.value.find(c => c.idString === idCategoriaSeleccionada.value)
+    return cat ? cat.nombre : ''
+})
+function borrarFiltros() {
+    idCategoriaSeleccionada.value = ''
 }
 </script>
 <style scoped lang="scss">
