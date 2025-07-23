@@ -116,7 +116,7 @@
                     <router-link class="dropdown-item" :to="{ name: 'cartografias'}">
                         <v-icon scale="2" name="fa-map" />Cartografía
                     </router-link>
-                    <router-link class="dropdown-item" :to="`/recursos/${idCenad}`">
+                    <router-link class="dropdown-item" :to="{ name: 'recursos'}">
                         <v-icon scale="2" name="fa-folder-open" />Recursos
                     </router-link>
                     <router-link class="dropdown-item" :to="{ name: 'categorias'}">

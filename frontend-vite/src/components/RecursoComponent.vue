@@ -1,30 +1,35 @@
 <template>
   <hr class='w-100'>
   <div class="row">
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
+    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">
       {{ props.content.nombre }}
-      <CategoriaModalComponent :nombre="props.content.nombre" :idCategoria="props.content.idString"
-        :descripcion="props.content.descripcion" :categoriaPadre="categoriaPadre" :idCenad="props.idCenad"
+      <RecursoModalComponent :nombre="props.content.nombre" :idRecurso="props.content.idString" :otros="props.content.otros"
+        :descripcion="props.content.descripcion" :categoria="categoria" :idCenad="props.idCenad" :tipoFormulario="tipoFormulario" :usuarioGestor="usuarioGestor"
         @emiteModal="actualizarCategoriaEnElemento" />
     </div>
-    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">{{ textoCategoriaPadre }}</div>
-    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6">{{ props.content.descripcion }}</div>
+        <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">{{ categoria?.nombre }}</div>
+        <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4">{{ props.content.descripcion }}</div>
   </div>
 </template>
 <script setup>
-import CategoriaService from '@/services/CategoriaService'
-import CategoriaModalComponent from './CategoriaModalComponent.vue'
 import { onMounted, ref } from 'vue'
+import RecursoModalComponent from './RecursoModalComponent.vue'
+import RecursoService from '@/services/RecursoService'
 const props = defineProps(['content', 'idCenad'])
 const emits = defineEmits(['emiteElemento'])
-const service = new CategoriaService()
-let categoriaPadre = ref()
-let textoCategoriaPadre = ref('')
+const service = new RecursoService()
+let categoria = ref()
+let tipoFormulario = ref()
+let usuarioGestor = ref()
 
 onMounted(async () => {
-   const response = await service.fetchCategoriaPadreDeSubcategoria(props.content.idString)
-   response!= null ? ((categoriaPadre.value = response) && (textoCategoriaPadre.value = categoriaPadre.value.nombre)) : (textoCategoriaPadre.value = 'NO TIENE')
-
+   const responseCategoria = await service.getCategoria(props.content.idString)
+   categoria.value = responseCategoria
+   console.log(categoria.value.idString)
+   const responseTipoFormulario = await service.getTipoFormulario(props.content.idString)
+   tipoFormulario.value = responseTipoFormulario
+      const responseUsuarioGestor = await service.getUsuarioGestor(props.content.idString)
+   usuarioGestor.value = responseUsuarioGestor
 })
 function actualizarCategoriaEnElemento() {
   emits('emiteElemento')

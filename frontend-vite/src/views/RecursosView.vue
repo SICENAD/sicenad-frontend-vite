@@ -2,17 +2,17 @@
     <!-- muestra la vista de categorias -->
     <div class="container-fluid">
         <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad} }">
+            <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad } }">
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
             </RouterLink>
         </div>
         <div class="row mt-1">
             <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>CATEGORÍAS DEL {{ auth.cenad.nombre }}</u></h3>
+                <h3 class="text-center titulo1"><u>RECURSOS DEL {{ auth.cenad.nombre }}</u></h3>
             </div>
             <div class="col-3 justify-content-end">
-                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-categoria">
-                    Nueva <b>Categoría</b>
+                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-recurso">
+                    Nuevo <b>Recurso</b>
                 </button>
             </div>
         </div>
@@ -20,42 +20,50 @@
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
                 <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo">
+                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                        <b>RECURSO</b>
+                    </div>
+                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
                         <b>CATEGORÍA</b>
                     </div>
-                    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo">
-                        <b>CATEGORÍA PADRE</b>
-                    </div>
-                    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo ">
+                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
                         <b>DESCRIPCIÓN</b>
                     </div>
                 </div>
-                <CategoriaComponent v-for="(item, index) in categorias" :key="index" :content="item" :idCenad="idCenad"
-                    @emiteElemento="actualizarCategoriaEnView" />
+                <RecursoComponent v-for="(item, index) in recursos" :key="index" :content="item" :idCenad="idCenad"
+                    @emiteElemento="actualizarRecursoEnView" />
             </div>
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="modal-nueva-categoria" tabindex="-1" aria-labelledby="modal-nueva-categoria-Label"
+    <div class="modal fade" id="modal-nuevo-recurso" tabindex="-1" aria-labelledby="modal-nuevo-recurso-Label"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modal-nueva-categoria-Label">
-                        Nueva Categoría
+                    <h1 class="modal-title fs-5" id="modal-nuevo-recurso-Label">
+                        Nuevo Recurso
                     </h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label class="titulo"><b>NOMBRE DE LA CATEGORÍA<sup class="text-danger">*</sup></b></label>
+                            <label class="titulo"><b>NOMBRE DEL RECURSO<sup class="text-danger">*</sup></b></label>
                             <input type="text" class="form-control letra" id="nombre" v-model="nombre" />
                         </div>
                         <div class="mb-3">
-                            <label class="titulo"><b>CATEGORÍA PADRE<sup class="text-danger">*</sup></b></label>
-                            <select class="form-select" aria-label="categoriaPadre" v-model="idCategoriaPadre">
-                                <option disabled value="">Selecciona la Categoría Padre</option>
+                            <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
+                            <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="titulo"><b>OTROS<sup class="text-danger">*</sup></b></label>
+                            <input type="textarea" class="form-control letra" id="otros" v-model="otros" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="titulo"><b>CATEGORÍA<sup class="text-danger">*</sup></b></label>
+                            <select class="form-select" aria-label="categoria" v-model="idCategoria">
+                                <option disabled value="">Selecciona la Categoría</option>
                                 <option v-for="categoria in categorias" :key="categoria.idString"
                                     :value="categoria.idString">
                                     {{ categoria.nombre }}
@@ -63,8 +71,24 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-                            <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+                            <label class="titulo"><b>TIPO DE FORMULARIO<sup class="text-danger">*</sup></b></label>
+                            <select class="form-select" aria-label="tipoFormulario" v-model="idTipoFormulario">
+                                <option disabled value="">Selecciona el Tipo de formulario</option>
+                                <option v-for="tipoFormulario in tiposFormulario" :key="tipoFormulario.idString"
+                                    :value="tipoFormulario.idString">
+                                    {{ tipoFormulario.nombre }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="titulo"><b>USUARIO GESTOR<sup class="text-danger">*</sup></b></label>
+                            <select class="form-select" aria-label="usuarioGestor" v-model="idUsuarioGestor">
+                                <option disabled value="">Selecciona el Gestor del recurso</option>
+                                <option v-for="usuarioGestor in usuariosGestor" :key="usuarioGestor.idString"
+                                    :value="usuarioGestor.idString">
+                                    {{ usuarioGestor.username }}
+                                </option>
+                            </select>
                         </div>
                     </form>
                 </div>
@@ -72,8 +96,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearCategoria" data-bs-dismiss="modal" class="btn btn-primary">
-                        Crear Categoría
+                    <button type="button" @click="crearRecurso" data-bs-dismiss="modal" class="btn btn-primary">
+                        Crear Recurso
                     </button>
                 </div>
             </div>
@@ -84,7 +108,10 @@
 import useAuthStore from '@/stores/auth'
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import CategoriaComponent from '@/components/CategoriaComponent.vue'
+import RecursoComponent from '@/components/RecursoComponent.vue'
+import RecursoService from '@/services/RecursoService'
+import UsuarioService from '@/services/UsuarioService'
+import TipoFormularioService from '@/services/TipoFormularioService'
 import CategoriaService from '@/services/CategoriaService'
 
 const auth = useAuthStore()
@@ -93,28 +120,49 @@ const idCenad = computed(() => route.params.id)
 
 let nombre = ref('')
 let descripcion = ref('')
-let idCategoriaPadre = ref('')
-
-
-const service = new CategoriaService()
-const categorias = service.getCategorias()
+let otros = ref('')
+let idCategoria = ref('')
+let idTipoFormulario = ref('')
+let idUsuarioGestor = ref('')
+const usuarioService = new UsuarioService()
+const tipoFormularioService = new TipoFormularioService()
+const categoriaService = new CategoriaService()
+const service = new RecursoService()
+const categorias = categoriaService.getCategorias()
+const recursos = service.getRecursos()
+const tiposFormulario = tipoFormularioService.getTiposFormulario()
+const usuariosGestor = usuarioService.getUsuariosGestor()
 
 onMounted(async () => {
+    await getRecursos()
     await getCategorias()
+    await getTiposFormulario()
+    await getUsuariosGestor()
 })
-const crearCategoria = async () => {
-    await service.crearCategoria(nombre.value, descripcion.value, idCenad.value, idCategoriaPadre.value)
+const crearRecurso = async () => {
+    await service.crearRecurso(nombre.value, descripcion.value, otros.value, idTipoFormulario.value, idCategoria.value, idUsuarioGestor.value)
     nombre.value = ''
-    idCategoriaPadre.value = ''
+    idCategoria.value = ''
     descripcion.value = ''
-    await getCategorias()
+    otros.value = ''
+    idTipoFormulario.value = ''
+    idUsuarioGestor.value = ''
+    await getRecursos()
 }
-const getCategorias = async () => {
+const getRecursos = async () => {
     await service.fetchAll(idCenad.value)
 }
-
-function actualizarCategoriaEnView() {
-    getCategorias()
+const getCategorias = async () => {
+    await categoriaService.fetchAll(idCenad.value)
+}
+const getTiposFormulario = async () => {
+    await tipoFormularioService.fetchAll()
+}
+const getUsuariosGestor = async () => {
+    await usuarioService.fetchUsuariosGestorDeCenad(idCenad.value)
+}
+function actualizarRecursoEnView() {
+    getRecursos()
 }
 </script>
 <style scoped lang="scss">

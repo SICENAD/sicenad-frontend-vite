@@ -81,7 +81,7 @@ class RecursoService {
       console.log(error)
     }
   }
-  async crearRecurso(nombre, descripcion, otros, idTipoFormulario, idCategoria, idGestor, idCenad) {
+  async crearRecurso(nombre, descripcion, otros, idTipoFormulario, idCategoria, idGestor) {
     try {
       const urlRecursos = `${this.utils.urlApi}/recursos`
       const body = {
@@ -91,7 +91,6 @@ class RecursoService {
         tipoFormulario: `${this.utils.urlApi}/tipos_formulario/${idTipoFormulario}`,
         categoria: `${this.utils.urlApi}/categorias/${idCategoria}`,
         usuarioGestor: `${this.utils.urlApi}/usuarios_gestor/${idGestor}`,
-        cenad: `${this.utils.urlApi}/cenads/${idCenad}`,
       }
       const response = await this.utils.fetchConToken(urlRecursos, 'POST', body)
       if (response.status == 201) {
@@ -177,8 +176,8 @@ class RecursoService {
             usuarioGestor: this.usuarioGestor.value.nombre,
           }),
         )
-        return true
-      } else return false
+        return this.usuarioGestor.value
+      } else return null
     } catch (error) {
       console.log(error)
     }
@@ -195,8 +194,8 @@ class RecursoService {
             categoria: this.categoria.value.nombre,
           }),
         )
-        return true
-      } else return false
+        return this.categoria.value
+      } else return null
     } catch (error) {
       console.log(error)
     }
@@ -213,8 +212,8 @@ class RecursoService {
             tipoFormulario: this.tipoFormulario.value.nombre,
           }),
         )
-        return true
-      } else return false
+        return this.tipoFormulario.value
+      } else return null
     } catch (error) {
       console.log(error)
     }
