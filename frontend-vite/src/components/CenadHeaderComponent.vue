@@ -166,6 +166,8 @@ const toggleMenu = () => {
     menuVisible.value = !menuVisible.value
 }
 onMounted(async () => {
+    auth.borrarDatosCenad()
+    auth.getDatosInicialesDeCenad(idCenad.value)
     auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
     cargarCenads()
 })
