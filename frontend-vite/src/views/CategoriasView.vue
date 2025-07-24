@@ -72,7 +72,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearCategoria" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearCategoria" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
                         Crear Categoría
                     </button>
                 </div>
@@ -116,6 +116,12 @@ const getCategorias = async () => {
 function actualizarCategoriaEnView() {
     getCategorias()
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != ''
+  )});
 </script>
 <style scoped lang="scss">
 .btn {

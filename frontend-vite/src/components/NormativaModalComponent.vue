@@ -51,7 +51,7 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('normativas.borrarNormativa') }}
           </button>
-          <button type="button" @click="editarNormativa" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarNormativa" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
             {{ $t('normativas.guardarNormativa') }}
           </button>
         </div>
@@ -84,7 +84,7 @@
   </div>
 </template>
 <script setup>
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import useUtilsStore from '@/stores/utils'
 import NormativaService from '@/services/NormativaService'
 
@@ -165,6 +165,13 @@ const borrarNormativa = async () => {
   await service.deleteNormativa(archivoActual.value, idNormativa.value, idCenad.value)
   emits('emiteModal')
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+    return (
+        nombre.value.trim() != '' &&
+        descripcion.value.trim() != '' 
+    )
+});
 </script>
 <style scoped lang="scss">
 div,

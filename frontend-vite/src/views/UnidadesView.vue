@@ -62,10 +62,12 @@
                         <div class="mb-3">
                             <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
                             <input type="text" class="form-control letra" id="tfno" v-model="tfno" />
+                            <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>EMAIL<sup class="text-danger">*</sup></b></label>
                             <input type="email" class="form-control letra" id="email" v-model="email" />
+                            <span v-if="emailError" class="text-danger">{{ emailError }}</span>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
@@ -81,7 +83,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearUnidad" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearUnidad" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
                         Crear Unidad
                     </button>
                 </div>
@@ -90,7 +92,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import UnidadComponent from '@/components/UnidadComponent.vue'
 import UnidadService from '@/services/UnidadService'
 import useAuthStore from '@/stores/auth'
@@ -106,7 +108,8 @@ const service = new UnidadService()
 let unidades = service.getUnidades()
 
 let rol = ref(auth.rol)
-let idCenad = auth.cenad.idString
+let idCenad = ''
+auth.cenad && (idCenad = auth.cenad.idString)
 let name = ref('superadministrador')
 let params = ref({})
 
@@ -134,6 +137,33 @@ const getUnidades = async () => {
 async function actualizarUnidadEnView() {
     await getUnidades()
 }
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+  if (email.value.trim() === '') return null
+  return isValidEmail(email.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+  if (tfno.value.trim() === '') return null
+  return isValidPhone(tfno.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    poc.value.trim() != '' &&
+    tfno.value.trim() != '' &&
+    isValidPhone(tfno.value) &&        // Teléfono válido
+    email.value.trim() != '' &&
+    isValidEmail(email.value) &&       // <-- validación email
+    descripcion.value.trim() != '' &&
+    direccion.value.trim() != ''
+  )
+})
 </script>
 <style scoped lang="scss">
 .btn {
@@ -141,36 +171,45 @@ async function actualizarUnidadEnView() {
     padding: 0.5;
     font-size: 14px;
 }
+
 .btn:hover {
     background-color: #A3B18A;
 }
+
 .titulo {
     color: #3A5A40;
     font-weight: bold;
 }
+
 .titulo1 {
     color: #588157;
 }
+
 h5 {
     color: #354f52;
     font-weight: bold;
 }
+
 a.volver {
     color: #3A5A40;
     font-size: 18px;
 }
+
 a.volver:hover {
     color: #A3B18A;
 }
+
 .row {
     height: auto;
     padding: auto;
     margin: auto;
 }
+
 hr {
     margin-bottom: 0;
     margin-top: 1;
 }
+
 .modal {
     max-height: 100%;
     max-width: 100%;

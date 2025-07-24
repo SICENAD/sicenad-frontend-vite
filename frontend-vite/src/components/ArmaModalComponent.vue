@@ -34,7 +34,7 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('armas.borrarArma') }}
           </button>
-          <button type="button" @click="editarArma" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarArma" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
             {{ $t('armas.guardarArma') }}
           </button>
         </div>
@@ -67,7 +67,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import useUtilsStore from '@/stores/utils'
 import ArmaService from '@/services/ArmaService'
 
@@ -96,6 +96,12 @@ const borrarArma = async () => {
   await service.deleteArma(idArma.value)
   emits('emiteModal')
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    tipoTiro.value.trim() != '' 
+  )});
 </script>
 <style scoped lang="scss">
 div,

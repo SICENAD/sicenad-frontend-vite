@@ -24,10 +24,12 @@
             <div class="mb-3">
               <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
               <input type="text" class="form-control letra" id="tfno" v-model="tfno" />
+              <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>EMAIL<sup class="text-danger">*</sup></b></label>
               <input type="email" class="form-control letra" id="email" v-model="email" />
+              <span v-if="emailError" class="text-danger">{{ emailError }}</span>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
@@ -46,7 +48,8 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('unidades.borrarUnidad') }}
           </button>
-          <button type="button" @click="editarUnidad" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarUnidad" data-bs-dismiss="modal" class="btn btn-success"
+            :disabled="!formularioValidado">
             {{ $t('unidades.guardarUnidad') }}
           </button>
         </div>
@@ -80,12 +83,12 @@
 </template>
 <script setup>
 import UnidadService from '@/services/UnidadService'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps(['nombre', 'descripcion', 'email', 'tfno', 'direccion', 'poc', 'idUnidad'])
 const emits = defineEmits(['emiteModal'])
 const nombre = ref(props.nombre)
-const descripcion = ref(props.tipoTiro)
+const descripcion = ref(props.descripcion)
 const email = ref(props.email)
 const tfno = ref(props.tfno)
 const direccion = ref(props.direccion)
@@ -103,6 +106,33 @@ const borrarUnidad = async () => {
   await service.deleteUnidad(idUnidad.value)
   emits('emiteModal')
 }
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+  if (email.value.trim() === '') return null
+  return isValidEmail(email.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+  if (tfno.value.trim() === '') return null
+  return isValidPhone(tfno.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    poc.value.trim() != '' &&
+    tfno.value.trim() != '' &&
+    isValidPhone(tfno.value) &&        // Teléfono válido
+    email.value.trim() != '' &&
+    isValidEmail(email.value) &&       // <-- validación email
+    descripcion.value.trim() != '' &&
+    direccion.value.trim() != ''
+  )
+})
 </script>
 <style scoped lang="scss">
 div,

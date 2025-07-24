@@ -2,7 +2,7 @@
     <!-- muestra la vista de normativas -->
     <div class="container-fluid">
         <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad} }">
+            <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad } }">
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
             </RouterLink>
         </div>
@@ -67,7 +67,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearNormativa" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearNormativa" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
                         Crear Normativa
                     </button>
                 </div>
@@ -107,7 +107,7 @@ onMounted(async () => {
 })
 const crearNormativa = async () => {
     await service.crearNormativa(nombre.value, descripcion.value, normativaFile.value, idCenad.value)
-     nombre.value = ''
+    nombre.value = ''
     normativaFile.value = ''
     descripcion.value = ''
     await getNormativas()
@@ -119,6 +119,14 @@ const getNormativas = async () => {
 function actualizarNormativaEnView() {
     getNormativas()
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+    return (
+        nombre.value.trim() != '' &&
+        descripcion.value.trim() != '' &&
+        normativaFile.value.trim() != ''
+    )
+});
 </script>
 <style scoped lang="scss">
 .btn {

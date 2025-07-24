@@ -98,10 +98,12 @@
                         <div class="mb-3">
                             <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
                             <input type="text" class="form-control letra" id="tfno" v-model="tfno" />
+                            <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>EMAIL</b></label>
                             <input type="email" class="form-control letra" id="email" v-model="email" />
+                            <span v-if="emailError" class="text-danger">{{ emailError }}</span>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
@@ -124,7 +126,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearCenad" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearCenad" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado">
                         Crear CENAD/CMT
                     </button>
                 </div>
@@ -133,7 +136,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import CenadComponent from '@/components/CenadComponent.vue'
 import CenadService from '@/services/CenadService'
 import useUtilsStore from '@/stores/utils'
@@ -184,6 +187,34 @@ const getCenads = async () => {
 function actualizarCenadEnView() {
     getCenads()
 }
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+    if (email.value.trim() === '') return null
+    return isValidEmail(email.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+    if (tfno.value.trim() === '') return null
+    return isValidPhone(tfno.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+    return (
+        nombre.value.trim() != '' &&
+        provincia.value.trim() != '' &&
+        tfno.value.trim() != '' &&
+        isValidPhone(tfno.value) &&        // Teléfono válido
+        email.value.trim() != '' &&
+        isValidEmail(email.value) &&       // <-- validación email
+        descripcion.value.trim() != '' &&
+        direccion.value.trim() != '' &&
+        escudoFile.value.trim() != ''
+    )
+})
 </script>
 <style scoped lang="scss">
 h2 {

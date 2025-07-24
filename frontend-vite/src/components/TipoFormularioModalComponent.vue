@@ -35,7 +35,7 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('tiposFormulario.borrarTipoFormulario') }}
           </button>
-          <button type="button" @click="editarTipoFormulario" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarTipoFormulario" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
             {{ $t('tiposFormulario.guardarTipoFormulario') }}
           </button>
         </div>
@@ -68,7 +68,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import TipoFormularioService from '@/services/TipoFormularioService'
 
 const props = defineProps(['nombre', 'codTipo', 'descripcion', 'idTipoFormulario'])
@@ -94,6 +94,13 @@ const borrarTipoFormulario = async () => {
   await service.deleteTipoFormulario(idTipoFormulario.value)
   emits('emiteModal')
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != '' &&
+    codTipo.value != '' 
+  )});
 </script>
 <style scoped lang="scss">
 div,

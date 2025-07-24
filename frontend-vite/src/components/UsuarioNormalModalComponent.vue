@@ -20,20 +20,21 @@
             </div>
             <div class="mb-3">
               <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno'))
-                  }}</b></label>
+              }}</b></label>
               <input type="text" class="form-control" id="tfnoUsuarioNormal" v-model="tfno" />
+              <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
             </div>
             <div class="mb-3">
               <label for="InputEmail1" class="form-label"><b>{{ toTitleCase($t('administracion.correo'))
-                  }}</b></label>
+              }}</b></label>
               <input type="email" class="form-control" id="emailUsuarioNormal" aria-describedby="emailHelp"
                 v-model="email" />
               <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
+              <span v-if="emailError" class="text-danger">{{ emailError }}</span>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
-              <input type="checkbox" class="letra" id="emailAdmitidoUsuarioNormal"
-                v-model="emailAdmitido" />
+              <input type="checkbox" class="letra" id="emailAdmitidoUsuarioNormal" v-model="emailAdmitido" />
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
@@ -58,7 +59,8 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('administracion.borrarUsuario') }}
           </button>
-          <button type="button" @click="editarUsuario" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarUsuario" data-bs-dismiss="modal" class="btn btn-success"
+            :disabled="!formularioValidado">
             {{ $t('administracion.guardarUsuario') }}
           </button>
         </div>
@@ -90,7 +92,7 @@
   </div>
 </template>
 <script setup>
-import { watch, onMounted, ref } from 'vue'
+import { watch, onMounted, ref, computed } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UnidadService from '@/services/UnidadService'
 import { toTitleCase } from '@/utils'
@@ -135,6 +137,32 @@ const borrarUsuario = async () => {
   await service.deleteUsuario(idUsuario.value)
   emits('emiteModal')
 }
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+  if (email.value.trim() === '') return null
+  return isValidEmail(email.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+  if (tfno.value.trim() === '') return null
+  return isValidPhone(tfno.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+  return (
+    username.value.trim() != '' &&
+    tfno.value.trim() != '' &&
+    isValidPhone(tfno.value) &&        // Teléfono válido
+    email.value.trim() != '' &&
+    isValidEmail(email.value) &&       // <-- validación email
+    descripcion.value.trim() != '' &&
+    idUnidad.value != ''
+  )
+})
 </script>
 <style scoped lang="scss">
 .passwordHelp {

@@ -39,7 +39,7 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('categoriasFichero.borrarCategoriaFichero') }}
           </button>
-          <button type="button" @click="editarCategoriaFichero" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarCategoriaFichero" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
             {{ $t('categoriasFichero.guardarCategoriaFichero') }}
           </button>
         </div>
@@ -72,13 +72,11 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
-import useUtilsStore from '@/stores/utils'
+import { computed, ref } from 'vue'
 import CategoriaFicheroService from '@/services/CategoriaFicheroService'
 
 const props = defineProps(['nombre', 'tipo', 'descripcion', 'idCategoriaFichero'])
 const emits = defineEmits(['emiteModal'])
-const utils = useUtilsStore()
 const tipo = ref(props.tipo)
 const descripcion = ref(props.descripcion)
 const nombre = ref(props.nombre)
@@ -100,6 +98,13 @@ const borrarCategoriaFichero = async () => {
   await service.deleteCategoriaFichero(idCategoriaFichero.value)
   emits('emiteModal')
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != '' &&
+    tipo.value != '' 
+  )});
 </script>
 <style scoped lang="scss">
 div,

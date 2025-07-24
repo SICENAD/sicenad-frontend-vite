@@ -36,22 +36,23 @@
                     <form>
                         <div class="mb-3">
                             <label for="username" class="form-label"><b>{{ $t('administracion.username')
-                            }}</b></label>
+                                    }}</b></label>
                             <input type="text" class="form-control" id="usernameUsuarioAdministrador"
                                 aria-describedby="usernameUsuarioAdministrador"
                                 v-model="usernameUsuarioAdministrador" />
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label"><b>{{ $t('administracion.password')
-                            }}</b></label>
+                                    }}</b></label>
                             <input type="password" class="form-control" id="passwordUsuarioAdministrador"
                                 v-model="passwordUsuarioAdministrador" />
                         </div>
                         <div class="mb-3">
                             <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno'))
-                            }}</b></label>
+                                    }}</b></label>
                             <input type="text" class="form-control" id="tfnoUsuarioAdministrador"
                                 v-model="tfnoUsuarioAdministrador" />
+                            <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
                         </div>
                         <div class="mb-3">
                             <label for="InputEmail1" class="form-label"><b>{{
@@ -60,6 +61,7 @@
                             <input type="email" class="form-control" id="emailUsuarioAdministrador"
                                 aria-describedby="emailHelp" v-model="emailUsuarioAdministrador" />
                             <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
+                            <span v-if="emailError" class="text-danger">{{ emailError }}</span>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
@@ -89,7 +91,7 @@
                         {{ $t('comun.cerrar') }}
                     </button>
                     <button type="button" @click="crearUsuarioAdministrador" data-bs-dismiss="modal"
-                        class="btn btn-primary">
+                        class="btn btn-primary" :disabled="!formularioValidado">
                         Crear Usuario Administrador
                     </button>
                 </div>
@@ -98,7 +100,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UsuarioAdministradorComponent from '@/components/UsuarioAdministradorComponent.vue'
 import { toTitleCase } from '@/utils'
@@ -115,7 +117,7 @@ let emailAdmitidoUsuarioAdministrador = ref(false)
 let descripcionUsuarioAdministrador = ref('')
 let usernameUsuarioAdministrador = ref('')
 let passwordUsuarioAdministrador = ref('')
-let cenad = ref()
+let cenad = ref(null)
 
 onMounted(async () => {
     await getUsuariosAdministrador()
@@ -129,7 +131,7 @@ const crearUsuarioAdministrador = async () => {
     emailUsuarioAdministrador.value = ''
     emailAdmitidoUsuarioAdministrador.value = false
     descripcionUsuarioAdministrador.value = ''
-    cenad.value = {}
+    cenad.value = null
     await getUsuariosAdministrador()
 }
 const getUsuariosAdministrador = async () => {
@@ -139,6 +141,33 @@ async function actualizarUsuarioAdministradorEnView() {
     await getUsuariosAdministrador()
     cenadsUsuarioAdministrador.value = await cenadService.getCenadsSinAdmin()
 }
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+    if (emailUsuarioAdministrador.value.trim() == '') return null
+    return isValidEmail(emailUsuarioAdministrador.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+    if (tfnoUsuarioAdministrador.value.trim() == '') return null
+    return isValidPhone(tfnoUsuarioAdministrador.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+    return (
+        usernameUsuarioAdministrador.value.trim() != '' &&
+        passwordUsuarioAdministrador.value.trim() != '' &&
+        tfnoUsuarioAdministrador.value.trim() != '' &&
+        isValidPhone(tfnoUsuarioAdministrador.value) &&        // Teléfono válido
+        emailUsuarioAdministrador.value.trim() != '' &&
+        isValidEmail(emailUsuarioAdministrador.value) &&       // <-- validación email
+        descripcionUsuarioAdministrador.value.trim() != '' &&
+        cenad.value != null
+    );
+});
 </script>
 <style scoped lang="scss">
 .btn {

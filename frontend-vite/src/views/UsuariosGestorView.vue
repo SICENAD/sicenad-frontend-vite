@@ -42,16 +42,18 @@
                         </div>
                         <div class="mb-3">
                             <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno'))
-                            }}</b></label>
+                                    }}</b></label>
                             <input type="text" class="form-control" id="tfnoUsuarioGestor"
                                 v-model="tfnoUsuarioGestor" />
+                            <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
                         </div>
                         <div class="mb-3">
                             <label for="InputEmail1" class="form-label"><b>{{ toTitleCase($t('administracion.correo'))
-                            }}</b></label>
+                                    }}</b></label>
                             <input type="email" class="form-control" id="emailUsuarioGestor"
                                 aria-describedby="emailHelp" v-model="emailUsuarioGestor" />
                             <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
+                            <span v-if="emailError" class="text-danger">{{ emailError }}</span>
                         </div>
                         <div class="mb-3">
                             <label class="titulo me-2"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
@@ -64,14 +66,15 @@
                             <input type="textarea" class="form-control letra" id="descripcionUsuarioGestor"
                                 v-model="descripcionUsuarioGestor" />
                         </div>
-                       
+
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearUsuarioGestor" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearUsuarioGestor" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado">
                         Crear Usuario Gestor
                     </button>
                 </div>
@@ -80,7 +83,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UsuarioGestorComponent from '@/components/UsuarioGestorComponent.vue'
 import { toTitleCase } from '@/utils'
@@ -118,6 +121,32 @@ const getUsuariosGestor = async () => {
 async function actualizarUsuarioGestorEnView() {
     await getUsuariosGestor()
 }
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+    if (emailUsuarioGestor.value.trim() == '') return null
+    return isValidEmail(emailUsuarioGestor.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+    if (tfnoUsuarioGestor.value.trim() == '') return null
+    return isValidPhone(tfnoUsuarioGestor.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+    return (
+        usernameUsuarioGestor.value.trim() != '' &&
+        passwordUsuarioGestor.value.trim() != '' &&
+        tfnoUsuarioGestor.value.trim() != '' &&
+        isValidPhone(tfnoUsuarioGestor.value) &&        // Teléfono válido
+        emailUsuarioGestor.value.trim() != '' &&
+        isValidEmail(emailUsuarioGestor.value) &&       // <-- validación email
+        descripcionUsuarioGestor.value.trim() != '' 
+    );
+});
 </script>
 <style scoped lang="scss">
 .btn {

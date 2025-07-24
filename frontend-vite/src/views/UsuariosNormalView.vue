@@ -44,16 +44,18 @@
                         </div>
                         <div class="mb-3">
                             <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno'))
-                                    }}</b></label>
+                            }}</b></label>
                             <input type="text" class="form-control" id="tfnoUsuarioNormal"
                                 v-model="tfnoUsuarioNormal" />
+                            <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
                         </div>
                         <div class="mb-3">
                             <label for="InputEmail1" class="form-label"><b>{{ toTitleCase($t('administracion.correo'))
-                                    }}</b></label>
+                            }}</b></label>
                             <input type="email" class="form-control" id="emailUsuarioNormal"
                                 aria-describedby="emailHelp" v-model="emailUsuarioNormal" />
                             <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
+                            <span v-if="emailError" class="text-danger">{{ emailError }}</span>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
@@ -81,7 +83,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearUsuarioNormal" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearUsuarioNormal" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado">
                         Crear Usuario Normal
                     </button>
                 </div>
@@ -90,7 +93,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UsuarioNormalComponent from '@/components/UsuarioNormalComponent.vue'
 import { toTitleCase } from '@/utils'
@@ -106,7 +109,7 @@ let emailAdmitidoUsuarioNormal = ref(false)
 let descripcionUsuarioNormal = ref('')
 let usernameUsuarioNormal = ref('')
 let passwordUsuarioNormal = ref('')
-let unidad = ref()
+let unidad = ref(null)
 
 onMounted(async () => {
     await getUsuariosNormal()
@@ -120,7 +123,7 @@ const crearUsuarioNormal = async () => {
     emailUsuarioNormal.value = ''
     emailAdmitidoUsuarioNormal.value = false
     descripcionUsuarioNormal.value = ''
-    unidad.value = {}
+    unidad.value = null
     await getUsuariosNormal()
 }
 const getUsuariosNormal = async () => {
@@ -129,6 +132,33 @@ const getUsuariosNormal = async () => {
 async function actualizarUsuarioNormalEnView() {
     await getUsuariosNormal()
 }
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+    if (emailUsuarioNormal.value.trim() == '') return null
+    return isValidEmail(emailUsuarioNormal.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+    if (tfnoUsuarioNormal.value.trim() == '') return null
+    return isValidPhone(tfnoUsuarioNormal.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+    return (
+        usernameUsuarioNormal.value.trim() != '' &&
+        passwordUsuarioNormal.value.trim() != '' &&
+        tfnoUsuarioNormal.value.trim() != '' &&
+        isValidPhone(tfnoUsuarioNormal.value) &&        // Teléfono válido
+        emailUsuarioNormal.value.trim() != '' &&
+        isValidEmail(emailUsuarioNormal.value) &&       // <-- validación email
+        descripcionUsuarioNormal.value.trim() != '' &&
+        unidad.value != null
+    );
+});
 </script>
 <style scoped lang="scss">
 .btn {

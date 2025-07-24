@@ -66,7 +66,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearArma" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearArma" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
                         Crear Arma
                     </button>
                 </div>
@@ -75,7 +75,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import ArmaComponent from '@/components/ArmaComponent.vue'
 import ArmaService from '@/services/ArmaService'
 import useUtilsStore from '@/stores/utils'
@@ -102,6 +102,12 @@ const getArmas = async () => {
 async function actualizarArmaEnView() {
     await getArmas()
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    tipoTiro.value.trim() != '' 
+  )});
 </script>
 <style scoped lang="scss">
 .btn {

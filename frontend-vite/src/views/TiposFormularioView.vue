@@ -67,7 +67,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearTipoFormulario" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearTipoFormulario" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
                         Crear Tipo de Formulario
                     </button>
                 </div>
@@ -78,7 +78,7 @@
 <script setup>
 import TipoFormularioComponent from '@/components/TipoFormularioComponent.vue'
 import TipoFormularioService from '@/services/TipoFormularioService'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 let nombre = ref('')
 let codTipo = ref('')
@@ -104,6 +104,13 @@ const getTiposFormulario = async () => {
 function actualizarTipoFormularioEnView() {
    getTiposFormulario()
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != '' &&
+    codTipo.value.trim() != '' 
+  )});
 </script>
 <style scoped lang="scss">
 .btn {

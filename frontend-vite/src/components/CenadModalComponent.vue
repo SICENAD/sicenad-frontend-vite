@@ -32,10 +32,12 @@
             <div class="mb-3">
               <label class="titulo"><b>TELÉFONO<sup class="text-danger">*</sup></b></label>
               <input type="text" class="form-control letra" id="tfno" v-model="tfno" />
+              <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>EMAIL</b></label>
               <input type="email" class="form-control letra" id="email" v-model="email" />
+              <span v-if="emailError" class="text-danger">{{ emailError }}</span>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
@@ -78,7 +80,8 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('cenads.borrarCenad') }}
           </button>
-          <button type="button" @click="editarCenad" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarCenad" data-bs-dismiss="modal" class="btn btn-success"
+            :disabled="!formularioValidado">
             {{ $t('cenads.guardarCenad') }}
           </button>
         </div>
@@ -111,7 +114,7 @@
   </div>
 </template>
 <script setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
 import CenadService from '@/services/CenadService'
 import useUtilsStore from '@/stores/utils'
 
@@ -134,14 +137,6 @@ const service = new CenadService()
 
 const archivoEscudo = ref(null)
 const escudoActual = ref(props.escudo)
-
-// URL base para cargar imágenes de escudo (ajusta según tu servidor)
-//const urlBaseEscudos = `${utils.urlApi}/files/escudos/`
-
-// Computed para URL del escudo actual
-//const urlEscudoActual = computed(() => {
-//  return escudoActual.value ? urlBaseEscudos + escudoActual.value : ''
-//})
 const urlEscudoActual = ref('')
 
 onMounted(async () => {
@@ -221,13 +216,37 @@ const editarCenad = async () => {
   }
   emits('emiteModal');
 }
-
-
-
 const borrarCenad = async () => {
   await service.deleteCenad(idCenad.value)
   emits('emiteModal')
 }
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+  if (email.value.trim() === '') return null
+  return isValidEmail(email.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+  if (tfno.value.trim() === '') return null
+  return isValidPhone(tfno.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    provincia.value != null &&
+    tfno.value.trim() != '' &&
+    isValidPhone(tfno.value) &&        // Teléfono válido
+    email.value.trim() != '' &&
+    isValidEmail(email.value) &&       // <-- validación email
+    descripcion.value.trim() != '' &&
+    direccion.value.trim() != ''
+  )
+})
 </script>
 <style scoped lang="scss">
 div,

@@ -63,7 +63,7 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('recursos.borrarRecursos') }}
           </button>
-          <button type="button" @click="editarRecurso" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarRecurso" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
             {{ $t('recursos.guardarRecurso') }}
           </button>
         </div>
@@ -173,6 +173,17 @@ const getTiposFormulario = async () => {
 const getUsuariosGestor = async () => {
   await usuarioService.fetchUsuariosGestorDeCenad(idCenad.value)
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != '' &&
+    otros.value.trim() != '' &&
+    idCategoria.value != '' &&
+    idTipoFormulario.value != '' &&
+    idUsuarioGestor.value != ''
+  );
+});
 </script>
 <style scoped lang="scss">
 div,

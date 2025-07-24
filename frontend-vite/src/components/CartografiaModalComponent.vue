@@ -59,7 +59,7 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('cartografias.borrarCartografia') }}
           </button>
-          <button type="button" @click="editarCartografia" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarCartografia" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
             {{ $t('cartografias.guardarCartografia') }}
           </button>
         </div>
@@ -92,7 +92,7 @@
   </div>
 </template>
 <script setup>
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import useUtilsStore from '@/stores/utils'
 import CartografiaService from '@/services/CartografiaService'
 
@@ -177,6 +177,13 @@ const borrarCartografia = async () => {
   await service.deleteCartografia(archivoActual.value, idCartografia.value, idCenad.value)
   emits('emiteModal')
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != '' &&
+    escala.value != '' 
+  )});
 </script>
 <style scoped lang="scss">
 div,

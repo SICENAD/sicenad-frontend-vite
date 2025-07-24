@@ -81,7 +81,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearCartografia" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearCartografia" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
                         Crear Cartografía
                     </button>
                 </div>
@@ -135,6 +135,14 @@ const getCartografias = async () => {
 function actualizarCartografiaEnView() {
     getCartografias()
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != '' &&
+    escala.value.trim() != '' &&
+    cartografiaFile.value.trim() != ''
+  )});
 </script>
 <style scoped lang="scss">
 .btn {

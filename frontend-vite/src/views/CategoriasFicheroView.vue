@@ -71,7 +71,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearCategoriaFichero" data-bs-dismiss="modal" class="btn btn-primary">
+                    <button type="button" @click="crearCategoriaFichero" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
                         Crear Categoría de fichero
                     </button>
                 </div>
@@ -80,7 +80,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import CategoriaFicheroComponent from '@/components/CategoriaFicheroComponent.vue'
 import CategoriaFicheroService from '@/services/CategoriaFicheroService'
 
@@ -109,6 +109,13 @@ const getCategoriasFichero = async () => {
 function actualizarCategoriaFicheroEnView() {
    getCategoriasFichero()
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != '' &&
+    tipo.value.trim() != '' 
+  )});
 </script>
 <style scoped lang="scss">
 .btn {

@@ -22,11 +22,11 @@
 </template>
 <script setup>
 import { onMounted } from 'vue'
-import UsuarioService from '@/services/UsuarioService'
+//import UsuarioService from '@/services/UsuarioService'
 import UsuarioSuperadministradorComponent from '@/components/UsuarioSuperadministradorComponent.vue'
 import useAuthStore from '@/stores/auth'
 
-const service = new UsuarioService()
+//const service = new UsuarioService()
 //let usuariosSuperadministrador = service.getUsuariosSuperadministrador()
 let usuariosSuperadministrador = useAuthStore().usuariosSuperadministrador
 

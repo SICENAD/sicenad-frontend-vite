@@ -120,7 +120,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearRecurso" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!isFormValid">
+                    <button type="button" @click="crearRecurso" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado
+                ">
                         Crear Recurso
                     </button>
                 </div>
@@ -270,7 +271,7 @@ const crearRecurso = async () => {
     await getRecursos()
 }
 // Validación: todos los campos deben estar llenos
-const isFormValid = computed(() => {
+const formularioValidado = computed(() => {
   return (
     nombre.value.trim() != '' &&
     descripcion.value.trim() != '' &&

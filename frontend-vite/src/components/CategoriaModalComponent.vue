@@ -39,7 +39,7 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('categorias.borrarCategoria') }}
           </button>
-          <button type="button" @click="editarCategoria" data-bs-dismiss="modal" class="btn btn-success">
+          <button type="button" @click="editarCategoria" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
             {{ $t('categorias.guardarCategoria') }}
           </button>
         </div>
@@ -110,6 +110,12 @@ onMounted(async () => {
 const getCategorias = async () => {
     await service.fetchAll(idCenad.value)
 }
+// Validación: todos los campos deben estar llenos
+const formularioValidado = computed(() => {
+  return (
+    nombre.value.trim() != '' &&
+    descripcion.value.trim() != ''
+  )});
 </script>
 <style scoped lang="scss">
 div,
