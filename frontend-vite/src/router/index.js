@@ -16,95 +16,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/cenad/:id',
-      name: 'cenad',
-      component: () => import('../views/CenadView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-      children: [
-        {
-          path: '',
-          name: 'cenad-home',
-          component: () => import('../components/CenadHomeComponent.vue'),
-        },
-        {
-          path: 'infocenad',
-          name: 'infocenad',
-          component: () => import('../components/InfoCenadComponent.vue'),
-        },
-        {
-          path: 'normativas',
-          name: 'normativas',
-          component: () => import('../views/NormativasView.vue'),
-        },
-        {
-          path: 'cartografias',
-          name: 'cartografias',
-          component: () => import('../views/CartografiasView.vue'),
-        },
-        {
-          path: 'categorias',
-          name: 'categorias',
-          component: () => import('../views/CategoriasView.vue'),
-        },
-        {
-          path: 'recursos',
-          name: 'recursos',
-          component: () => import('../views/RecursosView.vue'),
-        }
-      ],
-    },
-    {
-      path: '/superadministrador',
-      name: 'superadministrador',
-      component: () => import('../views/SuperadministradorView.vue'),
-      meta: {
-        requireAuth: true,
-        roles: ['Superadministrador'],
-      },
-    },
-    {
-      path: '/usuarios',
-      name: 'usuarios',
-      component: () => import('../views/UsuariosView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/unidades',
-      name: 'unidades',
-      component: () => import('../views/UnidadesView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/armas',
-      name: 'armas',
-      component: () => import('../views/ArmasView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/categoriasFichero',
-      name: 'categoriasFichero',
-      component: () => import('../views/CategoriasFicheroView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/tiposFormulario',
-      name: 'tiposFormulario',
-      component: () => import('../views/TiposFormularioView.vue'),
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
       path: '/auth/login',
       name: 'login',
       // route level code-splitting
@@ -122,6 +33,153 @@ const router = createRouter({
       meta: {
         requireAuth: false,
       },
+    },
+    {
+      path: '/superadministrador',
+      name: 'superadministrador',
+      component: () => import('../views/SuperadministradorView.vue'),
+      meta: {
+        requireAuth: true,
+        roles: ['Superadministrador'],
+      },
+      children: [
+        {
+          path: '',
+          redirect: '/superadministrador/cenads',
+        },
+        {
+          path: 'armas',
+          name: 'armas',
+          component: () => import('../views/ArmasView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Superadministrador'],
+          },
+        },
+        {
+          path: 'categoriasFichero',
+          name: 'categoriasFichero',
+          component: () => import('../views/CategoriasFicheroView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Superadministrador'],
+          },
+        },
+        {
+          path: 'tiposFormulario',
+          name: 'tiposFormulario',
+          component: () => import('../views/TiposFormularioView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Superadministrador'],
+          },
+        },
+        {
+          path: 'cenads',
+          name: 'cenads',
+          component: () => import('../views/CenadsView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Superadministrador'],
+          },
+        },
+        {
+          path: 'usuarios',
+          name: 'usuarios-super',
+          component: () => import('../views/UsuariosView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Superadministrador'],
+          },
+        },
+        {
+          path: 'unidades',
+          name: 'unidades-super',
+          component: () => import('../views/UnidadesView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Superadministrador'],
+          },
+        },
+      ],
+    },
+    {
+      path: '/cenad/:id',
+      name: 'cenad',
+      component: () => import('../views/CenadView.vue'),
+      meta: {
+        requireAuth: true,
+      },
+      children: [
+        {
+          path: '',
+          name: 'cenad-home',
+          component: () => import('../components/CenadHomeComponent.vue'),
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'infocenad',
+          name: 'infocenad',
+          component: () => import('../components/InfoCenadComponent.vue'),
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'normativas',
+          name: 'normativas',
+          component: () => import('../views/NormativasView.vue'),
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'cartografias',
+          name: 'cartografias',
+          component: () => import('../views/CartografiasView.vue'),
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'categorias',
+          name: 'categorias',
+          component: () => import('../views/CategoriasView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Administrador'],
+          },
+        },
+        {
+          path: 'recursos',
+          name: 'recursos',
+          component: () => import('../views/RecursosView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Administrador'],
+          },
+        },
+        {
+          path: 'usuarios',
+          name: 'usuarios-cenad',
+          component: () => import('../views/UsuariosView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Administrador'],
+          },
+        },
+        {
+          path: 'unidades',
+          name: 'unidades-cenad',
+          component: () => import('../views/UnidadesView.vue'),
+          meta: {
+            requireAuth: true,
+            roles: ['Administrador'],
+          },
+        },
+      ],
     },
     {
       path: '/not-found',
@@ -152,7 +210,6 @@ router.beforeEach(async (to, from, next) => {
       alert('Tu sesión ha caducado y debes volver a iniciar sesión')
     }
   }
-
   if (needAuth && !isAuth) {
     next({ name: 'login' })
     alert(i18n.global.t('comun.debeLog'))
@@ -163,5 +220,4 @@ router.beforeEach(async (to, from, next) => {
     next()
   }
 })
-
 export default router

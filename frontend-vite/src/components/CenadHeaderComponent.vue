@@ -122,10 +122,10 @@
                     <router-link class="dropdown-item" :to="{ name: 'categorias'}">
                         <v-icon scale="2" name="fa-tree" />Categorías
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'usuarios'}">
+                    <router-link class="dropdown-item" :to="{ name: 'usuarios-cenad'}">
                         <v-icon scale="2" name="fa-users" />Usuarios
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'unidades'}">
+                    <router-link class="dropdown-item" :to="{ name: 'unidades-cenad'}">
                         <v-icon scale="2" name="fa-sitemap" />Unidades
                     </router-link>
                     <router-link class="dropdown-item" :to="{ name: 'normativas'}">

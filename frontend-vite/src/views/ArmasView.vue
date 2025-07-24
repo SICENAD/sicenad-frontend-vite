@@ -1,23 +1,19 @@
 <template>
     <!-- muestra la vista de armas -->
-    <div class="container-fluid">
-        <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: 'superadministrador' }">
-                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
+        <div class="d-flex align-items-center position-relative p-2 bg-light">
+            <RouterLink class="nav-link volver me-auto" :to="{ name: 'cenads' }">
+                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" />
+                <strong>Volver</strong>
             </RouterLink>
-        </div>
-        <div class="row mt-4">
-            <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>GESTIÓN DE ARMAS</u> </h3>
-            </div>
-            <div class="col-3 justify-content-end">
-                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-arma">
-                    Nuevo <b>Arma</b>
-                </button>
-            </div>
+            <h3 class="position-absolute start-50 translate-middle-x m-0 titulo">
+                <u>GESTIÓN DE ARMAS</u>
+            </h3>
+            <button class="btn text-white ms-auto" data-bs-toggle="modal"
+                data-bs-target="#modal-nuevo-arma">
+                Nuevo <b>Arma</b>
+            </button>
         </div>
         <hr class='w-100'>
-
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
                 <div class="row mt-2 titulos">
@@ -32,7 +28,6 @@
                     @emiteElemento="actualizarArmaEnView" />
             </div>
         </div>
-    </div>
     <!-- Modal -->
     <div class="modal fade" id="modal-nuevo-arma" tabindex="-1" aria-labelledby="modal-nuevo-arma-Label"
         aria-hidden="true">
@@ -54,8 +49,7 @@
                             <label class="titulo me-2"><b>TIPO DE TIRO<sup class="text-danger">*</sup></b></label>
                             <select class="form-select" aria-label="tipoTiro" v-model="tipoTiro">
                                 <option disabled value="">Selecciona el Tipo de tiro</option>
-                                <option v-for="(tipoTiro, index) in tiposTiro" :key="index"
-                                    :value="tipoTiro">
+                                <option v-for="(tipoTiro, index) in tiposTiro" :key="index" :value="tipoTiro">
                                     {{ tipoTiro }}
                                 </option>
                             </select>
@@ -66,7 +60,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearArma" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
+                    <button type="button" @click="crearArma" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado">
                         Crear Arma
                     </button>
                 </div>
@@ -85,7 +80,7 @@ let tiposTiro = utils.tiposTiro
 let nombre = ref('')
 let tipoTiro = ref('')
 const service = new ArmaService()
-let armas =  service.getArmas()
+let armas = service.getArmas()
 
 onMounted(async () => {
     await getArmas()
@@ -104,51 +99,60 @@ async function actualizarArmaEnView() {
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-  return (
-    nombre.value.trim() != '' &&
-    tipoTiro.value.trim() != '' 
-  )});
+    return (
+        nombre.value.trim() != '' &&
+        tipoTiro.value.trim() != ''
+    )
+});
 </script>
 <style scoped lang="scss">
 .btn {
-  background: #3A5A40;
-  padding: 0.5;
-  font-size: 14px;
+    background: #3A5A40;
+    padding: 0.5;
+    font-size: 14px;
 }
+
 .btn:hover {
-  background-color: #A3B18A;
+    background-color: #A3B18A;
 }
+
 .titulo {
-  color: #3A5A40; 
-  font-weight: bold;
+    color: #3A5A40;
+    font-weight: bold;
 }
+
 .titulo1 {
-  color: #588157;
+    color: #588157;
 }
+
 h5 {
-  color: #354f52;
-  font-weight: bold;
+    color: #354f52;
+    font-weight: bold;
 }
+
 a.volver {
-  color: #3A5A40;
-  font-size: 18px;
+    color: #3A5A40;
+    font-size: 18px;
 }
+
 a.volver:hover {
-  color: #A3B18A;
+    color: #A3B18A;
 }
+
 .row {
     height: auto;
     padding: auto;
     margin: auto;
 }
+
 hr {
-  margin-bottom: 0;
-  margin-top: 1;
+    margin-bottom: 0;
+    margin-top: 1;
 }
 
 .modal {
-  max-height: 100%;
-  max-width: 100%;
-  margin: auto;
+    max-height: 100%;
+    max-width: 100%;
+    margin: auto;
 }
 </style>

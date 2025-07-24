@@ -1,38 +1,33 @@
 <template>
     <!-- muestra la vista de categorias de fichero -->
-    <div class="container-fluid">
-        <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: 'superadministrador' }">
-                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
-            </RouterLink>
-        </div>
-        <div class="row mt-4">
-            <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>GESTIÓN DE CATEGORÍAS DE FICHERO</u></h3>
-            </div>
-            <div class="col-3 justify-content-end">
-                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-categoriaFichero">
-                    Nueva <b>Categoría de fichero</b>
-                </button>
-            </div>
-        </div>
-        <hr class='w-100'>
-        <div class="row ms-5 p-0">
-            <div class="col col-md-12">
-                <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
-                        <b>NOMBRE</b>
-                    </div>
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
-                        <b>TIPO</b>
-                    </div>
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
-                        <b>DESCRIPCIÓN</b>
-                    </div>
+    <div class="d-flex align-items-center position-relative p-2 bg-light">
+        <RouterLink class="nav-link volver me-auto" :to="{ name: 'cenads' }">
+            <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" />
+            <strong>Volver</strong>
+        </RouterLink>
+        <h3 class="position-absolute start-50 translate-middle-x m-0 titulo">
+            <u>GESTIÓN DE CATEGORÍAS DE FICHERO</u>
+        </h3>
+        <button class="btn text-white ms-auto" data-bs-toggle="modal" data-bs-target="#modal-nueva-categoriaFichero">
+            Nueva <b>Categoría de fichero</b>
+        </button>
+    </div>
+    <hr class='w-100'>
+    <div class="row ms-5 p-0">
+        <div class="col col-md-12">
+            <div class="row mt-2 titulos">
+                <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <b>NOMBRE</b>
                 </div>
-                <CategoriaFicheroComponent v-for="(item, index) in categoriasFichero" :key="index" :content="item"
-                    @emiteElemento="actualizarCategoriaFicheroEnView" />
+                <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <b>TIPO</b>
+                </div>
+                <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <b>DESCRIPCIÓN</b>
+                </div>
             </div>
+            <CategoriaFicheroComponent v-for="(item, index) in categoriasFichero" :key="index" :content="item"
+                @emiteElemento="actualizarCategoriaFicheroEnView" />
         </div>
     </div>
     <!-- Modal -->
@@ -71,7 +66,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearCategoriaFichero" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
+                    <button type="button" @click="crearCategoriaFichero" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado">
                         Crear Categoría de fichero
                     </button>
                 </div>
@@ -107,15 +103,16 @@ const getCategoriasFichero = async () => {
 }
 
 function actualizarCategoriaFicheroEnView() {
-   getCategoriasFichero()
+    getCategoriasFichero()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-  return (
-    nombre.value.trim() != '' &&
-    descripcion.value.trim() != '' &&
-    tipo.value.trim() != '' 
-  )});
+    return (
+        nombre.value.trim() != '' &&
+        descripcion.value.trim() != '' &&
+        tipo.value.trim() != ''
+    )
+});
 </script>
 <style scoped lang="scss">
 .btn {

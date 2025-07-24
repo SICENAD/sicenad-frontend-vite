@@ -1,38 +1,33 @@
 <template>
     <!-- muestra la vista de categorias de fichero -->
-    <div class="container-fluid">
-        <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: 'superadministrador' }">
-                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
-            </RouterLink>
-        </div>
-        <div class="row mt-4">
-            <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>GESTIÓN DE TIPOS DE FORMULARIO</u></h3>
-            </div>
-            <div class="col-3 justify-content-end">
-                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-tipoFormulario">
-                    Nuevo <b>Tipo de Formulario</b>
-                </button>
-            </div>
-        </div>
-        <hr class='w-100'>
-        <div class="row ms-5 p-0">
-            <div class="col col-md-12">
-                <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
-                        <b>NOMBRE</b>
-                    </div>
-                    <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo text-center">
-                        <b>CÓDIGO DE TIPO</b>
-                    </div>
-                    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
-                        <b>DESCRIPCIÓN</b>
-                    </div>
+    <div class="d-flex align-items-center position-relative p-2 bg-light">
+        <RouterLink class="nav-link volver me-auto" :to="{ name: 'cenads' }">
+            <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" />
+            <strong>Volver</strong>
+        </RouterLink>
+        <h3 class="position-absolute start-50 translate-middle-x m-0 titulo">
+            <u>GESTIÓN DE TIPOS DE FORMULARIO</u>
+        </h3>
+        <button class="btn text-white ms-auto" data-bs-toggle="modal" data-bs-target="#modal-nuevo-tipoFormulario">
+            Nuevo <b>Tipo de Formulario</b>
+        </button>
+    </div>
+    <hr class='w-100'>
+    <div class="row ms-5 p-0">
+        <div class="col col-md-12">
+            <div class="row mt-2 titulos">
+                <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <b>NOMBRE</b>
                 </div>
-                <TipoFormularioComponent v-for="(item, index) in tiposFormulario" :key="index" :content="item"
-                    @emiteElemento="actualizarTipoFormularioEnView" />
+                <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo text-center">
+                    <b>CÓDIGO DE TIPO</b>
+                </div>
+                <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
+                    <b>DESCRIPCIÓN</b>
+                </div>
             </div>
+            <TipoFormularioComponent v-for="(item, index) in tiposFormulario" :key="index" :content="item"
+                @emiteElemento="actualizarTipoFormularioEnView" />
         </div>
     </div>
     <!-- Modal -->
@@ -54,7 +49,8 @@
                             <input type="text" class="form-control letra" id="nombre" v-model="nombre" />
                         </div>
                         <div class="mb-3">
-                            <label class="titulo me-2"><b>CÓDIGO DEL TIPO DE FORMULARIO<sup class="text-danger">*</sup></b></label>
+                            <label class="titulo me-2"><b>CÓDIGO DEL TIPO DE FORMULARIO<sup
+                                        class="text-danger">*</sup></b></label>
                             <input type="number" class="form-control letra" id="codTipo" v-model="codTipo" />
                         </div>
                         <div class="mb-3">
@@ -67,7 +63,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearTipoFormulario" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
+                    <button type="button" @click="crearTipoFormulario" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado">
                         Crear Tipo de Formulario
                     </button>
                 </div>
@@ -102,15 +99,16 @@ const getTiposFormulario = async () => {
 }
 
 function actualizarTipoFormularioEnView() {
-   getTiposFormulario()
+    getTiposFormulario()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-  return (
-    nombre.value.trim() != '' &&
-    descripcion.value.trim() != '' &&
-    codTipo.value.trim() != '' 
-  )});
+    return (
+        nombre.value.trim() != '' &&
+        descripcion.value.trim() != '' &&
+        codTipo.value.trim() != ''
+    )
+});
 </script>
 <style scoped lang="scss">
 .btn {

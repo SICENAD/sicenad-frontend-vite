@@ -1,41 +1,42 @@
 <template>
     <!-- muestra la vista principal de la gestión de usuarios. si se accede como superadministrador mostrará 
 administradores y normales y si se entra como administrador de un cenad mostrara gestores de su cenad y normales -->
-    <div class="container-fluid">
-        <div class="row ms-4 mb-3 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: name, params: params }">
-                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
-            </RouterLink>
-        </div>
-        <hr class='w-100 mb-2'>
+    <div class="d-flex align-items-center position-relative p-2 bg-light">
+        <RouterLink class="nav-link volver me-auto" :to="{ name: name, params: params }">
+            <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" />
+            <strong>Volver</strong>
+        </RouterLink>
+        <h3 class="position-absolute start-50 translate-middle-x m-0 mb-3 titulo">
+            <u>GESTIÓN DE USUARIOS</u>
+        </h3>
         <div class="row ms-5 p-0" v-if="(rol == 'Normal' || rol == 'Gestor' || (rol == 'Administrador' && !isMiCenad))">
             <p class="titulo mt-3">NO ESTÁS AUTORIZADO</p>
         </div>
-        <!-- vista de superadministrador->ve superadministradores,administradores y usuarios normales -->
-        <div class="row ms-5" v-if='rol == "Superadministrador"'>
-            <!-- superadministradores -->
-            <div class="col col-md-4">
-                <UsuariosSuperadministradorView />
-            </div>
-            <!-- administradores -->
-            <div class="col col-md-4 filtro">
-                <UsuariosAdministradorView />
-            </div>
-            <!-- usuarios normales -->
-            <div class="col col-md-4 filtro">
-                <UsuariosNormalView />
-            </div>
+    </div>
+    <!-- vista de superadministrador->ve superadministradores,administradores y usuarios normales -->
+    <div class="row ms-5" v-if='rol == "Superadministrador"'>
+        <!-- superadministradores -->
+        <div class="col col-md-4">
+            <UsuariosSuperadministradorView />
         </div>
-        <!-- vista de administrador->ve gestores y usuarios normales -->
-        <div class="row ms-5" v-if='(rol == "Administrador" && isMiCenad)'>
-            <!-- superadministradores -->
-            <div class="col col-md-6">
-                <UsuariosGestorView />
-            </div>
-            <!-- usuarios normales -->
-            <div class="col col-md-6 filtro">
-                <UsuariosNormalView />
-            </div>
+        <!-- administradores -->
+        <div class="col col-md-4 filtro">
+            <UsuariosAdministradorView />
+        </div>
+        <!-- usuarios normales -->
+        <div class="col col-md-4 filtro">
+            <UsuariosNormalView />
+        </div>
+    </div>
+    <!-- vista de administrador->ve gestores y usuarios normales -->
+    <div class="row ms-5" v-if='(rol == "Administrador" && isMiCenad)'>
+        <!-- superadministradores -->
+        <div class="col col-md-6">
+            <UsuariosGestorView />
+        </div>
+        <!-- usuarios normales -->
+        <div class="col col-md-6 filtro">
+            <UsuariosNormalView />
         </div>
     </div>
 </template>
@@ -49,7 +50,7 @@ import UsuariosSuperadministradorView from './UsuariosSuperadministradorView.vue
 const auth = useAuthStore()
 let name = ref('superadministrador')
 let params = ref({})
-let idCenad = ref('') 
+let idCenad = ref('')
 let isMiCenad = ref(true)//se modificara si estoy en un CENAD perteneciente al usuario gestor o administrador
 let rol = ref(auth.rol)
 
@@ -58,7 +59,7 @@ onMounted(async () => {
     auth.cenad != null && (idCenad.value = auth.cenad.idString)
 })
 function definirBtnVolver() {
-    name.value = rol.value === 'Superadministrador' ? 'superadministrador' : 'cenad-home'
+    name.value = rol.value === 'Superadministrador' ? 'cenads' : 'cenad-home'
     params.value = rol.value === 'Superadministrador' ? {} : { id: idCenad }
 }
 </script>

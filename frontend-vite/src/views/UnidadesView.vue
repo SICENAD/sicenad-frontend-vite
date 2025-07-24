@@ -1,21 +1,17 @@
 <template>
-    <!-- muestra la vista de armas -->
-    <div class="container-fluid">
-        <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: name, params: params }">
-                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
-            </RouterLink>
-        </div>
-        <div class="row mt-4">
-            <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>GESTIÓN DE UNIDADES</u> </h3>
-            </div>
-            <div class="col-3 justify-content-end">
-                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-unidad">
-                    Nueva <b>Unidad</b>
-                </button>
-            </div>
-        </div>
+    <!-- muestra la vista de unidades -->
+ <div class="d-flex align-items-center position-relative p-2 bg-light">
+        <RouterLink class="nav-link volver me-auto" :to="{ name: name, params: params }">
+            <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" />
+            <strong>Volver</strong>
+        </RouterLink>
+        <h3 class="position-absolute start-50 translate-middle-x m-0 titulo">
+            <u>GESTIÓN DE UNIDADES</u>
+        </h3>
+        <button class="btn text-white ms-auto" data-bs-toggle="modal" data-bs-target="#modal-nueva-unidad">
+            Nueva <b>Unidad</b>
+        </button>
+    </div>
         <hr class='w-100'>
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
@@ -37,7 +33,6 @@
                     @emiteElemento="actualizarUnidadEnView" />
             </div>
         </div>
-    </div>
     <!-- Modal -->
     <div class="modal fade" id="modal-nueva-unidad" tabindex="-1" aria-labelledby="modal-nueva-unidad-Label"
         aria-hidden="true">
@@ -118,7 +113,7 @@ onMounted(async () => {
     definirBtnVolver()
 })
 function definirBtnVolver() {
-    name.value = rol.value === 'Superadministrador' ? 'superadministrador' : 'cenad-home'
+    name.value = rol.value === 'Superadministrador' ? 'cenads' : 'cenad-home'
     params.value = rol.value === 'Superadministrador' ? {} : { id: idCenad }
 }
 const crearUnidad = async () => {
