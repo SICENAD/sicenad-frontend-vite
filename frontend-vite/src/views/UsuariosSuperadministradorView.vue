@@ -24,16 +24,19 @@
 import { onMounted } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UsuarioSuperadministradorComponent from '@/components/UsuarioSuperadministradorComponent.vue'
+import useAuthStore from '@/stores/auth'
 
 const service = new UsuarioService()
-let usuariosSuperadministrador = service.getUsuariosSuperadministrador()
+//let usuariosSuperadministrador = service.getUsuariosSuperadministrador()
+let usuariosSuperadministrador = useAuthStore().usuariosSuperadministrador
 
 onMounted(async () => {
     await getUsuariosSuperadministrador()
 })
 
 const getUsuariosSuperadministrador = async () => {
-    await service.fetchUsuariosSuperadministrador()
+    usuariosSuperadministrador = useAuthStore().usuariosSuperadministrador
+    //await service.fetchUsuariosSuperadministrador()
 }
 async function actualizarUsuarioSuperadministradorEnView() {
     await getUsuariosSuperadministrador()

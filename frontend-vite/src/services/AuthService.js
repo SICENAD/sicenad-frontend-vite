@@ -10,37 +10,35 @@ class AuthService {
     try {
       feedback = i18n.global.t('comun.enviando')
       const response = await authStore.login(username, password)
-      if (response == true) {
+      if (response) {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.logExito'))
       } else {
         feedback = i18n.global.t('comun.logError')
         alert(feedback)
       }
-      return response.status == 201 ? true : false
+      return response.ok
     } catch (feedback) {
       console.log(feedback)
     }
   }
-
   async register(username, password, tfno, email, emailAdmitido, descripcion, rol) {
     const authStore = useAuthStore()
     try {
       let feedback = i18n.global.t('comun.enviando')
       const response = await authStore.register(username, password, tfno, email, emailAdmitido, descripcion, rol)
-      if (response == true) {
+      if (response) {
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
       } else {
         feedback = i18n.global.t('comun.registroError')
         alert(feedback)
       }
-      return response.status == 201 ? true : false
+      return response
     } catch (feedback) {
       console.log(feedback)
     }
   }
-
   logout() {
     const auth = useAuthStore()
     auth.logout()
@@ -55,5 +53,4 @@ class AuthService {
       : alert(i18n.global.t('comun.wrongPassword'))
   }
 }
-
 export default AuthService

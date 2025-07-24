@@ -1,18 +1,19 @@
 <template>
   <div class="container">
     <form>
-      <p class="text-danger">{{ loginError }}</p>
       <div class="mb-3">
         <label for="tfno" class="form-label"><b>{{ toTitleCase($t('administracion.tfno')) }}</b></label>
         <input type="text" class="form-control" id="tfno" v-model="tfno" />
+        <span v-if="phoneError" class="text-danger">{{ phoneError }}</span>
       </div>
       <div class="mb-3">
         <label for="InputEmail1" class="form-label"><b>{{ toTitleCase($t('administracion.correo')) }}</b></label>
         <input type="email" class="form-control" id="email" aria-describedby="emailHelp" v-model="email" />
         <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
+        <span v-if="emailError" class="text-danger">{{ emailError }}</span>
       </div>
       <div class="mb-3">
-        <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
+        <label class="titulo me-2"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
         <input type="checkbox" class="letra" id="emailAdmitido" v-model="emailAdmitido" />
       </div>
       <div class="mb-3">
@@ -50,7 +51,8 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             {{ $t('comun.cerrar') }}
           </button>
-          <button type="button" class="btn btn-primary" @click="solicitudRegistro" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-primary" @click="solicitudRegistro" data-bs-dismiss="modal"
+            :disabled="!formularioValidado">
             {{ $t('administracion.crearUsuario') }}
           </button>
         </div>
@@ -59,7 +61,7 @@
   </div>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import AuthService from '@/services/AuthService'
 import { toTitleCase } from '@/utils'
 
@@ -69,21 +71,46 @@ let tfno = ref('')
 let email = ref('')
 let emailAdmitido = ref('')
 let descripcion = ref('')
-let loginError = ref('')
 let passwordForRegisterFromUser = ref('')
 
 const service = new AuthService()
 
+// Validación Email
+const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// Validación Teléfono (exactamente 9 dígitos)
+const isValidPhone = (phone) => /^[0-9]{9}$/.test(phone)
+
+// Errores individuales
+const emailError = computed(() => {
+  if (email.value.trim() === '') return null
+  return isValidEmail(email.value) ? null : 'El correo no es válido'
+})
+const phoneError = computed(() => {
+  if (tfno.value.trim() === '') return null
+  return isValidPhone(tfno.value) ? null : 'El teléfono debe tener 9 dígitos'
+})
+const formularioValidado = computed(() => {
+  return (
+    username.value.trim() != '' &&
+    password.value.trim() != '' &&
+    tfno.value.trim() != '' &&
+    isValidPhone(tfno.value) &&        // Teléfono válido
+    email.value.trim() != '' &&
+    isValidEmail(email.value) &&       // <-- validación email
+    descripcion.value.trim() != '' &&
+    passwordForRegisterFromUser.value.trim() != ''
+  )
+})
 const solicitudRegistro = async () => {
-  await service.solicitudRegistro(
+  service.solicitudRegistro(
     username.value,
     password.value,
     tfno.value,
     email.value,
     emailAdmitido.value,
     descripcion.value,
-    passwordForRegisterFromUser.value,
-    loginError.value,
+    passwordForRegisterFromUser.value
   )
 }
 </script>

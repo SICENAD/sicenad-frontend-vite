@@ -31,24 +31,27 @@ const useAuthStore = defineStore('auth', {
   getters: {},
   actions: {
     async register(username, password, tfno, email, emailAdmitido, descripcion, rol) {
-      const urlRegister = `${useUtilsStore().urlApi}/auth/register`
-      const rawResponse = await fetch(urlRegister, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'Application/json',
-          Accept: 'Application/json',
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-          tfno: tfno,
-          email: email,
-          emailAdmitido: emailAdmitido,
-          descripcion: descripcion,
-          rol: rol,
-        }),
-      })
-      rawResponse.status == 200 ? true : false
+      try {
+        const urlRegister = `${useUtilsStore().urlApi}/auth/register`
+        const rawResponse = await fetch(urlRegister, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'Application/json',
+            Accept: 'Application/json',
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password,
+            tfno: tfno,
+            email: email,
+            emailAdmitido: emailAdmitido,
+            descripcion: descripcion,
+            rol: rol,
+          }),
+        })
+        return rawResponse.ok
+      } catch (error) {
+      }
     },
     async login(username, password) {
       const urlLogin = `${useUtilsStore().urlApi}/auth/login`
@@ -63,7 +66,7 @@ const useAuthStore = defineStore('auth', {
           password: password,
         }),
       })
-      if (rawResponse.status == 200) {
+      if (rawResponse.ok) {
         const response = await rawResponse.json()
         this.token = response.token
         this.username = response.username

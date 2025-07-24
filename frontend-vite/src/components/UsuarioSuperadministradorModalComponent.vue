@@ -29,7 +29,7 @@
               <div id="emailHelp" class="form-text">{{ $t('administracion.helpMail') }}</div>
             </div>
             <div class="mb-3">
-              <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
+              <label class="titulo me-2"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
               <input type="checkbox" class="letra" id="emailAdmitidoUsuarioSuperadministrador" v-model="emailAdmitido" />
             </div>
             <div class="mb-3">
