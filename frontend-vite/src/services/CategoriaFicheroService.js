@@ -33,6 +33,17 @@ class CategoriaFicheroService {
       console.log(error)
     }
   }
+  async fetchCategoriaFichero(idCategoriaFichero) {
+    try {
+      const urlCategoriaFichero = `${this.utils.urlApi}/categorias_fichero/${idCategoriaFichero}`
+      const response = await this.utils.fetchConToken(urlCategoriaFichero, 'GET', null)
+      const json = await response.json()
+      this.categoriaFichero.value = await json
+      return response.status == 200 ? this.categoriaFichero.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearCategoriaFichero(nombre, tipo, descripcion) {
     try {
       const urlCategoriasFichero = `${this.utils.urlApi}/categorias_fichero`
@@ -48,6 +59,7 @@ class CategoriaFicheroService {
             categoriaFichero: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
@@ -61,7 +73,6 @@ class CategoriaFicheroService {
     descripcion,
     idCategoriaFichero
   ) {
-
     try {
       const urlCategoriaFichero = `${this.utils.urlApi}/categorias_fichero/${idCategoriaFichero}`
       const body = {
@@ -76,6 +87,7 @@ class CategoriaFicheroService {
             categoriaFichero: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return nombre
       } else {
         return null
@@ -83,17 +95,6 @@ class CategoriaFicheroService {
     } catch (error) {
       console.error(error)
       return null
-    }
-  }
-  async fetchCategoriaFichero(idCategoriaFichero) {
-    try {
-      const urlCategoriaFichero = `${this.utils.urlApi}/categorias_fichero/${idCategoriaFichero}`
-      const response = await this.utils.fetchConToken(urlCategoriaFichero, 'GET', null)
-      const json = await response.json()
-      this.categoriaFichero.value = await json
-      return response.status == 200 ? this.categoriaFichero.value : null
-    } catch (error) {
-      console.log(error)
     }
   }
   async deleteCategoriaFichero(idCategoriaFichero) {
@@ -108,6 +109,7 @@ class CategoriaFicheroService {
             categoriaFichero: this.categoriaFichero.value.nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {

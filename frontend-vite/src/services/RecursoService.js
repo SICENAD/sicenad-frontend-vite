@@ -96,6 +96,7 @@ async fetchRecurso(idRecurso) {
             recurso: nombre,
           }),
         )
+        await this.auth.getDatosInicialesDeCenad()
         return true
       } else return false
     } catch (error) {
@@ -121,6 +122,7 @@ async fetchRecurso(idRecurso) {
             recurso: nombre,
           }),
         )
+        await this.auth.getDatosInicialesDeCenad()
         return this.recurso
       } else {
         return null
@@ -142,6 +144,7 @@ async fetchRecurso(idRecurso) {
             recurso: this.recurso.value.nombre,
           }),
         )
+        await this.auth.getDatosInicialesDeCenad()
         return true
       } else return false
     } catch (error) {

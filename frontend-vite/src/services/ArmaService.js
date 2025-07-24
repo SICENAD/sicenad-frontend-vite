@@ -58,6 +58,7 @@ class ArmaService {
             cenad: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
@@ -80,10 +81,11 @@ class ArmaService {
       const response = await this.utils.fetchConToken(urlArma, 'PATCH', body)
       if (response.status == 200) {
         toastExito(
-          i18n.global.t('armas.editado', {
+          i18n.global.t('armas.editada', {
             cenad: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return nombre
       } else {
         return null
@@ -105,6 +107,7 @@ class ArmaService {
             arma: this.arma.value.nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {

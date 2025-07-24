@@ -119,6 +119,7 @@ class CategoriaService {
             categoria: nombre,
           }),
         )
+        await this.auth.getDatosInicialesDeCenad()
         return true
       } else return false
     } catch (error) {
@@ -142,6 +143,7 @@ class CategoriaService {
             categoria: nombre,
           }),
         )
+        await this.auth.getDatosInicialesDeCenad()
         return this.categoria
       } else {
         return null
@@ -163,6 +165,7 @@ class CategoriaService {
             categoria: this.categoria.value.nombre,
           }),
         )
+        await this.auth.getDatosInicialesDeCenad()
         return true
       } else return false
     } catch (error) {

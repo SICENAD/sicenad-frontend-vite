@@ -225,6 +225,7 @@ class UsuarioService {
         rol,
       )
       if (response == true) {
+        await this.auth.getDatosIniciales()
         await router.push({ name: 'home' })
         toastExito(i18n.global.t('comun.registroExito'))
       } else {
@@ -273,6 +274,7 @@ class UsuarioService {
           usuario.idString,
         )
         toastExito(i18n.global.t('comun.registroExito'))
+        await this.auth.getDatosIniciales()
       } else {
         let feedback = i18n.global.t('comun.registroError')
         alert(feedback)
@@ -311,6 +313,7 @@ class UsuarioService {
           usuario.idString,
         )
         toastExito(i18n.global.t('comun.registroExito'))
+        await this.auth.getDatosInicialesDeCenad()
       } else {
         let feedback = i18n.global.t('comun.registroError')
         alert(feedback)
@@ -349,6 +352,7 @@ class UsuarioService {
           usuario.idString,
         )
         toastExito(i18n.global.t('comun.registroExito'))
+        await this.auth.getDatosIniciales()
       } else {
         let feedback = i18n.global.t('comun.registroError')
         alert(feedback)
@@ -377,6 +381,7 @@ class UsuarioService {
       })
       if (response.status == 200) {
         toastExito(i18n.global.t('administracion.editado', { username: username }))
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
@@ -404,6 +409,7 @@ class UsuarioService {
       })
       if (response.status == 200) {
         toastExito(i18n.global.t('administracion.editado', { username: username }))
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
@@ -423,6 +429,7 @@ class UsuarioService {
       })
       if (response.status == 200) {
         toastExito(i18n.global.t('administracion.editado', { username: username }))
+        await this.auth.getDatosInicialesDeCenad()
         return true
       } else return false
     } catch (error) {
@@ -450,6 +457,7 @@ class UsuarioService {
       })
       if (response.status == 200) {
         toastExito(i18n.global.t('administracion.editado', { username: username }))
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
@@ -468,6 +476,7 @@ class UsuarioService {
             username: `${toTitleCase(this.usuario.value.username)}`,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {

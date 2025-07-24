@@ -18,8 +18,8 @@
         </ul>
       </span>
     </span>
-    <p v-if="authStore.token" class="alert alert-success">
-      {{ authStore.username }}
+    <p v-if="auth.token" class="alert alert-success">
+      {{ auth.username }}
       {{ $t('comun.usuarioIdentificado') }} {{ identificacion }}
       <button class="btn btn-success ms-3" @click="logout">{{ $t('comun.cerrarSesion') }}</button>
     </p>
@@ -38,17 +38,16 @@ import useAuthStore from '@/stores/auth'
 import { baseNormalizada } from '@/utils'
 import { computed } from 'vue'
 
-const authStore = useAuthStore()
+const auth = useAuthStore()
 const identificacion = computed(() => {
-  if (authStore.rol === 'Administrador' || authStore.rol === 'Gestor') {
-    return `${authStore.rol} del ${authStore.cenad.nombre}`
-  } else if (authStore.rol === 'Normal') {
-    return `${authStore.rol} de ${authStore.unidad.nombre}`
+  if (auth.rol == 'Administrador' || auth.rol == 'Gestor') {
+    return `${auth.rol} del ${auth.cenad.nombre}`
+  } else if (auth.rol === 'Normal') {
+    return `${auth.rol} de ${auth.unidad.nombre}`
   } else {
-    return authStore.rol
+    return auth.rol
   }
 })
-
 const getLanguageLabel = (locale) => {
   const labels = {
     es: 'Español',
@@ -57,7 +56,6 @@ const getLanguageLabel = (locale) => {
   }
   return labels[locale] || locale
 }
-
 const getFlag = (locale) => {
   const flags = {
     es: `${baseNormalizada()}img/banderas/es.svg`, // 🇪🇸
@@ -66,9 +64,8 @@ const getFlag = (locale) => {
   }
   return flags[locale] || `${baseNormalizada()}img/banderas/default.svg`
 }
-
 const logout = () => {
-  authStore.logout()
+  auth.logout()
 }
 </script>
 <style lang="scss">

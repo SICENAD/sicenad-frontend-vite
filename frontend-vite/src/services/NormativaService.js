@@ -69,6 +69,7 @@ class NormativaService {
             normativa: nombre,
           }),
         )
+        await this.auth.getDatosInicialesDeCenad()
         return true
       } else return false
     } catch (error) {
@@ -102,6 +103,7 @@ class NormativaService {
               normativa: nombre,
             }),
           )
+        await this.auth.getDatosInicialesDeCenad()
           return nombreArchivo
         } else {
           return null
@@ -126,6 +128,7 @@ class NormativaService {
             normativa: this.normativa.value.nombre,
           }),
         )
+        await this.auth.getDatosInicialesDeCenad()
         return true
       } else return false
     } catch (error) {

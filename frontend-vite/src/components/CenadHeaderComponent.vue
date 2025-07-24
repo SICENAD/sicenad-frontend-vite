@@ -166,7 +166,7 @@ const toggleMenu = () => {
     menuVisible.value = !menuVisible.value
 }
 onMounted(async () => {
-    isAdminEsteCenad.value = idCenad.value == auth.cenad.idString && auth.rol == 'Administrador'
+    auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
     cargarCenads()
 })
  // Función corregida

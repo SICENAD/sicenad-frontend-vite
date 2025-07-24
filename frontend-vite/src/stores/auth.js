@@ -13,6 +13,9 @@ const useAuthStore = defineStore('auth', {
       tiposFormulario: [],
       unidades: [],
       armas: [],
+      usuariosSuperadministrador: [],
+      usuariosAdministrador: [],
+      usuariosNormal: [],
       categorias: [],
       categoriasPadre: [],
       recursos: [],
@@ -45,15 +48,7 @@ const useAuthStore = defineStore('auth', {
           rol: rol,
         }),
       })
-      if (rawResponse.status == 200) {
-        /*
-        const response = await rawResponse.json()
-        this.token = response.token
-        this.username = response.username
-        this.rol = response.rol
-        */
-        return true
-      } else return false
+      rawResponse.status == 200 ? true : false
     },
     async login(username, password) {
       const urlLogin = `${useUtilsStore().urlApi}/auth/login`
@@ -73,36 +68,32 @@ const useAuthStore = defineStore('auth', {
         this.token = response.token
         this.username = response.username
         this.rol = response.rol
-
         await this.getDatosIniciales()
+        await this.getDatosDeUsuario()
         return true
       } else return false
     },
     async logout() {
-      this.token = null
-      this.username = null
-      this.rol = null
-      this.cenads = []
-      this.categoriasFichero = []
-      this.tiposFormulario = []
-      this.unidades = []
-      this.armas = []
-      this.cenad = null
-      this.unidad = null
+      this.borrarDatosSeguridad()
+      this.borrarDatosIniciales()
+      this.borrarDatosDeUsuario()
+      this.borrarDatosCenad()
       await router.push({ name: 'home' })
     },
     async getDatosIniciales() {
       const utils = useUtilsStore()
-
       try {
         let jsonTemporal
-        const [cenadsRes, categoriasFicheroRes, tiposFormularioRes, unidadesRes, armasRes] =
+        const [cenadsRes, categoriasFicheroRes, tiposFormularioRes, unidadesRes, armasRes, usuariosSuperadministradorRes, usuariosAdministradorRes, usuariosNormalRes] =
           await Promise.all([
             utils.fetchConToken(`${utils.urlApi}/cenads`, 'GET', null),
             utils.fetchConToken(`${utils.urlApi}/categorias_fichero`, 'GET', null),
             utils.fetchConToken(`${utils.urlApi}/tipos_formulario`, 'GET', null),
             utils.fetchConToken(`${utils.urlApi}/unidades`, 'GET', null),
             utils.fetchConToken(`${utils.urlApi}/armas`, 'GET', null),
+            utils.fetchConToken(`${utils.urlApi}/usuarios_superadministrador`, 'GET', null),
+            utils.fetchConToken(`${utils.urlApi}/usuarios_administrador`, 'GET', null),
+            utils.fetchConToken(`${utils.urlApi}/usuarios_normal`, 'GET', null),
           ])
         if (cenadsRes.ok) {
           jsonTemporal = await cenadsRes.json()
@@ -124,6 +115,25 @@ const useAuthStore = defineStore('auth', {
           jsonTemporal = await armasRes.json()
           this.armas = jsonTemporal._embedded.armas
         }
+        if (usuariosSuperadministradorRes.ok) {
+          jsonTemporal = await usuariosSuperadministradorRes.json()
+          this.usuariosSuperadministrador = jsonTemporal._embedded.usuarios_superadministrador
+        }
+        if (usuariosAdministradorRes.ok) {
+          jsonTemporal = await usuariosAdministradorRes.json()
+          this.usuariosAdministrador = jsonTemporal._embedded.usuarios_administrador
+        }
+        if (usuariosNormalRes.ok) {
+          jsonTemporal = await usuariosNormalRes.json()
+          this.usuariosNormal = jsonTemporal._embedded.usuarios_normal
+        }
+      } catch (err) {
+        console.error('Error cargando datos estáticos iniciales:', err)
+      }
+    },
+    async getDatosDeUsuario() {
+      const utils = useUtilsStore()
+      try {
         if (this.rol == 'Administrador') {
           const respUsuario = await utils.fetchConToken(
             `${utils.urlApi}/usuarios_administrador/search/findByUsername?username=${this.username}`,
@@ -170,7 +180,7 @@ const useAuthStore = defineStore('auth', {
           this.unidad = await respUnidad.json()
         }
       } catch (err) {
-        console.error('Error cargando datos estáticos:', err)
+        console.error('Error cargando datos estáticos del usuario:', err)
       }
     },
     async getDatosInicialesDeCenad(idCenad) {
@@ -236,7 +246,26 @@ const useAuthStore = defineStore('auth', {
         console.error('Error cargando datos estáticos:', err)
       }
     },
-    resetearDatosCenad() {
+    borrarDatosSeguridad() {
+      this.token = null
+      this.username = null
+      this.rol = null
+    },
+    borrarDatosIniciales() {
+      this.cenads = []
+      this.categoriasFichero = []
+      this.tiposFormulario = []
+      this.unidades = []
+      this.armas = [],
+        this.usuariosSuperadministrador = [],
+        this.usuariosAdministrador = [],
+        this.usuariosNormal = []
+    },
+    borrarDatosDeUsuario() {
+      this.cenad = null
+      this.unidad = null
+    },
+    borrarDatosCenad() {
       this.categorias = []
       this.categoriasPadre = []
       this.recursos = []
@@ -253,6 +282,7 @@ const useAuthStore = defineStore('auth', {
           const res = await utils.fetchConToken(`${utils.urlApi}/cenads`, 'GET', null)
           if (res.ok) {
             await this.getDatosIniciales()
+            await this.getDatosDeUsuario()
           } else {
             this.logout()
           }

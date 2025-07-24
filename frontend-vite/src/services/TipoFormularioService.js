@@ -72,6 +72,7 @@ async fetchTipoFormularioDeRecurso(idRecurso) {
             tiposFormulario: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
@@ -94,6 +95,7 @@ async fetchTipoFormularioDeRecurso(idRecurso) {
             tipoFormulario: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return nombre
       } else {
         return null
@@ -115,6 +117,7 @@ async fetchTipoFormularioDeRecurso(idRecurso) {
             tipoFormulario: this.tipoFormulario.value.nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {

@@ -106,6 +106,7 @@ class CenadService {
             cenad: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
@@ -153,6 +154,7 @@ class CenadService {
             cenad: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return escudo
       } else {
         return null
@@ -166,8 +168,7 @@ class CenadService {
     try {
       const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
       const urlCarpetaCenad = `${this.utils.urlApi}/files/${idCenad}/borrarCarpetaCenad`
-      const responseDeleteCarpeta = await borrarCarpeta(urlCarpetaCenad)
-      console.log(responseDeleteCarpeta)
+      await borrarCarpeta(urlCarpetaCenad)
       const response = await this.utils.fetchConToken(urlCenad, 'DELETE', null)
       const json = await response.json()
       this.cenad.value = await json
@@ -177,14 +178,26 @@ class CenadService {
             cenad: this.cenad.value.nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
       console.log(error)
     }
   }
-async fetchEscudo(filename, idCenad) {
+  async fetchEscudo(filename, idCenad) {
     const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/escudo/${filename}`, {
+      headers: {
+        Authorization: `Bearer ${this.auth.token}`,
+      },
+    })
+    if (!response.ok) throw new Error('No se pudo cargar la imagen')
+    const blob = await response.blob()
+    const imageUrl = URL.createObjectURL(blob)
+    return imageUrl // Lo usas como src en una <img>
+  }
+  async fetchInfoCenad(filename, idCenad) {
+    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/infoCenads/${filename}`, {
       headers: {
         Authorization: `Bearer ${this.auth.token}`,
       },
@@ -211,7 +224,6 @@ async fetchEscudo(filename, idCenad) {
       const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarInfoCenad/${infocenad}`
       infocenad != null && infocenad != '' && (await borrarArchivo(urlBorrarArchivo))
       infocenad = nuevaInfoCenad
-      console.log(nuevaInfoCenad)
     }
     try {
       const urlCenad = `${this.utils.urlApi}/cenads/${idCenad}`
@@ -225,15 +237,14 @@ async fetchEscudo(filename, idCenad) {
         body.infoCenad = infocenad
         console.log(body)
       }
-      console.log('pre editar')
       const response = await this.utils.fetchConToken(urlCenad, 'PATCH', body)
-      console.log(response.json())
       if (response.status == 200) {
         toastExito(
           i18n.global.t('cenads.editado', {
             cenad: idCenad,
           }),
         )
+        await this.auth.getDatosIniciales()
         return infocenad
       } else {
         return null
@@ -242,17 +253,6 @@ async fetchEscudo(filename, idCenad) {
       console.error(error)
       return null
     }
-  }
-  async fetchInfoCenad(filename, idCenad) {
-    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/infoCenads/${filename}`, {
-      headers: {
-        Authorization: `Bearer ${this.auth.token}`,
-      },
-    })
-    if (!response.ok) throw new Error('No se pudo cargar la imagen')
-    const blob = await response.blob()
-    const imageUrl = URL.createObjectURL(blob)
-    return imageUrl // Lo usas como src en una <img>
   }
 }
 export default CenadService

@@ -73,6 +73,7 @@ class UnidadService {
             unidad: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {
@@ -98,6 +99,7 @@ class UnidadService {
             unidad: nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return nombre
       } else {
         return null
@@ -119,6 +121,7 @@ class UnidadService {
             unidad: this.unidad.value.nombre,
           }),
         )
+        await this.auth.getDatosIniciales()
         return true
       } else return false
     } catch (error) {

@@ -42,8 +42,8 @@ class AuthService {
   }
 
   logout() {
-    const authStore = useAuthStore()
-    authStore.logout()
+    const auth = useAuthStore()
+    auth.logout()
   }
   solicitudRegistro(
     username, password, tfno, email, emailAdmitido, descripcion,
