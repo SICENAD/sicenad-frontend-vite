@@ -134,7 +134,7 @@ let sizeMaxEscudo = ref(utils.sizeMaxEscudo)
 const inputFile = ref(null)
 
 const archivoInfoCenad = ref(null)
-const infoCenadActual = ref(auth.cenad.infoCenad)
+const infoCenadActual = ref(auth.cenadVisitado.infoCenad)
 const urlInfoCenadActual = ref('')
 const pathRelativo = ref('')
 const pathImg = ref('')

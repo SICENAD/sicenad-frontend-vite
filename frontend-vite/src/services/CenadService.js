@@ -186,22 +186,14 @@ class CenadService {
     }
   }
   async fetchEscudo(filename, idCenad) {
-    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/escudo/${filename}`, {
-      headers: {
-        Authorization: `Bearer ${this.auth.token}`,
-      },
-    })
+    const response = await this.utils.fetchConToken(`${this.utils.urlApi}/files/${idCenad}/escudo/${filename}`, 'GET', null)
     if (!response.ok) throw new Error('No se pudo cargar la imagen')
     const blob = await response.blob()
     const imageUrl = URL.createObjectURL(blob)
     return imageUrl // Lo usas como src en una <img>
   }
   async fetchInfoCenad(filename, idCenad) {
-    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/infoCenads/${filename}`, {
-      headers: {
-        Authorization: `Bearer ${this.auth.token}`,
-      },
-    })
+    const response = await this.utils.fetchConToken(`${this.utils.urlApi}/files/${idCenad}/infoCenads/${filename}`, 'GET', null)
     if (!response.ok) throw new Error('No se pudo cargar la imagen')
     const blob = await response.blob()
     const imageUrl = URL.createObjectURL(blob)
