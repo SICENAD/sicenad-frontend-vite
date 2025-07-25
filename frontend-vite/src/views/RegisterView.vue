@@ -28,6 +28,9 @@
         <label for="password" class="form-label"><b>{{ $t('administracion.password') }}</b></label>
         <input type="password" class="form-control" id="password" v-model="password" />
       </div>
+      <RouterLink :to="{ name: 'login' }">
+        <button class="btn btn-primary text-white col-2 me-5">Cancelar</button>
+      </RouterLink>
       <!-- Abrir el modal manualmente -->
       <button type="button" class="btn btn-primary text-white col-2" data-bs-toggle="modal"
         data-bs-target="#modal-crear-usuario" :disabled="!formularioValidado">
@@ -97,7 +100,7 @@ const formularioValidado = computed(() => {
     isValidPhone(tfno.value) &&        // Teléfono válido
     email.value.trim() != '' &&
     isValidEmail(email.value) &&       // <-- validación email
-    descripcion.value.trim() != '' 
+    descripcion.value.trim() != ''
   )
 })
 const solicitudRegistro = async () => {
@@ -147,6 +150,7 @@ const solicitudRegistro = async () => {
 .link-personalizado:hover {
   color: #588157;
 }
+
 .passwordSistema {
   color: red;
 }
