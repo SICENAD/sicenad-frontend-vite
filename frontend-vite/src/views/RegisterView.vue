@@ -13,24 +13,24 @@
         <span v-if="emailError" class="text-danger">{{ emailError }}</span>
       </div>
       <div class="mb-3">
-        <label class="titulo me-2"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
+        <label class="form-label me-2"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup class="text-danger">*</sup></b></label>
         <input type="checkbox" class="letra" id="emailAdmitido" v-model="emailAdmitido" />
       </div>
       <div class="mb-3">
-        <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
+        <label class="form-label"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
         <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
       </div>
-      <div class="row mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
+      <div class="mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
         <label for="username" class="form-label"><b>{{ $t('administracion.username') }}</b></label>
         <input type="text" class="form-control" id="username" aria-describedby="username" v-model="username" />
       </div>
-      <div class="row mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
+      <div class="mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
         <label for="password" class="form-label"><b>{{ $t('administracion.password') }}</b></label>
         <input type="password" class="form-control" id="password" v-model="password" />
       </div>
       <!-- Abrir el modal manualmente -->
       <button type="button" class="btn btn-primary text-white col-2" data-bs-toggle="modal"
-        data-bs-target="#modal-crear-usuario">
+        data-bs-target="#modal-crear-usuario" :disabled="!formularioValidado">
         {{ $t('administracion.crearUsuario') }}
       </button>
     </form>
@@ -51,8 +51,7 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             {{ $t('comun.cerrar') }}
           </button>
-          <button type="button" class="btn btn-primary" @click="solicitudRegistro" data-bs-dismiss="modal"
-            :disabled="!formularioValidado">
+          <button type="button" class="btn btn-primary" @click="solicitudRegistro" data-bs-dismiss="modal">
             {{ $t('administracion.crearUsuario') }}
           </button>
         </div>
@@ -98,8 +97,7 @@ const formularioValidado = computed(() => {
     isValidPhone(tfno.value) &&        // Teléfono válido
     email.value.trim() != '' &&
     isValidEmail(email.value) &&       // <-- validación email
-    descripcion.value.trim() != '' &&
-    passwordForRegisterFromUser.value.trim() != ''
+    descripcion.value.trim() != '' 
   )
 })
 const solicitudRegistro = async () => {
@@ -115,10 +113,40 @@ const solicitudRegistro = async () => {
 }
 </script>
 <style scoped lang="scss">
-form {
-  margin: 20px;
+.container {
+  padding: 20px;
+  color: #a3b18a;
 }
 
+.login-form {
+  max-width: 300px;
+  /* Controla el ancho */
+  text-align: left;
+  /* Alinea el contenido a la izquierda */
+  font-weight: bold;
+}
+
+.btn-primary {
+  background: #a3b18a;
+  border: none;
+  font-size: 14px;
+  color: white;
+  padding: 8px 16px;
+}
+
+.btn-primary:hover {
+  background-color: #588157;
+}
+
+.link-personalizado {
+  color: #a3b18a;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.link-personalizado:hover {
+  color: #588157;
+}
 .passwordSistema {
   color: red;
 }
