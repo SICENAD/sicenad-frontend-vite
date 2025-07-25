@@ -131,7 +131,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import RecursoComponent from '@/components/RecursoComponent.vue'
 import RecursoService from '@/services/RecursoService'
@@ -144,33 +144,42 @@ const utils = useUtilsStore()
 const route = useRoute()
 const idCenad = computed(() => route.params.id)
 
+// Datos formulario
 let nombre = ref('')
 let descripcion = ref('')
 let otros = ref('')
 let idCategoria = ref('')
 let idTipoFormulario = ref('')
 let idUsuarioGestor = ref('')
+
+// Estados
 const categoriasFiltradas = ref([])
 const recursos = ref([])
-const categoriaSeleccionada = ref(null)       // categoría elegida en el select
-const historialCategorias = ref([])           // pila con el camino de categorías elegidas
+const categoriaSeleccionada = ref(null)
+const historialCategorias = ref([])
 const loading = ref(false)
 
+// Servicios
 const categoriaService = new CategoriaService()
 const service = new RecursoService()
 
+// Stores
 const tiposFormulario = computed(() => auth.tiposFormulario)
 const usuariosGestor = computed(() => auth.usuariosGestor)
 const categorias = computed(() => auth.categorias)
+
+// Caché local para evitar llamadas repetidas
+const cacheSubcategorias = reactive(new Map()) // idCategoria -> subcategorias[]
+const cacheRecursos = reactive(new Map())      // idCategoria -> recursos[]
 
 onMounted(async () => {
     loading.value = true
     await cargarCategoriasPadre()
     loading.value = false
 })
+// Obtener recursos y asignar categorías
 const getRecursos = async () => {
-    recursos.value = await service.fetchAll(idCenad.value)
-
+    recursos.value = auth.recursos
     const promises = recursos.value.map(async (recurso) => {
         if (recurso._links && recurso._links.categoria) {
             try {
@@ -184,68 +193,105 @@ const getRecursos = async () => {
             }
         }
     })
-    await Promise.all(promises) // Espera a que todas las categorías se obtengan
+    await Promise.all(promises)
 }
 function actualizarRecursoEnView() {
     getRecursos()
 }
 // Carga inicial de categorías padre
 const cargarCategoriasPadre = async () => {
-    loading.value = true
-    categoriasFiltradas.value = await categoriaService.fetchCategoriasPadre(idCenad.value)
+    categoriasFiltradas.value = auth.categoriasPadre
     categoriaSeleccionada.value = null
     historialCategorias.value = []
-    recursos.value = []
-    recursos.value = await service.fetchAll(idCenad.value)
-    loading.value = false
+    recursos.value = auth.recursos
 }
-// Función que se ejecuta cuando seleccionas categoría en el select
+// Filtrar por categoría seleccionada con caché
 const filtrar = async () => {
     if (!categoriaSeleccionada.value) return
     loading.value = true
-    // Guardamos la categoría en el historial (camino)
+    const idCat = categoriaSeleccionada.value.idString
     historialCategorias.value.push(categoriaSeleccionada.value)
-    // Consultamos subcategorías de la categoría seleccionada
-    const subcategorias = await categoriaService.fetchSubcategorias(categoriaSeleccionada.value.idString)
-    if (subcategorias.length === 0) {
-        // Sin subcategorías: mostramos recursos de esta categoría
-        recursos.value = await service.fetchRecursosDeCategoria(categoriaSeleccionada.value.idString)
-        categoriasFiltradas.value = []       // no hay categorías para mostrar
-        categoriaSeleccionada.value = null   // reseteamos selección para evitar confusión
+    // 1. Subcategorías (desde caché o API)
+    let subcategorias
+    if (cacheSubcategorias.has(idCat)) {
+        subcategorias = cacheSubcategorias.get(idCat)
     } else {
-        // Hay subcategorías: actualizamos select con ellas
-        categoriasFiltradas.value = subcategorias
-        categoriaSeleccionada.value = null
-        // Cargar recursos de la categoría padre también
-        recursos.value = await service.fetchRecursosDeSubcategorias(historialCategorias.value[historialCategorias.value.length - 1].idString)
+        subcategorias = await categoriaService.fetchSubcategorias(idCat)
+        cacheSubcategorias.set(idCat, subcategorias)
     }
+    if (subcategorias.length === 0) {
+        // 2. Recursos (desde caché o API)
+        let recursosCat
+        if (cacheRecursos.has(idCat)) {
+            recursosCat = cacheRecursos.get(idCat)
+        } else {
+            recursosCat = await service.fetchRecursosDeCategoria(idCat)
+            cacheRecursos.set(idCat, recursosCat)
+        }
+        recursos.value = recursosCat
+        categoriasFiltradas.value = []
+    } else {
+        // Hay subcategorías
+        categoriasFiltradas.value = subcategorias
+        // Recursos de esta categoría y subcategorías
+        let recursosCat
+        if (cacheRecursos.has(idCat)) {
+            recursosCat = cacheRecursos.get(idCat)
+        } else {
+            recursosCat = await service.fetchRecursosDeSubcategorias(idCat)
+            cacheRecursos.set(idCat, recursosCat)
+        }
+        recursos.value = recursosCat
+    }
+    categoriaSeleccionada.value = null
     loading.value = false
 }
-// Botón para borrar filtros (volver a estado inicial)
+// Borrar filtros y volver a estado inicial
 const borrarFiltros = async () => {
     await cargarCategoriasPadre()
 }
-// Botón para retroceder en el árbol de categorías
+// Retroceder en historial con caché
 const retroceder = async () => {
-    if (historialCategorias.value.length === 0) return;
-    loading.value = true;
-    historialCategorias.value.pop(); // Eliminamos la última categoría seleccionada
+    if (historialCategorias.value.length === 0) return
+    loading.value = true
+    historialCategorias.value.pop() // Eliminar última categoría
     if (historialCategorias.value.length === 0) {
-        // Si no queda historial, volvemos a categorías padre
-        await cargarCategoriasPadre();
+        // Volvemos a categorías padre
+        await cargarCategoriasPadre()
     } else {
-        // Recuperamos la categoría anterior (nivel superior)
-        const ultimaCategoria = historialCategorias.value[historialCategorias.value.length - 1];
-        // Cargamos sus subcategorías
-        categoriasFiltradas.value = await categoriaService.fetchSubcategorias(ultimaCategoria.idString);
-        // Y todos los recursos de esa categoría (recursivo)
-        recursos.value = await service.fetchRecursosDeSubcategorias(ultimaCategoria.idString);
-        categoriaSeleccionada.value = null;
+        const ultimaCategoria = historialCategorias.value[historialCategorias.value.length - 1]
+        const idCat = ultimaCategoria.idString
+        // Subcategorías desde caché o API
+        if (cacheSubcategorias.has(idCat)) {
+            categoriasFiltradas.value = cacheSubcategorias.get(idCat)
+        } else {
+            const subcategorias = await categoriaService.fetchSubcategorias(idCat)
+            cacheSubcategorias.set(idCat, subcategorias)
+            categoriasFiltradas.value = subcategorias
+        }
+        // Recursos desde caché o API
+        if (cacheRecursos.has(idCat)) {
+            recursos.value = cacheRecursos.get(idCat)
+        } else {
+            const recursosCat = await service.fetchRecursosDeSubcategorias(idCat)
+            cacheRecursos.set(idCat, recursosCat)
+            recursos.value = recursosCat
+        }
     }
-    loading.value = false;
+    categoriaSeleccionada.value = null
+    loading.value = false
 }
+// Crear recurso y refrescar recursos
 const crearRecurso = async () => {
-    await service.crearRecurso(nombre.value, descripcion.value, otros.value, idTipoFormulario.value, idCategoria.value, idUsuarioGestor.value)
+    await service.crearRecurso(
+        nombre.value,
+        descripcion.value,
+        otros.value,
+        idTipoFormulario.value,
+        idCategoria.value,
+        idUsuarioGestor.value
+    )
+    // Reset form
     nombre.value = ''
     idCategoria.value = ''
     descripcion.value = ''
@@ -254,22 +300,18 @@ const crearRecurso = async () => {
     idUsuarioGestor.value = ''
     await getRecursos()
 }
-// Validación: todos los campos deben estar llenos
+// Validación formulario
 const formularioValidado = computed(() => {
     return (
-        nombre.value.trim() != '' &&
-        descripcion.value.trim() != '' &&
-        otros.value.trim() != '' &&
-        idCategoria.value != '' &&
-        idTipoFormulario.value != '' &&
-        idUsuarioGestor.value != ''
-    );
-});
+        nombre.value.trim() !== '' &&
+        descripcion.value.trim() !== '' &&
+        otros.value.trim() !== '' &&
+        idCategoria.value !== '' &&
+        idTipoFormulario.value !== '' &&
+        idUsuarioGestor.value !== ''
+    )
+})
 </script>
-
-
-
-
 <style scoped lang="scss">
 .btn {
     background: #3A5A40;
