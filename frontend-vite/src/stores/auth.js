@@ -216,7 +216,7 @@ const useAuthStore = defineStore('auth', {
           ? (await cartografiasRes.json())?._embedded?.cartografias || []
           : []
         this.normativas = normativasRes.ok
-          ? (await normativasRes.json())?._embedded?.normativas || []
+          ? (await normativasRes.json())?._embedded?.ficheros || []
           : []
         this.usuariosGestor = usuariosGestoresRes.ok
           ? (await usuariosGestoresRes.json())?._embedded?.usuarios_gestor || []

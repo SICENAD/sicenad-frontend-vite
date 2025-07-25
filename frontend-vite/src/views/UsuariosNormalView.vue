@@ -92,14 +92,12 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UsuarioNormalComponent from '@/components/UsuarioNormalComponent.vue'
 import { toTitleCase } from '@/utils'
-import UnidadService from '@/services/UnidadService'
 import useAuthStore from '@/stores/auth'
 const auth = useAuthStore()
-const unidadService = new UnidadService()
 const service = new UsuarioService()
 let usuariosNormal = computed(() => auth.usuariosNormal)
 let unidades = computed(() => auth.unidades)

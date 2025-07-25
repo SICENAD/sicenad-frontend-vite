@@ -30,8 +30,7 @@
                         <b>DESCARGA</b>
                     </div>
                 </div>
-                <NormativaComponent v-for="(item, index) in normativas" :key="index" :content="item" :idCenad="idCenad"
-                    @emiteElemento="actualizarNormativaEnView" />
+                <NormativaComponent v-for="(item, index) in normativas" :key="index" :content="item" :idCenad="idCenad" />
             </div>
         </div>
     </div>
@@ -78,7 +77,7 @@
 <script setup>
 import NormativaComponent from '@/components/NormativaComponent.vue'
 import useAuthStore from '@/stores/auth'
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import useUtilsStore from '@/stores/utils'
 import NormativaService from '@/services/NormativaService'
 import { useRoute } from 'vue-router'
@@ -96,28 +95,18 @@ let normativaFile = ref(null)
 
 
 const service = new NormativaService()
-const normativas = service.getNormativas()
+const normativas = computed(() => auth.normativas)
 
 function onFileChange(e) {
     const file = e.target.files[0]
     normativaFile.value = file
 }
-onMounted(async () => {
-    await getNormativas()
-})
+
 const crearNormativa = async () => {
     await service.crearNormativa(nombre.value, descripcion.value, normativaFile.value, idCenad.value)
     nombre.value = ''
     normativaFile.value = ''
     descripcion.value = ''
-    await getNormativas()
-}
-const getNormativas = async () => {
-    await service.fetchAll(idCenad.value)
-}
-
-function actualizarNormativaEnView() {
-    getNormativas()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
