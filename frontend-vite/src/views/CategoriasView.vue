@@ -30,8 +30,7 @@
                         <b>DESCRIPCIÓN</b>
                     </div>
                 </div>
-                <CategoriaComponent v-for="(item, index) in categorias" :key="index" :content="item" :idCenad="idCenad"
-                    @emiteElemento="actualizarCategoriaEnView" />
+                <CategoriaComponent v-for="(item, index) in categorias" :key="index" :content="item" :idCenad="idCenad" />
             </div>
         </div>
     </div>
@@ -95,26 +94,14 @@ let nombre = ref('')
 let descripcion = ref('')
 let idCategoriaPadre = ref('')
 
-
 const service = new CategoriaService()
-const categorias = service.getCategorias()
+const categorias = computed(() => auth.categorias)
 
-onMounted(async () => {
-    await getCategorias()
-})
 const crearCategoria = async () => {
     await service.crearCategoria(nombre.value, descripcion.value, idCenad.value, idCategoriaPadre.value)
     nombre.value = ''
     idCategoriaPadre.value = ''
     descripcion.value = ''
-    await getCategorias()
-}
-const getCategorias = async () => {
-    await service.fetchAll(idCenad.value)
-}
-
-function actualizarCategoriaEnView() {
-    getCategorias()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {

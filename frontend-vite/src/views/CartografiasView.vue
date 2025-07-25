@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <CartografiaComponent v-for="(item, index) in cartografias" :key="index" :content="item"
-                    :idCenad="idCenad" @emiteElemento="actualizarCartografiaEnView" />
+                    :idCenad="idCenad" />
             </div>
         </div>
     </div>
@@ -109,31 +109,19 @@ let descripcion = ref('')
 let escala = ref('')
 let cartografiaFile = ref(null)
 
-
 const service = new CartografiaService()
-const cartografias = service.getCartografias()
+const cartografias = computed(() => auth.cartografias)
 
 function onFileChange(e) {
     const file = e.target.files[0]
     cartografiaFile.value = file
 }
-onMounted(async () => {
-    await getCartografias()
-})
 const crearCartografia = async () => {
     await service.crearCartografia(nombre.value, descripcion.value, escala.value, cartografiaFile.value, idCenad.value)
     nombre.value = ''
     cartografiaFile.value = ''
     descripcion.value = '',
     escala.value = ''
-    await getCartografias()
-}
-const getCartografias = async () => {
-    await service.fetchAll(idCenad.value)
-}
-
-function actualizarCartografiaEnView() {
-    getCartografias()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
@@ -142,7 +130,7 @@ const formularioValidado = computed(() => {
     descripcion.value.trim() != '' &&
     escala.value.trim() != '' &&
     cartografiaFile.value.trim() != ''
-  )});
+  )})
 </script>
 <style scoped lang="scss">
 .btn {

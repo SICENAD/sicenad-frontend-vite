@@ -92,13 +92,13 @@
   </div>
 </template>
 <script setup>
-import { watch, onMounted, ref, computed } from 'vue'
+import { watch, ref, computed } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
-import UnidadService from '@/services/UnidadService'
 import { toTitleCase } from '@/utils'
+import useAuthStore from '@/stores/auth'
 const props = defineProps(['username', 'tfno', 'email', 'emailAdmitido', 'descripcion', 'unidad', 'idUsuario'])
 const emits = defineEmits(['emiteModal'])
-
+const auth = useAuthStore()
 let username = ref(props.username)
 let tfno = ref(props.tfno)
 let email = ref(props.email)
@@ -114,15 +114,8 @@ let idUsuario = ref(props.idUsuario)
 let idModal = 'modal-usuario-' + props.idUsuario
 let idModalEliminar = 'modal-usuario-eliminar' + props.idUsuario
 const service = new UsuarioService()
-const unidadService = new UnidadService()
-let unidades = unidadService.getUnidades()
+let unidades = computed(() => auth.unidades)
 
-onMounted(async () => {
-  getUnidades()
-})
-const getUnidades = async () => {
-  await unidadService.fetchAll()
-}
 const editarUsuario = async () => {
   let unidad = null
   unidades.value.forEach(u => {

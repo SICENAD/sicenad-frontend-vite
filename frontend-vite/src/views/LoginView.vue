@@ -43,7 +43,8 @@ let feedback = ref('')
 const service = new AuthService()
 
 const login = async () => {
-  service.login(username.value, password.value, feedback.value)
+  const response = service.login(username.value, password.value, feedback.value)
+  response && await router.push({ name: 'home' })
 }
 </script>
 

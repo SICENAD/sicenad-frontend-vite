@@ -96,17 +96,13 @@
   </div>
 </template>
 <script setup>
-import CategoriaService from '@/services/CategoriaService'
 import RecursoService from '@/services/RecursoService'
-import TipoFormularioService from '@/services/TipoFormularioService'
-import UsuarioService from '@/services/UsuarioService'
-import { computed, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import useAuthStore from '@/stores/auth'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps(['nombre', 'categoria', 'tipoFormulario', 'usuarioGestor', 'descripcion', 'otros', 'idRecurso'])
 const emits = defineEmits(['emiteModal'])
-const route = useRoute()
-const idCenad = computed(() => route.params.id)
+const auth = useAuthStore()
 
 const descripcion = ref(props.descripcion)
 const nombre = ref(props.nombre)
@@ -118,12 +114,9 @@ const idUsuarioGestor = ref('')
 const idModal = 'modal-categoria-' + props.idRecurso
 const idModalEliminar = 'modal-categoria-eliminar' + props.idRecurso
 const service = new RecursoService()
-const categoriaService = new CategoriaService()
-const tipoFormularioService = new TipoFormularioService()
-const usuarioService = new UsuarioService()
-const categorias = categoriaService.getCategorias()
-const tiposFormulario = tipoFormularioService.getTiposFormulario()
-const usuariosGestor = usuarioService.getUsuariosGestor()
+const categorias = computed(() => auth.categorias)
+const tiposFormulario = computed(() => auth.tiposFormulario)
+const usuariosGestor = computed(() => auth.usuariosGestor)
 
 const editarRecurso = async () => {
   await service.editarRecurso(
@@ -158,21 +151,6 @@ watch(
   (nuevo) => { if (nuevo) idCategoria.value = nuevo.idString },
   { immediate: true }
 )
-onMounted(async () => {
-  await getCategorias()
-  await getTiposFormulario()
-  await getUsuariosGestor()
-
-})
-const getCategorias = async () => {
-  await categoriaService.fetchAll(idCenad.value)
-}
-const getTiposFormulario = async () => {
-  await tipoFormularioService.fetchAll()
-}
-const getUsuariosGestor = async () => {
-  await usuarioService.fetchUsuariosGestorDeCenad(idCenad.value)
-}
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
   return (

@@ -151,11 +151,8 @@ onMounted(async () => {
     urlEscudoActual.value = ''
   }
 })
-
-
 // Para preview de archivo seleccionado nuevo
 const previewEscudo = ref('')
-
 // Cuando cambie archivoEscudo, creamos preview con FileReader
 watch(archivoEscudo, (newFile) => {
   if (!newFile) {
@@ -168,26 +165,20 @@ watch(archivoEscudo, (newFile) => {
   }
   reader.readAsDataURL(newFile)
 })
-
 // Variable para guardar la URL creada y poder revocarla
 let currentObjectURL = ''
-
 // Cuando cambie urlEscudoActual, revocamos la anterior para evitar fuga de memoria
 watch(urlEscudoActual, (newUrl, oldUrl) => {
   if (oldUrl) URL.revokeObjectURL(oldUrl)  // revoca la URL vieja
   currentObjectURL = newUrl                 // guardamos la nueva
 })
-
 // Liberamos la URL cuando el componente se desmonta
 onBeforeUnmount(() => {
   if (currentObjectURL) URL.revokeObjectURL(currentObjectURL)
 })
-
-
 function onFileChange(event) {
   archivoEscudo.value = event.target.files[0]
 }
-
 const editarCenad = async () => {
   const success = await service.editarCenad(
     nombre.value,
@@ -200,11 +191,9 @@ const editarCenad = async () => {
     escudoActual.value,   // nombre actual del escudo en la base
     idCenad.value
   );
-
   if (success) {
     // Actualizar el escudoActual con el nombre real subido
     escudoActual.value = success; // Asumiendo que editarCenad retorna el nombreArchivo
-
     // Volver a cargar la URL del escudo actualizado para mostrar preview
     try {
       urlEscudoActual.value = await service.fetchEscudo(escudoActual.value, idCenad.value)

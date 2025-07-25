@@ -92,13 +92,13 @@
   </div>
 </template>
 <script setup>
-import { watch, onMounted, ref, computed } from 'vue'
+import { watch, ref, computed } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import { toTitleCase } from '@/utils'
-import CenadService from '@/services/CenadService'
+import useAuthStore from '@/stores/auth'
 const props = defineProps(['username', 'tfno', 'email', 'emailAdmitido', 'descripcion', 'cenad', 'idUsuario'])
 const emits = defineEmits(['emiteModal'])
-
+const auth = useAuthStore()
 let username = ref(props.username)
 let tfno = ref(props.tfno)
 let email = ref(props.email)
@@ -114,15 +114,8 @@ let idUsuario = ref(props.idUsuario)
 let idModal = 'modal-usuario-' + props.idUsuario
 let idModalEliminar = 'modal-usuario-eliminar' + props.idUsuario
 const service = new UsuarioService()
-const cenadService = new CenadService()
-let cenads = cenadService.getCenads()
+let cenads = computed(() => auth.cenads)
 
-onMounted(async () => {
-  getCenads()
-})
-const getCenads = async () => {
-  await cenadService.fetchAll()
-}
 const editarUsuario = async () => {
   let cenad = null
   cenads.value.forEach(c => {

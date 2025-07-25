@@ -75,10 +75,12 @@
 import { computed, onMounted, ref } from 'vue'
 import CategoriaService from '@/services/CategoriaService'
 import { useRoute } from 'vue-router'
+import useAuthStore from '@/stores/auth'
 
 const props = defineProps(['nombre', 'categoriaPadre', 'descripcion', 'idCategoria'])
 const emits = defineEmits(['emiteModal'])
 const route = useRoute()
+const auth = useAuthStore()
 const idCenad = computed(() => route.params.id)
 
 const descripcion = ref(props.descripcion)
@@ -88,7 +90,7 @@ const idCategoriaPadre = computed(() =>props.categoriaPadre?.idString)
 const idModal = 'modal-categoria-' + props.idCategoria
 const idModalEliminar = 'modal-categoria-eliminar' + props.idCategoria
 const service = new CategoriaService()
-const categorias = service.getCategorias()
+const categorias = computed(() => auth.categorias)
 const categoriasSeleccionables = ref([])
 const editarCategoria = async () => {
   await service.editarCategoria(
@@ -104,12 +106,8 @@ const borrarCategoria = async () => {
   emits('emiteModal')
 }
 onMounted(async () => {
-    await getCategorias()
     categoriasSeleccionables.value = categorias.value.filter(cat => cat.idString !== idCategoria.value)
 })
-const getCategorias = async () => {
-    await service.fetchAll(idCenad.value)
-}
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
   return (

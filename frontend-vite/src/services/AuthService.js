@@ -17,7 +17,7 @@ class AuthService {
         feedback = i18n.global.t('comun.logError')
         alert(feedback)
       }
-      return response.ok
+      return response
     } catch (feedback) {
       console.log(feedback)
     }
