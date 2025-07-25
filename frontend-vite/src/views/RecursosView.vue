@@ -120,8 +120,9 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearRecurso" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado
-                ">
+                    <button type="button" @click="crearRecurso" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado
+                            ">
                         Crear Recurso
                     </button>
                 </div>
@@ -134,8 +135,6 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import RecursoComponent from '@/components/RecursoComponent.vue'
 import RecursoService from '@/services/RecursoService'
-import UsuarioService from '@/services/UsuarioService'
-import TipoFormularioService from '@/services/TipoFormularioService'
 import CategoriaService from '@/services/CategoriaService'
 import useUtilsStore from '@/stores/utils'
 import useAuthStore from '@/stores/auth'
@@ -157,22 +156,16 @@ const categoriaSeleccionada = ref(null)       // categoría elegida en el select
 const historialCategorias = ref([])           // pila con el camino de categorías elegidas
 const loading = ref(false)
 
-const usuarioService = new UsuarioService()
-const tipoFormularioService = new TipoFormularioService()
 const categoriaService = new CategoriaService()
 const service = new RecursoService()
 
-const tiposFormulario = tipoFormularioService.getTiposFormulario()
-const usuariosGestor = usuarioService.getUsuariosGestor()
-const categorias = categoriaService.getCategorias()
+const tiposFormulario = computed(() => auth.tiposFormulario)
+const usuariosGestor = computed(() => auth.usuariosGestor)
+const categorias = computed(() => auth.categorias)
 
 onMounted(async () => {
     loading.value = true
     await cargarCategoriasPadre()
-    await getCategorias()
-    await getTiposFormulario()
-    await getUsuariosGestor()
-    recursos.value = await service.fetchAll(idCenad.value)
     loading.value = false
 })
 const getRecursos = async () => {
@@ -193,15 +186,6 @@ const getRecursos = async () => {
     })
     await Promise.all(promises) // Espera a que todas las categorías se obtengan
 }
-const getCategorias = async () => {
-    await categoriaService.fetchAll(idCenad.value)
-}
-const getTiposFormulario = async () => {
-    await tipoFormularioService.fetchAll()
-}
-const getUsuariosGestor = async () => {
-    await usuarioService.fetchUsuariosGestorDeCenad(idCenad.value)
-}
 function actualizarRecursoEnView() {
     getRecursos()
 }
@@ -212,6 +196,7 @@ const cargarCategoriasPadre = async () => {
     categoriaSeleccionada.value = null
     historialCategorias.value = []
     recursos.value = []
+    recursos.value = await service.fetchAll(idCenad.value)
     loading.value = false
 }
 // Función que se ejecuta cuando seleccionas categoría en el select
@@ -242,23 +227,22 @@ const borrarFiltros = async () => {
 }
 // Botón para retroceder en el árbol de categorías
 const retroceder = async () => {
-    if (historialCategorias.value.length === 0) return
-    loading.value = true
-    // Quitamos la última categoría seleccionada (nivel actual)
-    historialCategorias.value.pop()
+    if (historialCategorias.value.length === 0) return;
+    loading.value = true;
+    historialCategorias.value.pop(); // Eliminamos la última categoría seleccionada
     if (historialCategorias.value.length === 0) {
-        // Si no hay historial, volvemos a las categorías padre y limpiamos recursos
-        await cargarCategoriasPadre()
+        // Si no queda historial, volvemos a categorías padre
+        await cargarCategoriasPadre();
     } else {
-        // Cargamos las subcategorías del nivel anterior
-        const ultimaCategoria = historialCategorias.value[historialCategorias.value.length - 1]
-        const subcategorias = await categoriaService.fetchSubcategorias(ultimaCategoria.idString)
-        categoriasFiltradas.value = subcategorias
-        categoriaSeleccionada.value = null
-        // También puedes cargar recursos de la categoría anterior si quieres:
-        recursos.value = await service.fetchRecursosDeCategoria(ultimaCategoria.idString)
+        // Recuperamos la categoría anterior (nivel superior)
+        const ultimaCategoria = historialCategorias.value[historialCategorias.value.length - 1];
+        // Cargamos sus subcategorías
+        categoriasFiltradas.value = await categoriaService.fetchSubcategorias(ultimaCategoria.idString);
+        // Y todos los recursos de esa categoría (recursivo)
+        recursos.value = await service.fetchRecursosDeSubcategorias(ultimaCategoria.idString);
+        categoriaSeleccionada.value = null;
     }
-    loading.value = false
+    loading.value = false;
 }
 const crearRecurso = async () => {
     await service.crearRecurso(nombre.value, descripcion.value, otros.value, idTipoFormulario.value, idCategoria.value, idUsuarioGestor.value)
@@ -272,52 +256,65 @@ const crearRecurso = async () => {
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-  return (
-    nombre.value.trim() != '' &&
-    descripcion.value.trim() != '' &&
-    otros.value.trim() != '' &&
-    idCategoria.value != '' &&
-    idTipoFormulario.value != '' &&
-    idUsuarioGestor.value != ''
-  );
+    return (
+        nombre.value.trim() != '' &&
+        descripcion.value.trim() != '' &&
+        otros.value.trim() != '' &&
+        idCategoria.value != '' &&
+        idTipoFormulario.value != '' &&
+        idUsuarioGestor.value != ''
+    );
 });
 </script>
+
+
+
+
 <style scoped lang="scss">
 .btn {
     background: #3A5A40;
     padding: 0.5;
     font-size: 14px;
 }
+
 .btn:hover {
     background-color: #A3B18A;
 }
+
 .titulo {
     color: #3A5A40;
     font-weight: bold;
 }
+
 .titulo1 {
     color: #588157;
 }
+
 h5 {
     color: #354f52;
     font-weight: bold;
 }
+
 a.volver {
     color: #3A5A40;
     font-size: 18px;
 }
+
 a.volver:hover {
     color: #A3B18A;
 }
+
 .row {
     height: auto;
     padding: auto;
     margin: auto;
 }
+
 hr {
     margin-bottom: 0;
     margin-top: 1;
 }
+
 .modal {
     max-height: 100%;
     max-width: 100%;
