@@ -26,8 +26,7 @@
                     <b>DESCRIPCIÓN</b>
                 </div>
             </div>
-            <TipoFormularioComponent v-for="(item, index) in tiposFormulario" :key="index" :content="item"
-                @emiteElemento="actualizarTipoFormularioEnView" />
+            <TipoFormularioComponent v-for="(item, index) in tiposFormulario" :key="index" :content="item" />
         </div>
     </div>
     <!-- Modal -->
@@ -75,31 +74,21 @@
 <script setup>
 import TipoFormularioComponent from '@/components/TipoFormularioComponent.vue'
 import TipoFormularioService from '@/services/TipoFormularioService'
-import { ref, onMounted, computed } from 'vue'
-
+import { ref, computed } from 'vue'
+import useAuthStore from '@/stores/auth'
+const auth = useAuthStore()
 let nombre = ref('')
 let codTipo = ref('')
 let descripcion = ref('')
 
 const service = new TipoFormularioService()
-const tiposFormulario = service.getTiposFormulario()
+const tiposFormulario = computed(() => auth.tiposFormulario)
 
-onMounted(async () => {
-    await getTiposFormulario()
-})
 const crearTipoFormulario = async () => {
     await service.crearTipoFormulario(nombre.value, codTipo.value, descripcion.value)
     nombre.value = ''
     codTipo.value = ''
     descripcion.value = ''
-    await getTiposFormulario()
-}
-const getTiposFormulario = async () => {
-    await service.fetchAll()
-}
-
-function actualizarTipoFormularioEnView() {
-    getTiposFormulario()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {

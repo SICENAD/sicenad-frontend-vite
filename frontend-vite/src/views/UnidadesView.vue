@@ -29,8 +29,7 @@
                         <b>POC</b>
                     </div>
                 </div>
-                <UnidadComponent v-for="(item, index) in unidades" :key="index" :content="item"
-                    @emiteElemento="actualizarUnidadEnView" />
+                <UnidadComponent v-for="(item, index) in unidades" :key="index" :content="item" />
             </div>
         </div>
     <!-- Modal -->
@@ -100,7 +99,7 @@ let direccion = ref('')
 let poc = ref('')
 
 const service = new UnidadService()
-let unidades = service.getUnidades()
+const unidades = computed(() => auth.unidades)
 
 let rol = ref(auth.rol)
 let idCenad = ''
@@ -109,7 +108,6 @@ let name = ref('superadministrador')
 let params = ref({})
 
 onMounted(async () => {
-    await getUnidades()
     definirBtnVolver()
 })
 function definirBtnVolver() {
@@ -124,13 +122,6 @@ const crearUnidad = async () => {
     tfno.value = ''
     direccion.value = ''
     poc.value = ''
-    await getUnidades()
-}
-const getUnidades = async () => {
-    await service.fetchAll()
-}
-async function actualizarUnidadEnView() {
-    await getUnidades()
 }
 // Validación Email
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)

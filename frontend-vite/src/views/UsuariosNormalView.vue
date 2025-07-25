@@ -16,8 +16,7 @@
                 <b>UNIDAD</b>
             </div>
         </div>
-        <UsuarioNormalComponent v-for="(item, index) in usuariosNormal" :key="index" :content="item"
-            @emiteElemento="actualizarUsuarioNormalEnView" />
+        <UsuarioNormalComponent v-for="(item, index) in usuariosNormal" :key="index" :content="item" />
     </div>
     <!-- Modal usuarioNormal-->
     <div class="modal fade" id="modal-nuevo-usuarioNormal" tabindex="-1"
@@ -98,11 +97,12 @@ import UsuarioService from '@/services/UsuarioService'
 import UsuarioNormalComponent from '@/components/UsuarioNormalComponent.vue'
 import { toTitleCase } from '@/utils'
 import UnidadService from '@/services/UnidadService'
-
+import useAuthStore from '@/stores/auth'
+const auth = useAuthStore()
 const unidadService = new UnidadService()
 const service = new UsuarioService()
-let usuariosNormal = service.getUsuariosNormal()
-let unidades = unidadService.getUnidades()
+let usuariosNormal = computed(() => auth.usuariosNormal)
+let unidades = computed(() => auth.unidades)
 let tfnoUsuarioNormal = ref('')
 let emailUsuarioNormal = ref('')
 let emailAdmitidoUsuarioNormal = ref(false)
@@ -111,10 +111,6 @@ let usernameUsuarioNormal = ref('')
 let passwordUsuarioNormal = ref('')
 let unidad = ref(null)
 
-onMounted(async () => {
-    await getUsuariosNormal()
-    await unidadService.fetchAll()
-})
 const crearUsuarioNormal = async () => {
     await service.crearUsuarioNormal(usernameUsuarioNormal.value, passwordUsuarioNormal.value, tfnoUsuarioNormal.value, emailUsuarioNormal.value, emailAdmitidoUsuarioNormal.value, descripcionUsuarioNormal.value, unidad.value.idString)
     usernameUsuarioNormal.value = ''
@@ -124,13 +120,6 @@ const crearUsuarioNormal = async () => {
     emailAdmitidoUsuarioNormal.value = false
     descripcionUsuarioNormal.value = ''
     unidad.value = null
-    await getUsuariosNormal()
-}
-const getUsuariosNormal = async () => {
-    await service.fetchUsuariosNormal()
-}
-async function actualizarUsuarioNormalEnView() {
-    await getUsuariosNormal()
 }
 // Validación Email
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)

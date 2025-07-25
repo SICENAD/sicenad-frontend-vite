@@ -14,8 +14,7 @@
                 <b>GESTOR</b>
             </div>
         </div>
-        <UsuarioGestorComponent v-for="(item, index) in usuariosGestor" :key="index" :content="item"
-            @emiteElemento="actualizarUsuarioGestorEnView" />
+        <UsuarioGestorComponent v-for="(item, index) in usuariosGestor" :key="index" :content="item" />
     </div>
     <!-- Modal usuarioGestor-->
     <div class="modal fade" id="modal-nuevo-usuarioGestor" tabindex="-1"
@@ -83,7 +82,7 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import UsuarioService from '@/services/UsuarioService'
 import UsuarioGestorComponent from '@/components/UsuarioGestorComponent.vue'
 import { toTitleCase } from '@/utils'
@@ -93,7 +92,7 @@ const auth = useAuthStore()
 const idCenad = auth.cenad.idString
 
 const service = new UsuarioService()
-let usuariosGestor = service.getUsuariosGestor()
+let usuariosGestor = computed(() => auth.usuariosGestor)
 
 let tfnoUsuarioGestor = ref('')
 let emailUsuarioGestor = ref('')
@@ -102,9 +101,6 @@ let descripcionUsuarioGestor = ref('')
 let usernameUsuarioGestor = ref('')
 let passwordUsuarioGestor = ref('')
 
-onMounted(async () => {
-    await getUsuariosGestor()
-})
 const crearUsuarioGestor = async () => {
     await service.crearUsuarioGestor(usernameUsuarioGestor.value, passwordUsuarioGestor.value, tfnoUsuarioGestor.value, emailUsuarioGestor.value, emailAdmitidoUsuarioGestor.value, descripcionUsuarioGestor.value, idCenad)
     usernameUsuarioGestor.value = ''
@@ -113,13 +109,6 @@ const crearUsuarioGestor = async () => {
     emailUsuarioGestor.value = ''
     emailAdmitidoUsuarioGestor.value = false
     descripcionUsuarioGestor.value = ''
-    await getUsuariosGestor()
-}
-const getUsuariosGestor = async () => {
-    await service.fetchUsuariosGestorDeCenad(idCenad)
-}
-async function actualizarUsuarioGestorEnView() {
-    await getUsuariosGestor()
 }
 // Validación Email
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)

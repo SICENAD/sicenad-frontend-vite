@@ -186,8 +186,8 @@ class UsuarioService {
       const urlAdministrador = `${this.utils.urlApi}/cenads/${idCenad}/usuarioAdministrador`
       const response = await this.utils.fetchConToken(urlAdministrador, 'GET', null)
       const json = await response.json()
-      this.administrador.value = await json
-      return response.status == 200 ? this.administrador.value : null
+      this.usuario.value = await json
+      return response.status == 200 ? this.usuario.value : null
     } catch (error) {
       console.log(error)
     }

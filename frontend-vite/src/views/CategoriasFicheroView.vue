@@ -26,8 +26,7 @@
                     <b>DESCRIPCIÓN</b>
                 </div>
             </div>
-            <CategoriaFicheroComponent v-for="(item, index) in categoriasFichero" :key="index" :content="item"
-                @emiteElemento="actualizarCategoriaFicheroEnView" />
+            <CategoriaFicheroComponent v-for="(item, index) in categoriasFichero" :key="index" :content="item" />
         </div>
     </div>
     <!-- Modal -->
@@ -76,34 +75,24 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import CategoriaFicheroComponent from '@/components/CategoriaFicheroComponent.vue'
 import CategoriaFicheroService from '@/services/CategoriaFicheroService'
-
+import useAuthStore from '@/stores/auth'
+const auth = useAuthStore()
 let nombre = ref('')
 let tipo = ref('')
 let descripcion = ref('')
 
 const service = new CategoriaFicheroService()
-const categoriasFichero = service.getCategoriasFichero()
+const categoriasFichero = computed(() => auth.categoriasFichero)
 
-onMounted(async () => {
-    await getCategoriasFichero()
-})
 const crearCategoriaFichero = async () => {
     await service.crearCategoriaFichero(nombre.value, tipo.value, descripcion.value)
 
     nombre.value = ''
     tipo.value = ''
     descripcion.value = ''
-    await getCategoriasFichero()
-}
-const getCategoriasFichero = async () => {
-    await service.fetchAll()
-}
-
-function actualizarCategoriaFicheroEnView() {
-    getCategoriasFichero()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {

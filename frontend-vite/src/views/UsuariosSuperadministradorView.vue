@@ -16,31 +16,15 @@
                 <b>SUPERADMINISTRADOR</b>
             </div>
         </div>
-        <UsuarioSuperadministradorComponent v-for="(item, index) in usuariosSuperadministrador" :key="index" :content="item"
-            @emiteElemento="actualizarUsuarioSuperadministradorEnView" />
+        <UsuarioSuperadministradorComponent v-for="(item, index) in usuariosSuperadministrador" :key="index" :content="item" />
     </div>
 </template>
 <script setup>
-import { onMounted } from 'vue'
-//import UsuarioService from '@/services/UsuarioService'
+import { computed } from 'vue'
 import UsuarioSuperadministradorComponent from '@/components/UsuarioSuperadministradorComponent.vue'
 import useAuthStore from '@/stores/auth'
-
-//const service = new UsuarioService()
-//let usuariosSuperadministrador = service.getUsuariosSuperadministrador()
-let usuariosSuperadministrador = useAuthStore().usuariosSuperadministrador
-
-onMounted(async () => {
-    await getUsuariosSuperadministrador()
-})
-
-const getUsuariosSuperadministrador = async () => {
-    usuariosSuperadministrador = useAuthStore().usuariosSuperadministrador
-    //await service.fetchUsuariosSuperadministrador()
-}
-async function actualizarUsuarioSuperadministradorEnView() {
-    await getUsuariosSuperadministrador()
-}
+const auth = useAuthStore()
+const usuariosSuperadministrador = computed(() => auth.usuariosSuperadministrador)
 </script>
 <style scoped lang="scss">
 .btn {

@@ -259,10 +259,11 @@ const useAuthStore = defineStore('auth', {
       this.categoriasFichero = []
       this.tiposFormulario = []
       this.unidades = []
-      this.armas = [],
-        this.usuariosSuperadministrador = [],
-        this.usuariosAdministrador = [],
-        this.usuariosNormal = []
+      this.armas = []
+      this.usuariosSuperadministrador = []
+      this.usuariosAdministrador = []
+      this.usuariosNormal = []
+
     },
     borrarDatosDeUsuario() {
       this.cenad = null

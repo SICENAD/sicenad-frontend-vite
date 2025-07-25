@@ -79,13 +79,13 @@ class ArmaService {
         tipoTiro: tipoTiro
       }
       const response = await this.utils.fetchConToken(urlArma, 'PATCH', body)
-      if (response.status == 200) {
+      if (response.ok) {
         toastExito(
           i18n.global.t('armas.editada', {
             cenad: nombre,
           }),
         )
-        await this.auth.getDatosIniciales()
+        this.auth.getDatosIniciales()
         return nombre
       } else {
         return null

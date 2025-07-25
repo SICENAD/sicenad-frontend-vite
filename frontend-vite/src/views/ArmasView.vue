@@ -1,33 +1,31 @@
 <template>
     <!-- muestra la vista de armas -->
-        <div class="d-flex align-items-center position-relative p-2 bg-light">
-            <RouterLink class="nav-link volver me-auto" :to="{ name: 'cenads' }">
-                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" />
-                <strong>Volver</strong>
-            </RouterLink>
-            <h3 class="position-absolute start-50 translate-middle-x m-0 titulo">
-                <u>GESTIÓN DE ARMAS</u>
-            </h3>
-            <button class="btn text-white ms-auto" data-bs-toggle="modal"
-                data-bs-target="#modal-nuevo-arma">
-                Nuevo <b>Arma</b>
-            </button>
-        </div>
-        <hr class='w-100'>
-        <div class="row ms-5 p-0">
-            <div class="col col-md-12">
-                <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
-                        <b>NOMBRE</b>
-                    </div>
-                    <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
-                        <b>TIPO DE TIRO</b>
-                    </div>
+    <div class="d-flex align-items-center position-relative p-2 bg-light">
+        <RouterLink class="nav-link volver me-auto" :to="{ name: 'cenads' }">
+            <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" />
+            <strong>Volver</strong>
+        </RouterLink>
+        <h3 class="position-absolute start-50 translate-middle-x m-0 titulo">
+            <u>GESTIÓN DE ARMAS</u>
+        </h3>
+        <button class="btn text-white ms-auto" data-bs-toggle="modal" data-bs-target="#modal-nuevo-arma">
+            Nuevo <b>Arma</b>
+        </button>
+    </div>
+    <hr class='w-100'>
+    <div class="row ms-5 p-0">
+        <div class="col col-md-12">
+            <div class="row mt-2 titulos">
+                <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
+                    <b>NOMBRE</b>
                 </div>
-                <ArmaComponent v-for="(item, index) in armas" :key="index" :content="item"
-                    @emiteElemento="actualizarArmaEnView" />
+                <div class="col-10 col-sm-10 col-md-6 col-lg-6 col-xl-6 titulo">
+                    <b>TIPO DE TIRO</b>
+                </div>
             </div>
+            <ArmaComponent v-for="(item, index) in armas" :key="index" :content="item" />
         </div>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="modal-nuevo-arma" tabindex="-1" aria-labelledby="modal-nuevo-arma-Label"
         aria-hidden="true">
@@ -70,33 +68,25 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import ArmaComponent from '@/components/ArmaComponent.vue'
 import ArmaService from '@/services/ArmaService'
 import useUtilsStore from '@/stores/utils'
-
+import useAuthStore from '@/stores/auth'
+const auth = useAuthStore()
 const utils = useUtilsStore()
 let tiposTiro = utils.tiposTiro
 let nombre = ref('')
 let tipoTiro = ref('')
 const service = new ArmaService()
-let armas = service.getArmas()
+const armas = computed(() => auth.armas)
 
-onMounted(async () => {
-    await getArmas()
-})
 const crearArma = async () => {
     await service.crearArma(nombre.value, tipoTiro.value)
     nombre.value = ''
     tipoTiro.value = ''
-    await getArmas()
 }
-const getArmas = async () => {
-    await service.fetchAll()
-}
-async function actualizarArmaEnView() {
-    await getArmas()
-}
+
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
     return (

@@ -105,10 +105,11 @@ import UsuarioService from '@/services/UsuarioService'
 import UsuarioAdministradorComponent from '@/components/UsuarioAdministradorComponent.vue'
 import { toTitleCase } from '@/utils'
 import CenadService from '@/services/CenadService'
-
+import useAuthStore from '@/stores/auth'
+const auth = useAuthStore()
 const cenadService = new CenadService()
 const service = new UsuarioService()
-let usuariosAdministrador = service.getUsuariosAdministrador()
+let usuariosAdministrador = computed(() => auth.usuariosAdministrador)
 let cenadsUsuarioAdministrador = ref([])
 
 let tfnoUsuarioAdministrador = ref('')
@@ -120,7 +121,6 @@ let passwordUsuarioAdministrador = ref('')
 let cenad = ref(null)
 
 onMounted(async () => {
-    await getUsuariosAdministrador()
     cenadsUsuarioAdministrador.value = await cenadService.getCenadsSinAdmin()
 })
 const crearUsuarioAdministrador = async () => {
@@ -132,13 +132,8 @@ const crearUsuarioAdministrador = async () => {
     emailAdmitidoUsuarioAdministrador.value = false
     descripcionUsuarioAdministrador.value = ''
     cenad.value = null
-    await getUsuariosAdministrador()
-}
-const getUsuariosAdministrador = async () => {
-    await service.fetchUsuariosAdministrador()
 }
 async function actualizarUsuarioAdministradorEnView() {
-    await getUsuariosAdministrador()
     cenadsUsuarioAdministrador.value = await cenadService.getCenadsSinAdmin()
 }
 // Validación Email

@@ -83,8 +83,6 @@ const idModalEliminar = 'modal-arma-eliminar' + props.idArma
 const service = new ArmaService()
 
 const editarArma = async () => {
-    console.log('Antes de editar:', nombre.value, tipoTiro.value)
-
   await service.editarArma(
     nombre.value,
     tipoTiro.value,

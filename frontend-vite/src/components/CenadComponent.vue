@@ -29,8 +29,8 @@ const provincia = computed(() => {
   const encontrada = provincias.find(p => p.idProvincia == idProvincia)
   return encontrada ? encontrada.nombre : ''
 })
-let usuarioAdministrador = ref()
 const usuarioService = new UsuarioService()
+let usuarioAdministrador = usuarioService.getUsuario()
 
 onMounted(async () => {
   //tendre que recuperar, si existe, el usuario administrador del cenad

@@ -22,8 +22,7 @@
                     <b>ADMINISTRADOR</b>
                 </div>
             </div>
-            <CenadComponent v-for="(item, index) in cenads" :key="index" :content="item"
-                @emiteElemento="actualizarCenadEnView" />
+            <CenadComponent v-for="(item, index) in cenads" :key="index" :content="item" />
         </div>
     </div>
     <!-- Modal -->
@@ -98,11 +97,12 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed } from 'vue'
 import CenadComponent from '@/components/CenadComponent.vue'
 import CenadService from '@/services/CenadService'
 import useUtilsStore from '@/stores/utils'
-
+import useAuthStore from '@/stores/auth'
+const auth = useAuthStore()
 const utils = useUtilsStore()
 let provincias = utils.provincias
 let sizeMaxEscudo = ref(utils.sizeMaxEscudo)
@@ -116,7 +116,7 @@ let escudoFile = ref(null)
 const previewEscudo = ref(null) // <-- URL para vista previa
 
 const service = new CenadService()
-const cenads = service.getCenads()
+const cenads = computed(() => auth.cenads)
 
 function onFileChange(e) {
     const file = e.target.files[0]
@@ -128,9 +128,6 @@ function onFileChange(e) {
         previewEscudo.value = null
     }
 }
-onMounted(async () => {
-    await getCenads()
-})
 const crearCenad = async () => {
     await service.crearCenad(nombre.value, provincia.value, direccion.value, tfno.value, email.value, descripcion.value, escudoFile.value)
     nombre.value = ''
@@ -140,14 +137,7 @@ const crearCenad = async () => {
     email.value = ''
     descripcion.value = ''
     escudoFile.value = ''
-    await getCenads()
     this.previewEscudo.value = null
-}
-const getCenads = async () => {
-    await service.fetchAll()
-}
-function actualizarCenadEnView() {
-    getCenads()
 }
 // Validación Email
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
