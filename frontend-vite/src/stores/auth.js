@@ -183,8 +183,8 @@ const useAuthStore = defineStore('auth', {
       const utils = useUtilsStore()
       try {
         const [
-          cenadRes,
           usuarioAdministradorRes,
+          cenadRes,
           categoriasRes,
           categoriasPadreRes,
           recursosRes,

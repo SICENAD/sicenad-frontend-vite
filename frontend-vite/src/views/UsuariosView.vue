@@ -9,8 +9,8 @@ administradores y normales y si se entra como administrador de un cenad mostrara
         <h3 class="position-absolute start-50 translate-middle-x m-0 mb-3 titulo">
             <u>GESTIÓN DE USUARIOS</u>
         </h3>
-        <div class="row ms-5 p-0" v-if="(rol == 'Normal' || rol == 'Gestor' || (rol == 'Administrador' && !isMiCenad))">
-            <p class="titulo mt-3">NO ESTÁS AUTORIZADO</p>
+        <div class="row ms-5 p-0 mt-5 " v-if="(rol == 'Normal' || rol == 'Gestor' || (rol == 'Administrador' && !isMiCenad))">
+            <p class="titulo mt-5">NO ESTÁS AUTORIZADO</p>
         </div>
     </div>
     <!-- vista de superadministrador->ve superadministradores,administradores y usuarios normales -->
@@ -41,17 +41,21 @@ administradores y normales y si se entra como administrador de un cenad mostrara
     </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import useAuthStore from '@/stores/auth'
 import UsuariosAdministradorView from './UsuariosAdministradorView.vue'
 import UsuariosNormalView from './UsuariosNormalView.vue'
 import UsuariosGestorView from './UsuariosGestorView.vue'
 import UsuariosSuperadministradorView from './UsuariosSuperadministradorView.vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 const auth = useAuthStore()
+const idCenadVisitado = computed(() => route.params.id)
 let name = ref('superadministrador')
 let params = ref({})
 let idCenad = ref('')
-let isMiCenad = ref(true)//se modificara si estoy en un CENAD perteneciente al usuario gestor o administrador
+let isMiCenad = computed(() => (idCenadVisitado.value == idCenad.value))
 let rol = ref(auth.rol)
 
 onMounted(async () => {
