@@ -69,7 +69,7 @@ class NormativaService {
             normativa: nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {
@@ -103,7 +103,7 @@ class NormativaService {
               normativa: nombre,
             }),
           )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
           return nombreArchivo
         } else {
           return null
@@ -128,7 +128,7 @@ class NormativaService {
             normativa: this.normativa.value.nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {

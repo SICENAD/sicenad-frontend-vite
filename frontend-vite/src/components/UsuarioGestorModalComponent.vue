@@ -127,7 +127,7 @@ const editarUsuario = async () => {
   emits('emiteModal')
 }
 const borrarUsuario = async () => {
-  await service.deleteUsuario(idUsuario.value)
+  await service.deleteUsuario(idCenad.value, idUsuario.value)
   emits('emiteModal')
 }
 // Validación Email

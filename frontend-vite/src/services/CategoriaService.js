@@ -119,7 +119,7 @@ class CategoriaService {
             categoria: nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {
@@ -127,7 +127,7 @@ class CategoriaService {
       return false
     }
   }
-  async editarCategoria(nombre, descripcion, idCategoriaPadre, idCategoria) {
+  async editarCategoria(nombre, descripcion, idCenad, idCategoriaPadre, idCategoria) {
     try {
       const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
       const body = {
@@ -143,7 +143,7 @@ class CategoriaService {
             categoria: nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return this.categoria
       } else {
         return null
@@ -153,7 +153,7 @@ class CategoriaService {
       return null
     }
   }
-  async deleteCategoria(idCategoria) {
+  async deleteCategoria(idCenad, idCategoria) {
     try {
       const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
       const response = await this.utils.fetchConToken(urlCategoria, 'DELETE', null)
@@ -165,7 +165,7 @@ class CategoriaService {
             categoria: this.categoria.value.nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {

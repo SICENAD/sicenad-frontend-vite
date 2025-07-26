@@ -313,7 +313,7 @@ class UsuarioService {
           usuario.idString,
         )
         toastExito(i18n.global.t('comun.registroExito'))
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
       } else {
         let feedback = i18n.global.t('comun.registroError')
         alert(feedback)
@@ -429,7 +429,7 @@ class UsuarioService {
       })
       if (response.status == 200) {
         toastExito(i18n.global.t('administracion.editado', { username: username }))
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {
@@ -482,6 +482,10 @@ class UsuarioService {
     } catch (error) {
       console.log(error)
     }
+  }
+ async deleteUsuarioGestor(idCenad, idUsuario) {
+  this.deleteUsuario(idUsuario)
+  await this.auth.getDatosInicialesDeCenad(idCenad)
   }
 }
 export default UsuarioService

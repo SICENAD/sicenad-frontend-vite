@@ -70,7 +70,7 @@ class CartografiaService {
             cartografia: nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {
@@ -78,52 +78,61 @@ class CartografiaService {
       return false
     }
   }
-  async editarCartografia(
-    nombre,
-    descripcion,
-    escala,
-    archivo,
-    nombreArchivoActual,
-    idCenad,
-    idCartografia,
-  ) {
-    let nombreArchivo = nombreArchivoActual // por defecto mantenemos el actual
+ async editarCartografia(
+  nombre,
+  descripcion,
+  escala,
+  archivo,
+  nombreArchivoActual,
+  idCenad,
+  idCartografia,
+) {
+  let nombreArchivo = nombreArchivoActual; // por defecto mantenemos el actual
+
+  try {
+    // Si hay archivo nuevo, lo subimos y borramos el anterior
     if (archivo) {
-      const urlUpload = `${this.utils.urlApi}/files/${idCenad}/subirCartografia`
-      const nuevaCartografia = await subirArchivo(archivo, urlUpload)
-      if (nuevaCartografia == false) return null
-      const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarCartografia/${nombreArchivo}`
-      const responseDeleteArchivo = await borrarArchivo(urlBorrarArchivo)
-      console.log(responseDeleteArchivo)
-      nombreArchivo = nuevaCartografia
-      try {
-        const urlCartografia = `${this.utils.urlApi}/cartografias/${idCartografia}`
-        const body = {
-          nombre: nombre.toUpperCase(),
-          descripcion: descripcion,
-          escala: escala,
-        }
-        if (nombreArchivo) {
-          body.nombreArchivo = nombreArchivo
-        }
-        const response = await this.utils.fetchConToken(urlCartografia, 'PATCH', body)
-        if (response.status == 200) {
-          toastExito(
-            i18n.global.t('cartografias.editada', {
-              cartografia: nombre,
-            }),
-          )
-        await this.auth.getDatosInicialesDeCenad()
-          return nombreArchivo
-        } else {
-          return null
-        }
-      } catch (error) {
-        console.error(error)
-        return null
-      }
+      const urlUpload = `${this.utils.urlApi}/files/${idCenad}/subirCartografia`;
+      const nuevaCartografia = await subirArchivo(archivo, urlUpload);
+      if (nuevaCartografia == false) return null;
+
+      // Borrar archivo anterior
+      const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarCartografia/${nombreArchivo}`;
+      await borrarArchivo(urlBorrarArchivo);
+
+      // Actualizamos el nombre del archivo para la BD
+      nombreArchivo = nuevaCartografia;
     }
+
+    // Aquí siempre hacemos el PATCH, aunque no haya archivo nuevo
+    const urlCartografia = `${this.utils.urlApi}/cartografias/${idCartografia}`;
+    const body = {
+      nombre: nombre.toUpperCase(),
+      descripcion: descripcion,
+      escala: escala,
+      nombreArchivo: nombreArchivo, // se mantiene igual si no hubo archivo nuevo
+    };
+
+    const response = await this.utils.fetchConToken(urlCartografia, 'PATCH', body);
+
+    if (response.status == 200) {
+      toastExito(
+        i18n.global.t('cartografias.editada', {
+          cartografia: nombre,
+        }),
+      );
+      await this.auth.getDatosInicialesDeCenad(idCenad);
+      return nombreArchivo;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
   }
+}
+
+
   async deleteCartografia(nombreArchivo, idCartografia, idCenad) {
     try {
       const urlBorrarArchivo = `${this.utils.urlApi}/files/${idCenad}/borrarCartografia/${nombreArchivo}`
@@ -138,7 +147,7 @@ class CartografiaService {
             cartografia: this.cartografia.value.nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {

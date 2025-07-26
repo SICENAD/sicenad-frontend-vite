@@ -77,7 +77,7 @@ async fetchRecurso(idRecurso) {
       console.log(error)
     }
   }
-  async crearRecurso(nombre, descripcion, otros, idTipoFormulario, idCategoria, idGestor) {
+  async crearRecurso(nombre, descripcion, otros, idCenad,idTipoFormulario, idCategoria, idGestor) {
     try {
       const urlRecursos = `${this.utils.urlApi}/recursos`
       const body = {
@@ -96,7 +96,7 @@ async fetchRecurso(idRecurso) {
             recurso: nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {
@@ -104,7 +104,7 @@ async fetchRecurso(idRecurso) {
       return false
     }
   }
-  async editarRecurso(nombre, descripcion, otros, idTipoFormulario, idCategoria, idGestor, idRecurso) {
+  async editarRecurso(nombre, descripcion, otros, idCenad, idTipoFormulario, idCategoria, idGestor, idRecurso) {
     try {
       const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
       const body = {
@@ -122,7 +122,7 @@ async fetchRecurso(idRecurso) {
             recurso: nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return this.recurso
       } else {
         return null
@@ -132,7 +132,7 @@ async fetchRecurso(idRecurso) {
       return null
     }
   }
-  async deleteRecurso(idRecurso) {
+  async deleteRecurso(idCenad, idRecurso) {
     try {
       const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
       const response = await this.utils.fetchConToken(urlRecurso, 'DELETE', null)
@@ -144,7 +144,7 @@ async fetchRecurso(idRecurso) {
             recurso: this.recurso.value.nombre,
           }),
         )
-        await this.auth.getDatosInicialesDeCenad()
+        await this.auth.getDatosInicialesDeCenad(idCenad)
         return true
       } else return false
     } catch (error) {

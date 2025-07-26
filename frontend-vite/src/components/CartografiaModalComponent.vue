@@ -159,6 +159,7 @@ const editarCartografia = async () => {
     idCenad.value,
     idCartografia.value
   );
+  console.log(success)
   if (success) {
     // Actualizar el archivoActual con el nombre real subido
     archivoActual.value = success; // Asumiendo que editarNormativa retorna el nombreArchivo

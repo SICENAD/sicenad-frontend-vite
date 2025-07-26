@@ -287,6 +287,7 @@ const crearRecurso = async () => {
         nombre.value,
         descripcion.value,
         otros.value,
+        idCenad.value,
         idTipoFormulario.value,
         idCategoria.value,
         idUsuarioGestor.value

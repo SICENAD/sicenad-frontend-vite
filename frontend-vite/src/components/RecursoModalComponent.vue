@@ -99,10 +99,12 @@
 import RecursoService from '@/services/RecursoService'
 import useAuthStore from '@/stores/auth'
 import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const props = defineProps(['nombre', 'categoria', 'tipoFormulario', 'usuarioGestor', 'descripcion', 'otros', 'idRecurso'])
 const emits = defineEmits(['emiteModal'])
 const auth = useAuthStore()
+const route = useRoute()
 
 const descripcion = ref(props.descripcion)
 const nombre = ref(props.nombre)
@@ -111,6 +113,7 @@ const idRecurso = ref(props.idRecurso)
 const idCategoria = ref('')
 const idTipoFormulario = ref('')
 const idUsuarioGestor = ref('')
+const idCenad = computed (() => route.params.id)
 const idModal = 'modal-categoria-' + props.idRecurso
 const idModalEliminar = 'modal-categoria-eliminar' + props.idRecurso
 const service = new RecursoService()
@@ -123,6 +126,7 @@ const editarRecurso = async () => {
     nombre.value,
     descripcion.value,
     otros.value,
+    idCenad.value,
     idTipoFormulario.value,
     idCategoria.value,
     idUsuarioGestor.value,
@@ -131,7 +135,7 @@ const editarRecurso = async () => {
   emits('emiteModal');
 }
 const borrarRecurso = async () => {
-  await service.deleteRecurso(idRecurso.value)
+  await service.deleteRecurso(idCenad.value, idRecurso.value)
   emits('emiteModal')
 }
 watch(

@@ -96,13 +96,14 @@ const editarCategoria = async () => {
   await service.editarCategoria(
     nombre.value,
     descripcion.value,
+    idCenad.value,
     idCategoriaPadre,
     idCategoria.value
   );
   emits('emiteModal');
 }
 const borrarCategoria = async () => {
-  await service.deleteCategoria(idCategoria.value)
+  await service.deleteCategoria(idCenad.value, idCategoria.value)
   emits('emiteModal')
 }
 onMounted(async () => {
