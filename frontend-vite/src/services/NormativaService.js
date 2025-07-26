@@ -87,6 +87,7 @@ class NormativaService {
       const responseDeleteArchivo = await borrarArchivo(urlBorrarArchivo)
       console.log(responseDeleteArchivo)
       nombreArchivo = nuevaNormativa
+    }
       try {
         const urlNormativa = `${this.utils.urlApi}/ficheros/${idNormativa}`
         const body = {
@@ -112,7 +113,7 @@ class NormativaService {
         console.error(error)
         return null
       }
-    }
+    
   }
   async deleteNormativa(nombreArchivo, idNormativa, idCenad) {
     try {
