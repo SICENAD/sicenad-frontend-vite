@@ -1,6 +1,5 @@
 <template>
     <!-- muestra la vista de categorias -->
-    <div class="container-fluid">
         <div class="row ms-4 mb-0 ps-3">
             <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad } }">
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
@@ -44,10 +43,10 @@
         <div class="row ms-5 p-0">
             <div class="col col-md-12">
                 <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <div class="col-10 col-sm-10 col-md-5 col-lg-5 col-xl-5 titulo">
                         <b>RECURSO</b>
                     </div>
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo">
                         <b>CATEGORÍA</b>
                     </div>
                     <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
@@ -58,7 +57,6 @@
                     @emiteElemento="actualizarRecursoEnView" />
             </div>
         </div>
-    </div>
     <!-- Modal -->
     <div class="modal fade" id="modal-nuevo-recurso" tabindex="-1" aria-labelledby="modal-nuevo-recurso-Label"
         aria-hidden="true">

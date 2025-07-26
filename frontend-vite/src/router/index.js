@@ -157,8 +157,7 @@ const router = createRouter({
           name: 'recursos',
           component: () => import('../views/RecursosView.vue'),
           meta: {
-            requireAuth: true,
-            roles: ['Administrador'],
+            requireAuth: true
           },
         },
         {

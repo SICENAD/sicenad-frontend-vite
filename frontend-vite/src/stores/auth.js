@@ -26,6 +26,7 @@ const useAuthStore = defineStore('auth', {
       cenadVisitado: null,
       cenad: null,
       unidad: null,
+      usuario: null
     }
   },
   getters: {},
@@ -136,10 +137,9 @@ const useAuthStore = defineStore('auth', {
             'GET',
             null,
           )
-          const respJson = await respUsuario.json()
-          const idUsusario = respJson.idString
+          this.usuario = await respUsuario.json()
           const respCenad = await utils.fetchConToken(
-            `${utils.urlApi}/usuarios_administrador/${idUsusario}/cenad`,
+            `${utils.urlApi}/usuarios_administrador/${this.usuario.idString}/cenad`,
             'GET',
             null,
           )
@@ -151,10 +151,9 @@ const useAuthStore = defineStore('auth', {
             'GET',
             null,
           )
-          const respJson = await respUsuario.json()
-          const idUsusario = respJson.idString
+          this.usuario = await respUsuario.json()
           const respCenad = await utils.fetchConToken(
-            `${utils.urlApi}/usuarios_gestor/${idUsusario}/cenad`,
+            `${utils.urlApi}/usuarios_gestor/${this.usuario.idString}/cenad`,
             'GET',
             null,
           )
@@ -166,10 +165,9 @@ const useAuthStore = defineStore('auth', {
             'GET',
             null,
           )
-          const respJson = await respUsuario.json()
-          const idUsusario = respJson.idString
+          this.usuario = await respUsuario.json()
           const respUnidad = await utils.fetchConToken(
-            `${utils.urlApi}/usuarios_normal/${idUsusario}/cenad`,
+            `${utils.urlApi}/usuarios_normal/${this.usuario.idString}/cenad`,
             'GET',
             null,
           )
@@ -247,6 +245,7 @@ const useAuthStore = defineStore('auth', {
     borrarDatosDeUsuario() {
       this.cenad = null
       this.unidad = null
+      this.usuario = null
     },
     borrarDatosCenad() {
       this.categorias = []

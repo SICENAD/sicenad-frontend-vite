@@ -12,37 +12,37 @@
         <ul>
           <li class="pt-4" v-if="auth.rol == 'Superadministrador'">
             <router-link :to="`/calendarios/${idCenad}`">
-          <v-icon scale="2" class="me-2" name="fa-calendar-alt" />
+              <v-icon scale="2" class="me-2" name="fa-calendar-alt" />
               Planificar Recursos
             </router-link>
           </li>
           <li class="pt-4" v-if="auth.rol != 'Superadministrador'">
             <router-link :to="`/calendarios/${idCenad}`">
-          <v-icon scale="2" class="me-2" name="fa-calendar-alt" />
+              <v-icon scale="2" class="me-2" name="fa-calendar-alt" />
               Calendario
             </router-link>
           </li>
           <li class="pt-4">
-            <router-link :to="`/consultaRecursos/${idCenad}`">
-          <v-icon scale="2" class="me-2" name="fa-folder-open" />
+            <router-link class="dropdown-item" :to="{ name: 'recursos' }">
+              <v-icon scale="2" class="me-2" name="fa-folder-open" />
               Consultar Recursos
             </router-link>
           </li>
           <li class="pt-4">
-            <router-link :to="{ name: 'cartografias'}">
-          <v-icon scale="2" class="me-2" name="fa-map" />
+            <router-link :to="{ name: 'cartografias' }">
+              <v-icon scale="2" class="me-2" name="fa-map" />
               Cartografía
             </router-link>
           </li>
           <li class="pt-4" v-if="auth.rol == 'Normal'">
             <router-link :to="`/solicitudesRecursos/${idCenad}/formulario/${idCenad}/${idSolicitud}`">
-          <v-icon scale="2" class="me-2" name="fa-business-time" />
+              <v-icon scale="2" class="me-2" name="fa-business-time" />
               Solicitar Recurso
             </router-link>
           </li>
           <li class="pt-4" v-if="auth.rol != 'Normal'">
             <a href="#" @click.prevent="mensaje">
-          <v-icon scale="2" class="me-2" name="fa-business-time" />
+              <v-icon scale="2" class="me-2" name="fa-business-time" />
               Solicitar Recurso
             </a>
           </li>

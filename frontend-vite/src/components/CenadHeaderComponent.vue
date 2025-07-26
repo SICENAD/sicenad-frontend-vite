@@ -35,7 +35,7 @@
                                 <v-icon scale="2" name="fa-edge" />Consultar
                             </button>
                             <div class="dropdown-menu consultar">
-                                <router-link class="nav-link" :to="`/consultaRecursos/${idCenad}`">
+                                <router-link class="dropdown-item" :to="{ name: 'recursos' }">
                                     <v-icon scale="2" name="fa-folder-open" />Recurso
                                 </router-link>
 
@@ -43,7 +43,7 @@
                                     <v-icon scale="2" name="fa-calendar-alt" />Calendario
                                 </router-link>
 
-                                <router-link class="nav-link" :to="{ name: 'cartografias'}">
+                                <router-link class="nav-link" :to="{ name: 'cartografias' }">
                                     <v-icon scale="2" name="fa-map" />Cartografía
                                 </router-link>
 
@@ -86,10 +86,10 @@
                     <v-icon scale="2" name="fa-folder-plus" />Otros
                 </button>
                 <div class="dropdown-menu otros">
-                    <router-link class="nav-link"  :to="{ name: 'infocenad', params: { idCenad } }">
+                    <router-link class="nav-link" :to="{ name: 'infocenad', params: { idCenad } }">
                         <v-icon scale="2" name="fa-question-circle" />Información
                     </router-link>
-                    <router-link class="nav-link" :to="{ name: 'normativas'}">
+                    <router-link class="nav-link" :to="{ name: 'normativas' }">
                         <v-icon scale="2" name="fa-book" />Normativa
                     </router-link>
                 </div>
@@ -113,25 +113,25 @@
                     <v-icon scale="2" name="fa-user" />Gestionar
                 </button>
                 <div class="dropdown-menu gestionar">
-                    <router-link class="dropdown-item" :to="{ name: 'cartografias'}">
+                    <router-link class="dropdown-item" :to="{ name: 'cartografias' }">
                         <v-icon scale="2" name="fa-map" />Cartografía
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'recursos'}">
+                    <router-link class="dropdown-item" :to="{ name: 'recursos' }">
                         <v-icon scale="2" name="fa-folder-open" />Recursos
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'categorias'}">
+                    <router-link class="dropdown-item" :to="{ name: 'categorias' }">
                         <v-icon scale="2" name="fa-tree" />Categorías
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'usuarios-cenad'}">
+                    <router-link class="dropdown-item" :to="{ name: 'usuarios-cenad' }">
                         <v-icon scale="2" name="fa-users" />Usuarios
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'unidades-cenad'}">
+                    <router-link class="dropdown-item" :to="{ name: 'unidades-cenad' }">
                         <v-icon scale="2" name="fa-sitemap" />Unidades
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'normativas'}">
+                    <router-link class="dropdown-item" :to="{ name: 'normativas' }">
                         <v-icon scale="2" name="fa-book" />Normativa
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'infocenad'}">
+                    <router-link class="dropdown-item" :to="{ name: 'infocenad' }">
                         <v-icon scale="2" name="fa-question-circle" />Información
                     </router-link>
                 </div>
@@ -171,25 +171,25 @@ onMounted(async () => {
     auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
     cargarCenads()
 })
- // Función corregida
+// Función corregida
 function cargarCenads() {
-  cenads.value = auth.cenads;
-  buscarIdCenadZaragoza();
-  comprobarCenadZaragoza();
+    cenads.value = auth.cenads;
+    buscarIdCenadZaragoza();
+    comprobarCenadZaragoza();
 }
 // Buscar CENAD Zaragoza
 function buscarIdCenadZaragoza() {
-  cenads.value.forEach(c => {
-    if (c.provincia == 50) {
-      idCenadZaragoza.value = c.idString;
-    }
-  });
+    cenads.value.forEach(c => {
+        if (c.provincia == 50) {
+            idCenadZaragoza.value = c.idString;
+        }
+    });
 }
 // Comprobar si es Zaragoza
 function comprobarCenadZaragoza() {
-  if (idCenadZaragoza.value == idCenad.value) {
-    isCenadZaragoza.value = true;
-  }
+    if (idCenadZaragoza.value == idCenad.value) {
+        isCenadZaragoza.value = true;
+    }
 }
 </script>
 <style scoped>
@@ -247,7 +247,8 @@ li.home {
     padding-top: 0;
 }
 
-.menu a.home, a.gestionar {
+.menu a.home,
+a.gestionar {
     margin-top: 0;
 }
 
