@@ -26,7 +26,8 @@ const useAuthStore = defineStore('auth', {
       cenadVisitado: null,
       cenad: null,
       unidad: null,
-      usuario: null
+      usuario: null,
+      isReady: false
     }
   },
   getters: {},
@@ -173,6 +174,7 @@ const useAuthStore = defineStore('auth', {
           )
           this.unidad = await respUnidad.json()
         }
+        this.isReady = true
       } catch (err) {
         console.error('Error cargando datos estáticos del usuario:', err)
       }

@@ -18,7 +18,7 @@
         </ul>
       </span>
     </span>
-    <p v-if="auth.token" class="alert alert-success">
+    <p v-if="auth.token && auth.isReady" class="alert alert-success">
       {{ auth.username }}
       {{ $t('comun.usuarioIdentificado') }} {{ identificacion }}
       <button class="btn btn-success ms-3" @click="logout">{{ $t('comun.cerrarSesion') }}</button>
@@ -40,12 +40,12 @@ import { computed } from 'vue'
 
 const auth = useAuthStore()
 const identificacion = computed(() => {
-  if (auth.rol == 'Administrador' || auth.rol == 'Gestor') {
-    return `${auth.rol} del ${auth.cenad.nombre}`
+  if (auth.rol === 'Administrador' || auth.rol === 'Gestor') {
+    return `${auth.rol} del ${auth.cenad?.nombre || ''}`
   } else if (auth.rol === 'Normal') {
-    return `${auth.rol} de ${auth.unidad.nombre}`
+    return `${auth.rol} de ${auth.unidad?.nombre || ''}`
   } else {
-    return auth.rol
+    return auth.rol || ''
   }
 })
 const getLanguageLabel = (locale) => {

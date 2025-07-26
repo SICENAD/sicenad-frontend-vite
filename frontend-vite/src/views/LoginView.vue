@@ -34,9 +34,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import AuthService from '@/services/AuthService'
-
+const router = useRouter()
 let username = ref('')
 let password = ref('')
 let feedback = ref('')
