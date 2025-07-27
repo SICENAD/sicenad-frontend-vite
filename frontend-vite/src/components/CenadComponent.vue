@@ -33,7 +33,6 @@ const usuarioService = new UsuarioService()
 let usuarioAdministrador = usuarioService.getUsuario()
 
 onMounted(async () => {
-  //tendre que recuperar, si existe, el usuario administrador del cenad
   usuarioAdministrador.value = await usuarioService.fetchUsuarioAdministradorDeCenad(props.content.idString)
 })
 function actualizarCenadEnElemento() {

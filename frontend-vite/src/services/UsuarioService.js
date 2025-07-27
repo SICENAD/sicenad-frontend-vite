@@ -186,7 +186,7 @@ class UsuarioService {
       const urlAdministrador = `${this.utils.urlApi}/cenads/${idCenad}/usuarioAdministrador`
       const response = await this.utils.fetchConToken(urlAdministrador, 'GET', null)
       const json = await response.json()
-      this.usuario.value = await json
+      json.username && (this.usuario.value = await json)
       return response.status == 200 ? this.usuario.value : null
     } catch (error) {
       console.log(error)
@@ -483,9 +483,9 @@ class UsuarioService {
       console.log(error)
     }
   }
- async deleteUsuarioGestor(idCenad, idUsuario) {
-  this.deleteUsuario(idUsuario)
-  await this.auth.getDatosInicialesDeCenad(idCenad)
+  async deleteUsuarioGestor(idCenad, idUsuario) {
+    this.deleteUsuario(idUsuario)
+    await this.auth.getDatosInicialesDeCenad(idCenad)
   }
 }
 export default UsuarioService

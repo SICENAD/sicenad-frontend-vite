@@ -228,7 +228,8 @@ const actualizar = async () => {
         }
         archivoInfoCenad.value = null;
         previewInfoCenad.value = '';
-        alert('Se ha modificado la información del CENAD/CMT')
+        cambiaRol()
+        cargarCenad()
     }
 }
 </script>

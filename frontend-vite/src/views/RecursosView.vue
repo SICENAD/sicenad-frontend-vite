@@ -1,62 +1,62 @@
 <template>
     <!-- muestra la vista de categorias -->
-        <div class="row ms-4 mb-0 ps-3">
-            <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad } }">
-                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
-            </RouterLink>
-        </div>
-        <div class="row mt-1">
-            <div class="d-flex flex-column align-items-start col-3">
-                <label v-if="historialCategorias.length > 0" class="me-2 mt-2">
-                    Categoría Seleccionada:
-                    <strong>{{ historialCategorias[historialCategorias.length - 1].nombre.toUpperCase() }}</strong>
-                </label>
+    <div class="row ms-4 mb-0 ps-3">
+        <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad } }">
+            <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
+        </RouterLink>
+    </div>
+    <div class="row mt-1">
+        <div class="d-flex flex-column align-items-start col-3">
+            <label v-if="historialCategorias.length > 0" class="me-2 mt-2">
+                Categoría Seleccionada:
+                <strong>{{ historialCategorias[historialCategorias.length - 1].nombre.toUpperCase() }}</strong>
+            </label>
 
-                <select v-if="(categoriasFiltradas || []).length > 0" v-model="categoriaSeleccionada" @change="filtrar"
-                    class="form-select mb-3">
-                    <option value="" disabled selected>Selecciona una categoría</option>
-                    <option v-for="categoria in categoriasFiltradas" :key="categoria.idString" :value="categoria">
-                        {{ categoria.nombre.toUpperCase() }}
-                    </option>
-                </select>
+            <select v-if="(categoriasFiltradas || []).length > 0" v-model="categoriaSeleccionada" @change="filtrar"
+                class="form-select mb-3">
+                <option value="" disabled selected>Selecciona una categoría</option>
+                <option v-for="categoria in categoriasFiltradas" :key="categoria.idString" :value="categoria">
+                    {{ categoria.nombre.toUpperCase() }}
+                </option>
+            </select>
 
-                <div class="d-flex gap-2 mb-2">
-                    <button v-if="historialCategorias.length > 0" @click="retroceder" class="btn btn-secondary">
-                        Atrás
-                    </button>
-                    <button v-if="historialCategorias.length > 0" @click="borrarFiltros" class="btn btn-danger">
-                        Borrar filtros
-                    </button>
-                </div>
-            </div>
-            <div class="col-6 text-center d-flex justify-content-center align-items-center">
-                <h3 class="titulo1 me-2"><u>RECURSOS DEL {{ auth.cenad.nombre }}</u></h3>
-                <div v-if="loading" class="spinner-border spinner-border-sm titulo" role="status"></div>
-            </div>
-            <div class="col-3 justify-content-end">
-                <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-recurso">
-                    Nuevo <b>Recurso</b>
+            <div class="d-flex gap-2 mb-2">
+                <button v-if="historialCategorias.length > 0" @click="retroceder" class="btn btn-secondary">
+                    Atrás
+                </button>
+                <button v-if="historialCategorias.length > 0" @click="borrarFiltros" class="btn btn-danger">
+                    Borrar filtros
                 </button>
             </div>
         </div>
-        <hr class='w-100'>
-        <div class="row ms-5 p-0">
-            <div class="col col-md-12">
-                <div class="row mt-2 titulos">
-                    <div class="col-10 col-sm-10 col-md-5 col-lg-5 col-xl-5 titulo">
-                        <b>RECURSO</b>
-                    </div>
-                    <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo">
-                        <b>CATEGORÍA</b>
-                    </div>
-                    <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
-                        <b>DESCRIPCIÓN</b>
-                    </div>
-                </div>
-                <RecursoComponent v-for="(item, index) in recursos" :key="index" :content="item" :idCenad="idCenad"
-                    @emiteElemento="actualizarRecursoEnView" />
-            </div>
+        <div class="col-6 text-center d-flex justify-content-center align-items-center">
+            <h3 class="titulo1 me-2" v-if="auth.cenadVisitado"><u>RECURSOS DEL {{ auth.cenadVisitado.nombre }}</u></h3>
+            <div v-if="loading" class="spinner-border spinner-border-sm titulo" role="status"></div>
         </div>
+        <div class="col-3 justify-content-end" v-if="isAdminEsteCenad">
+            <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nuevo-recurso">
+                Nuevo <b>Recurso</b>
+            </button>
+        </div>
+    </div>
+    <hr class='w-100'>
+    <div class="row ms-5 p-0">
+        <div class="col col-md-12">
+            <div class="row mt-2 titulos">
+                <div class="col-10 col-sm-10 col-md-5 col-lg-5 col-xl-5 titulo">
+                    <b>RECURSO</b>
+                </div>
+                <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo">
+                    <b>CATEGORÍA</b>
+                </div>
+                <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo">
+                    <b>DESCRIPCIÓN</b>
+                </div>
+            </div>
+            <RecursoComponent v-for="(item, index) in recursos" :key="index" :content="item" :idCenad="idCenad"
+                @emiteElemento="actualizarRecursoEnView" />
+        </div>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="modal-nuevo-recurso" tabindex="-1" aria-labelledby="modal-nuevo-recurso-Label"
         aria-hidden="true">
@@ -141,6 +141,8 @@ const auth = useAuthStore()
 const utils = useUtilsStore()
 const route = useRoute()
 const idCenad = computed(() => route.params.id)
+const isAdminEsteCenad = ref(false)
+
 
 // Datos formulario
 let nombre = ref('')
@@ -171,6 +173,7 @@ const cacheSubcategorias = reactive(new Map()) // idCategoria -> subcategorias[]
 const cacheRecursos = reactive(new Map())      // idCategoria -> recursos[]
 
 onMounted(async () => {
+    auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
     loading.value = true
     await cargarCategoriasPadre()
     loading.value = false

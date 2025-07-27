@@ -65,12 +65,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import ResultadoCenadsProvinciaComponent from '@/components/ResultadoCenadsProvinciaComponent.vue'
 import useUtilsStore from '@/stores/utils'
 import useAuthStore from '@/stores/auth'
 
 const utils = useUtilsStore()
+const auth = useAuthStore()
 const provinciasMap = ref([
     {
         id: 15,
@@ -545,7 +546,7 @@ const provinciasMap = ref([
 // Estado
 const provincias = ref([])
 provincias.value = utils.provincias
-const cenads = ref(useAuthStore().cenads)
+const cenads = computed(() => auth.cenads)
 const cenadsFiltro = ref([])
 const idProvinciaSeleccionada = ref(null)
 const provinciaSeleccionada = ref('')

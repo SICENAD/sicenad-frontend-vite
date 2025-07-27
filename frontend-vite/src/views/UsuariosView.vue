@@ -10,7 +10,7 @@ administradores y normales y si se entra como administrador de un cenad mostrara
             <u>GESTIÓN DE USUARIOS</u>
         </h3>
         <div class="row ms-5 p-0 mt-5 " v-if="(rol == 'Normal' || rol == 'Gestor' || (rol == 'Administrador' && !isMiCenad))">
-            <p class="titulo mt-5">NO ESTÁS AUTORIZADO</p>
+            <p class="titulo mt-5">NO ESTÁS AUTORIZADO A LA GESTIÓN DE USUARIOS EN OTRO CENAD/CMT</p>
         </div>
     </div>
     <!-- vista de superadministrador->ve superadministradores,administradores y usuarios normales -->
@@ -64,7 +64,7 @@ onMounted(async () => {
 })
 function definirBtnVolver() {
     name.value = rol.value === 'Superadministrador' ? 'cenads' : 'cenad-home'
-    params.value = rol.value === 'Superadministrador' ? {} : { id: idCenad }
+    params.value = rol.value === 'Superadministrador' ? {} : { id: idCenadVisitado }
 }
 </script>
 <style scoped lang="scss">

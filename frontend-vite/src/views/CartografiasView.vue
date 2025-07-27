@@ -8,9 +8,9 @@
         </div>
         <div class="row mt-1">
             <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>CARTOGRAFÍA DEL {{ auth.cenad.nombre }}</u></h3>
+                <h3 class="text-center titulo1" v-if="auth.cenadVisitado"><u>CARTOGRAFÍA DEL {{ auth.cenadVisitado.nombre }}</u></h3>
             </div>
-            <div class="col-3 justify-content-end">
+            <div class="col-3 justify-content-end" v-if="isAdminEsteCenad">
                 <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-cartografia">
                     Nueva <b>Cartografía</b>
                 </button>
@@ -91,7 +91,7 @@
 </template>
 <script setup>
 import useAuthStore from '@/stores/auth'
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import useUtilsStore from '@/stores/utils'
 import { useRoute } from 'vue-router'
 import CartografiaComponent from '@/components/CartografiaComponent.vue'
@@ -108,10 +108,14 @@ let nombreArchivo = ref('')
 let descripcion = ref('')
 let escala = ref('')
 let cartografiaFile = ref(null)
+const isAdminEsteCenad = ref(false)
 
 const service = new CartografiaService()
 const cartografias = computed(() => auth.cartografias)
 
+onMounted(async () => {
+      auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
+})
 function onFileChange(e) {
     const file = e.target.files[0]
     cartografiaFile.value = file

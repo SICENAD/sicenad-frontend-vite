@@ -7,10 +7,10 @@
             </RouterLink>
         </div>
         <div class="row mt-1">
-            <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>NORMATIVA DEL {{ auth.cenad.nombre }}</u></h3>
+            <div>
+                <h3 class="text-center titulo1" v-if="auth.cenadVisitado"><u>NORMATIVA DEL {{ auth.cenadVisitado.nombre }}</u></h3>
             </div>
-            <div class="col-3 justify-content-end">
+            <div class="text-end" v-if="isAdminEsteCenad">
                 <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-normativa">
                     Nueva <b>Normativa</b>
                 </button>
@@ -77,7 +77,7 @@
 <script setup>
 import NormativaComponent from '@/components/NormativaComponent.vue'
 import useAuthStore from '@/stores/auth'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import useUtilsStore from '@/stores/utils'
 import NormativaService from '@/services/NormativaService'
 import { useRoute } from 'vue-router'
@@ -92,11 +92,14 @@ let nombre = ref('')
 let nombreArchivo = ref('')
 let descripcion = ref('')
 let normativaFile = ref(null)
-
+const isAdminEsteCenad = ref(false)
 
 const service = new NormativaService()
 const normativas = computed(() => auth.normativas)
 
+onMounted(async () => {
+      auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
+})
 function onFileChange(e) {
     const file = e.target.files[0]
     normativaFile.value = file

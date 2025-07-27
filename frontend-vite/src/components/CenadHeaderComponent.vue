@@ -35,32 +35,26 @@
                                 <v-icon scale="2" name="fa-edge" />Consultar
                             </button>
                             <div class="dropdown-menu consultar">
-                                <router-link class="dropdown-item" :to="{ name: 'recursos' }">
-                                    <v-icon scale="2" name="fa-folder-open" />Recurso
+                                <router-link class="dropdown-item" :to="{ name: 'recursos' }" v-if="!isAdminEsteCenad && !isGestorEsteCenad">
+                                    <v-icon scale="2" name="fa-folder-open" />Recursos
                                 </router-link>
-
                                 <router-link v-if="!isSuperAdmin" class="nav-link" :to="`/calendarios/${idCenad}`">
                                     <v-icon scale="2" name="fa-calendar-alt" />Calendario
                                 </router-link>
-
-                                <router-link class="nav-link" :to="{ name: 'cartografias' }">
+                                <router-link class="nav-link" :to="{ name: 'cartografias' }" v-if="!isAdminEsteCenad">
                                     <v-icon scale="2" name="fa-map" />Cartografía
                                 </router-link>
-
                                 <a v-if="!isCenadZaragoza" class="nav-link" href="https://www.tiempo.com"
                                     target="_blank">
                                     <v-icon scale="2" name="fa-snowflake" />Meteorología
                                 </a>
-
                                 <a class="nav-link" href="http://srvgregwww02/GESNOEX" target="_blank">
                                     <v-icon scale="2" name="fa-bomb" />Artefactos No Explosionados
                                 </a>
-
                                 <a v-if="isCenadZaragoza" class="nav-link" href="https://10.63.172.26/so/#/login"
                                     target="_blank">
                                     <v-icon scale="2" name="fa-search-location" />Vistas ACMT
                                 </a>
-
                                 <!-- Submenú: Meteorología especial Zaragoza -->
                         <li class="nav-item dropdown-submenu" v-if="isCenadZaragoza">
                             <a class="nav-link dropdown-toggle" href="#">
@@ -81,7 +75,7 @@
             </div>
             </li>
             <!-- Otros -->
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" v-if="!isAdminEsteCenad">
                 <button class="nav-link dropdown-toggle" href="#">
                     <v-icon scale="2" name="fa-folder-plus" />Otros
                 </button>
@@ -94,47 +88,46 @@
                     </router-link>
                 </div>
             </li>
-
-            <!-- Solicitudes -->
-            <li class="nav-item gestionar" v-if="isGestorNormal">
-                <router-link class="nav-link gestionar" :to="`/solicitudesRecursos/${idCenad}`">
-                    <v-icon scale="2" name="fa-business-time" />Solicitudes
-                </router-link>
-            </li>
-
-            <li class="nav-item gestionar" v-if="isAdminEsteCenad">
-                <router-link class="nav-link gestionar" :to="`/calendarios/${idCenad}`">
-                    <v-icon scale="2" name="fa-business-time" />Solicitudes
-                </router-link>
-            </li>
             <!-- Gestionar -->
-            <li class="nav-item dropdown" v-if="isAdminEsteCenad">
+            <li class="nav-item dropdown" v-if="isAdminEsteCenad || isGestorEsteCenad">
                 <button class="nav-link dropdown-toggle" href="#">
                     <v-icon scale="2" name="fa-user" />Gestionar
                 </button>
                 <div class="dropdown-menu gestionar">
-                    <router-link class="dropdown-item" :to="{ name: 'cartografias' }">
+                    <router-link class="dropdown-item" :to="{ name: 'cartografias' }" v-if="isAdminEsteCenad">
                         <v-icon scale="2" name="fa-map" />Cartografía
                     </router-link>
                     <router-link class="dropdown-item" :to="{ name: 'recursos' }">
                         <v-icon scale="2" name="fa-folder-open" />Recursos
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'categorias' }">
+                    <router-link class="dropdown-item" :to="{ name: 'categorias' }" v-if="isAdminEsteCenad">
                         <v-icon scale="2" name="fa-tree" />Categorías
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'usuarios-cenad' }">
+                    <router-link class="dropdown-item" :to="{ name: 'usuarios-cenad' }" v-if="isAdminEsteCenad">
                         <v-icon scale="2" name="fa-users" />Usuarios
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'unidades-cenad' }">
+                    <router-link class="dropdown-item" :to="{ name: 'unidades-cenad' }" v-if="isAdminEsteCenad">
                         <v-icon scale="2" name="fa-sitemap" />Unidades
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'normativas' }">
+                    <router-link class="dropdown-item" :to="{ name: 'normativas' }" v-if="isAdminEsteCenad">
                         <v-icon scale="2" name="fa-book" />Normativa
                     </router-link>
-                    <router-link class="dropdown-item" :to="{ name: 'infocenad' }">
+                    <router-link class="dropdown-item" :to="{ name: 'infocenad' }" v-if="isAdminEsteCenad">
                         <v-icon scale="2" name="fa-question-circle" />Información
                     </router-link>
                 </div>
+            </li>
+            <!--Gestionar solicitudes como administrador-->
+            <li class="nav-item gestionar" v-if="isAdminEsteCenad">
+                <router-link class="nav-link gestionar" :to="`/calendarios/${idCenad}`">
+                    <v-icon scale="2" name="fa-business-time" />Solicitudes
+                </router-link>
+            </li>
+            <!-- Solicitudes como gestor-->
+            <li class="nav-item gestionar" v-if="isGestorNormal">
+                <router-link class="nav-link gestionar" :to="`/solicitudesRecursos/${idCenad}`">
+                    <v-icon scale="2" name="fa-business-time" />Solicitudes
+                </router-link>
             </li>
             </ul>
             </nav>
@@ -158,6 +151,7 @@ const idCenadZaragoza = ref(null);
 const isSuperAdmin = ref(auth.rol == 'Superadministrador')
 let isCenadZaragoza = ref(false)
 const isAdminEsteCenad = ref(false)
+const isGestorEsteCenad = ref(false)
 const isGestorNormal = ref(
     auth.rol == 'Gestor' || auth.rol == 'Normal'
 )
@@ -168,6 +162,7 @@ const toggleMenu = () => {
 onMounted(async () => {
     auth.borrarDatosCenad()
     auth.getDatosInicialesDeCenad(idCenad.value)
+    auth.rol == 'Gestor' && (isGestorEsteCenad.value = idCenad.value == auth.cenad.idString)
     auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
     cargarCenads()
 })

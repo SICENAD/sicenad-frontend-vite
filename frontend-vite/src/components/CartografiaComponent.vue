@@ -5,7 +5,7 @@
       {{ props.content.nombre }}
       <CartografiaModalComponent :nombreArchivo="props.content.nombreArchivo" :nombre="props.content.nombre"
         :escala="props.content.escala" :idCartografia="props.content.idString" :descripcion="props.content.descripcion"
-        :idCenad="props.idCenad" @emiteModal="actualizarCartografiaEnElemento" />
+        :idCenad="props.idCenad" @emiteModal="actualizarCartografiaEnElemento" v-if="isAdminEsteCenad"/>
     </div>
     <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2">{{ props.content.escala }}</div>
     <div class="col-10 col-sm-10 col-md-5 col-lg-5 col-xl-5">{{ props.content.descripcion }}</div>
@@ -17,12 +17,18 @@
 import { onMounted, ref } from 'vue'
 import CartografiaModalComponent from './CartografiaModalComponent.vue'
 import CartografiaService from '@/services/CartografiaService'
+import useAuthStore from '@/stores/auth'
 const props = defineProps(['content', 'idCenad'])
 const emits = defineEmits(['emiteElemento'])
+const auth = useAuthStore()
 let linkDescarga = ref('')
 const service = new CartografiaService()
 
+const isAdminEsteCenad = ref(false)
+
 onMounted(async () => {
+      auth.rol == 'Administrador' && (isAdminEsteCenad.value = props.idCenad == auth.cenad.idString)
+    
   linkDescarga.value = await service.fetchArchivoCartografia(props.content.nombreArchivo, props.idCenad)
 })
 function actualizarCartografiaEnElemento() {

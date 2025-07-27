@@ -6,9 +6,9 @@
                 <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
             </RouterLink>
         </div>
-        <div class="row mt-1">
+        <div class="row mt-1" v-if="isAdminEsteCenad">
             <div class="col-9 text-center">
-                <h3 class="text-center titulo1"><u>CATEGORÍAS DEL {{ auth.cenad.nombre }}</u></h3>
+                <h3 class="text-center titulo1" v-if="auth.cenadVisitado"><u>CATEGORÍAS DEL {{ auth.cenadVisitado.nombre }}</u></h3>
             </div>
             <div class="col-3 justify-content-end">
                 <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-categoria">
@@ -18,7 +18,7 @@
         </div>
         <hr class='w-100'>
         <div class="row ms-5 p-0">
-            <div class="col col-md-12">
+            <div class="col col-md-12" v-if="isAdminEsteCenad">
                 <div class="row mt-2 titulos">
                     <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3 titulo">
                         <b>CATEGORÍA</b>
@@ -32,6 +32,7 @@
                 </div>
                 <CategoriaComponent v-for="(item, index) in categorias" :key="index" :content="item" :idCenad="idCenad" />
             </div>
+                <div v-if="!isAdminEsteCenad" class="titulo text-center">NO PUEDES ACCEDER A LA GESTIÓN DE CATEGORÍAS DE OTRO CENAD/CMT</div>
         </div>
     </div>
     <!-- Modal -->
@@ -81,7 +82,7 @@
 </template>
 <script setup>
 import useAuthStore from '@/stores/auth'
-import { ref, onMounted, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import CategoriaComponent from '@/components/CategoriaComponent.vue'
 import CategoriaService from '@/services/CategoriaService'
@@ -89,6 +90,7 @@ import CategoriaService from '@/services/CategoriaService'
 const auth = useAuthStore()
 const route = useRoute()
 const idCenad = computed(() => route.params.id)
+const isAdminEsteCenad = ref(false)
 
 let nombre = ref('')
 let descripcion = ref('')
@@ -97,6 +99,9 @@ let idCategoriaPadre = ref('')
 const service = new CategoriaService()
 const categorias = computed(() => auth.categorias)
 
+onMounted(async () => {
+      auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
+})
 const crearCategoria = async () => {
     await service.crearCategoria(nombre.value, descripcion.value, idCenad.value, idCategoriaPadre.value)
     nombre.value = ''

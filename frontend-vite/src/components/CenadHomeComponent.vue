@@ -23,9 +23,9 @@
             </router-link>
           </li>
           <li class="pt-4">
-            <router-link class="dropdown-item" :to="{ name: 'recursos' }">
+            <router-link :to="{ name: 'recursos' }">
               <v-icon scale="2" class="me-2" name="fa-folder-open" />
-              Consultar Recursos
+              Recursos
             </router-link>
           </li>
           <li class="pt-4">

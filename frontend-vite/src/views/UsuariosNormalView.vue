@@ -57,7 +57,7 @@
                             <span v-if="emailError" class="text-danger">{{ emailError }}</span>
                         </div>
                         <div class="mb-3">
-                            <label class="titulo"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
+                            <label class="titulo me-2"><b>¿QUIERE RECIBIR NOTIFICACIONES?<sup
                                         class="text-danger">*</sup></b></label>
                             <input type="checkbox" class="letra" id="emailAdmitidoUsuarioNormal"
                                 v-model="emailAdmitidoUsuarioNormal" />
