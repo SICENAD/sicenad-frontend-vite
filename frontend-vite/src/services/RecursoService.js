@@ -132,6 +132,33 @@ async fetchRecurso(idRecurso) {
       return null
     }
   }
+ async editarRecursoDetalle(nombre, descripcion, otros, conDatosEspecificosSolicitud, datosEspecificosSolicitud, idCenad, idRecurso) {
+    try {
+      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
+      const body = {
+        nombre: nombre.toUpperCase(),
+        descripcion: descripcion,
+        otros: otros,
+        conDatosEspecificosSolicitud: conDatosEspecificosSolicitud,
+        datosEspecificosSolicitud: datosEspecificosSolicitud
+      }
+      const response = await this.utils.fetchConToken(urlRecurso, 'PATCH', body)
+      if (response.status == 200) {
+        toastExito(
+          i18n.global.t('recursos.editado', {
+            recurso: nombre,
+          }),
+        )
+        await this.auth.getDatosInicialesDeCenad(idCenad)
+        return this.recurso
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.error(error)
+      return null
+    }
+  }  
   async deleteRecurso(idCenad, idRecurso) {
     try {
       const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`

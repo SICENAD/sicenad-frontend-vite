@@ -1,5 +1,5 @@
 <template>
-    <!-- muestra el contenido del recurso, con diferente vista segun este logueado como administrador de ese cenad o no -->
+    <!-- muestra la información del CENAD/CMT, con diferente vista segun este logueado como administrador de ese cenad o no -->
     <div class="container-fluid">
         <div class="row ms-0 pl-0 mb-0 pb-0">
             <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad } }">

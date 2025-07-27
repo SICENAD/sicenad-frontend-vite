@@ -158,7 +158,7 @@ const router = createRouter({
           component: () => import('../views/RecursosView.vue'),
           meta: {
             requireAuth: true
-          },
+          }
         },
         {
           path: 'usuarios',
@@ -179,6 +179,14 @@ const router = createRouter({
           },
         },
       ],
+    },
+    {
+      path: '/cenad/:id/recursos/:idRecurso',
+      name: 'recurso',
+      component: () => import('../components/RecursoDetalleComponent.vue'),
+      meta: {
+        requireAuth: true,
+      },
     },
     {
       path: '/not-found',

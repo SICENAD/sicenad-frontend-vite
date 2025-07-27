@@ -2,7 +2,7 @@
   <footer class="footer mt-5 w-100">
     <div class="row py-3 container-fluid">
       <div class="col-4 text-start ps-5">
-        <a target="_blank" rel="noopener" href="manual.pdf">
+        <a target="_blank" rel="noopener" href="/manual.pdf">
           <span>Manual de Usuario</span>
         </a>
       </div>

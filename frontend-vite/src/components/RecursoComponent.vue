@@ -2,7 +2,7 @@
   <hr class='w-100'>
   <div class="row">
     <div class="col-10 col-sm-10 col-md-5 col-lg-5 col-xl-5 d-flex">
-      <router-link class="nav-link me-2" to="/" v-if="!isAdminEsteCenad">
+      <router-link class="nav-link me-2" :to="{ name: 'recurso', params: { id: idCenad, idRecurso: props.content.idString } }" v-if="!isAdminEsteCenad">
         <v-icon scale="1.5" name="fa-eye" />
       </router-link>
       <p class="me-2">{{ props.content.nombre }}</p>
