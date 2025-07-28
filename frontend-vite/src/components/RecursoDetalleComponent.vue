@@ -1,13 +1,17 @@
 <template>
     <!-- muestra el contenido del recurso, con diferente vista segun este logueado como gestor del recurso o no -->
     <div class="container-fluid">
-        <div class="row ms-0 pl-0 mb-0 pb-0">
-            <RouterLink class="nav-link volver" :to="{ name: 'cenad-home', params: { id: idCenad } }">
-                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" /><strong>Volver</strong>
+        <div class="position-relative d-flex align-items-center mb-3" style="height: 50px;">
+            <!-- Flecha alineada a la izquierda -->
+            <RouterLink class="nav-link volver position-absolute start-0 d-flex align-items-center"
+                :to="{ name: 'cenad-home', params: { id: idCenad } }">
+                <v-icon name="fa-arrow-alt-circle-left" scale="2" class="me-2" />
+                <strong>Volver</strong>
             </RouterLink>
-            <div>{{ nombre }}</div>
-            <hr class="w-100 mt-0 mb-1" />
+            <!-- Título centrado -->
+            <h3 class="titulo1 position-absolute start-50 translate-middle-x text-center"><b>{{ nombre }}</b></h3>
         </div>
+        <hr class="w-100 mt-0 mb-1" />
         <!-- este boton se deberá mostrar solo si eres el gestor del recurso -->
         <div class="row  align-items-start mt-0 pt-0 ">
             <div class="col-3" v-if='isGestorEsteRecurso'>

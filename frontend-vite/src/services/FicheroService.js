@@ -57,7 +57,6 @@ class FicheroService {
       const body = {
         nombre: nombre.toUpperCase(),
         descripcion: descripcion,
-        cenad: `${this.utils.urlApi}/cenads/${idCenad}`,
         recurso: `${this.utils.urlApi}/recursos/${idRecurso}`,
         categoriaFichero: `${this.utils.urlApi}/categorias_fichero/${idCategoriaFichero}`,
         nombreArchivo: nombreArchivo,
@@ -94,7 +93,6 @@ class FicheroService {
       const body = {
         nombre: nombre.toUpperCase(),
         descripcion: descripcion,
-        cenad: `${this.utils.urlApi}/cenads/${idCenad}`,
         recurso: `${this.utils.urlApi}/recursos/${idRecurso}`,
         categoriaFichero: `${this.utils.urlApi}/categorias_fichero/${idCategoriaFichero}`,
       }
