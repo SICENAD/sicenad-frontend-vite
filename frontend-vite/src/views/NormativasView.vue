@@ -8,7 +8,8 @@
         </div>
         <div class="row mt-1">
             <div>
-                <h3 class="text-center titulo1" v-if="auth.cenadVisitado"><u>NORMATIVA DEL {{ auth.cenadVisitado.nombre }}</u></h3>
+                <h3 class="text-center titulo1" v-if="auth.cenadVisitado"><u>NORMATIVA DEL {{ auth.cenadVisitado.nombre
+                        }}</u></h3>
             </div>
             <div class="text-end" v-if="isAdminEsteCenad">
                 <button class="btn text-white " data-bs-toggle="modal" data-bs-target="#modal-nueva-normativa">
@@ -30,7 +31,8 @@
                         <b>DESCARGA</b>
                     </div>
                 </div>
-                <NormativaComponent v-for="(item, index) in normativas" :key="index" :content="item" :idCenad="idCenad" />
+                <NormativaComponent v-for="(item, index) in normativas" :key="index" :content="item"
+                    :idCenad="idCenad" />
             </div>
         </div>
     </div>
@@ -53,7 +55,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-                            <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+                            <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo
@@ -66,7 +68,8 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ $t('comun.cerrar') }}
                     </button>
-                    <button type="button" @click="crearNormativa" data-bs-dismiss="modal" class="btn btn-primary" :disabled="!formularioValidado">
+                    <button type="button" @click="crearNormativa" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado">
                         Crear Normativa
                     </button>
                 </div>
@@ -98,7 +101,7 @@ const service = new NormativaService()
 const normativas = computed(() => auth.normativas)
 
 onMounted(async () => {
-      auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
+    auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
 })
 function onFileChange(e) {
     const file = e.target.files[0]
@@ -113,12 +116,9 @@ const crearNormativa = async () => {
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-    return (
-        nombre.value.trim() != '' &&
-        descripcion.value.trim() != '' &&
-        normativaFile.value.trim() != ''
-    )
-});
+    if (!nombre.value || !descripcion.value || !normativaFile.value) return false;
+    return nombre.value.trim() != '' && descripcion.value.trim() != '' && normativaFile.value != null;
+})
 </script>
 <style scoped lang="scss">
 .btn {

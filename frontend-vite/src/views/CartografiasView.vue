@@ -68,7 +68,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-                            <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+                            <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo
@@ -128,13 +128,10 @@ const crearCartografia = async () => {
     escala.value = ''
 }
 // Validación: todos los campos deben estar llenos
-const formularioValidado = computed(() => {
-  return (
-    nombre.value.trim() != '' &&
-    descripcion.value.trim() != '' &&
-    escala.value.trim() != '' &&
-    cartografiaFile.value.trim() != ''
-  )})
+  const formularioValidado = computed(() => {
+  if (!nombre.value || !descripcion.value || !escala.value || !cartografiaFile.value) return false;
+  return nombre.value.trim() != '' && descripcion.value.trim() != '' && escala.value != '' && cartografiaFile.value != null;
+})
 </script>
 <style scoped lang="scss">
 .btn {

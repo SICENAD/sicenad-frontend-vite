@@ -16,7 +16,7 @@
 </template>
 <script setup>
 import { toTitleCase } from '@/utils'
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, computed } from 'vue'
 import CenadModalComponent from './CenadModalComponent.vue'
 import useUtilsStore from '@/stores/utils'
 import UsuarioService from '@/services/UsuarioService'

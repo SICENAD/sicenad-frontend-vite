@@ -38,7 +38,7 @@
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="descripcionUsuarioNormal" v-model="descripcion" />
+              <textarea class="form-control letra" id="descripcionUsuarioNormal" v-model="descripcion"></textarea>
             </div>
             <div class="mb-3">
               <label class="titulo me-2"><b>UNIDAD<sup class="text-danger">*</sup></b></label>

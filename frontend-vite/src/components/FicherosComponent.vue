@@ -28,8 +28,8 @@
                         <b>DESCARGA</b>
                     </div>
                 </div>
-                <FicheroComponent v-for="(item, index) in ficheros" :key="index" :content="item" :idCenad="idCenad"
-                    :idRecurso="idRecurso" @emiteElemento="actualizarFicheroEnView"/>
+                <FicheroComponent v-for="item in ficheros" :key="item.idString" :content="item" :idCenad="idCenad"
+                    :idRecurso="idRecurso" @emiteElemento="actualizarFicheroEnView" />
             </div>
         </div>
     </div>
@@ -47,7 +47,7 @@
                 <div class="modal-body">
                     <form>
                         <div class="mb-3">
-                            <label class="titulo"><b>NOMBRE DEL FICHERO<sup class="text-danger">*</sup></b></label>
+                            <label class="titulo"><b>NOMBRE DEL FICHERO <sup class="text-danger">*</sup></b></label>
                             <input type="text" class="form-control letra" id="nombre" v-model="nombre" />
                         </div>
                         <div class="mb-3">
@@ -62,7 +62,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-                            <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+                            <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo
@@ -127,6 +127,7 @@ onMounted(async () => {
 function onFileChange(e) {
     const file = e.target.files[0]
     ficheroFile.value = file
+    nombreArchivo.value = file ? file.name : ''
 }
 async function getFicheros() {
     await service.fetchAll(idRecurso.value)
@@ -137,20 +138,17 @@ function actualizarFicheroEnView() {
 const crearFichero = async () => {
     await service.crearFichero(nombre.value, descripcion.value, ficheroFile.value, idCategoriaFichero.value, idCenad.value, idRecurso.value)
     nombre.value = ''
-    ficheroFile.value = ''
+    ficheroFile.value = null
     descripcion.value = ''
     idCategoriaFichero.value = ''
     getFicheros()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-    return (
-        nombre.value.trim() != '' &&
-        descripcion.value.trim() != '' &&
-        idCategoriaFichero.value != '' &&
-        ficheroFile.value != null
-    )
-});
+  if (!nombre.value || !descripcion.value || !idCategoriaFichero.value || !ficheroFile.value) return false;
+  return nombre.value.trim() != '' && descripcion.value.trim() != '' && idCategoriaFichero.value != '' && ficheroFile.value != null;
+})
+
 </script>
 <style scoped lang="scss">
 .btn {

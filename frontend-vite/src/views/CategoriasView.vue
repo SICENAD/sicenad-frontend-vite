@@ -65,7 +65,7 @@
                     <div class="col-10 col-sm-10 col-md-8 col-lg-8 col-xl-8 titulo"><b>DESCRIPCIÓN</b></div>
                 </div>
                 <CategoriaComponent v-for="(item, index) in categoriasMostradas" :key="index" :content="item"
-                    :idCenad="idCenad" />
+                    :idCenad="idCenad" @emiteElemento="cargarCategoriasPadre"/>
             </div>
             <div v-if="!isAdminEsteCenad" class="titulo text-center">NO PUEDES ACCEDER A LA GESTIÓN DE CATEGORÍAS DE
                 OTRO CENAD/CMT</div>
@@ -99,7 +99,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-                            <input type="textarea" class="form-control letra" v-model="descripcion" />
+                            <textarea class="form-control letra" v-model="descripcion"></textarea>
                         </div>
                     </form>
                 </div>
@@ -214,6 +214,7 @@ const crearCategoria = async () => {
     nombre.value = ''
     idCategoriaPadre.value = ''
     descripcion.value = ''
+    await cargarCategoriasPadre()
 }
 
 // Validación

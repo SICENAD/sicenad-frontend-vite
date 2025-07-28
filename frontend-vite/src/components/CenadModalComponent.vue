@@ -41,7 +41,7 @@
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+              <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>ESCUDO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo permitido: {{

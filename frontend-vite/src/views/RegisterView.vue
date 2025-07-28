@@ -18,7 +18,7 @@
       </div>
       <div class="mb-3">
         <label class="form-label"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-        <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+        <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
       </div>
       <div class="mb-3 col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
         <label for="username" class="form-label"><b>{{ $t('administracion.username') }}</b></label>

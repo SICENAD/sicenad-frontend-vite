@@ -19,7 +19,7 @@
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+              <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo permitido: {{
@@ -51,7 +51,8 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('normativas.borrarNormativa') }}
           </button>
-          <button type="button" @click="editarNormativa" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
+          <button type="button" @click="editarNormativa" data-bs-dismiss="modal" class="btn btn-success"
+            :disabled="!formularioValidado">
             {{ $t('normativas.guardarNormativa') }}
           </button>
         </div>
@@ -93,8 +94,8 @@ const emits = defineEmits(['emiteModal'])
 const utils = useUtilsStore()
 
 let sizeMaxDocRecurso = ref(utils.sizeMaxDocRecurso)
-const descripcion = ref(props.descripcion)
-const nombre = ref(props.nombre)
+const descripcion = ref(props.descripcion || '')
+const nombre = ref(props.nombre || '')
 const idNormativa = ref(props.idNormativa)
 const idCenad = ref(props.idCenad)
 const idModal = 'modal-normativa-' + props.idNormativa
@@ -139,7 +140,7 @@ onMounted(async () => {
 })
 
 const editarNormativa = async () => {
- const success = await service.editarNormativa(
+  const success = await service.editarNormativa(
     nombre.value,
     descripcion.value,
     archivoNormativa.value,
@@ -167,11 +168,9 @@ const borrarNormativa = async () => {
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-    return (
-        nombre.value.trim() != '' &&
-        descripcion.value.trim() != '' 
-    )
-});
+  if (!nombre.value || !descripcion.value) return false;
+  return nombre.value.trim() != '' && descripcion.value.trim() != ''
+})
 </script>
 <style scoped lang="scss">
 div,

@@ -28,7 +28,7 @@
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+              <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
             </div>
           </form>
         </div>
@@ -97,8 +97,8 @@ const editarCategoria = async () => {
     nombre.value,
     descripcion.value,
     idCenad.value,
-    idCategoriaPadre,
-    idCategoria.value
+    idCategoria.value,
+    idCategoriaPadre.value
   );
   emits('emiteModal');
 }

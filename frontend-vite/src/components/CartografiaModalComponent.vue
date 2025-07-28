@@ -28,7 +28,7 @@
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+              <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo permitido: {{
@@ -59,7 +59,8 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('cartografias.borrarCartografia') }}
           </button>
-          <button type="button" @click="editarCartografia" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
+          <button type="button" @click="editarCartografia" data-bs-dismiss="modal" class="btn btn-success"
+            :disabled="!formularioValidado">
             {{ $t('cartografias.guardarCartografia') }}
           </button>
         </div>
@@ -96,16 +97,16 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import useUtilsStore from '@/stores/utils'
 import CartografiaService from '@/services/CartografiaService'
 
-const props = defineProps(['nombre', 'descripcion', 'nombreArchivo', 'idCartografia', 'idCenad'])
+const props = defineProps(['nombre', 'descripcion', 'nombreArchivo', 'escala', 'idCartografia', 'idCenad'])
 const emits = defineEmits(['emiteModal'])
 const utils = useUtilsStore()
 
 let sizeMaxCartografia = ref(utils.sizeMaxCartografia)
 let escalas = utils.escalasCartografia
 
-const descripcion = ref(props.descripcion)
-const nombre = ref(props.nombre)
-const escala = ref(props.escala)
+const descripcion = ref(props.descripcion || '')
+const nombre = ref(props.nombre || '')
+const escala = ref(props.escala || '')
 const idCartografia = ref(props.idCartografia)
 const idCenad = ref(props.idCenad)
 const idModal = 'modal-cartografia-' + props.idCartografia
@@ -179,12 +180,11 @@ const borrarCartografia = async () => {
   emits('emiteModal')
 }
 // Validación: todos los campos deben estar llenos
+
 const formularioValidado = computed(() => {
-  return (
-    nombre.value.trim() != '' &&
-    descripcion.value.trim() != '' &&
-    escala.value != '' 
-  )});
+  if (!nombre.value || !descripcion.value || !escala.value) return false;
+  return nombre.value.trim() != '' && descripcion.value.trim() != '' && escala.value != ''
+})
 </script>
 <style scoped lang="scss">
 div,

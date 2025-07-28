@@ -40,24 +40,27 @@
                         </textarea>
                     </div>
                     <div class="col-lg-12 col-md-12 pt-3">
-                        <label class="titulo me-2"><b>¿TIENE DATOS ESPECÍFICOS PARA SU SOLICITUD?<sup class="text-danger">*</sup></b></label>
+                        <label class="titulo me-2"><b>¿TIENE DATOS ESPECÍFICOS PARA SU SOLICITUD?<sup
+                                    class="text-danger">*</sup></b></label>
                         <input type="checkbox" v-model="conDatosEspecificosSolicitud" required />
                     </div>
                     <div class="col-lg-12 col-md-12 pt-3" v-if="conDatosEspecificosSolicitud">
-                        <label class="titulo"><b>DATOS ESPECÍFICOS DE LA SOLICITUD<sup class="text-danger">*</sup></b></label>
-                        <textarea class="form-control letra" v-model="datosEspecificosSolicitud" placeholder="Datos específicos para la solicitud"
-                            datosEspecificosSolicitud="otros" rows="5" cols="50">
+                        <label class="titulo"><b>DATOS ESPECÍFICOS DE LA SOLICITUD<sup
+                                    class="text-danger">*</sup></b></label>
+                        <textarea class="form-control letra" v-model="datosEspecificosSolicitud"
+                            placeholder="Datos específicos para la solicitud" datosEspecificosSolicitud="otros" rows="5"
+                            cols="50">
                         </textarea>
                     </div>
                 </div>
                 <!--aqui insertare la vista de ficheros...-->
-<FicherosComponent />
+                <FicherosComponent />
 
 
 
 
 
-                
+
                 <div class="form-row justify-content-between pt-3">
                     <div class="col-lg-5 col-md-12 mb-4">
                         <button type="button" @click="actualizar" data-bs-dismiss="modal" class="btn text-white">
@@ -79,7 +82,7 @@
 
 
 
-            
+
             <div class="titulo">
                 <h4 class="text-center"><b>CALENDARIO</b></h4>
                 <hr>
@@ -95,7 +98,7 @@
             <div class="titulo" v-if='conDatosEspecificosSolicitud'>
                 <h4 class="text-center"><b>DATOS ESPECÍFICOS DE LA SOLICITUD</b></h4>
                 <hr>
-                <textarea class="texto" rows="6" cols="60" readonly>{{ datosEspecificosSolicitud }}</textarea>
+                <textarea class="texto" rows="6" cols="60" readonly v-model="datosEspecificosSolicitud"></textarea>
             </div>
 
         </div>
@@ -105,7 +108,6 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import useAuthStore from '@/stores/auth'
-import useUtilsStore from '@/stores/utils'
 import RecursoService from '@/services/RecursoService'
 import UsuarioService from '@/services/UsuarioService'
 import CategoriaService from '@/services/CategoriaService'
@@ -115,7 +117,6 @@ const usuarioService = new UsuarioService()
 const categoriaService = new CategoriaService()
 const route = useRoute()
 const auth = useAuthStore()
-const utils = useUtilsStore()
 const idCenad = computed(() => route.params.id)
 const idRecurso = computed(() => route.params.idRecurso)
 const idGestor = ref('')

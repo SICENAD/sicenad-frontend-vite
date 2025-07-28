@@ -19,11 +19,11 @@
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+              <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>OTROS<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="otros" v-model="otros" />
+              <textarea class="form-control letra" id="otros" v-model="otros"></textarea>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>CATEGORÍA<sup class="text-danger">*</sup></b></label>

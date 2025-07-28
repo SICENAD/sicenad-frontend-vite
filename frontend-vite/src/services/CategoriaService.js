@@ -109,7 +109,7 @@ class CategoriaService {
         descripcion: descripcion,
         cenad: `${this.utils.urlApi}/cenads/${idCenad}`,
       }
-      idCategoriaPadre != null &&
+      idCategoriaPadre != '' &&
         (body.categoriaPadre = `${this.utils.urlApi}/categorias/${idCategoriaPadre}`)
       const response = await this.utils.fetchConToken(urlCategorias, 'POST', body)
       if (response.status == 201) {
@@ -127,15 +127,16 @@ class CategoriaService {
       return false
     }
   }
-  async editarCategoria(nombre, descripcion, idCenad, idCategoriaPadre, idCategoria) {
+  async editarCategoria(nombre, descripcion, idCenad, idCategoria, idCategoriaPadre) {
     try {
       const urlCategoria = `${this.utils.urlApi}/categorias/${idCategoria}`
       const body = {
         nombre: nombre.toUpperCase(),
         descripcion: descripcion,
       }
-      idCategoriaPadre != null &&
+      if (idCategoriaPadre != null && idCategoriaPadre != undefined && idCategoriaPadre != '') {
         (body.categoriaPadre = `${this.utils.urlApi}/categorias/${idCategoriaPadre}`)
+      }
       const response = await this.utils.fetchConToken(urlCategoria, 'PATCH', body)
       if (response.status == 200) {
         toastExito(

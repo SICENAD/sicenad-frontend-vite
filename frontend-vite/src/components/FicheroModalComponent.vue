@@ -19,7 +19,7 @@
             </div>
             <div class="mb-3">
               <label class="titulo"><b>DESCRIPCIÓN<sup class="text-danger">*</sup></b></label>
-              <input type="textarea" class="form-control letra" id="descripcion" v-model="descripcion" />
+              <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
             </div>
             <div class="mb-3">
               <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo permitido: {{
@@ -37,7 +37,7 @@
                   <input type="file" accept="*" @change="onFileChange" ref="inputFile" hidden />
                 </label>
                 <!-- Nombre del archivo seleccionado -->
-                <div v-if="archivoNormativa" class="mt-2 ms-2">
+                <div v-if="archivoFichero" class="mt-2 ms-2">
                   <small>Archivo seleccionado: {{ archivoFichero.name }}</small>
                 </div>
               </div>
@@ -93,12 +93,13 @@ const emits = defineEmits(['emiteModal'])
 const utils = useUtilsStore()
 
 let sizeMaxDocRecurso = ref(utils.sizeMaxDocRecurso)
-const descripcion = ref(props.descripcion)
-const nombre = ref(props.nombre)
+const descripcion = ref(props.descripcion || '');
+const nombre = ref(props.nombre || '');
 const idFichero = ref(props.idFichero)
 const idCenad = ref(props.idCenad)
 const idRecurso = ref(props.idRecurso)
-const idCategoriaFichero = ref(props.categoriaFichero.idString)
+console.log(props)
+const idCategoriaFichero = ref(props.categoriaFichero?.idString || '');
 const idModal = 'modal-fichero-' + props.idFichero
 const idModalEliminar = 'modal-fichero-eliminar' + props.idFichero
 const inputFile = ref(null)
@@ -152,7 +153,7 @@ const editarFichero = async () => {
   );
   if (success) {
     // Actualizar el archivoActual con el nombre real subido
-    archivoActual.value = success; // Asumiendo que editarNormativa retorna el nombreArchivo
+    archivoActual.value = success; // Asumiendo que editarFichero retorna el nombreArchivo
 
     // Volver a cargar la URL del archivo actualizado 
     try {
