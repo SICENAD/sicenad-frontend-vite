@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <!--aqui insertare la vista de ficheros...-->
-
+<FicherosComponent />
 
 
 
@@ -109,6 +109,7 @@ import useUtilsStore from '@/stores/utils'
 import RecursoService from '@/services/RecursoService'
 import UsuarioService from '@/services/UsuarioService'
 import CategoriaService from '@/services/CategoriaService'
+import FicherosComponent from '@/components/FicherosComponent.vue'
 const service = new RecursoService()
 const usuarioService = new UsuarioService()
 const categoriaService = new CategoriaService()

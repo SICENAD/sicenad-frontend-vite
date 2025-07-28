@@ -44,6 +44,17 @@ class CategoriaFicheroService {
       console.log(error)
     }
   }
+  async fetchCategoriaFicheroDeFichero(idFichero) {
+    try {
+      const urlCategoriaFichero = `${this.utils.urlApi}/ficheros/${idFichero}/categoriaFichero`
+      const response = await this.utils.fetchConToken(urlCategoriaFichero, 'GET', null)
+      const json = await response.json()
+      this.categoriaFichero.value = await json
+      return response.status == 200 ? this.categoriaFichero.value : null
+    } catch (error) {
+      console.log(error)
+    }
+  }
   async crearCategoriaFichero(nombre, tipo, descripcion) {
     try {
       const urlCategoriasFichero = `${this.utils.urlApi}/categorias_fichero`
