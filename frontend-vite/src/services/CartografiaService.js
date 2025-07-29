@@ -155,11 +155,7 @@ class CartografiaService {
     }
   }
   async fetchArchivoCartografia(filename, idCenad) {
-    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/cartografias/${filename}`, {
-      headers: {
-        Authorization: `Bearer ${this.auth.token}`,
-      },
-    })
+    const response = await this.utils.fetchArchivoConToken(`${this.utils.urlApi}/files/${idCenad}/cartografias/${filename}`, 'GET', null)
     if (!response.ok) throw new Error('No se pudo descargar el archivo')
     const blob = await response.blob()
     const archivoUrl = URL.createObjectURL(blob)

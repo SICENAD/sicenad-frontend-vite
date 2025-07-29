@@ -137,11 +137,7 @@ class NormativaService {
     }
   }
   async fetchArchivoNormativa(filename, idCenad) {
-    const response = await fetch(`${this.utils.urlApi}/files/${idCenad}/normativas/${filename}`, {
-      headers: {
-        Authorization: `Bearer ${this.auth.token}`,
-      },
-    })
+    const response = await this.utils.fetchArchivoConToken(`${this.utils.urlApi}/files/${idCenad}/normativas/${filename}`, 'GET', null)
     if (!response.ok) throw new Error('No se pudo descargar el archivo')
 
     const blob = await response.blob()

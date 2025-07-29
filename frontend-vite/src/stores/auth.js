@@ -27,7 +27,7 @@ const useAuthStore = defineStore('auth', {
       cenad: null,
       unidad: null,
       usuario: null,
-      isReady: false
+      isReady: false,
     }
   },
   getters: {},
@@ -168,11 +168,19 @@ const useAuthStore = defineStore('auth', {
           )
           this.usuario = await respUsuario.json()
           const respUnidad = await utils.fetchConToken(
-            `${utils.urlApi}/usuarios_normal/${this.usuario.idString}/cenad`,
+            `${utils.urlApi}/usuarios_normal/${this.usuario.idString}/unidad`,
             'GET',
             null,
           )
           this.unidad = await respUnidad.json()
+        }
+        if (this.rol == 'Superadministrador') {
+          const respUsuario = await utils.fetchConToken(
+            `${utils.urlApi}/usuarios_superadministrador/search/findByUsername?username=${this.username}`,
+            'GET',
+            null,
+          )
+          this.usuario = await respUsuario.json()
         }
         this.isReady = true
       } catch (err) {
