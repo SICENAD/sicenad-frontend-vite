@@ -22,6 +22,15 @@
               <textarea class="form-control letra" id="descripcion" v-model="descripcion"></textarea>
             </div>
             <div class="mb-3">
+              <label class="titulo"><b>CATEGORÍA DE FICHERO<sup class="text-danger">*</sup></b></label>
+              <select class="form-select" aria-label="categoriaFichero" v-model="idCategoriaFichero">
+                <option disabled value="">Selecciona la Categoría de fichero</option>
+                <option v-for="categoriaFichero in categoriasFichero" :key="categoriaFichero.idString" :value="categoriaFichero.idString">
+                  {{ categoriaFichero.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
               <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo permitido: {{
                 sizeMaxDocRecurso }} MB)</label>
               <!-- Mostrar archivo actual si existe -->
@@ -51,7 +60,8 @@
           <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal">
             {{ $t('ficheros.borrarFichero') }}
           </button>
-          <button type="button" @click="editarFichero" data-bs-dismiss="modal" class="btn btn-success" :disabled="!formularioValidado">
+          <button type="button" @click="editarFichero" data-bs-dismiss="modal" class="btn btn-success"
+            :disabled="!formularioValidado">
             {{ $t('ficheros.guardarFichero') }}
           </button>
         </div>
@@ -87,11 +97,12 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import useUtilsStore from '@/stores/utils'
 import FicheroService from '@/services/FicheroService'
+import useAuthStore from '@/stores/auth'
 
 const props = defineProps(['nombre', 'nombreArchivo', 'descripcion', 'idFichero', 'idCenad', 'idRecurso', 'categoriaFichero'])
 const emits = defineEmits(['emiteModal'])
 const utils = useUtilsStore()
-
+const auth = useAuthStore()
 let sizeMaxDocRecurso = ref(utils.sizeMaxDocRecurso)
 const descripcion = ref(props.descripcion || '');
 const nombre = ref(props.nombre || '');
@@ -99,11 +110,13 @@ const idFichero = ref(props.idFichero)
 const idCenad = ref(props.idCenad)
 const idRecurso = ref(props.idRecurso)
 console.log(props)
-const idCategoriaFichero = ref(props.categoriaFichero?.idString || '');
+const idCategoriaFichero = ref('')
 const idModal = 'modal-fichero-' + props.idFichero
 const idModalEliminar = 'modal-fichero-eliminar' + props.idFichero
 const inputFile = ref(null)
 const service = new FicheroService()
+const categoriasFichero = computed(() => auth.categoriasFichero)
+
 
 const archivoFichero = ref(null)
 const archivoActual = ref(props.nombreArchivo)
@@ -118,7 +131,11 @@ watch(urlArchivoActual, (newUrl, oldUrl) => {
   if (oldUrl) URL.revokeObjectURL(oldUrl)  // revoca la URL vieja
   currentObjectURL = newUrl                 // guardamos la nueva
 })
-
+watch(
+  () => props.categoriaFichero,
+  (nuevo) => { if (nuevo) idCategoriaFichero.value = nuevo.idString },
+  { immediate: true }
+)
 // Liberamos la URL cuando el componente se desmonta
 onBeforeUnmount(() => {
   if (currentObjectURL) URL.revokeObjectURL(currentObjectURL)
@@ -141,7 +158,7 @@ onMounted(async () => {
 })
 
 const editarFichero = async () => {
- const success = await service.editarFichero(
+  const success = await service.editarFichero(
     nombre.value,
     descripcion.value,
     archivoFichero.value,
@@ -171,12 +188,9 @@ const borrarArchivo = async () => {
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-    return (
-        nombre.value.trim() != '' &&
-        descripcion.value.trim() != '' &&
-        idCategoriaFichero.value != ''
-    )
-});
+  if (!nombre.value || !descripcion.value) return false;
+  return nombre.value.trim() != '' && descripcion.value.trim() != ''
+})
 </script>
 <style scoped lang="scss">
 div,

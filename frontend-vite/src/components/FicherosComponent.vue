@@ -32,6 +32,38 @@
                     :idRecurso="idRecurso" @emiteElemento="actualizarFicheroEnView" />
             </div>
         </div>
+
+
+
+
+
+
+
+
+        <div>aqui vere los ficheros</div>
+        <div v-for="categoriaFichero in categoriasFicheroImagenesMisFicheros" :key="categoriaFichero.idString">{{
+            categoriaFichero.nombre }} imagenes</div>
+        <div v-for="categoriaFichero in categoriasFicheroNoImagenesMisFicheros" :key="categoriaFichero.idString">{{
+            categoriaFichero.nombre }} no imagenes</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
     <!-- Modal -->
     <div class="modal fade" id="modal-nuevo-fichero" tabindex="-1" aria-labelledby="modal-nuevo-fichero-Label"
@@ -92,6 +124,7 @@ import { useRoute } from 'vue-router'
 import FicheroComponent from '@/components/FicheroComponent.vue'
 import FicheroService from '@/services/FicheroService'
 import UsuarioService from '@/services/UsuarioService'
+import CategoriaFicheroService from '@/services/CategoriaFicheroService'
 
 const utils = useUtilsStore()
 const auth = useAuthStore()
@@ -112,7 +145,12 @@ const isGestorEsteRecurso = ref(false)
 
 const service = new FicheroService()
 const usuarioService = new UsuarioService()
+const categoriaFicheroService = new CategoriaFicheroService()
 const ficheros = service.getFicheros()
+
+
+const categoriasFicheroImagenesMisFicheros = ref([])
+const categoriasFicheroNoImagenesMisFicheros = ref([])
 
 onMounted(async () => {
     await getFicheros()
@@ -123,6 +161,7 @@ onMounted(async () => {
     } else {
         isGestorEsteRecurso.value = false
     }
+    obtenerCategoriasMisFicheros(ficheros.value)
 })
 function onFileChange(e) {
     const file = e.target.files[0]
@@ -145,9 +184,44 @@ const crearFichero = async () => {
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
-  if (!nombre.value || !descripcion.value || !idCategoriaFichero.value || !ficheroFile.value) return false;
-  return nombre.value.trim() != '' && descripcion.value.trim() != '' && idCategoriaFichero.value != '' && ficheroFile.value != null;
+    if (!nombre.value || !descripcion.value || !idCategoriaFichero.value || !ficheroFile.value) return false;
+    return nombre.value.trim() != '' && descripcion.value.trim() != '' && idCategoriaFichero.value != '' && ficheroFile.value != null;
 })
+
+
+
+
+async function obtenerCategoriasMisFicheros(ficheros) {
+    // 1. Hacer llamadas a cada URL de categoriaFichero
+    const categorias = await Promise.all(
+        ficheros.map(async (fichero) => {
+            console.log(fichero.idString)
+            const response = await categoriaFicheroService.fetchCategoriaFicheroDeFichero(fichero.idString);
+                        console.log(response)
+           // if (!response.ok) throw new Error("Error al obtener la categoría");
+           
+            return response // Se espera que devuelva { id, nombre, tipo }
+        })
+    );
+
+    // 2. Eliminar duplicados usando un Map por id
+    const categoriasUnicas = Array.from(
+        new Map(categorias.map(cat => [cat.idString, cat])).values()
+    );
+
+    // 3. Separar en dos listas según el tipo
+    categoriasFicheroImagenesMisFicheros.value = categoriasUnicas.filter(cat => cat.tipo === 0);
+    categoriasFicheroNoImagenesMisFicheros.value = categoriasUnicas.filter(cat => cat.tipo === 1);
+}
+
+
+
+
+
+
+
+
+
 
 </script>
 <style scoped lang="scss">
