@@ -57,14 +57,8 @@
                         </textarea>
                     </div>
                 </div>
-                <!--aqui insertare la vista de ficheros...-->
+                <!--aqui insertare la vista de ficheros del gestor, un listado donde crearlos y editarlos...-->
                 <FicherosComponent />
-
-
-
-
-
-
                 <div class="form-row justify-content-between pt-3">
                     <div class="col-lg-5 col-md-12 mb-4">
                         <button type="button" @click="actualizar" data-bs-dismiss="modal" class="btn text-white">
@@ -79,25 +73,21 @@
             <div class="titulo">
                 <h4 class="text-center"><b>DESCRIPCIÓN</b></h4>
                 <hr>
-                <p class="texto">{{ descripcion }}</p>
+                <p class="texto ms-3">{{ descripcion }}</p>
             </div>
-            <!--ahora tendria que recorrer los ficheros clasificados por categoria de fichero...-->
-
-
-
-
-
+            <!--ahora tendria que recorrer los ficheros clasificados por categoria de fichero...con enlaces de descarga o modales si son imagenes-->
+            <FicherosComponent />
             <div class="titulo">
                 <h4 class="text-center"><b>CALENDARIO</b></h4>
                 <hr>
                 <a href="/manual.pdf" target="_blank" rel="noopener">
-                    <p class="texto href">Calendario del recurso {{ nombre }}</p>
+                    <p class="texto href ms-3">Calendario del recurso {{ nombre }}</p>
                 </a>
             </div>
             <div class="titulo">
                 <h4 class="text-center"><b>OTROS</b></h4>
                 <hr>
-                <p class="texto">{{ otros }}</p>
+                <p class="texto ms-3">{{ otros }}</p>
             </div>
             <div class="titulo" v-if='conDatosEspecificosSolicitud'>
                 <h4 class="text-center"><b>DATOS ESPECÍFICOS DE LA SOLICITUD</b></h4>
@@ -135,6 +125,7 @@ let datosEspecificosSolicitud = ref('')
 const isGestorEsteRecurso = ref(false)
 const cambioBoton = ref(false)
 const rol = ref('Gestor')
+
 onMounted(async () => {
     await cargarRecurso()
     if (idGestor.value == auth.usuario.idString) {
@@ -181,7 +172,7 @@ const actualizar = async () => {
     }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
 .btn {
     background: #3A5A40;
 }
@@ -206,6 +197,23 @@ const actualizar = async () => {
 a.volver {
     color: #3A5A40;
     font-size: 18px;
+}
+
+a {
+    text-decoration: none;      /* Sin subrayado */
+    color: #3A5A40;            /* Color por defecto */
+}
+
+a:visited {
+    color: #3A5A40;            /* Evita color morado */
+}
+
+a:hover {
+    color: #A3B18A;            /* Color al pasar el mouse */
+}
+
+a:active {
+    color: #3A5A40;            /* Mantiene color al hacer clic */
 }
 
 a.volver:hover,
