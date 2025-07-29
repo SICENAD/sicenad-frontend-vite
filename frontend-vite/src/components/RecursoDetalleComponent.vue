@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <!--aqui insertare la vista de ficheros del gestor, un listado donde crearlos y editarlos...-->
-                <FicherosComponent />
+            <FicherosComponent :rol="rol"/>
                 <div class="form-row justify-content-between pt-3">
                     <div class="col-lg-5 col-md-12 mb-4">
                         <button type="button" @click="actualizar" data-bs-dismiss="modal" class="btn text-white">
@@ -76,7 +76,7 @@
                 <p class="texto ms-3">{{ descripcion }}</p>
             </div>
             <!--ahora tendria que recorrer los ficheros clasificados por categoria de fichero...con enlaces de descarga o modales si son imagenes-->
-            <FicherosComponent />
+            <FicherosComponent :rol="rol"/>
             <div class="titulo">
                 <h4 class="text-center"><b>CALENDARIO</b></h4>
                 <hr>
