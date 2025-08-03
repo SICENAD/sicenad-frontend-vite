@@ -157,8 +157,40 @@ const router = createRouter({
           name: 'recursos',
           component: () => import('../views/RecursosView.vue'),
           meta: {
-            requireAuth: true
-          }
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'recursos/:idRecurso',
+          name: 'recurso',
+          component: () => import('../components/RecursoDetalleComponent.vue'),
+          meta: {
+            requireAuth: true,
+          },
+        },
+                {
+          path: 'solicitudes',
+          name: 'solicitudes',
+          component: () => import('../views/SolicitudesView.vue'),
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'solicitudes/:estado',
+          name: 'solicitudes-estado',
+          component: () => import('../components/SolicitudesEstadoComponent.vue'),
+          meta: {
+            requireAuth: true,
+          },
+        },
+                {
+          path: 'solicitudes/:idSolicitud',
+          name: 'solicitud',
+          component: () => import('../components/SolicitudDetalleComponent.vue'),
+          meta: {
+            requireAuth: true,
+          },
         },
         {
           path: 'usuarios',
@@ -179,14 +211,6 @@ const router = createRouter({
           },
         },
       ],
-    },
-    {
-      path: '/cenad/:id/recursos/:idRecurso',
-      name: 'recurso',
-      component: () => import('../components/RecursoDetalleComponent.vue'),
-      meta: {
-        requireAuth: true,
-      },
     },
     {
       path: '/not-found',

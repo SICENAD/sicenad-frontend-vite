@@ -2,109 +2,82 @@ import { ref } from 'vue'
 import useAuthStore from '@/stores/auth'
 import useUtilsStore from '@/stores/utils'
 import i18n from '@/plugins/i18n'
-import { toastExito } from '@/utils'
+import { formatearFecha, formatearFechaHora, toastExito, toTitleCase } from '@/utils'
 
-class RecursoService {
-  recursos
-  recurso
+class SolicitudService {
+  solicitudes
+  solicitud
   auth
   utils
 
   constructor() {
-    this.recursos = ref([])
-    this.recurso = ref()
+    this.solicitudes = ref([])
+    this.solicitud = ref()
     this.auth = useAuthStore()
     this.utils = useUtilsStore()
   }
-  getRecursos() {
-    return this.recursos
+  getSolicitudes() {
+    return this.solicitudes
   }
-  getRecurso() {
-    return this.recurso
+  getSolicitud() {
+    return this.solicitud
   }
   async fetchAll(idCenad) {
     try {
-      const urlRecursos = `${this.utils.urlApi}/cenads/${idCenad}/recursos?size=1000`
-      const response = await this.utils.fetchConToken(urlRecursos, 'GET', null)
+      const urlSolicitudes = `${this.utils.urlApi}/cenads/${idCenad}/solicitudes?size=1000`
+      const response = await this.utils.fetchConToken(urlSolicitudes, 'GET', null)
       const json = await response.json()
-      this.recursos.value = await json._embedded.recursos
-      return response.status == 200 ? this.recursos.value : null
+      this.solicitudes.value = await json._embedded.solicitudes
+      return response.status == 200 ? this.solicitudes.value : null
     } catch (error) {
       console.log(error)
     }
   }
-  async fetchRecursosDeCategoria(idCategoria) {
+  async fetchSolicitudesDeCenadPorEstado(idCenad, estado) {
     try {
-      const urlRecursos = `${this.utils.urlApi}/categorias/${idCategoria}/recursos?size=1000`
-      const response = await this.utils.fetchConToken(urlRecursos, 'GET', null)
+      const urlSolicitudes = `${this.utils.urlApi}/cenads/${idCenad}/solicitudesEstado/${estado}?size=1000`
+      const response = await this.utils.fetchConToken(urlSolicitudes, 'GET', null)
       const json = await response.json()
-      this.recursos.value = await json._embedded.recursos
-      return response.status == 200 ? this.recursos.value : null
+      console.log(json)
+      json && (this.solicitudes.value = await json._embedded.solicitudes)
+      return response.status == 200 ? this.solicitudes.value : null
     } catch (error) {
       console.log(error)
     }
   }
-  async fetchRecursosDeSubcategorias(idCategoria) {
+async fetchSolicitud(idSolicitud) {
     try {
-      const urlRecursos = `${this.utils.urlApi}/categorias/${idCategoria}/recursosDeSubcategorias?size=1000`
-      const response = await this.utils.fetchConToken(urlRecursos, 'GET', null)
+      const urlSolicitud = `${this.utils.urlApi}/solicitudes/${idSolicitud}`
+      const response = await this.utils.fetchConToken(urlSolicitud, 'GET', null)
       const json = await response.json()
-      this.recursos.value = await json._embedded.recursos
-      return response.status == 200 ? this.recursos.value : null
+      this.solicitud.value = await json
+      return response.status == 200 ? this.solicitud.value : null
     } catch (error) {
       console.log(error)
     }
   }
-    async fetchRecursosDeGestor(idGestor) {
+  async crearSolicitud(observaciones, unidadUsuaria, jefeUnidadUsuaria, pocEjercicio, tlfnRedactor, fechaSolicitud, fechaHoraInicioRecurso, fechaHoraFinRecurso, idCenad, idRecurso, idUsuarioNormal) {
     try {
-      const urlRecursos = `${this.utils.urlApi}/usuarios_gestor/${idGestor}/recursos?size=1000`
-      const response = await this.utils.fetchConToken(urlRecursos, 'GET', null)
-      const json = await response.json()
-      this.recursos.value = await json._embedded.recursos
-      return response.status == 200 ? this.recursos.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
-async fetchRecurso(idRecurso) {
-    try {
-      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
-      const response = await this.utils.fetchConToken(urlRecurso, 'GET', null)
-      const json = await response.json()
-      this.recurso.value = await json
-      return response.status == 200 ? this.recurso.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
-async fetchRecursoDeSolicitud(idSolicitud) {
-    try {
-      const urlRecurso = `${this.utils.urlApi}/solicitudes/${idSolicitud}/recurso`
-      const response = await this.utils.fetchConToken(urlRecurso, 'GET', null)
-      const json = await response.json()
-      this.recurso.value = await json
-      return response.status == 200 ? this.recurso.value : null
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  async crearRecurso(nombre, descripcion, otros, idCenad,idTipoFormulario, idCategoria, idGestor) {
-    try {
-      const urlRecursos = `${this.utils.urlApi}/recursos`
+      const urlSolicitudes = `${this.utils.urlApi}/solicitudes`
       const body = {
-        nombre: nombre.toUpperCase(),
-        descripcion: descripcion,
-        otros: otros,
-        tipoFormulario: `${this.utils.urlApi}/tipos_formulario/${idTipoFormulario}`,
-        categoria: `${this.utils.urlApi}/categorias/${idCategoria}`,
-        usuarioGestor: `${this.utils.urlApi}/usuarios_gestor/${idGestor}`,
+        observaciones: observaciones,
+        unidadUsuaria: unidadUsuaria.toUpperCase(),
+        jefeUnidadUsuaria: toTitleCase(jefeUnidadUsuaria),
+        pocEjercicio: pocEjercicio,
+        tlfnRedactor: tlfnRedactor,
+        fechaSolicitud: formatearFechaHora(fechaSolicitud),
+        fechaHoraInicioRecurso: formatearFechaHora(fechaHoraInicioRecurso),
+        fechaHoraFinRecurso:formatearFechaHora(fechaHoraFinRecurso),
+        recurso: `${this.utils.urlApi}/recursos/${idRecurso}`,
+        usuarioNormal: `${this.utils.urlApi}/usuarios_normal/${idUsuarioNormal}`,
+        estado: "Borrador"
       }
-      const response = await this.utils.fetchConToken(urlRecursos, 'POST', body)
+      const response = await this.utils.fetchConToken(urlSolicitudes, 'POST', body)
       if (response.status == 201) {
         i18n.global.t('comun.enviando')
         toastExito(
-          i18n.global.t('recursos.creado', {
-            recurso: nombre,
+          i18n.global.t('solicitudes.creada', {
+            solicitud: fechaSolicitud,
           }),
         )
         await this.auth.getDatosInicialesDeCenad(idCenad)
@@ -190,4 +163,4 @@ async fetchRecursoDeSolicitud(idSolicitud) {
     }
   }
 }
-export default RecursoService
+export default SolicitudService

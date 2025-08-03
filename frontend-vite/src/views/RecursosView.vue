@@ -53,7 +53,7 @@
                     <b>DESCRIPCIÓN</b>
                 </div>
             </div>
-            <RecursoComponent v-for="(item, index) in recursos" :key="index" :content="item" :idCenad="idCenad"
+            <RecursoComponent v-for="(item, index) in recursos" :key="index" :content="item"
                 @emiteElemento="actualizarRecursoEnView" />
         </div>
     </div>

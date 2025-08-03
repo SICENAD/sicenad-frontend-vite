@@ -102,7 +102,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import useAuthStore from '@/stores/auth'
-import RecursoService from '@/services/RecursoService'
+import RecursoService from '@/services/SolicitudService'
 import UsuarioService from '@/services/UsuarioService'
 import CategoriaService from '@/services/CategoriaService'
 import FicherosComponent from '@/components/FicherosComponent.vue'

@@ -23,7 +23,7 @@ import CategoriaService from '@/services/CategoriaService'
 import UsuarioService from '@/services/UsuarioService'
 import useAuthStore from '@/stores/auth'
 import { useRoute } from 'vue-router'
-const props = defineProps(['content', 'idCenad'])
+const props = defineProps(['content'])
 const emits = defineEmits(['emiteElemento'])
 const auth = useAuthStore()
 const route =useRoute()

@@ -117,15 +117,8 @@
                     </router-link>
                 </div>
             </li>
-            <!--Gestionar solicitudes como administrador-->
-            <li class="nav-item gestionar" v-if="isAdminEsteCenad">
-                <router-link class="nav-link gestionar" :to="`/calendarios/${idCenad}`">
-                    <v-icon scale="2" name="fa-business-time" />Solicitudes
-                </router-link>
-            </li>
-            <!-- Solicitudes como gestor-->
-            <li class="nav-item gestionar" v-if="isGestorNormal">
-                <router-link class="nav-link gestionar" :to="`/solicitudesRecursos/${idCenad}`">
+            <li class="nav-item gestionar">
+                <router-link class="nav-link gestionar" :to="{ name: 'solicitudes' }">
                     <v-icon scale="2" name="fa-business-time" />Solicitudes
                 </router-link>
             </li>

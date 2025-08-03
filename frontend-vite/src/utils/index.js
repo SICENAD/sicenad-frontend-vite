@@ -12,20 +12,31 @@ export function toTitleCase(str) {
 export function toSentenceCase(str) {
   return str.toLowerCase().split(' ').charAt(0).toUpperCase() + str.slice(1).join(' ')
 }
-export function formatearFecha(fechaISO) {//desde ISO a como la quiero presentar y  usar en el input tipo Date
+export function formatearFechaHora(fechaISO) {
+  //desde ISO a como la quiero presentar y  usar en el input tipo Date
   const fecha = new Date(fechaISO)
   const dia = String(fecha.getUTCDate()).padStart(2, '0')
   const mes = String(fecha.getUTCMonth() + 1).padStart(2, '0')
-  const year = fecha.getUTCFullYear();
-  return `${dia}/${mes}/${year}`
+  const year = fecha.getUTCFullYear()
+  const horas = String(fecha.getHours()).padStart(2, '0')
+  const minutos = String(fecha.getMinutes()).padStart(2, '0')
+  const segundos = String(fecha.getSeconds()).padStart(2, '0')
+  return `${dia}-${mes}-${year} ${horas}:${minutos}:${segundos}`
 }
-export function toDate(fechaISO) {//desde ISO a Date para
-  return new Date(fechaISO).toISOString().split("T")[0]
+export function formatearFecha(fechaSQL) {
+   if (!fechaSQL) return '';
+    const [fecha] = fechaSQL.split(' '); // separa fecha y hora
+    const [dia, mes, anio] = fecha.split('-');
+    return `${dia}-${mes}-${anio}`;
+}
+export function toDate(fechaISO) {
+  //desde ISO a Date para
+  return new Date(fechaISO).toISOString().split('T')[0]
 }
 // Convertir a string Instant (ISO) cuando se vaya a enviar al backend
 export function toInstant(fechaString) {
-  const date = new Date(fechaString); // yyyy-MM-dd
-  return date.toISOString(); // "2025-07-09T00:00:00.000Z"
+  const date = new Date(fechaString) // yyyy-MM-dd
+  return date.toISOString() // "2025-07-09T00:00:00.000Z"
 }
 export function toastExito(str) {
   return toast.success(str, {
@@ -40,65 +51,65 @@ export function baseNormalizada() {
   return baseNormalizada
 }
 export async function subirArchivo(archivo, urlUpload) {
-    if (!archivo) return null
-    const utils = useUtilsStore()
-    const formData = new FormData()
-    formData.append('file', archivo)
+  if (!archivo) return null
+  const utils = useUtilsStore()
+  const formData = new FormData()
+  formData.append('file', archivo)
 
-    const uploadResponse = await utils.fetchArchivoConToken(urlUpload, 'POST', formData)
+  const uploadResponse = await utils.fetchArchivoConToken(urlUpload, 'POST', formData)
 
-    if (uploadResponse.status == 413) {
-      alert('El archivo tiene un tamaño superior al permitido')
-      return false
-    }
-
-    const data = await uploadResponse.json()
-    console.log('Respuesta de subida:', data)
-
-    if (!uploadResponse.ok) {
-      if (data.mensaje) console.error(data.mensaje)
-      return false
-    }
-
-    return data.nombreArchivo // o el campo que corresponda
+  if (uploadResponse.status == 413) {
+    alert('El archivo tiene un tamaño superior al permitido')
+    return false
   }
-  export async function borrarArchivo(urlUpload) {
-    const utils = useUtilsStore()
 
-    const uploadResponse = await utils.fetchArchivoConToken(urlUpload, 'GET', null)
+  const data = await uploadResponse.json()
+  console.log('Respuesta de subida:', data)
 
-    if (uploadResponse.status == 400) {
-      alert('El archivo no ha sido borrado')
-      return false
-    }
-
-    const data = await uploadResponse.json()
-    console.log('Respuesta de eliminación:', data)
-
-    if (!uploadResponse.ok) {
-      if (data.mensaje) console.error(data.mensaje)
-      return false
-    }
-
-    return data 
+  if (!uploadResponse.ok) {
+    if (data.mensaje) console.error(data.mensaje)
+    return false
   }
+
+  return data.nombreArchivo // o el campo que corresponda
+}
+export async function borrarArchivo(urlUpload) {
+  const utils = useUtilsStore()
+
+  const uploadResponse = await utils.fetchArchivoConToken(urlUpload, 'GET', null)
+
+  if (uploadResponse.status == 400) {
+    alert('El archivo no ha sido borrado')
+    return false
+  }
+
+  const data = await uploadResponse.json()
+  console.log('Respuesta de eliminación:', data)
+
+  if (!uploadResponse.ok) {
+    if (data.mensaje) console.error(data.mensaje)
+    return false
+  }
+
+  return data
+}
 export async function borrarCarpeta(urlUpload) {
-    const utils = useUtilsStore()
+  const utils = useUtilsStore()
 
-    const uploadResponse = await utils.fetchCarpetaConToken(urlUpload, 'GET', null)
+  const uploadResponse = await utils.fetchCarpetaConToken(urlUpload, 'GET', null)
 
-    if (uploadResponse.status == 400) {
-      alert('La carpeta no ha sido borrada')
-      return false
-    }
-
-    const data = await uploadResponse.json()
-    console.log('Respuesta de eliminación:', data)
-
-    if (!uploadResponse.ok) {
-      if (data.mensaje) console.error(data.mensaje)
-      return false
-    }
-
-    return data 
+  if (uploadResponse.status == 400) {
+    alert('La carpeta no ha sido borrada')
+    return false
   }
+
+  const data = await uploadResponse.json()
+  console.log('Respuesta de eliminación:', data)
+
+  if (!uploadResponse.ok) {
+    if (data.mensaje) console.error(data.mensaje)
+    return false
+  }
+
+  return data
+}

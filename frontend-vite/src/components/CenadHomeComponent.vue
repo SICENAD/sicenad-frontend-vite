@@ -34,17 +34,11 @@
               Cartografía
             </router-link>
           </li>
-          <li class="pt-4" v-if="auth.rol == 'Normal'">
-            <router-link :to="`/solicitudesRecursos/${idCenad}/formulario/${idCenad}/${idSolicitud}`">
+          <li class="pt-4">
+            <router-link :to="{ name: 'solicitudes' }">
               <v-icon scale="2" class="me-2" name="fa-business-time" />
-              Solicitar Recurso
+              Solicitudes
             </router-link>
-          </li>
-          <li class="pt-4" v-if="auth.rol != 'Normal'">
-            <a href="#" @click.prevent="mensaje">
-              <v-icon scale="2" class="me-2" name="fa-business-time" />
-              Solicitar Recurso
-            </a>
           </li>
         </ul>
       </div>

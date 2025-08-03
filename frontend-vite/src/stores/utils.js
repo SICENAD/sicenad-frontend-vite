@@ -71,6 +71,7 @@ const useUtilsStore = defineStore('utils', {
     categoriaFicheroCartografia: (state) => state.properties?.categoriaFicheroCartografia || '1',
     tiposTiro: (state) => state.properties?.tiposTiro || [],
     escalasCartografia: (state) => state.properties?.escalasCartografia || [],
+    estadosSolicitud: (state) => state.properties?.estadosSolicitud || [],
   },
   actions: {
     async cargarPropiedadesIniciales() {

@@ -1,10 +1,11 @@
-import { baseNormalizada, toastExito, toSentenceCase, toTitleCase, formatearFecha, toInstant, toDate, subirArchivo, borrarArchivo } from '@/utils'
+import { baseNormalizada, toastExito, toSentenceCase, toTitleCase, formatearFecha, toInstant, toDate, subirArchivo, borrarArchivo, formatearFechaHora } from '@/utils'
 
 export default {
   install: (app) => {
     app.config.globalProperties.$utils = {
       toTitleCase,
       toSentenceCase,
+      formatearFechaHora,
       formatearFecha,
       toInstant,
       toDate,
