@@ -1,27 +1,37 @@
 <template>
     <div class="row">
-        <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1"><b>{{props.content.unidadUsuaria}}</b></div>
-        <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1"><b>{{formatearFecha(props.content.fechaSolicitud)}}</b></div>
-        <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo1"><b>{{recurso?.nombre}}</b></div>
-        <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1"><b>{{formatearFecha(props.content.fechaHoraInicioRecurso)}}</b></div>
-        <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1"><b>{{formatearFecha(props.content.fechaHoraFinRecurso)}}</b></div>
+        <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1">
+            <b class="me-2">{{ props.content.unidadUsuaria }}</b>
+            <SolicitudModalComponent :content="props.content" :recurso="recurso?.nombre" @emiteModal="actualizarSolicitudEnElemento"/>
+        </div>
+        <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1">
+            <b>{{ formatearFecha(props.content.fechaSolicitud) }}</b>
+        </div>
+        <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo1"><b>{{ recurso?.nombre }}</b></div>
+        <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1">
+            <b>{{ formatearFecha(props.content.fechaHoraInicioRecurso) }}</b>
+        </div>
+        <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1">
+            <b>{{ formatearFecha(props.content.fechaHoraFinRecurso) }}</b>
+        </div>
     </div>
 </template>
 <script setup>
 import RecursoService from '@/services/RecursoService'
 import { formatearFecha } from '@/utils'
 import { onMounted, ref } from 'vue'
+import SolicitudModalComponent from './SolicitudModalComponent.vue'
 
 const props = defineProps(['content'])
 const emits = defineEmits(['emiteElemento'])
 const recursoService = new RecursoService()
 const recurso = ref()
 function actualizarSolicitudEnElemento() {
-  emits('emiteElemento')
+    emits('emiteElemento')
 }
 onMounted(async () => {
-  const responseRecurso = await recursoService.fetchRecursoDeSolicitud(props.content.idString)
-  recurso.value = responseRecurso
+    const responseRecurso = await recursoService.fetchRecursoDeSolicitud(props.content.idString)
+    recurso.value = responseRecurso
 })
 </script>
 <style lang="scss" scoped>

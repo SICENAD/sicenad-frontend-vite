@@ -45,7 +45,7 @@ class SolicitudService {
       console.log(error)
     }
   }
-async fetchSolicitud(idSolicitud) {
+  async fetchSolicitud(idSolicitud) {
     try {
       const urlSolicitud = `${this.utils.urlApi}/solicitudes/${idSolicitud}`
       const response = await this.utils.fetchConToken(urlSolicitud, 'GET', null)
@@ -56,7 +56,20 @@ async fetchSolicitud(idSolicitud) {
       console.log(error)
     }
   }
-  async crearSolicitud(observaciones, unidadUsuaria, jefeUnidadUsuaria, pocEjercicio, tlfnRedactor, fechaSolicitud, fechaHoraInicioRecurso, fechaHoraFinRecurso, estado, idCenad, idRecurso, idUsuarioNormal) {
+  async crearSolicitud(
+    observaciones,
+    unidadUsuaria,
+    jefeUnidadUsuaria,
+    pocEjercicio,
+    tlfnRedactor,
+    fechaSolicitud,
+    fechaHoraInicioRecurso,
+    fechaHoraFinRecurso,
+    estado,
+    idCenad,
+    idRecurso,
+    idUsuarioNormal,
+  ) {
     try {
       const urlSolicitudes = `${this.utils.urlApi}/solicitudes`
       const body = {
@@ -66,11 +79,12 @@ async fetchSolicitud(idSolicitud) {
         pocEjercicio: pocEjercicio,
         tlfnRedactor: tlfnRedactor,
         fechaSolicitud: formatearFechaHora(fechaSolicitud),
+        fechaUltModSolicitud: formatearFechaHora(fechaSolicitud),
         fechaHoraInicioRecurso: formatearFechaHora(fechaHoraInicioRecurso),
-        fechaHoraFinRecurso:formatearFechaHora(fechaHoraFinRecurso),
+        fechaHoraFinRecurso: formatearFechaHora(fechaHoraFinRecurso),
         recurso: `${this.utils.urlApi}/recursos/${idRecurso}`,
         usuarioNormal: `${this.utils.urlApi}/usuarios_normal/${idUsuarioNormal}`,
-        estado: estado
+        estado: estado,
       }
       const response = await this.utils.fetchConToken(urlSolicitudes, 'POST', body)
       if (response.status == 201) {
@@ -88,16 +102,70 @@ async fetchSolicitud(idSolicitud) {
       return false
     }
   }
-  async editarRecurso(nombre, descripcion, otros, idCenad, idTipoFormulario, idCategoria, idGestor, idRecurso) {
+  async editarSolicitud(
+    observaciones,
+    unidadUsuaria,
+    jefeUnidadUsuaria,
+    pocEjercicio,
+    tlfnRedactor,
+    fechaHoraInicioRecurso,
+    fechaHoraFinRecurso,
+    estado,
+    idCenad,
+    idSolicitud,
+    observacionesCenad,
+    fechaFinDocumentacion,
+
+  ) {
+    try {
+      const urlSolicitud = `${this.utils.urlApi}/solicitudes/${idSolicitud}`
+      const body = {
+        observaciones: observaciones,
+        observacionesCenad: observacionesCenad,
+        unidadUsuaria: unidadUsuaria.toUpperCase(),
+        jefeUnidadUsuaria: toTitleCase(jefeUnidadUsuaria),
+        pocEjercicio: pocEjercicio,
+        tlfnRedactor: tlfnRedactor,
+        fechaFinDocumentacion: formatearFechaHora(fechaFinDocumentacion),
+        fechaUltModSolicitud: formatearFechaHora(new Date()),
+        fechaHoraInicioRecurso: formatearFechaHora(fechaHoraInicioRecurso),
+        fechaHoraFinRecurso: formatearFechaHora(fechaHoraFinRecurso),
+        estado: estado,
+      }
+      const response = await this.utils.fetchConToken(urlSolicitud, 'PATCH', body)
+      if (response.status == 200) {
+        toastExito(
+          i18n.global.t('solicitudes.editado', {
+            solicitud: fechaSolicitud,
+          }),
+        )
+        await this.auth.getDatosInicialesDeCenad(idCenad)
+        return this.solicitud
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.error(error)
+      return null
+    }
+  }
+  async editarRecursoDetalle(
+    nombre,
+    descripcion,
+    otros,
+    conDatosEspecificosSolicitud,
+    datosEspecificosSolicitud,
+    idCenad,
+    idRecurso,
+  ) {
     try {
       const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
       const body = {
         nombre: nombre.toUpperCase(),
         descripcion: descripcion,
         otros: otros,
-        tipoFormulario: `${this.utils.urlApi}/tipos_formulario/${idTipoFormulario}`,
-        categoria: `${this.utils.urlApi}/categorias/${idCategoria}`,
-        usuarioGestor: `${this.utils.urlApi}/usuarios_gestor/${idGestor}`
+        conDatosEspecificosSolicitud: conDatosEspecificosSolicitud,
+        datosEspecificosSolicitud: datosEspecificosSolicitud,
       }
       const response = await this.utils.fetchConToken(urlRecurso, 'PATCH', body)
       if (response.status == 200) {
@@ -116,43 +184,16 @@ async fetchSolicitud(idSolicitud) {
       return null
     }
   }
- async editarRecursoDetalle(nombre, descripcion, otros, conDatosEspecificosSolicitud, datosEspecificosSolicitud, idCenad, idRecurso) {
+  async deleteSolicitud(idCenad, idSolicitud) {
     try {
-      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
-      const body = {
-        nombre: nombre.toUpperCase(),
-        descripcion: descripcion,
-        otros: otros,
-        conDatosEspecificosSolicitud: conDatosEspecificosSolicitud,
-        datosEspecificosSolicitud: datosEspecificosSolicitud
-      }
-      const response = await this.utils.fetchConToken(urlRecurso, 'PATCH', body)
-      if (response.status == 200) {
-        toastExito(
-          i18n.global.t('recursos.editado', {
-            recurso: nombre,
-          }),
-        )
-        await this.auth.getDatosInicialesDeCenad(idCenad)
-        return this.recurso
-      } else {
-        return null
-      }
-    } catch (error) {
-      console.error(error)
-      return null
-    }
-  }  
-  async deleteRecurso(idCenad, idRecurso) {
-    try {
-      const urlRecurso = `${this.utils.urlApi}/recursos/${idRecurso}`
-      const response = await this.utils.fetchConToken(urlRecurso, 'DELETE', null)
+      const urlSolicitud = `${this.utils.urlApi}/solicitudes/${idSolicitud}`
+      const response = await this.utils.fetchConToken(urlSolicitud, 'DELETE', null)
       const json = await response.json()
-      this.recurso.value = await json
+      this.solicitud.value = await json
       if (response.status == 200) {
         toastExito(
-          i18n.global.t('recursos.recursoBorrado', {
-            recurso: this.recurso.value.nombre,
+          i18n.global.t('solicitudes.solicitudBorrada', {
+            solicitud: this.solicitud.value.fechaSolicitud,
           }),
         )
         await this.auth.getDatosInicialesDeCenad(idCenad)

@@ -52,12 +52,14 @@
                         <div class="row py-2 justify-content-between">
                             <div class="col-lg-2 col-md-12">
                                 <label class="me-2">Unidad Solicitante: <sup class="text-danger">*</sup></label>
-                                <select class="form-select" aria-label="unidad" v-model="unidad">
+                                <select class="form-select" aria-label="unidad" v-model="unidad"
+                                    v-if="auth.rol != 'Normal'">
                                     <option disabled value="">Selecciona la unidad</option>
                                     <option v-for="unidad in unidades" :key="unidad.idString" :value="unidad">
                                         {{ unidad.nombre }}
                                     </option>
                                 </select>
+                                <label class="form-control" v-else>{{ auth.unidad.nombre }}</label>
                             </div>
                             <div class="col-lg-2 col-md-12">
                                 <label>Jefe Unidad Usuaria: <sup class="text-danger">*</sup></label>
@@ -86,7 +88,7 @@
                                 <label class="d-block me-2 mt-2" v-if="historialCategorias.length > 0">
                                     Categoría Seleccionada:
                                     <strong>{{ historialCategorias[historialCategorias.length - 1].nombre.toUpperCase()
-                                        }}</strong>
+                                    }}</strong>
                                 </label>
                                 <label class="me-5">Categoría: <sup class="text-danger me-3">*</sup></label>
                                 <select v-if="(categoriasFiltradas || []).length > 0" v-model="categoriaSeleccionada"
@@ -145,7 +147,7 @@
                         {{ $t('comun.cerrar') }}
                     </button>
                     <button type="button" @click="crearSolicitud" data-bs-dismiss="modal" class="btn btn-primary"
-                        :disabled="!formularioValidado">
+                        :disabled="!formularioValidado" v-if="auth.rol == 'Normal'">
                         Crear Solicitud (Borrador)
                     </button>
                     <button type="button" @click="crearYEnviarSolicitud" data-bs-dismiss="modal" class="btn btn-primary"
@@ -194,7 +196,6 @@ const isGestorEsteCenad = ref(false)
 const service = new SolicitudService()
 const categoriaService = new CategoriaService()
 const recursoService = new RecursoService()
-const solicitudes = service.getSolicitudes()
 const solicitudesPorEstado = ref({
     Solicitada: [],
     Validada: [],
@@ -203,9 +204,9 @@ const solicitudesPorEstado = ref({
     Borrador: []
 })
 onMounted(async () => {
+    await getSolicitudes()
     auth.rol == 'Gestor' && (isGestorEsteCenad.value = idCenad.value == auth.cenad.idString)
     auth.rol == 'Administrador' && (isAdminEsteCenad.value = idCenad.value == auth.cenad.idString)
-    await getSolicitudes()
     loading.value = true
     await cargarCategoriasPadre()
     loading.value = false
@@ -295,6 +296,7 @@ const retroceder = async () => {
 }
 async function getSolicitudes() {
     const data = await service.fetchAll(idCenad.value)
+    console.log(data)
     solicitudesPorEstado.value.Solicitada = data.filter(s => s.estado === 'Solicitada')
     solicitudesPorEstado.value.Validada = data.filter(s => s.estado === 'Validada')
     solicitudesPorEstado.value.Rechazada = data.filter(s => s.estado === 'Rechazada')
@@ -310,7 +312,7 @@ const crearYEnviarSolicitud = async () => {
     crearSolicitud()
 }
 const crearSolicitud = async () => {
-    console.log(estado)
+    auth.rol == 'Normal' && (unidad.value = auth.unidad)
     await service.crearSolicitud(observaciones.value, unidad.value.nombre, jefeUnidadUsuaria.value, pocEjercicio.value, tlfnRedactor.value, fechaSolicitud.value, fechaInicio.value, fechaFin.value, estado, idCenad.value, idRecurso.value, auth.usuario.idString)
     observaciones.value = ''
     jefeUnidadUsuaria.value = ''

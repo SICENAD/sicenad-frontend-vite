@@ -1,4 +1,4 @@
-import { baseNormalizada, toastExito, toSentenceCase, toTitleCase, formatearFecha, toInstant, toDate, subirArchivo, borrarArchivo, formatearFechaHora } from '@/utils'
+import { baseNormalizada, toastExito, toSentenceCase, toTitleCase, formatearFecha, toInstant, toDate, subirArchivo, borrarArchivo, formatearFechaHora, parseDate, formatDate, formatDateTime } from '@/utils'
 
 export default {
   install: (app) => {
@@ -9,6 +9,9 @@ export default {
       formatearFecha,
       toInstant,
       toDate,
+      parseDate,
+      formatDate,
+      formatDateTime,
       toastExito,
       baseNormalizada,
       subirArchivo, 

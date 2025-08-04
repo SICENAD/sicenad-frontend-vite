@@ -21,6 +21,7 @@ const useAuthStore = defineStore('auth', {
       recursos: [],
       cartografias: [],
       normativas: [],
+      solicitudes: [],
       usuariosGestor: [],
       usuarioAdministrador: null,
       cenadVisitado: null,
@@ -198,6 +199,7 @@ const useAuthStore = defineStore('auth', {
           recursosRes,
           cartografiasRes,
           normativasRes,
+          solicitudesRes,
           usuariosGestoresRes,
         ] = await Promise.all([
           utils.fetchConToken(
@@ -211,6 +213,7 @@ const useAuthStore = defineStore('auth', {
           utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/recursos`, 'GET', null),
           utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/cartografias`, 'GET', null),
           utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/normativas`, 'GET', null),
+          utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/solicitudes`, 'GET', null),
           utils.fetchConToken(`${utils.urlApi}/cenads/${idCenad}/usuariosGestores`, 'GET', null),
         ])
         this.categorias = categoriasRes.ok
@@ -225,6 +228,9 @@ const useAuthStore = defineStore('auth', {
           : []
         this.normativas = normativasRes.ok
           ? (await normativasRes.json())?._embedded?.ficheros || []
+          : []
+        this.solicitudes = solicitudesRes.ok
+          ? (await solicitudesRes.json())?._embedded?.solicitudes || []
           : []
         this.usuariosGestor = usuariosGestoresRes.ok
           ? (await usuariosGestoresRes.json())?._embedded?.usuarios_gestor || []
@@ -263,6 +269,7 @@ const useAuthStore = defineStore('auth', {
       this.recursos = []
       this.cartografias = []
       this.normativas = []
+      this.solicitudes = []
       this.usuariosGestor = []
       this.usuarioAdministrador = null
       this.cenadVisitado = null
@@ -298,6 +305,22 @@ const useAuthStore = defineStore('auth', {
       'tiposFormulario',
       'unidades',
       'armas',
+      'usuariosSuperadministrador',
+      'usuariosAdministrador',
+      'usuariosNormal',
+      'categorias',
+      'categoriasPadre',
+      'recursos',
+      'cartografias',
+      'normativas',
+      'solicitudes',
+      'usuariosGestor',
+      'usuarioAdministrador',
+      'cenadVisitado',
+      'cenad',
+      'unidad',
+      'usuario',
+      'isReady',
     ], //si quisiera persistir todo el store simplemente cambio el objeto por true...
   },
 })

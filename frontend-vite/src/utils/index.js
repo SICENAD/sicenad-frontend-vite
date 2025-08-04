@@ -18,9 +18,9 @@ export function formatearFechaHora(fechaISO) {
   const dia = String(fecha.getUTCDate()).padStart(2, '0')
   const mes = String(fecha.getUTCMonth() + 1).padStart(2, '0')
   const year = fecha.getUTCFullYear()
-  const horas = String(fecha.getHours()).padStart(2, '0')
-  const minutos = String(fecha.getMinutes()).padStart(2, '0')
-  const segundos = String(fecha.getSeconds()).padStart(2, '0')
+  const horas = String(fecha.getUTCHours()).padStart(2, '0')
+  const minutos = String(fecha.getUTCMinutes()).padStart(2, '0')
+  const segundos = String(fecha.getUTCSeconds()).padStart(2, '0')
   return `${dia}-${mes}-${year} ${horas}:${minutos}:${segundos}`
 }
 export function formatearFecha(fechaSQL) {
@@ -37,6 +37,32 @@ export function toDate(fechaISO) {
 export function toInstant(fechaString) {
   const date = new Date(fechaString) // yyyy-MM-dd
   return date.toISOString() // "2025-07-09T00:00:00.000Z"
+}
+export function parseDate(dateString) {
+    if (!dateString) return null
+
+    // Formato dd-MM-yyyy HH:mm:ss
+    const match = dateString.match(/^(\d{2})-(\d{2})-(\d{4})(?: (\d{2}):(\d{2})(?::(\d{2}))?)?$/)
+    if (match) {
+        const [ , day, month, year, hour = '00', minute = '00', second = '00' ] = match
+        return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`)
+    }
+
+    // Si ya viene en formato ISO (por seguridad)
+    if (/^\d{4}-\d{2}-\d{2}/.test(dateString)) {
+        return new Date(dateString.replace(' ', 'T'))
+    }
+    return null
+}
+export function formatDate(dateString) {
+    const date = parseDate(dateString)
+    if (!date || isNaN(date)) return ''
+    return date.toISOString().slice(0, 10) // YYYY-MM-DD
+}
+export function formatDateTime(dateString) {
+    const date = parseDate(dateString)
+    if (!date || isNaN(date)) return ''
+    return date.toISOString().slice(0, 16) // YYYY-MM-DDTHH:mm
 }
 export function toastExito(str) {
   return toast.success(str, {
