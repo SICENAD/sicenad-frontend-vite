@@ -6,7 +6,7 @@
             </label>
         </h5>
         <hr :class='`w-100 titulo-${claseEstado}`'>
-        <div class="row">
+        <div class="row" v-if="solicitudesTop5?.length">
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>UCO</u></b></div>
             <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo"><b><u>SOLICITUD</u></b></div>
             <div class="col-10 col-sm-10 col-md-4 col-lg-4 col-xl-4 titulo"><b><u>RECURSO</u></b></div>
