@@ -56,7 +56,7 @@ async fetchSolicitud(idSolicitud) {
       console.log(error)
     }
   }
-  async crearSolicitud(observaciones, unidadUsuaria, jefeUnidadUsuaria, pocEjercicio, tlfnRedactor, fechaSolicitud, fechaHoraInicioRecurso, fechaHoraFinRecurso, idCenad, idRecurso, idUsuarioNormal) {
+  async crearSolicitud(observaciones, unidadUsuaria, jefeUnidadUsuaria, pocEjercicio, tlfnRedactor, fechaSolicitud, fechaHoraInicioRecurso, fechaHoraFinRecurso, estado, idCenad, idRecurso, idUsuarioNormal) {
     try {
       const urlSolicitudes = `${this.utils.urlApi}/solicitudes`
       const body = {
@@ -70,7 +70,7 @@ async fetchSolicitud(idSolicitud) {
         fechaHoraFinRecurso:formatearFechaHora(fechaHoraFinRecurso),
         recurso: `${this.utils.urlApi}/recursos/${idRecurso}`,
         usuarioNormal: `${this.utils.urlApi}/usuarios_normal/${idUsuarioNormal}`,
-        estado: "Borrador"
+        estado: estado
       }
       const response = await this.utils.fetchConToken(urlSolicitudes, 'POST', body)
       if (response.status == 201) {

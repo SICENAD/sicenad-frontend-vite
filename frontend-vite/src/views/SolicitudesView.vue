@@ -17,22 +17,22 @@
     </div>
     <div class="row solicitadas-validadas mb-3" v-if="auth.rol == 'Normal' || isAdminEsteCenad || isGestorEsteCenad">
         <div class="col-6 solicitadas">
-            <SolicitudesEstadoComponent :estado="'Solicitada'"  :solicitudes="solicitudesPorEstado.Solicitada" />
+            <SolicitudesEstadoComponent :estado="'Solicitada'" :solicitudes="solicitudesPorEstado.Solicitada" />
         </div>
         <div class="col-6 validadas">
-            <SolicitudesEstadoComponent :estado="'Validada'"  :solicitudes="solicitudesPorEstado.Validada"/>
+            <SolicitudesEstadoComponent :estado="'Validada'" :solicitudes="solicitudesPorEstado.Validada" />
         </div>
     </div>
     <div class="row rechazadas-canceladas mb-3" v-if="auth.rol == 'Normal' || isAdminEsteCenad || isGestorEsteCenad">
         <div class="col-6 rechazadas">
-            <SolicitudesEstadoComponent :estado="'Rechazada'"  :solicitudes="solicitudesPorEstado.Rechazada"/>
+            <SolicitudesEstadoComponent :estado="'Rechazada'" :solicitudes="solicitudesPorEstado.Rechazada" />
             <hr class='w-100 titulo-rechazadas'>
         </div>
         <div class="col-6 canceladas" v-if="auth.rol != 'Normal'">
-            <SolicitudesEstadoComponent :estado="'Cancelada'"  :solicitudes="solicitudesPorEstado.Cancelada"/>
+            <SolicitudesEstadoComponent :estado="'Cancelada'" :solicitudes="solicitudesPorEstado.Cancelada" />
         </div>
         <div class="col-6 borrador" v-if="auth.rol == 'Normal'">
-            <SolicitudesEstadoComponent :estado="'Borrador'"  :solicitudes="solicitudesPorEstado.Borrador"/>
+            <SolicitudesEstadoComponent :estado="'Borrador'" :solicitudes="solicitudesPorEstado.Borrador" />
         </div>
     </div>
     <!-- Modal -->
@@ -146,7 +146,11 @@
                     </button>
                     <button type="button" @click="crearSolicitud" data-bs-dismiss="modal" class="btn btn-primary"
                         :disabled="!formularioValidado">
-                        Crear Solicitud
+                        Crear Solicitud (Borrador)
+                    </button>
+                    <button type="button" @click="crearYEnviarSolicitud" data-bs-dismiss="modal" class="btn btn-primary"
+                        :disabled="!formularioValidado">
+                        Crear y Enviar Solicitud
                     </button>
                 </div>
             </div>
@@ -175,6 +179,7 @@ let fechaInicio = ref()
 let fechaFin = ref()
 let idRecurso = ref('')
 let unidad = ref(null)
+let estado = 'Borrador'
 const categoriasFiltradas = ref([])
 const recursos = ref([])
 const categoriaSeleccionada = ref(null)
@@ -300,10 +305,13 @@ async function getSolicitudes() {
 function actualizarSolicitudEnView() {
     getSolicitudes()
 }
+const crearYEnviarSolicitud = async () => {
+    estado = 'Solicitada'
+    crearSolicitud()
+}
 const crearSolicitud = async () => {
-    console.log(fechaSolicitud.value)//2025-08-04T19:34
-
-    await service.crearSolicitud(observaciones.value, unidad.value.nombre, jefeUnidadUsuaria.value, pocEjercicio.value, tlfnRedactor.value, fechaSolicitud.value, fechaInicio.value, fechaFin.value, idCenad.value, idRecurso.value, auth.usuario.idString)
+    console.log(estado)
+    await service.crearSolicitud(observaciones.value, unidad.value.nombre, jefeUnidadUsuaria.value, pocEjercicio.value, tlfnRedactor.value, fechaSolicitud.value, fechaInicio.value, fechaFin.value, estado, idCenad.value, idRecurso.value, auth.usuario.idString)
     observaciones.value = ''
     jefeUnidadUsuaria.value = ''
     pocEjercicio.value = ''
@@ -314,6 +322,8 @@ const crearSolicitud = async () => {
     unidad.value = null
     categoriaSeleccionada.value = null
     idRecurso.value = ''
+    estado = 'Borrador'
+    await cargarCategoriasPadre()
     await getSolicitudes()
 }
 // Validación: todos los campos deben estar llenos
