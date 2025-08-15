@@ -184,14 +184,6 @@ const router = createRouter({
             requireAuth: true,
           },
         },
-                {
-          path: 'solicitudes/:idSolicitud',
-          name: 'solicitud',
-          component: () => import('../components/SolicitudDetalleComponent.vue'),
-          meta: {
-            requireAuth: true,
-          },
-        },
         {
           path: 'usuarios',
           name: 'usuarios-cenad',
