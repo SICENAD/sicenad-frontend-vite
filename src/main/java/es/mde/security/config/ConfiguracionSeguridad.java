@@ -26,7 +26,7 @@ public class ConfiguracionSeguridad {
 	private final AuthenticationProvider authProvider;
 
 	private static String allowedOriginLocal = "local";
-	private static String allowedOriginProduccion = "produccion";
+	private static String allowedOriginProduccion = "https://sicenad-frontend-vite.netlify.app";
 
 	
 	public ConfiguracionSeguridad(JwtAuthenticationFilter jwtAuthenticationFilter,@Qualifier("allowedOriginLocal") String originLocal, @Qualifier("allowedOriginProduccion") String originProduccion,
