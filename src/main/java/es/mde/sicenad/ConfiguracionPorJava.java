@@ -245,7 +245,7 @@ public class ConfiguracionPorJava {
 	@Bean("allowedOriginProduccion")
 	public String getAllowedOriginProduccion() {
 
-		return allowedOriginLocal;
+		return allowedOriginProduccion;
 	}
 	
 	/**
