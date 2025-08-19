@@ -100,6 +100,8 @@ const utils = useUtilsStore()
 const auth = useAuthStore()
 const route = useRoute()
 const idCenad = computed(() => route.params.id)
+const idSolicitud = computed(() => route.params.idSolicitud)
+
 let sizeMaxDocRecurso = ref(utils.sizeMaxDocRecurso)
 let nombre = ref('')
 let nombreArchivo = ref('')
@@ -129,22 +131,23 @@ function onFileChange(e) {
     nombreArchivo.value = file ? file.name : ''
 }
 async function getDocumentacionCenad() {
-    const datos = await service.fetchDocumentacionSolicitudCenad(props.idSolicitud)
+    const datos = await service.fetchDocumentacionSolicitudCenad(idSolicitud.value)
     // Añadir la URL a cada fichero
     if (datos) {
         for (let fichero of datos) {
-            fichero.url = await service.fetchArchivoDocumentacionSolicitud(fichero.nombreArchivo, idCenad.value, props.idSolicitud)
+            console.log(idSolicitud.value)
+            fichero.url = await service.fetchArchivoDocumentacionSolicitud(fichero.nombreArchivo, idCenad.value, idSolicitud.value)
         }
     }
     documentacionCenad.value = datos
     return documentacionCenad.value
 }
 async function getDocumentacionUnidad() {
-    const datos = await service.fetchDocumentacionSolicitudUnidad(props.idSolicitud)
+    const datos = await service.fetchDocumentacionSolicitudUnidad(idSolicitud.value)
     // Añadir la URL a cada fichero
     if (datos) {
         for (let fichero of datos) {
-            fichero.url = await service.fetchArchivoDocumentacionSolicitud(fichero.nombreArchivo, idCenad.value, props.idSolicitud)
+            fichero.url = await service.fetchArchivoDocumentacionSolicitud(fichero.nombreArchivo, idCenad.value, idSolicitud.value)
         }
     }
     documentacionUnidad.value = datos
@@ -157,7 +160,7 @@ function actualizarFicheroEnView() {
     getDocumentacion()
 }
 const crearDocumentacion = async () => {
-    await service.crearDocumentacionSolicitud(nombre.value, descripcion.value, ficheroFile.value, idCategoriaFichero.value, idCenad.value, props.idSolicitud, props.isCenad)
+    await service.crearDocumentacionSolicitud(nombre.value, descripcion.value, ficheroFile.value, idCategoriaFichero.value, idCenad.value, idSolicitud.value, props.isCenad)
     nombre.value = ''
     ficheroFile.value = null
     descripcion.value = ''

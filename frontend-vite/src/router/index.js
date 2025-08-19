@@ -168,7 +168,7 @@ const router = createRouter({
             requireAuth: true,
           },
         },
-                {
+        {
           path: 'solicitudes',
           name: 'solicitudes',
           component: () => import('../views/SolicitudesView.vue'),
@@ -180,6 +180,14 @@ const router = createRouter({
           path: 'solicitudes/:estado',
           name: 'solicitudes-estado',
           component: () => import('../components/SolicitudesEstadoComponent.vue'),
+          meta: {
+            requireAuth: true,
+          },
+        },
+        {
+          path: 'solicitudes/:idSolicitud',
+          name: 'solicitudDetalle',
+          component: () => import('../components/SolicitudDetalleComponent.vue'),
           meta: {
             requireAuth: true,
           },

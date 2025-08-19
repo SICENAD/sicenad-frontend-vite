@@ -2,7 +2,10 @@
     <div class="row">
         <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1">
             <b class="me-2">{{ props.content.unidadUsuaria }}</b>
-            <SolicitudModalComponent :content="props.content" :recurso="recurso?.nombre" @emiteModal="actualizarSolicitudEnElemento"/>
+            <router-link :to="{ name: 'solicitudDetalle', params: { idSolicitud: props.content.idString } }">
+                <v-icon name="fa-edit" v-if="isEditable" scale="1.5" />
+                <v-icon name="fa-eye" v-else scale="1.5" />
+            </router-link>
         </div>
         <div class="col-10 col-sm-10 col-md-2 col-lg-2 col-xl-2 titulo1">
             <b>{{ formatearFecha(props.content.fechaSolicitud) }}</b>
@@ -20,18 +23,20 @@
 import RecursoService from '@/services/RecursoService'
 import { formatearFecha } from '@/utils'
 import { onMounted, ref } from 'vue'
-import SolicitudModalComponent from './SolicitudModalComponent.vue'
 
 const props = defineProps(['content'])
 const emits = defineEmits(['emiteElemento'])
 const recursoService = new RecursoService()
 const recurso = ref()
+const isEditable = ref(false)
+
 function actualizarSolicitudEnElemento() {
     emits('emiteElemento')
 }
 onMounted(async () => {
     const responseRecurso = await recursoService.fetchRecursoDeSolicitud(props.content.idString)
     recurso.value = responseRecurso
+    isEditable.value = (props.content.estado == 'Borrador' || props.content.estado == 'Solicitada' || isAdminEsteCenad.value || isGestorEsteCenad.value)
 })
 </script>
 <style lang="scss" scoped>
@@ -53,6 +58,10 @@ onMounted(async () => {
 
 .titulo1 {
     color: #588157;
+}
+.titulo1 a {
+  color: inherit !important; /* el link hereda el color del padre */
+  text-decoration: none;
 }
 
 h5 {
