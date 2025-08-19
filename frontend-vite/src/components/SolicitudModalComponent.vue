@@ -19,10 +19,6 @@
                     <form class="formulario">
                         <!--cuando se abra como no editable todo el form sera de lectura-->
                         <fieldset :disabled="!isEditable">
-
-
-
-
                             <div class="row py-2 justify-content-between">
                                 <div class="col-lg-2 col-md-12">
                                     <label class="me-2">Unidad Solicitante: <sup class="text-danger">*</sup></label>
@@ -85,13 +81,39 @@
                                 </textarea>
                                 </div>
                             </div>
-                            <div class="ms-2 py-2 mt-2 col-lg-2 col-md-12 d-flex align-items-center">
-                                <label for="validationServer02" class="mb-0 me-2 flex-grow-1" style="min-width: 200px;">
-                                    Fecha Fin Documentación:
-                                </label>
-                                <input type="date" class="form-control w-auto" v-model="fechaFinDocumentacion"
-                                    placeholder="dd-MM-yyyy" required name="fechaFinDocumentacion" />
+                            <div class="row py-2 mt-2 justify-content-start">
+                                <div class="col-auto d-flex align-items-center">
+                                    <label class="me-2 mb-0">
+                                        <b>Estado de la solicitud: <sup class="text-danger">*</sup></b>
+                                    </label>
+                                    <select class="form-select form-select-sm w-auto" aria-label="estado"
+                                        v-model="estado">
+                                        <option v-for="(estado, index) in estados" :key="index" :value="estado">
+                                            {{ estado }}
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
+                            <div class="row py-2 mt-2 justify-content-start">
+                                <div class="col-auto d-flex align-items-center">
+                                    <label class="me-2 mb-0">
+                                        <b>Fecha Fin Documentación: <sup class="text-danger">*</sup></b>
+                                    </label>
+                                    <input type="date" class="form-control w-auto" v-model="fechaFinDocumentacion"
+                                        placeholder="dd-MM-yyyy" required name="fechaFinDocumentacion" />
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                            <FicherosDeSolicitudComponent :isCenad=true :idSolicitud="props.content.idString"/>
+                            </div>
+                            <div>
+                            <FicherosDeSolicitudComponent :isCenad=false :idSolicitud="props.content.idString"/>
+                            </div>
+
+
+
+
+
 
 
 
@@ -142,13 +164,17 @@
 <script setup>
 import SolicitudService from '@/services/SolicitudService'
 import useAuthStore from '@/stores/auth'
+import useUtilsStore from '@/stores/utils'
 import { formatDate, formatDateTime } from '@/utils'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import FicherosDeSolicitudComponent from './FicherosDeSolicitudComponent.vue'
 const auth = useAuthStore()
 const props = defineProps(['content', 'recurso'])
 const emits = defineEmits(['emiteModal'])
 const route = useRoute()
+const utils = useUtilsStore()
+const estados = utils.estadosSolicitud
 const isEditable = ref(false)
 const observaciones = ref(props.content.observaciones)
 const jefeUnidadUsuaria = ref(props.content.jefeUnidadUsuaria)

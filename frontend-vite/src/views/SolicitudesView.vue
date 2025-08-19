@@ -296,7 +296,6 @@ const retroceder = async () => {
 }
 async function getSolicitudes() {
     const data = await service.fetchAll(idCenad.value)
-    console.log(data)
     solicitudesPorEstado.value.Solicitada = data.filter(s => s.estado === 'Solicitada')
     solicitudesPorEstado.value.Validada = data.filter(s => s.estado === 'Validada')
     solicitudesPorEstado.value.Rechazada = data.filter(s => s.estado === 'Rechazada')
