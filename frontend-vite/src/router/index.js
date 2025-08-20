@@ -177,7 +177,7 @@ const router = createRouter({
           },
         },
         {
-          path: 'solicitudes/:estado',
+          path: 'solicitudes/estado/:estado',
           name: 'solicitudes-estado',
           component: () => import('../components/SolicitudesEstadoComponent.vue'),
           meta: {

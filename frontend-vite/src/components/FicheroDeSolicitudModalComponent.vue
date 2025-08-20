@@ -109,7 +109,6 @@ const nombre = ref(props.nombre || '');
 const idFichero = ref(props.idFichero)
 const idCenad = ref(props.idCenad)
 const idRecurso = ref(props.idRecurso)
-console.log(props)
 const idCategoriaFichero = ref('')
 const idModal = 'modal-fichero-' + props.idFichero
 const idModalEliminar = 'modal-fichero-eliminar' + props.idFichero

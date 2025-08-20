@@ -95,7 +95,7 @@ import { useRoute } from 'vue-router'
 import FicheroService from '@/services/FicheroService'
 import CategoriaFicheroService from '@/services/CategoriaFicheroService'
 import FicheroDeSolicitudComponent from './FicheroDeSolicitudComponent.vue'
-const props = defineProps(['rol', 'isCenad', 'idSolicitud'])
+const props = defineProps(['rol', 'isCenad'])
 const utils = useUtilsStore()
 const auth = useAuthStore()
 const route = useRoute()
@@ -135,7 +135,6 @@ async function getDocumentacionCenad() {
     // Añadir la URL a cada fichero
     if (datos) {
         for (let fichero of datos) {
-            console.log(idSolicitud.value)
             fichero.url = await service.fetchArchivoDocumentacionSolicitud(fichero.nombreArchivo, idCenad.value, idSolicitud.value)
         }
     }
@@ -156,8 +155,8 @@ async function getDocumentacionUnidad() {
 function getDocumentacion() {
     return props.isCenad ? getDocumentacionCenad() : getDocumentacionUnidad()
 }
-function actualizarFicheroEnView() {
-    getDocumentacion()
+async function actualizarFicheroEnView() {
+    documentacion.value = await getDocumentacion()
 }
 const crearDocumentacion = async () => {
     await service.crearDocumentacionSolicitud(nombre.value, descripcion.value, ficheroFile.value, idCategoriaFichero.value, idCenad.value, idSolicitud.value, props.isCenad)
@@ -167,7 +166,7 @@ const crearDocumentacion = async () => {
     idCategoriaFichero.value = ''
     mostrarFormulario.value = false
 
-    getDocumentacion()
+    documentacion.value = await getDocumentacion()
 }
 // Validación: todos los campos deben estar llenos
 const formularioValidado = computed(() => {
