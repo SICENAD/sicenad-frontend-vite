@@ -40,7 +40,7 @@
                         <!-- Archivo -->
                         <div class="col-md-4">
                             <label class="form-label">
-                                <b>Archivo *</b> (Máx: {{ sizeMaxDocRecurso }} MB)
+                                <b>Archivo *</b> (Máx: {{ sizeMaxDocSolicitud }} MB)
                             </label>
                             <input type="file" class="form-control" @change="onFileChange" />
                             <small class="text-muted">{{ nombreArchivo }}</small>
@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <FicheroDeSolicitudComponent v-for="item in documentacion" :key="item.idString" :content="item"
-                    :idCenad="idCenad" :idSolicitud="idSolicitud" @emiteElemento="actualizarFicheroEnView" />
+                    :idCenad="idCenad" :idSolicitud="idSolicitud" :isCenad="props.isCenad" @emiteElemento="actualizarFicheroEnView" />
             </div>
         </div>
     </div>
@@ -102,7 +102,7 @@ const route = useRoute()
 const idCenad = computed(() => route.params.id)
 const idSolicitud = computed(() => route.params.idSolicitud)
 
-let sizeMaxDocRecurso = ref(utils.sizeMaxDocRecurso)
+let sizeMaxDocSolicitud = ref(utils.sizeMaxDocSolicitud)
 let nombre = ref('')
 let nombreArchivo = ref('')
 let descripcion = ref('')

@@ -32,7 +32,7 @@
             </div>
             <div class="mb-3">
               <label class="titulo"><b>ARCHIVO<sup class="text-danger mr-2">*</sup></b> (Tamaño máximo permitido: {{
-                sizeMaxDocRecurso }} MB)</label>
+                sizeMaxDocSolicitud }} MB)</label>
               <!-- Mostrar archivo actual si existe -->
               <div v-if="archivoActual" class="mb-2">
                 <p>Archivo actual: {{ archivoActual }}</p>
@@ -99,11 +99,11 @@ import useUtilsStore from '@/stores/utils'
 import FicheroService from '@/services/FicheroService'
 import useAuthStore from '@/stores/auth'
 
-const props = defineProps(['nombre', 'nombreArchivo', 'descripcion', 'idFichero', 'idCenad', 'idSolicitud', 'categoriaFichero'])
+const props = defineProps(['nombre', 'nombreArchivo', 'descripcion', 'idFichero', 'idCenad', 'idSolicitud', 'categoriaFichero', 'isCenad'])
 const emits = defineEmits(['emiteModal'])
 const utils = useUtilsStore()
 const auth = useAuthStore()
-let sizeMaxDocRecurso = ref(utils.sizeMaxDocRecurso)
+let sizeMaxDocSolicitud = ref(utils.sizeMaxDocSolicitud)
 const descripcion = ref(props.descripcion || '');
 const nombre = ref(props.nombre || '');
 const idFichero = ref(props.idFichero)
@@ -157,15 +157,16 @@ onMounted(async () => {
 })
 
 const editarFichero = async () => {
-  const success = await service.editarFichero(
+  const success = await service.editarDocumentacionSolicitud(
     nombre.value,
     descripcion.value,
     archivoFichero.value,
     archivoActual.value,
     idCenad.value,
-    idRecurso.value,
+    idSolicitud.value,
     idCategoriaFichero.value,
-    idFichero.value
+    idFichero.value,
+    props.isCenad
   );
   if (success) {
     // Actualizar el archivoActual con el nombre real subido

@@ -11,6 +11,7 @@
         :idCenad="props.idCenad"
         :idSolicitud="props.idSolicitud"
         :categoriaFichero="categoriaFichero"
+        :isCenad="props.isCenad"
         @emiteModal="actualizarFicheroEnElemento"
       />
     </div>
@@ -38,7 +39,7 @@ import CategoriaFicheroService from '@/services/CategoriaFicheroService'
 import FicheroDeSolicitudModalComponent from './FicheroDeSolicitudModalComponent.vue'
 
 // ✅ Props y Emits
-const props = defineProps(['content', 'idCenad', 'idSolicitud'])
+const props = defineProps(['content', 'idCenad', 'idSolicitud', 'isCenad'])
 const emits = defineEmits(['emiteElemento'])
 
 // ✅ Estado
