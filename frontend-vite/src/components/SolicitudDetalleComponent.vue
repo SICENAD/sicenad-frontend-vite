@@ -101,7 +101,7 @@
 
             </fieldset>
         </form>
-        <div>
+        <div class="mt-3">
             <router-link :to="{ name: 'solicitudes', params: { id: idCenad } }" class="btn btn-secondary me-2">
                 {{ $t('comun.cerrar') }}
             </router-link>

@@ -12,7 +12,7 @@
         :idSolicitud="props.idSolicitud"
         :categoriaFichero="categoriaFichero"
         :isCenad="props.isCenad"
-        @emiteModal="actualizarFicheroEnElemento"
+        @emiteModal="actualizarFicheroEnElemento" v-if="isUnidad != props.isCenad"
       />
     </div>
 
@@ -37,11 +37,13 @@ import { onMounted, ref, watch } from 'vue'
 import FicheroService from '@/services/FicheroService'
 import CategoriaFicheroService from '@/services/CategoriaFicheroService'
 import FicheroDeSolicitudModalComponent from './FicheroDeSolicitudModalComponent.vue'
+import useAuthStore from '@/stores/auth'
+const auth = useAuthStore()
+const isUnidad = ref(auth.rol == 'Normal')
 
 // ✅ Props y Emits
 const props = defineProps(['content', 'idCenad', 'idSolicitud', 'isCenad'])
 const emits = defineEmits(['emiteElemento'])
-
 // ✅ Estado
 const linkDescarga = ref('')
 const categoriaFichero = ref(null)

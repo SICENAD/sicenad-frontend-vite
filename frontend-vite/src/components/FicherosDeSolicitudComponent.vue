@@ -7,7 +7,7 @@
             <div v-else>
                 <h3 class="text-center titulo1"><u>FICHEROS DE LA UNIDAD</u></h3>
             </div>
-            <div class="text-end">
+            <div class="text-end" v-if="isUnidad != props.isCenad">
                 <button type="button" class="btn btn-primary text-white" @click="mostrarFormulario = !mostrarFormulario"
                     v-if="!mostrarFormulario">
                     <span>Nuevo</span>
@@ -98,6 +98,7 @@ import FicheroDeSolicitudComponent from './FicheroDeSolicitudComponent.vue'
 const props = defineProps(['rol', 'isCenad'])
 const utils = useUtilsStore()
 const auth = useAuthStore()
+const isUnidad = ref(auth.rol == 'Normal')
 const route = useRoute()
 const idCenad = computed(() => route.params.id)
 const idSolicitud = computed(() => route.params.idSolicitud)
