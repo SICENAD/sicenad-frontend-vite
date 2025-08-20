@@ -102,7 +102,7 @@
             </fieldset>
         </form>
         <div>
-            <router-link to="solicitudes" class="btn btn-secondary me-2">
+            <router-link :to="{ name: 'solicitudes', params: { id: idCenad } }" class="btn btn-secondary me-2">
                 {{ $t('comun.cerrar') }}
             </router-link>
             <button class="btn btn-danger" :data-bs-target="'#' + idModalEliminar" data-bs-toggle="modal"
