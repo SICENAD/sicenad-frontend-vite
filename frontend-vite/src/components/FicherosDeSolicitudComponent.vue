@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <FicheroDeSolicitudComponent v-for="item in documentacion" :key="item.idString" :content="item"
-                    :idCenad="idCenad" :idRecurso="idRecurso" @emiteElemento="actualizarFicheroEnView" />
+                    :idCenad="idCenad" :idSolicitud="idSolicitud" @emiteElemento="actualizarFicheroEnView" />
             </div>
         </div>
     </div>

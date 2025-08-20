@@ -99,7 +99,7 @@ import useUtilsStore from '@/stores/utils'
 import FicheroService from '@/services/FicheroService'
 import useAuthStore from '@/stores/auth'
 
-const props = defineProps(['nombre', 'nombreArchivo', 'descripcion', 'idFichero', 'idCenad', 'idRecurso', 'categoriaFichero'])
+const props = defineProps(['nombre', 'nombreArchivo', 'descripcion', 'idFichero', 'idCenad', 'idSolicitud', 'categoriaFichero'])
 const emits = defineEmits(['emiteModal'])
 const utils = useUtilsStore()
 const auth = useAuthStore()
@@ -108,7 +108,7 @@ const descripcion = ref(props.descripcion || '');
 const nombre = ref(props.nombre || '');
 const idFichero = ref(props.idFichero)
 const idCenad = ref(props.idCenad)
-const idRecurso = ref(props.idRecurso)
+const idSolicitud = ref(props.idSolicitud)
 const idCategoriaFichero = ref('')
 const idModal = 'modal-fichero-' + props.idFichero
 const idModalEliminar = 'modal-fichero-eliminar' + props.idFichero
@@ -146,7 +146,7 @@ function onFileChange(event) {
 onMounted(async () => {
   if (archivoActual.value) {
     try {
-      urlArchivoActual.value = await service.fetchArchivoFichero(archivoActual.value, idCenad.value, idRecurso.value)
+      urlArchivoActual.value = await service.fetchArchivoDocumentacionSolicitud(archivoActual.value, idCenad.value, idSolicitud.value)
     } catch (error) {
       console.error('Error cargando archivo:', error)
       urlArchivoActual.value = '' // para evitar mostrar URL rota
@@ -173,7 +173,7 @@ const editarFichero = async () => {
 
     // Volver a cargar la URL del archivo actualizado 
     try {
-      urlArchivoActual.value = await service.fetchArchivoFichero(archivoActual.value, idCenad.value, idRecurso.value)
+      urlArchivoActual.value = await service.fetchArchivoDocumentacionSolicitud(archivoActual.value, idCenad.value, idSolicitud.value)
     } catch (e) {
       urlArchivoActual.value = ''
     }
@@ -182,7 +182,7 @@ const editarFichero = async () => {
   emits('emiteModal');
 }
 const borrarArchivo = async () => {
-  await service.deleteFichero(archivoActual.value, idFichero.value, idCenad.value, idRecurso.value)
+  await service.deleteDocumentacionSolicitud(archivoActual.value, idFichero.value, idCenad.value, idSolicitud.value)
   emits('emiteModal')
 }
 // Validación: todos los campos deben estar llenos

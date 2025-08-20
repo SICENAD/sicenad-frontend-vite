@@ -3,13 +3,13 @@
   <div class="row" v-if="props.content">
     <div class="col-10 col-sm-10 col-md-3 col-lg-3 col-xl-3">
       {{ props.content?.nombre }}
-      <FicheroModalComponent
+      <FicheroDeSolicitudModalComponent
         :nombreArchivo="props.content?.nombreArchivo"
         :nombre="props.content?.nombre"
         :idFichero="props.content?.idString"
         :descripcion="props.content?.descripcion"
         :idCenad="props.idCenad"
-        :idRecurso="props.idRecurso"
+        :idSolicitud="props.idSolicitud"
         :categoriaFichero="categoriaFichero"
         @emiteModal="actualizarFicheroEnElemento"
       />
@@ -33,27 +33,21 @@
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import useAuthStore from '@/stores/auth'
 import FicheroService from '@/services/FicheroService'
-import FicheroModalComponent from './FicheroModalComponent.vue'
 import CategoriaFicheroService from '@/services/CategoriaFicheroService'
-import UsuarioService from '@/services/UsuarioService'
+import FicheroDeSolicitudModalComponent from './FicheroDeSolicitudModalComponent.vue'
 
 // ✅ Props y Emits
-const props = defineProps(['content', 'idCenad', 'idRecurso'])
+const props = defineProps(['content', 'idCenad', 'idSolicitud'])
 const emits = defineEmits(['emiteElemento'])
 
 // ✅ Estado
-const auth = useAuthStore()
 const linkDescarga = ref('')
 const categoriaFichero = ref(null)
-const idGestor = ref('')
-const isGestorEsteRecurso = ref(false)
 
 // ✅ Servicios
 const service = new FicheroService()
 const categoriaFicheroService = new CategoriaFicheroService()
-const usuarioService = new UsuarioService()
 
 console.log('Componente cargando...')
 
@@ -61,22 +55,13 @@ console.log('Componente cargando...')
 onMounted(async () => {
   console.log('Entrando en onMounted...')
   try {
-    // Obtener gestor del recurso
-    const gestor = await usuarioService.fetchUsuarioGestorDeRecurso(props.idRecurso)
-    idGestor.value = gestor.idString
-
-    // Comparar con usuario actual (si existe)
-    if (idGestor.value === auth.usuario?.idString) {
-      isGestorEsteRecurso.value = true
-    } else {
-      isGestorEsteRecurso.value = false
-    }
-
+    
+    console.log('para linkdescarga uso nombrearchivo, idcenad y idsolicitud ' + props.content?.nombreArchivo + props.idCenad + props.idSolicitud)
     // Link descarga
-    linkDescarga.value = await service.fetchArchivoFichero(
+    linkDescarga.value = await service.fetchArchivoDocumentacionSolicitud(
       props.content?.nombreArchivo,
       props.idCenad,
-      props.idRecurso
+      props.idSolicitud
     )
 
     // Cargar categoría (si hay idString)
