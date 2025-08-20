@@ -160,22 +160,22 @@ const recursoService = new RecursoService()
 const estados = utils.estadosSolicitud
 const isEditable = ref(false)
 const solicitud = ref()
-const observaciones = ref(solicitud.observaciones)
-const jefeUnidadUsuaria = ref(solicitud.jefeUnidadUsuaria)
-const pocEjercicio = ref(solicitud.pocEjercicio)
-const tlfnRedactor = ref(solicitud.tlfnRedactor)
+const observaciones = ref()
+const jefeUnidadUsuaria = ref()
+const pocEjercicio = ref()
+const tlfnRedactor = ref()
 const fechaSolicitud = ref()
-const fechaHoraInicioRecurso = ref(solicitud.fechaHoraInicioRecurso)
-const fechaHoraFinRecurso = ref(solicitud.fechaHoraFinRecurso)
-const estado = ref(solicitud.estado)
-const observacionesCenad = ref(solicitud.observacionesCenad)
-const fechaFinDocumentacion = ref(solicitud.fechaFinDocumentacion)
+const fechaHoraInicioRecurso = ref()
+const fechaHoraFinRecurso = ref()
+const estado = ref()
+const observacionesCenad = ref()
+const fechaFinDocumentacion = ref()
 const isAdminEsteCenad = ref(false)
 const isGestorEsteCenad = ref(false)
 const recurso = ref()
 
 
-const idModalEliminar = 'modal-categoria-eliminar' + solicitud.idString
+const idModalEliminar = 'modal-categoria-eliminar' + idSolicitud.value
 watch(
     () => solicitud.value,
     (newContent) => {
